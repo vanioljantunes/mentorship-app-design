@@ -23,13 +23,19 @@
   a:hover { color: hsl(212 85% 20%); }
   button, select, input { font-family: inherit; letter-spacing: inherit; }
 
+  @media (min-width: 861px) {
+    .app-sidebar.collapsed { width: 64px !important; }
+    .app-sidebar.collapsed .side-text { display: none; }
+    .app-sidebar.collapsed ul a, .app-sidebar.collapsed > div > button, .app-sidebar.collapsed a[href="#"] { justify-content: center; }
+  }
+
   /* ---- mobile adaptation ---- */
   .mobile-topbar { display: none; }
   .nav-backdrop { display: none; }
   @media (max-width: 860px) {
     .mobile-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 12px; background: hsl(44 26% 96% / .92); backdrop-filter: blur(10px); border-bottom: 1px solid hsl(42 14% 88%); }
     .mobile-topbar button { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 9.6px; background: transparent; color: hsl(234 40% 22%); }
-    .app-sidebar { position: fixed !important; top: 0; bottom: 0; left: 0; height: 100vh !important; width: 280px !important; z-index: 50 !important; transform: translateX(-105%); transition: transform .25s cubic-bezier(.165, .84, .44, 1); box-shadow: 0 12px 40px -12px hsl(234 45% 18% / .5); }
+    .app-sidebar { position: fixed !important; top: 0; bottom: 0; left: 0; height: 100vh !important; height: 100dvh !important; width: min(260px, 82vw) !important; z-index: 50 !important; transform: translateX(-105%); transition: transform .25s cubic-bezier(.165, .84, .44, 1); box-shadow: 0 12px 40px -12px hsl(234 45% 18% / .5); }
     .app-sidebar.nav-open { transform: translateX(0); }
     .nav-backdrop.nav-open { display: block; position: fixed; inset: 0; z-index: 45; background: hsl(234 68% 12% / .4); border: 0; padding: 0; }
     .app-sidebar a, .app-sidebar > div > button { min-height: 44px; }
@@ -39,9 +45,10 @@
     .app-main [style*="grid-template-columns:2fr 1fr"], .app-main [style*="grid-template-columns: 2fr 1fr"] { grid-template-columns: 1fr !important; }
     .app-main [style*="grid-template-columns:1fr 1fr"], .app-main [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
     .app-main [style*="border-right:1px solid"], .app-main [style*="border-right: 1px solid"] { border-right: 0 !important; border-bottom: 1px solid hsl(42 12% 84%) !important; }
-    .app-main [style*="repeat(4, minmax(0,1fr))"], .app-main [style*="repeat(4, minmax(0, 1fr))"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
-    .app-main [style*="repeat(3, minmax(0,1fr))"], .app-main [style*="repeat(3, minmax(0, 1fr))"] { grid-template-columns: 1fr !important; }
-    .app-main [style*="grid-template-columns:repeat(2, minmax(0,1fr))"], .app-main [style*="grid-template-columns: repeat(2, minmax(0, 1fr))"] { grid-template-columns: 1fr !important; }
+    .app-main .rgrid-2col { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+    .app-main .rgrid-1 { grid-template-columns: 1fr !important; }
+    .app-main .avail-row { flex-wrap: wrap; row-gap: 8px; }
+    .app-main .avail-row > span[style*="width:104px"] { width: auto !important; }
     .app-main [style*="grid-template-columns:minmax(104px,132px)"], .app-main [style*="grid-template-columns: minmax(104px, 132px)"] { grid-template-columns: 1fr !important; row-gap: 4px !important; }
     .app-main [style*="max-width:340px"], .app-main [style*="max-width: 340px"] { max-width: 100% !important; }
     .app-main [style*="max-width:474px"], .app-main [style*="max-width: 474px"] { max-width: 100% !important; }
@@ -71,19 +78,19 @@
   <aside class="{{ sidebarClass }}" style="position:sticky; top:0; align-self:flex-start; height:100vh; width:256px; flex-shrink:0; display:flex; flex-direction:column; background:hsl(44 26% 96%); border-right:1px solid hsl(42 14% 88%); z-index:20">
     <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; border-bottom:1px solid hsl(42 14% 88%)">
       <span style="display:inline-block; height:36px; width:36px; flex-shrink:0"><img src="assets/logo-mentorship-navy.png" alt="Mentoria MAA" style="height:100%; width:100%; object-fit:contain" /></span>
-      <button style="display:inline-flex; align-items:center; justify-content:center; height:32px; width:32px; border-radius:9.6px; border:0; background:transparent; color:hsl(234 40% 22%)" style-hover="background:hsl(46 24% 86%)">
+      <button onClick="{{ toggleSidebar }}" aria-label="Collapse sidebar" style="display:inline-flex; align-items:center; justify-content:center; height:32px; width:32px; border-radius:9.6px; border:0; background:transparent; color:hsl(234 40% 22%); cursor:pointer" style-hover="background:hsl(46 24% 86%)">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
       </button>
     </div>
 
     <div style="flex:1; min-height:0; overflow:auto; padding:8px">
-      <div style="display:flex; align-items:center; height:32px; padding:0 8px; font-size:13px; font-weight:500; color:hsl(234 40% 22% / .7)">Overview</div>
+      <div class="side-text" style="display:flex; align-items:center; height:32px; padding:0 8px; font-size:13px; font-weight:500; color:hsl(234 40% 22% / .7)">Overview</div>
       <ul style="display:flex; flex-direction:column; gap:4px; list-style:none; margin:0; padding:0">
         <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
           <li style="position:relative">
             <a href="#" onClick="{{ item.go }}" style="{{ item.style }}">
               <span style="display:flex; width:16px; height:16px; flex-shrink:0" dangerouslySetInnerHTML="{{ item.icon }}"></span>
-              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ item.label }}</span>
+              <span class="side-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ item.label }}</span>
               <sc-if value="{{ item.active }}" hint-placeholder-val="{{ true }}">
                 <span style="position:absolute; left:0; top:6px; bottom:6px; width:3px; border-radius:9999px; background:linear-gradient(180deg, hsl(234 85% 14%), hsl(212 85% 20%))"></span>
               </sc-if>
@@ -96,12 +103,12 @@
     <div style="display:flex; flex-direction:column; gap:8px; padding:8px; border-top:1px solid hsl(42 14% 88%)">
       <button style="display:flex; align-items:center; gap:8px; height:32px; padding:8px; border:0; background:transparent; border-radius:9.6px; font-size:14px; color:hsl(234 40% 22%); text-align:left; width:100%" style-hover="background:hsl(46 24% 86%)">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
-        <span>Theme</span>
+        <span class="side-text">Theme</span>
       </button>
       <div style="height:1px; margin:0 8px; background:hsl(42 14% 88%)"></div>
       <a href="#" onClick="{{ goProfile }}" style="{{ profileStyle }}">
         <span style="position:relative; display:flex; height:32px; width:32px; flex-shrink:0; align-items:center; justify-content:center; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); box-shadow:0 0 0 2px hsl(234 85% 14% / .3); color:hsl(40 30% 96%); font-size:11px; font-weight:700">MT</span>
-        <span style="display:grid; flex:1; text-align:left; line-height:1.25">
+        <span class="side-text" style="display:grid; flex:1; text-align:left; line-height:1.25">
           <span style="font-family:Ruda, sans-serif; font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">Metahu Team</span>
           <span style="font-size:11px; color:hsl(38 6% 42%)">{{ roleLabel }}</span>
         </span>
@@ -110,7 +117,7 @@
       <div style="height:1px; margin:0 8px; background:hsl(42 14% 88%)"></div>
       <button style="display:flex; align-items:center; gap:8px; height:32px; padding:8px; border:0; background:transparent; border-radius:9.6px; font-size:14px; color:hsl(4 62% 50%); text-align:left; width:100%" style-hover="background:hsl(4 62% 50% / .1)">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
-        <span>Sign out</span>
+        <span class="side-text">Sign out</span>
       </button>
     </div>
   </aside>
@@ -184,7 +191,7 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px">
+        <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px">
           <sc-for list="{{ quickLinks }}" as="q" hint-placeholder-count="3">
             <a href="#" onClick="{{ q.go }}" style="display:flex; align-items:center; gap:14px; padding:16px 18px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)" style-hover="border-color:hsl(234 85% 14% / .4)">
               <span style="display:flex; width:20px; height:20px; color:hsl(234 85% 14%)" dangerouslySetInnerHTML="{{ q.icon }}"></span>
@@ -240,7 +247,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </a>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:24px; margin-top:16px; max-width:960px">
+          <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:24px; margin-top:16px; max-width:960px">
             <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
               <div style="border-radius:13.6px; overflow:hidden; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
                 <img src="{{ c.img }}" alt="{{ c.title }}" style="display:block; width:100%; aspect-ratio:596/1058; object-fit:cover" />
@@ -522,7 +529,7 @@
                 <div style="background:hsl(42 33% 99%); border:1px solid hsl(234 85% 14% / .25); border-radius:17.6px; padding:24px; box-shadow:0 12px 30px -16px hsl(234 45% 18% / .6)">
                   <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Confirm this time</h2>
                   <p style="margin:0 0 20px; font-size:14px; color:hsl(38 6% 42%)">{{ confirmSubtitle }}</p>
-                  <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; margin-bottom:20px">
+                  <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; margin-bottom:20px">
                     <div style="padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
                       <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Your time · {{ tzShort }}</div>
                       <div style="margin-top:6px; font-family:Ruda, sans-serif; font-size:17px; font-weight:700">{{ selectedUserTime }}</div>
@@ -702,7 +709,7 @@
 
                 <div style="display:flex; flex-direction:column">
                   <sc-for list="{{ availabilityRows }}" as="row" hint-placeholder-count="7">
-                    <div style="{{ row.rowStyle }}">
+                    <div class="avail-row" style="{{ row.rowStyle }}">
                       <button onClick="{{ row.toggle }}" style="{{ row.switchStyle }}"><span style="{{ row.knobStyle }}"></span></button>
                       <span style="width:104px; flex-shrink:0; font-size:14px; font-weight:600">{{ row.label }}</span>
                       <div style="flex:1; display:flex; flex-wrap:wrap; align-items:center; gap:10px">
@@ -959,7 +966,7 @@
                   <div style="padding:16px 18px; border:1px solid hsl(42 12% 84%); border-radius:13.6px">
                     <div style="font-size:15px; font-weight:600">{{ s.title }}</div>
                     <div style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%); margin-top:2px">DOI {{ s.doi }}</div>
-                    <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; margin-top:14px">
+                    <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; margin-top:14px">
                       <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Population</span><span style="font-size:14px">{{ s.p }}</span></span>
                       <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Intervention</span><span style="font-size:14px">{{ s.i }}</span></span>
                       <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Comparator</span><span style="font-size:14px">{{ s.c }}</span></span>
@@ -974,7 +981,7 @@
 
             <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
               <h2 style="margin:0 0 18px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Files &amp; outputs</h2>
-              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px">
+              <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px">
                 <div style="display:grid; gap:6px">
                   <span style="font-size:13px; font-weight:600">Drive folder</span>
                   <a href="#" style="font-size:14px">drive.google.com/example-1</a>
@@ -1110,7 +1117,7 @@
           </button>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px">
+        <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px">
           <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
             <div style="padding:20px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
               <div style="display:flex; align-items:center; gap:12px">
@@ -1165,7 +1172,7 @@
           </h1>
           <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Structured content and session recordings to support your meta-analysis journey.</p>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:24px; max-width:1000px">
+        <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:24px; max-width:1000px">
           <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
             <div style="border-radius:13.6px; overflow:hidden; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
               <img src="{{ c.img }}" alt="{{ c.title }}" style="display:block; width:100%; aspect-ratio:596/1058; object-fit:cover" />
@@ -1525,6 +1532,7 @@ class Component extends DCLogic {
   state = {
     page: 'dashboard',
     navOpen: false,
+    sidebarCollapsed: false,
     briefOpen: null,
     bannerIdx: 0,
     selected: 29,
@@ -1682,7 +1690,7 @@ class Component extends DCLogic {
         enabled: day.enabled,
         disabled: !day.enabled,
         count: day.enabled ? Math.floor(total / st.duration) + ' slots' : '',
-        rowStyle: 'display:flex; align-items:center; gap:16px; padding:14px 24px; border-bottom:1px solid hsl(42 12% 84%); background:' + (day.enabled ? 'transparent' : 'hsl(44 26% 96% / .6)'),
+        rowStyle: 'display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; padding:14px 24px; border-bottom:1px solid hsl(42 12% 84%); background:' + (day.enabled ? 'transparent' : 'hsl(44 26% 96% / .6)'),
         switchStyle: 'position:relative; flex-shrink:0; width:38px; height:22px; padding:0; border:0; border-radius:9999px; cursor:pointer; background:' + (day.enabled ? 'hsl(234 85% 14%)' : 'hsl(44 14% 89%)'),
         knobStyle: 'position:absolute; top:3px; left:' + (day.enabled ? '19px' : '3px') + '; width:16px; height:16px; border-radius:9999px; background:hsl(42 33% 99%); transition:left .15s ease',
         toggle: () => this.updateAvail((a) => {
@@ -1884,7 +1892,8 @@ class Component extends DCLogic {
       clearSelection: () => this.setState({ pick: null }),
 
       sessionsSubtitle: st.role === 'mentor' ? 'Schedule and manage sessions with your mentees.' : 'Book your weekly mentorship session and see what is coming up.',
-      sidebarClass: 'app-sidebar' + (st.navOpen ? ' nav-open' : ''),
+      sidebarClass: 'app-sidebar' + (st.navOpen ? ' nav-open' : '') + (st.sidebarCollapsed ? ' collapsed' : ''),
+      toggleSidebar: (e) => { e.preventDefault(); this.setState({ sidebarCollapsed: !st.sidebarCollapsed }); },
       backdropClass: 'nav-backdrop' + (st.navOpen ? ' nav-open' : ''),
       toggleNav: (e) => { e.preventDefault(); this.setState({ navOpen: !st.navOpen }); },
       closeNav: (e) => { e.preventDefault(); this.setState({ navOpen: false }); },
