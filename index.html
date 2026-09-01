@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ruda:wght@500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+<style>
+  html, body { margin: 0; padding: 0; background: hsl(40 8% 93%); }
+  body { font-family: "Hanken Grotesk", system-ui, sans-serif; letter-spacing: -0.01em; color: hsl(234 68% 12%); -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: hsl(234 85% 14%); text-decoration: none; }
+  a:hover { color: hsl(212 85% 20%); }
+  button, select, input { font-family: inherit; letter-spacing: inherit; }
+</style>
+</helmet>
+<div style="display:flex; min-height:100vh; width:100%; background:hsl(40 8% 93%); position:relative">
+
+  <div aria-hidden="true" style="position:fixed; inset:0; pointer-events:none; overflow:hidden">
+    <div style="position:absolute; inset:0; background-image:linear-gradient(hsl(234 40% 25% / .1) 1px, transparent 1px), linear-gradient(90deg, hsl(234 40% 25% / .1) 1px, transparent 1px); background-size:64px 64px; -webkit-mask-image:radial-gradient(120% 80% at 50% 0%, #000 0%, transparent 70%); mask-image:radial-gradient(120% 80% at 50% 0%, #000 0%, transparent 70%)"></div>
+    <div style="position:absolute; top:-180px; left:12%; width:620px; height:620px; border-radius:9999px; background:hsl(234 60% 35% / .1); filter:blur(90px)"></div>
+    <div style="position:absolute; top:-120px; right:-80px; width:520px; height:520px; border-radius:9999px; background:hsl(212 65% 40% / .09); filter:blur(90px)"></div>
+    <div style="position:absolute; bottom:-200px; left:35%; width:700px; height:700px; border-radius:9999px; background:hsl(46 45% 68% / .14); filter:blur(100px)"></div>
+  </div>
+
+  <aside style="position:sticky; top:0; align-self:flex-start; height:100vh; width:256px; flex-shrink:0; display:flex; flex-direction:column; background:hsl(44 26% 96%); border-right:1px solid hsl(42 14% 88%); z-index:20">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; border-bottom:1px solid hsl(42 14% 88%)">
+      <span style="display:inline-block; height:36px; width:36px; flex-shrink:0"><img src="assets/logo-mentorship-navy.png" alt="Mentoria MAA" style="height:100%; width:100%; object-fit:contain" /></span>
+      <button style="display:inline-flex; align-items:center; justify-content:center; height:32px; width:32px; border-radius:9.6px; border:0; background:transparent; color:hsl(234 40% 22%)" style-hover="background:hsl(46 24% 86%)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
+      </button>
+    </div>
+
+    <div style="flex:1; min-height:0; overflow:auto; padding:8px">
+      <div style="display:flex; align-items:center; height:32px; padding:0 8px; font-size:12px; font-weight:500; color:hsl(234 40% 22% / .7)">Overview</div>
+      <ul style="display:flex; flex-direction:column; gap:4px; list-style:none; margin:0; padding:0">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+          <li style="position:relative">
+            <a href="#" onClick="{{ item.go }}" style="{{ item.style }}">
+              <span style="display:flex; width:16px; height:16px; flex-shrink:0" dangerouslySetInnerHTML="{{ item.icon }}"></span>
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ item.label }}</span>
+              <sc-if value="{{ item.active }}" hint-placeholder-val="{{ true }}">
+                <span style="position:absolute; left:0; top:6px; bottom:6px; width:3px; border-radius:9999px; background:linear-gradient(180deg, hsl(234 85% 14%), hsl(212 85% 20%))"></span>
+              </sc-if>
+            </a>
+          </li>
+        </sc-for>
+      </ul>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:8px; padding:8px; border-top:1px solid hsl(42 14% 88%)">
+      <button style="display:flex; align-items:center; gap:8px; height:32px; padding:8px; border:0; background:transparent; border-radius:9.6px; font-size:14px; color:hsl(234 40% 22%); text-align:left; width:100%" style-hover="background:hsl(46 24% 86%)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+        <span>Theme</span>
+      </button>
+      <div style="height:1px; margin:0 8px; background:hsl(42 14% 88%)"></div>
+      <a href="#" onClick="{{ goProfile }}" style="{{ profileStyle }}">
+        <span style="position:relative; display:flex; height:32px; width:32px; flex-shrink:0; align-items:center; justify-content:center; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); box-shadow:0 0 0 2px hsl(234 85% 14% / .3); color:hsl(40 30% 96%); font-size:11px; font-weight:700">MT</span>
+        <span style="display:grid; flex:1; text-align:left; line-height:1.25">
+          <span style="font-family:Ruda, sans-serif; font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">Metahu Team</span>
+          <span style="font-size:11px; color:hsl(38 6% 42%)">{{ roleLabel }}</span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </a>
+      <div style="height:1px; margin:0 8px; background:hsl(42 14% 88%)"></div>
+      <button style="display:flex; align-items:center; gap:8px; height:32px; padding:8px; border:0; background:transparent; border-radius:9.6px; font-size:14px; color:hsl(4 62% 50%); text-align:left; width:100%" style-hover="background:hsl(4 62% 50% / .1)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
+        <span>Sign out</span>
+      </button>
+    </div>
+  </aside>
+
+  <main style="position:relative; z-index:10; flex:1; min-width:0; padding:28px">
+
+    <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px">
+        <div style="background:hsl(42 33% 99% / .72); backdrop-filter:blur(12px); border:1px solid hsl(42 12% 84%); border-radius:23.6px; padding:24px 28px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <h1 style="margin:0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.02em">Welcome back, Metahu.</h1>
+        </div>
+
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:24px; align-items:start">
+          <div style="position:relative; border:1px solid hsl(42 12% 84%); border-radius:17.6px; overflow:hidden; background:hsl(46 22% 90%); aspect-ratio:3/1; display:grid; place-items:center; color:hsl(38 6% 42%); font-size:13px">Mentorship banner image</div>
+          <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:20px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+              <h2 style="display:flex; align-items:center; gap:10px; margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                Weekly Activities
+              </h2>
+              <a href="#" onClick="{{ goCalendar }}" style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500">View All
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </a>
+            </div>
+            <p style="margin:6px 0 14px; font-size:13px; color:hsl(38 6% 42%)">Aug 31 - Sep 6, 2026 · times in {{ tzShort }}</p>
+            <div style="display:flex; flex-direction:column; gap:10px">
+              <sc-for list="{{ weekActivities }}" as="a" hint-placeholder-count="2">
+                <div style="display:flex; align-items:center; gap:12px; padding:12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
+                  <span style="display:grid; place-items:center; width:34px; height:34px; flex-shrink:0; border-radius:9.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
+                  </span>
+                  <span style="display:grid; gap:2px; flex:1; min-width:0">
+                    <span style="font-size:14px; font-weight:600">{{ a.title }}</span>
+                    <span style="font-size:12px; color:hsl(38 6% 42%)">{{ a.when }}</span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:20px 24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+            <h2 style="display:flex; align-items:center; gap:10px; margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M11 12H3"></path><path d="M16 6H3"></path><path d="M16 18H3"></path><path d="m17 12 2 2 4-4"></path></svg>
+              Tasks this week
+            </h2>
+            <span style="font-size:12px; color:hsl(38 6% 42%)">Set by your mentor on Aug 26</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px">
+            <sc-for list="{{ weekTasks }}" as="t" hint-placeholder-count="3">
+              <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
+                <span style="width:16px; height:16px; flex-shrink:0; border-radius:5.6px; border:1px solid hsl(42 12% 84%); background:hsl(44 14% 89%)"></span>
+                <span style="flex:1; font-size:14px">{{ t.title }}</span>
+                <span style="font-size:12px; color:hsl(38 6% 42%)">{{ t.due }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px">
+          <sc-for list="{{ quickLinks }}" as="q" hint-placeholder-count="3">
+            <a href="#" onClick="{{ q.go }}" style="display:flex; align-items:center; gap:14px; padding:16px 18px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)" style-hover="border-color:hsl(234 85% 14% / .4)">
+              <span style="display:flex; width:20px; height:20px; color:hsl(234 85% 14%)" dangerouslySetInnerHTML="{{ q.icon }}"></span>
+              <span style="display:grid; gap:2px; flex:1">
+                <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:600">{{ q.title }}</span>
+                <span style="font-size:13px; color:hsl(38 6% 42%)">{{ q.sub }}</span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(38 6% 42%)"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </a>
+          </sc-for>
+        </div>
+
+        <div>
+          <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">From question to publication</div>
+          <h2 style="margin:4px 0 16px; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">Your research projects</h2>
+          <div style="max-width:474px; border-radius:17.6px; overflow:hidden; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); box-shadow:0 12px 30px -16px hsl(234 45% 18% / .6)">
+            <div style="background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); padding:16px 20px">
+              <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; opacity:.8">Now · Research question</div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:4px">
+                <span style="font-family:Ruda, sans-serif; font-size:20px; font-weight:700">Example 1</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:20px; font-weight:700">0%</span>
+              </div>
+            </div>
+            <div style="padding:16px 20px; display:flex; flex-direction:column; gap:9px">
+              <sc-for list="{{ stages }}" as="s" hint-placeholder-count="8">
+                <div style="display:grid; grid-template-columns:1fr 12px 40px; align-items:center; gap:12px; font-size:12px">
+                  <span style="text-align:right; font-weight:600; color:hsl(234 68% 12%)">{{ s.name }}</span>
+                  <span style="width:10px; height:10px; border-radius:3px; background:hsl(44 14% 89%); border:1px solid hsl(42 12% 84%)"></span>
+                  <span style="text-align:right; font-family:'JetBrains Mono', monospace; color:hsl(38 6% 42%)">0%</span>
+                </div>
+              </sc-for>
+              <div style="text-align:center; font-size:11px; font-weight:700; color:hsl(155 40% 27%); margin-top:4px">Publication</div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-top:1px solid hsl(42 12% 84%); font-size:13px">
+              <span style="font-family:'JetBrains Mono', monospace">0/37 tasks</span>
+              <span style="font-weight:600; color:hsl(234 60% 16%)">In progress</span>
+            </div>
+            <div style="padding:0 20px 20px">
+              <a href="#" onClick="{{ goMetaTracker }}" style="display:flex; align-items:center; justify-content:center; gap:8px; height:44px; border-radius:9.6px; background:hsl(44 16% 88%); font-size:14px; font-weight:600" style-hover="background:hsl(46 24% 84%)">Open project
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px">
+            <div>
+              <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Keep learning</div>
+              <h2 style="margin:4px 0 0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">Office Hours</h2>
+            </div>
+            <a href="#" onClick="{{ goCourses }}" style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500">View all
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </a>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:24px; margin-top:16px; max-width:960px">
+            <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
+              <div style="border-radius:13.6px; overflow:hidden; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+                <div style="aspect-ratio:596/1058; background:linear-gradient(160deg, hsl(234 85% 14%), hsl(212 85% 20%)); display:grid; place-items:center; padding:16px; text-align:center; color:hsl(40 30% 96%); font-family:Ruda, sans-serif; font-size:14px; line-height:1.3; font-weight:700; letter-spacing:.06em; text-transform:uppercase">{{ c.title }}</div>
+                <div style="padding:14px; font-size:13px; font-weight:500; text-transform:uppercase; letter-spacing:.02em">{{ c.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px">
+        <div>
+          <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Schedule</div>
+          <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+            <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+            </span>
+            <span>Activity Calendar</span>
+          </h1>
+          <p style="margin:8px 0 0; max-width:42rem; font-size:14px; color:hsl(38 6% 42%)">View all scheduled mentorship activities and sessions</p>
+        </div>
+
+        <div style="display:flex; gap:24px; align-items:flex-start">
+          <div style="flex-shrink:0">
+            <div style="padding:24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px; width:286px">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+                <button style="display:inline-flex; align-items:center; justify-content:center; height:40px; width:40px; border:1px solid hsl(42 12% 84%); background:transparent; border-radius:9.6px; color:hsl(234 68% 12%)" style-hover="background:hsl(46 24% 84%)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">August 2026</h2>
+                <button style="display:inline-flex; align-items:center; justify-content:center; height:40px; width:40px; border:1px solid hsl(42 12% 84%); background:transparent; border-radius:9.6px; color:hsl(234 68% 12%)" style-hover="background:hsl(46 24% 84%)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:0">
+                <sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7">
+                  <div style="text-align:center; font-size:12.8px; font-weight:500; color:hsl(38 6% 42%)">{{ w }}</div>
+                </sc-for>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:0; margin-top:8px">
+                <sc-for list="{{ monthCells }}" as="d" hint-placeholder-count="35">
+                  <div style="aspect-ratio:1/1; padding:1px">
+                    <sc-if value="{{ d.day }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ d.select }}" style="{{ d.style }}">{{ d.day }}</button>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:16px; margin-top:16px; font-size:12px; color:hsl(38 6% 42%)">
+                <div style="display:flex; align-items:center; gap:8px"><span style="width:16px; height:16px; border-radius:4px; background:hsl(234 85% 14%)"></span><span>Selected</span></div>
+                <div style="display:flex; align-items:center; gap:8px"><span style="width:16px; height:16px; border-radius:4px; background:hsl(46 24% 84%)"></span><span>Today</span></div>
+                <div style="display:flex; align-items:center; gap:8px"><span style="width:16px; height:16px; border-radius:4px; box-shadow:0 0 0 1px hsl(42 33% 99%), 0 0 0 3px hsl(44 16% 88%)"></span><span>Has events</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:16px">
+            <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px">
+              <sc-for list="{{ calendarHighlights }}" as="h" hint-placeholder-count="4">
+                <div style="{{ h.cardStyle }}">
+                  <span style="{{ h.eyebrowStyle }}">{{ h.eyebrow }}</span>
+                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700; line-height:1.25">{{ h.title }}</span>
+                  <span style="font-size:13px; color:hsl(38 6% 42%)">{{ h.when }}</span>
+                  <span style="font-size:12px; color:hsl(38 6% 42%); opacity:.85">{{ h.note }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+              <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Activities for {{ selectedLabel }}</h3>
+            </div>
+            <div style="text-align:center; padding:48px 0; color:hsl(38 6% 42%); background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 8px; opacity:.5"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+              <p style="margin:0; font-size:16px">No activities scheduled for this day</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSessions }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px">
+          <div>
+            <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Weekly mentorship</div>
+            <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+              <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
+              </span>
+              <span>Sessions</span>
+            </h1>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Book your weekly mentorship session and see what is coming up.</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px">
+            <div style="display:inline-flex; gap:4px; padding:4px; background:hsl(44 14% 89%); border-radius:9.6px">
+              <button onClick="{{ setMentee }}" style="{{ menteeTabStyle }}">Mentee view</button>
+              <button onClick="{{ setMentor }}" style="{{ mentorTabStyle }}">Mentor view</button>
+            </div>
+            <a href="#" onClick="{{ goCalendar }}" style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; font-size:14px; font-weight:500; background:hsl(42 33% 99% / .6)" style-hover="background:hsl(46 24% 84%)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+              View Calendar
+            </a>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:24px; align-items:start">
+
+          <div style="display:flex; flex-direction:column; gap:24px; min-width:0">
+
+            <sc-if value="{{ isMenteeView }}" hint-placeholder-val="{{ true }}">
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
+                  <div>
+                    <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Book a session</h2>
+                    <p style="margin:4px 0 0; font-size:13px; color:hsl(38 6% 42%)">Pick any open time from Vânio's weekly availability. Same-day booking is allowed.</p>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:10px">
+                    <div style="display:inline-flex; gap:4px; padding:4px; background:hsl(44 14% 89%); border-radius:9.6px">
+                      <sc-for list="{{ durationOptions }}" as="d" hint-placeholder-count="3">
+                        <button onClick="{{ d.pick }}" style="{{ d.style }}">{{ d.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:14px 24px; border-bottom:1px solid hsl(42 12% 84%); background:hsl(44 26% 96%)">
+                  <div style="display:flex; align-items:center; gap:8px">
+                    <button onClick="{{ prevWeek }}" style="display:inline-flex; align-items:center; justify-content:center; height:34px; width:34px; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); border-radius:9.6px; color:hsl(234 68% 12%)" style-hover="background:hsl(46 24% 84%)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                    </button>
+                    <span style="min-width:190px; text-align:center; font-family:Ruda, sans-serif; font-size:15px; font-weight:600">{{ weekLabel }}</span>
+                    <button onClick="{{ nextWeek }}" style="display:inline-flex; align-items:center; justify-content:center; height:34px; width:34px; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); border-radius:9.6px; color:hsl(234 68% 12%)" style-hover="background:hsl(46 24% 84%)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                    </button>
+                  </div>
+                  <label style="display:inline-flex; align-items:center; gap:8px; font-size:13px; color:hsl(38 6% 42%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                    Your timezone
+                    <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:34px; padding:0 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; color:hsl(234 68% 12%)">
+                      <sc-for list="{{ tzOptions }}" as="t" hint-placeholder-count="5">
+                        <option value="{{ t.id }}">{{ t.label }}</option>
+                      </sc-for>
+                    </select>
+                  </label>
+                </div>
+
+                <div style="display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:10px; padding:20px 24px 24px">
+                  <sc-for list="{{ weekDays }}" as="day" hint-placeholder-count="7">
+                    <div style="display:flex; flex-direction:column; gap:8px; min-width:0">
+                      <div style="text-align:center; padding-bottom:8px; border-bottom:1px solid hsl(42 12% 84%)">
+                        <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(38 6% 42%)">{{ day.weekday }}</div>
+                        <div style="{{ day.dateStyle }}">{{ day.dayNum }}</div>
+                      </div>
+                      <sc-if value="{{ day.hasSlots }}" hint-placeholder-val="{{ true }}">
+                        <sc-for list="{{ day.slots }}" as="slot" hint-placeholder-count="3">
+                          <button onClick="{{ slot.pick }}" title="{{ slot.title }}" style="{{ slot.style }}">{{ slot.label }}</button>
+                        </sc-for>
+                      </sc-if>
+                      <sc-if value="{{ day.empty }}" hint-placeholder-val="{{ true }}">
+                        <div style="padding:10px 0; text-align:center; font-size:12px; color:hsl(38 6% 42%); opacity:.7">—</div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:0 24px 20px; font-size:12px; color:hsl(38 6% 42%)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                  {{ gBusyNote }}
+                </div>
+              </div>
+
+              <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ true }}">
+                <div style="background:hsl(42 33% 99%); border:1px solid hsl(234 85% 14% / .25); border-radius:17.6px; padding:24px; box-shadow:0 12px 30px -16px hsl(234 45% 18% / .6)">
+                  <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Confirm this time</h2>
+                  <p style="margin:0 0 20px; font-size:13px; color:hsl(38 6% 42%)">{{ confirmSubtitle }}</p>
+                  <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; margin-bottom:20px">
+                    <div style="padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
+                      <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Your time · {{ tzShort }}</div>
+                      <div style="margin-top:6px; font-family:Ruda, sans-serif; font-size:17px; font-weight:700">{{ selectedUserTime }}</div>
+                    </div>
+                    <div style="padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
+                      <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Vânio's time · Brasília</div>
+                      <div style="margin-top:6px; font-family:Ruda, sans-serif; font-size:17px; font-weight:700">{{ selectedMentorTime }}</div>
+                    </div>
+                  </div>
+                  <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px">What do you want to cover?</label>
+                  <input value="{{ topic }}" onChange="{{ setTopic }}" placeholder="e.g. Review the screening strategy for Example 1" style="width:100%; height:44px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%); margin-bottom:16px" />
+                  <label style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; margin-bottom:20px; cursor:pointer">
+                    <input type="checkbox" checked="{{ repeatWeekly }}" onChange="{{ toggleRepeat }}" style="width:16px; height:16px; margin-top:2px; accent-color:hsl(234 85% 14%)" />
+                    <span style="display:grid; gap:2px">
+                      <span style="font-size:14px; font-weight:600">Repeat weekly at this time</span>
+                      <span style="font-size:13px; color:hsl(38 6% 42%)">{{ repeatHint }}</span>
+                    </span>
+                  </label>
+                  <div style="display:flex; align-items:center; gap:12px">
+                    <button onClick="{{ confirmBooking }}" style="display:inline-flex; align-items:center; gap:8px; height:44px; padding:0 22px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:15px; font-weight:600">Confirm session</button>
+                    <button onClick="{{ clearSelection }}" style="height:44px; padding:0 18px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:transparent; font-size:14px; font-weight:500; color:hsl(38 6% 42%)">Cancel</button>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isBooked }}" hint-placeholder-val="{{ true }}">
+                <div style="background:hsl(42 33% 99%); border:1px solid hsl(155 40% 27% / .3); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+                  <div style="display:flex; align-items:center; gap:12px">
+                    <span style="display:grid; place-items:center; width:36px; height:36px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                    </span>
+                    <div style="display:grid; gap:2px">
+                      <span style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700">Session booked</span>
+                      <span style="font-size:13px; color:hsl(38 6% 42%)">{{ bookedSummary }}</span>
+                    </div>
+                  </div>
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:18px">
+                    <a href="https://meet.google.com/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 18px; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:14px; font-weight:600">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+                      Join with Google Meet
+                    </a>
+                    <a href="{{ gcalUrl }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:transparent; font-size:14px; font-weight:500; color:hsl(234 68% 12%)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M12 14v4"></path><path d="M10 16h4"></path></svg>
+                      Add to Google Calendar
+                    </a>
+                    <button onClick="{{ resetBooking }}" style="height:40px; padding:0 16px; border:0; background:transparent; font-size:14px; font-weight:500; color:hsl(4 62% 50%)">Reschedule</button>
+                  </div>
+                </div>
+              </sc-if>
+            </sc-if>
+
+            <sc-if value="{{ isMentorView }}" hint-placeholder-val="{{ true }}">
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
+                  <div>
+                    <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Weekly availability</h2>
+                    <p style="margin:4px 0 0; font-size:13px; color:hsl(38 6% 42%)">These hours repeat every week. Mentees see them converted into their own timezone.</p>
+                  </div>
+                  <label style="display:inline-flex; align-items:center; gap:8px; font-size:13px; color:hsl(38 6% 42%)">
+                    Your timezone
+                    <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:34px; padding:0 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; color:hsl(234 68% 12%)">
+                      <sc-for list="{{ tzOptions }}" as="t" hint-placeholder-count="5">
+                        <option value="{{ t.id }}">{{ t.label }}</option>
+                      </sc-for>
+                    </select>
+                  </label>
+                </div>
+
+                <div style="display:flex; flex-direction:column">
+                  <sc-for list="{{ availabilityRows }}" as="row" hint-placeholder-count="7">
+                    <div style="{{ row.rowStyle }}">
+                      <button onClick="{{ row.toggle }}" style="{{ row.switchStyle }}"><span style="{{ row.knobStyle }}"></span></button>
+                      <span style="width:104px; flex-shrink:0; font-size:14px; font-weight:600">{{ row.label }}</span>
+                      <div style="flex:1; display:flex; flex-wrap:wrap; align-items:center; gap:10px">
+                        <sc-if value="{{ row.enabled }}" hint-placeholder-val="{{ true }}">
+                          <sc-for list="{{ row.ranges }}" as="range" hint-placeholder-count="1">
+                            <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 8px 6px 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
+                              <select onChange="{{ range.setStart }}" value="{{ range.start }}" style="height:30px; border:0; background:transparent; font-size:13px; font-weight:600; color:hsl(234 68% 12%)">
+                                <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="6">
+                                  <option value="{{ t }}">{{ t }}</option>
+                                </sc-for>
+                              </select>
+                              <span style="font-size:13px; color:hsl(38 6% 42%)">to</span>
+                              <select onChange="{{ range.setEnd }}" value="{{ range.end }}" style="height:30px; border:0; background:transparent; font-size:13px; font-weight:600; color:hsl(234 68% 12%)">
+                                <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="6">
+                                  <option value="{{ t }}">{{ t }}</option>
+                                </sc-for>
+                              </select>
+                              <button onClick="{{ range.remove }}" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border:0; border-radius:6.6px; background:transparent; color:hsl(38 6% 42%)" style-hover="background:hsl(4 62% 50% / .1); color:hsl(4 62% 50%)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                              </button>
+                            </div>
+                          </sc-for>
+                          <button onClick="{{ row.addRange }}" style="display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px; border:1px dashed hsl(42 12% 84%); border-radius:9.6px; background:transparent; font-size:13px; font-weight:600; color:hsl(234 85% 14%)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                            Add hours
+                          </button>
+                        </sc-if>
+                        <sc-if value="{{ row.disabled }}" hint-placeholder-val="{{ true }}">
+                          <span style="font-size:13px; color:hsl(38 6% 42%)">Unavailable</span>
+                        </sc-if>
+                      </div>
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ row.count }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:18px 24px; border-top:1px solid hsl(42 12% 84%); background:hsl(44 26% 96%)">
+                  <span style="font-size:13px; color:hsl(38 6% 42%)">{{ availabilitySummary }}</span>
+                  <button style="height:40px; padding:0 20px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:14px; font-weight:600">Save availability</button>
+                </div>
+              </div>
+
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+                <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Booking rules</h2>
+                <p style="margin:0 0 18px; font-size:13px; color:hsl(38 6% 42%)">Applies to every mentee assigned to you.</p>
+                <div style="display:flex; flex-direction:column; gap:10px">
+                  <sc-for list="{{ bookingRules }}" as="rule" hint-placeholder-count="4">
+                    <label style="display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
+                      <input type="checkbox" checked="{{ rule.on }}" onChange="{{ rule.toggle }}" style="width:16px; height:16px; accent-color:hsl(234 85% 14%)" />
+                      <span style="display:grid; gap:2px; flex:1">
+                        <span style="font-size:14px; font-weight:600">{{ rule.title }}</span>
+                        <span style="font-size:13px; color:hsl(38 6% 42%)">{{ rule.sub }}</span>
+                      </span>
+                    </label>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="position:relative; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <span style="position:absolute; top:20px; right:24px; display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:12px; font-weight:600">Active</span>
+              <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My Mentor</h2>
+              <div style="display:flex; align-items:center; gap:16px">
+                <span style="display:grid; place-items:center; height:48px; width:48px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-size:14px; font-weight:700">VA</span>
+                <div style="display:grid; gap:2px">
+                  <span style="font-family:Ruda, sans-serif; font-size:16px; font-weight:700">Vânio Antunes do Livramento Junior</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">vanio.antunes.md@gmail.com</span>
+                  <span style="font-size:13px; color:hsl(38 6% 42%)">Level 2 mentor · Clinical epidemiology, meta-analysis</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:24px">
+            <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Mentorship plan</h2>
+              <p style="margin:0 0 16px; font-size:13px; color:hsl(38 6% 42%)">Calculated from your start date — 1 session per week for 1 year.</p>
+              <div style="display:flex; align-items:baseline; gap:8px">
+                <span style="font-family:'JetBrains Mono', monospace; font-size:28px; font-weight:700">{{ sessionsDone }}</span>
+                <span style="font-size:14px; color:hsl(38 6% 42%)">of {{ sessionsTotal }} sessions</span>
+              </div>
+              <div style="height:6px; border-radius:9999px; background:hsl(44 14% 89%); margin:12px 0 14px; overflow:hidden">
+                <div style="{{ progressStyle }}"></div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:hsl(38 6% 42%)">
+                <span>Started Mar 2, 2026 · ends Mar 1, 2027</span>
+                <span>{{ sessionsLeft }} sessions remaining</span>
+              </div>
+              <button style="width:100%; height:38px; margin-top:16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:transparent; font-size:13px; font-weight:600">Adjust plan manually</button>
+            </div>
+
+            <div style="background:hsl(40 78% 44% / .08); border:1px solid hsl(40 78% 44% / .4); border-radius:17.6px; padding:20px">
+              <div style="display:flex; align-items:center; gap:10px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(40 78% 44%)"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">Renewal window</span>
+              </div>
+              <p style="margin:10px 0 0; font-size:13px; color:hsl(38 6% 42%)">Coordinators are notified 30 days before Mar 1, 2027 and again on the end date.</p>
+            </div>
+
+            <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <div style="display:flex; align-items:center; gap:12px">
+                <span style="display:grid; place-items:center; width:36px; height:36px; flex-shrink:0; border-radius:9.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M12 14v4"></path><path d="M10 16h4"></path></svg>
+                </span>
+                <div style="display:grid; gap:2px; flex:1; min-width:0">
+                  <span style="font-family:Ruda, sans-serif; font-size:16px; font-weight:700">Google Calendar</span>
+                  <sc-if value="{{ gConnected }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size:12px; color:hsl(38 6% 42%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ gAccount }}</span>
+                  </sc-if>
+                  <sc-if value="{{ gDisconnected }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size:12px; color:hsl(38 6% 42%)">Not connected</span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ gConnected }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:inline-flex; align-items:center; gap:6px; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:12px; font-weight:600">Synced</span>
+                </sc-if>
+              </div>
+
+              <sc-if value="{{ gConnected }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column; gap:12px; margin-top:18px">
+                  <sc-for list="{{ gToggles }}" as="t" hint-placeholder-count="3">
+                    <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer">
+                      <input type="checkbox" checked="{{ t.on }}" onChange="{{ t.toggle }}" style="width:16px; height:16px; margin-top:2px; accent-color:hsl(234 85% 14%)" />
+                      <span style="display:grid; gap:2px">
+                        <span style="font-size:13px; font-weight:600">{{ t.title }}</span>
+                        <span style="font-size:12px; color:hsl(38 6% 42%)">{{ t.sub }}</span>
+                      </span>
+                    </label>
+                  </sc-for>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:18px; padding-top:14px; border-top:1px solid hsl(42 12% 84%); font-size:12px; color:hsl(38 6% 42%)">
+                  <span>Calendar: {{ gCalendar }} · synced {{ gSyncedAt }}</span>
+                  <button onClick="{{ gDisconnect }}" style="border:0; background:transparent; padding:0; font-size:12px; font-weight:600; color:hsl(4 62% 50%); cursor:pointer">Disconnect</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ gDisconnected }}" hint-placeholder-val="{{ true }}">
+                <p style="margin:14px 0 16px; font-size:13px; color:hsl(38 6% 42%)">Connect to hide the times you are already busy, push booked sessions to your calendar, and attach a Meet link to each one.</p>
+                <button onClick="{{ gConnect }}" style="width:100%; height:42px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; font-weight:600; cursor:pointer">Connect Google Calendar</button>
+              </sc-if>
+            </div>
+
+            <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <h2 style="margin:0 0 14px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Upcoming</h2>
+              <div style="display:flex; flex-direction:column; gap:10px">
+                <sc-for list="{{ weekActivities }}" as="a" hint-placeholder-count="2">
+                  <div style="display:grid; gap:2px; padding:12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
+                    <span style="font-size:14px; font-weight:600">{{ a.title }}</span>
+                    <span style="font-size:12px; color:hsl(38 6% 42%)">{{ a.when }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1px solid hsl(42 12% 84%); font-size:13px">
+                <span style="color:hsl(38 6% 42%)">Quarterly feedback</span>
+                <a href="#" style="font-weight:600">Open form</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMetaTracker }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px">
+          <div>
+            <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">From question to publication</div>
+            <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+              <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>
+              </span>
+              <span>MetaTracker</span>
+            </h1>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Manage your meta-analysis projects step by step.</p>
+          </div>
+          <button style="display:inline-flex; align-items:center; gap:8px; height:44px; padding:0 20px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:15px; font-weight:600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            New Research
+          </button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
+            <div style="padding:20px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <div style="display:flex; align-items:center; gap:12px">
+                <span style="{{ s.iconStyle }}" dangerouslySetInnerHTML="{{ s.icon }}"></span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:700">{{ s.value }}</span>
+              </div>
+              <p style="margin:10px 0 0; font-size:14px; color:hsl(38 6% 42%)">{{ s.label }}</p>
+            </div>
+          </sc-for>
+        </div>
+
+        <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">My Research Projects</h2>
+        <div style="max-width:394px; padding:20px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <div style="display:flex; align-items:center; gap:12px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>
+            <span style="flex:1; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">Example 1</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(38 6% 42%)"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          </div>
+          <div style="display:flex; align-items:center; gap:0; margin:20px 0 16px">
+            <sc-for list="{{ stageDots }}" as="dot" hint-placeholder-count="8">
+              <div style="display:flex; align-items:center; flex:1">
+                <span style="{{ dot.style }}"></span>
+                <span style="flex:1; height:2px; background:hsl(42 12% 84%)"></span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px">
+            <span style="color:hsl(38 6% 42%)">Now: Research Question</span>
+            <span style="font-family:'JetBrains Mono', monospace; font-weight:700">0%</span>
+          </div>
+          <div style="height:6px; border-radius:9999px; background:hsl(44 14% 89%); margin:8px 0 16px"></div>
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px; color:hsl(38 6% 42%)">
+            <span style="display:inline-flex; align-items:center; gap:6px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              Updated 23 minutes ago
+            </span>
+            <span style="font-family:'JetBrains Mono', monospace">0/37 tasks</span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCourses }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px">
+        <div>
+          <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Learning</div>
+          <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+            <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+            </span>
+            <span>Office Hours</span>
+          </h1>
+          <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Structured content and session recordings to support your meta-analysis journey.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:24px; max-width:1000px">
+          <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
+            <div style="border-radius:13.6px; overflow:hidden; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <div style="aspect-ratio:596/1058; background:linear-gradient(160deg, hsl(234 85% 14%), hsl(212 85% 20%)); display:grid; place-items:center; padding:24px; text-align:center; color:hsl(40 30% 96%); font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:.06em; text-transform:uppercase">{{ c.title }}</div>
+              <div style="padding:18px; font-size:14px; font-weight:500; text-transform:uppercase; letter-spacing:.02em">{{ c.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="max-width:1000px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Recordings</h2>
+          <p style="margin:0 0 18px; font-size:13px; color:hsl(38 6% 42%)">Every office hour is recorded and posted here within 24 hours.</p>
+          <div style="display:flex; flex-direction:column; gap:10px">
+            <sc-for list="{{ recordings }}" as="r" hint-placeholder-count="4">
+              <div style="display:flex; align-items:center; gap:16px; padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
+                <span style="display:grid; place-items:center; width:36px; height:36px; flex-shrink:0; border-radius:9999px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                </span>
+                <span style="display:grid; gap:2px; flex:1; min-width:0">
+                  <span style="font-size:15px; font-weight:600">{{ r.title }}</span>
+                  <span style="font-size:13px; color:hsl(38 6% 42%)">{{ r.meta }}</span>
+                </span>
+                <a href="#" style="font-size:13px; font-weight:600">Watch</a>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px; max-width:1000px">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px">
+          <div>
+            <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Account</div>
+            <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+              <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </span>
+              <span>Profile</span>
+            </h1>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Your account information and mentorship role.</p>
+          </div>
+          <button style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99% / .6); font-size:14px; font-weight:500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>
+            Edit Profile
+          </button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:24px; padding:24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <span style="display:grid; place-items:center; height:76px; width:76px; flex-shrink:0; border-radius:9999px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-family:Ruda, sans-serif; font-size:22px; font-weight:700">MT</span>
+          <div style="display:grid; gap:8px">
+            <span style="font-family:Ruda, sans-serif; font-size:20px; font-weight:700">Metahu Team</span>
+            <span style="display:inline-flex; align-items:center; gap:8px; font-size:14px; color:hsl(38 6% 42%)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+              metahub@metaanalysis.academy
+            </span>
+            <span style="display:inline-flex; align-items:center; gap:12px; flex-wrap:wrap">
+              <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(44 16% 88%); color:hsl(234 45% 20%); font-size:12px; font-weight:600">Mentee</span>
+              <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:12px; font-weight:600">Active</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; font-size:13px; color:hsl(38 6% 42%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                Member since March 2026
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div style="padding:24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <h2 style="margin:0 0 6px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Timezone</h2>
+          <p style="margin:0 0 16px; font-size:13px; color:hsl(38 6% 42%)">All session times across the platform are converted into this timezone.</p>
+          <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:44px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%); min-width:280px">
+            <sc-for list="{{ tzOptions }}" as="t" hint-placeholder-count="5">
+              <option value="{{ t.id }}">{{ t.label }}</option>
+            </sc-for>
+          </select>
+        </div>
+
+        <sc-for list="{{ profileSections }}" as="sec" hint-placeholder-count="3">
+          <div style="padding:24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+            <h2 style="margin:0 0 20px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ sec.title }}</h2>
+            <div style="display:flex; flex-direction:column; gap:20px">
+              <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="2">
+                <div>
+                  <div style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600">
+                    <span style="display:flex; width:15px; height:15px; color:hsl(234 68% 12%)" dangerouslySetInnerHTML="{{ row.icon }}"></span>
+                    {{ row.label }}
+                  </div>
+                  <div style="margin-top:4px; font-size:15px; color:hsl(38 6% 42%)">{{ row.value }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+
+        <div style="padding:24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Bio</h2>
+          <p style="margin:0; font-size:15px; font-style:italic; color:hsl(38 6% 42%)">Not set</p>
+        </div>
+      </div>
+    </sc-if>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+const ICONS = {
+  dashboard: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>',
+  calendar: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>',
+  video: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>',
+  fileSearch: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>',
+  cap: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>',
+  chart: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>',
+  clock: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
+  check: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>',
+  phone: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
+  pin: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+  building: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M8 10h.01"></path><path d="M16 10h.01"></path><path d="M8 14h.01"></path><path d="M16 14h.01"></path></svg>',
+  capSm: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>'
+};
+
+const NAV = [
+  { key: 'dashboard', label: 'Dashboard', icon: ICONS.dashboard },
+  { key: 'calendar', label: 'Calendar', icon: ICONS.calendar },
+  { key: 'sessions', label: 'Sessions', icon: ICONS.video },
+  { key: 'metatracker', label: 'MetaTracker', icon: ICONS.fileSearch },
+  { key: 'courses', label: 'Office Hours', icon: ICONS.cap }
+];
+
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAY_FULL = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+const TZS = [
+  { id: 'sao_paulo', label: 'Brasília — GMT-3', short: 'GMT-3', offset: -3 },
+  { id: 'new_york', label: 'New York — GMT-4', short: 'GMT-4', offset: -4 },
+  { id: 'lisbon', label: 'Lisbon — GMT+1', short: 'GMT+1', offset: 1 },
+  { id: 'london', label: 'London — GMT+1', short: 'GMT+1', offset: 1 },
+  { id: 'utc', label: 'UTC — GMT+0', short: 'UTC', offset: 0 }
+];
+const MENTOR_OFFSET = -3;
+
+// "today" inside the prototype: Monday, Aug 31 2026, 14:20 mentor time
+const TODAY = new Date(2026, 7, 31);
+const NOW_MIN = 14 * 60 + 20;
+const TAKEN = { '1-15:00': true, '3-09:30': true, '3-16:00': true, '4-10:00': true };
+// events already on the mentor's Google Calendar (mentor-local time)
+const GOOGLE_BUSY = {
+  '0-10:00': 'Ward round',
+  '1-16:00': 'Journal club',
+  '3-17:00': 'Thesis defence',
+  '4-11:00': 'Department meeting'
+};
+
+function toMin(hhmm) { const p = hhmm.split(':'); return parseInt(p[0], 10) * 60 + parseInt(p[1], 10); }
+function fmt(min) {
+  let m = ((min % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60), mm = m % 60;
+  return (h < 10 ? '0' : '') + h + ':' + (mm < 10 ? '0' : '') + mm;
+}
+function addDays(d, n) { const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+
+const TIME_OPTIONS = (function () {
+  const out = [];
+  for (let m = 6 * 60; m <= 22 * 60; m += 30) out.push(fmt(m));
+  return out;
+})();
+
+class Component extends DCLogic {
+  state = {
+    page: 'dashboard',
+    selected: 29,
+    role: 'mentee',
+    weekOffset: 0,
+    duration: 60,
+    tzId: 'sao_paulo',
+    pick: null,
+    topic: '',
+    repeatWeekly: true,
+    booked: null,
+    rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
+    google: { connected: true, account: 'vanio.antunes.md@gmail.com', calendar: 'Mentoria MAA', blockConflicts: true, autoAdd: true, meetLink: true, syncedAt: '2 minutes ago' },
+    availability: [
+      { enabled: true, ranges: [{ start: '09:00', end: '12:00' }] },
+      { enabled: true, ranges: [{ start: '14:00', end: '17:00' }] },
+      { enabled: false, ranges: [] },
+      { enabled: true, ranges: [{ start: '09:00', end: '11:00' }, { start: '15:00', end: '18:00' }] },
+      { enabled: true, ranges: [{ start: '10:00', end: '12:00' }] },
+      { enabled: false, ranges: [] },
+      { enabled: false, ranges: [] }
+    ]
+  };
+
+  go = (page) => (e) => { if (e) e.preventDefault(); this.setState({ page }); window.scrollTo(0, 0); };
+
+  tz() { return TZS.filter((t) => t.id === this.state.tzId)[0] || TZS[0]; }
+  shift() { return (this.tz().offset - MENTOR_OFFSET) * 60; }
+
+  updateAvail(fn) {
+    const next = this.state.availability.map((d) => ({ enabled: d.enabled, ranges: d.ranges.map((r) => ({ start: r.start, end: r.end })) }));
+    fn(next);
+    this.setState({ availability: next, pick: null });
+  }
+
+  buildWeek() {
+    const monday = addDays(TODAY, this.state.weekOffset * 7);
+    const dur = this.state.duration;
+    const shift = this.shift();
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const date = addDays(monday, i);
+      const av = this.state.availability[i];
+      const isToday = sameDay(date, TODAY);
+      const isPastDay = date < TODAY && !isToday;
+      const slots = [];
+      if (av.enabled && !isPastDay) {
+        av.ranges.forEach((r) => {
+          for (let m = toMin(r.start); m + dur <= toMin(r.end); m += dur) {
+            const key = i + '-' + fmt(m);
+            if (TAKEN[key] && this.state.weekOffset === 0) continue;
+            if (isToday && m <= NOW_MIN) continue;
+            const busy = this.state.google.connected && this.state.google.blockConflicts && this.state.weekOffset === 0 ? GOOGLE_BUSY[key] : null;
+            slots.push({ mentorMin: m, dayIdx: i, date: date, busy: busy || null });
+          }
+        });
+      }
+      days.push({ date: date, isToday: isToday, slots: slots, shift: shift });
+    }
+    return days;
+  }
+
+  renderVals() {
+    const st = this.state;
+    const page = st.page;
+    const tz = this.tz();
+    const shift = this.shift();
+
+    const navItems = NAV.map((n) => {
+      const active = n.key === page;
+      return {
+        label: n.label,
+        icon: { __html: n.icon },
+        active: active,
+        go: this.go(n.key),
+        style: 'position:relative; display:flex; align-items:center; gap:8px; height:32px; padding:8px; border-radius:9.6px; font-size:14px; font-weight:' + (active ? '600' : '500') + '; color:' + (active ? 'hsl(234 60% 18%)' : 'hsl(234 40% 22%)') + '; background:' + (active ? 'hsl(46 24% 86%)' : 'transparent') + '; overflow:hidden'
+      };
+    });
+
+    // month grid for the calendar page (August 2026 starts on a Saturday)
+    const cells = [];
+    for (let i = 0; i < 6; i++) cells.push({ day: null });
+    for (let d = 1; d <= 31; d++) {
+      const isSel = d === st.selected;
+      cells.push({
+        day: d,
+        select: (e) => { e.preventDefault(); this.setState({ selected: d }); },
+        style: 'width:100%; height:100%; padding:0; border:0; border-radius:9.6px; font-family:inherit; font-size:14px; font-weight:' + (isSel ? '700' : '400') + '; display:flex; align-items:center; justify-content:center; background:' + (isSel ? 'hsl(234 85% 14%)' : 'transparent') + '; color:' + (isSel ? 'hsl(40 30% 96%)' : 'hsl(234 68% 12%)')
+      });
+    }
+    while (cells.length % 7 !== 0) cells.push({ day: null });
+
+    const week = this.buildWeek();
+    const weekDays = week.map((d, i) => {
+      const slots = d.slots.map((s) => {
+        const isPicked = st.pick && st.pick.dayIdx === s.dayIdx && st.pick.mentorMin === s.mentorMin && st.pick.weekOffset === st.weekOffset;
+        if (s.busy) {
+          return {
+            label: fmt(s.mentorMin + shift),
+            title: 'Busy on Google Calendar — ' + s.busy,
+            busy: true,
+            pick: (e) => { e.preventDefault(); },
+            style: 'width:100%; height:38px; border-radius:9.6px; font-size:13px; font-weight:500; font-family:inherit; cursor:not-allowed; border:1px dashed hsl(42 12% 84%); background:hsl(44 14% 89% / .5); color:hsl(38 6% 42%); text-decoration:line-through'
+          };
+        }
+        return {
+          label: fmt(s.mentorMin + shift),
+          title: '',
+          busy: false,
+          pick: (e) => { e.preventDefault(); this.setState({ pick: { dayIdx: s.dayIdx, mentorMin: s.mentorMin, weekOffset: st.weekOffset, date: s.date }, booked: null }); },
+          style: 'width:100%; height:38px; border-radius:9.6px; font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; border:1px solid ' + (isPicked ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)') + '; background:' + (isPicked ? 'hsl(234 85% 14%)' : 'hsl(42 33% 99%)') + '; color:' + (isPicked ? 'hsl(40 30% 96%)' : 'hsl(234 85% 14%)')
+        };
+      });
+      return {
+        weekday: DAY_NAMES[i],
+        dayNum: d.date.getDate(),
+        dateStyle: 'margin-top:2px; font-family:Ruda, sans-serif; font-size:17px; font-weight:700; color:' + (d.isToday ? 'hsl(234 85% 14%)' : 'hsl(234 68% 12%)'),
+        slots: slots,
+        hasSlots: slots.length > 0,
+        empty: slots.length === 0
+      };
+    });
+
+    const first = week[0].date, last = week[6].date;
+    const weekLabel = MONTHS_SHORT[first.getMonth()] + ' ' + first.getDate() + ' – ' + MONTHS_SHORT[last.getMonth()] + ' ' + last.getDate() + ', ' + last.getFullYear();
+
+    const pick = st.pick;
+    let selectedUserTime = '', selectedMentorTime = '', confirmSubtitle = '';
+    if (pick) {
+      const d = pick.date;
+      const dateStr = DAY_FULL[pick.dayIdx] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate();
+      selectedUserTime = dateStr + ' · ' + fmt(pick.mentorMin + shift) + ' – ' + fmt(pick.mentorMin + shift + st.duration);
+      selectedMentorTime = dateStr + ' · ' + fmt(pick.mentorMin) + ' – ' + fmt(pick.mentorMin + st.duration);
+      confirmSubtitle = st.duration + '-minute session with Vânio Antunes do Livramento Junior';
+    }
+
+    const sessionsTotal = 52, sessionsDone = 26;
+
+    const availabilityRows = st.availability.map((day, i) => {
+      const total = day.ranges.reduce((sum, r) => sum + (toMin(r.end) - toMin(r.start)), 0);
+      return {
+        label: DAY_FULL[i],
+        enabled: day.enabled,
+        disabled: !day.enabled,
+        count: day.enabled ? Math.floor(total / st.duration) + ' slots' : '',
+        rowStyle: 'display:flex; align-items:center; gap:16px; padding:14px 24px; border-bottom:1px solid hsl(42 12% 84%); background:' + (day.enabled ? 'transparent' : 'hsl(44 26% 96% / .6)'),
+        switchStyle: 'position:relative; flex-shrink:0; width:38px; height:22px; padding:0; border:0; border-radius:9999px; cursor:pointer; background:' + (day.enabled ? 'hsl(234 85% 14%)' : 'hsl(44 14% 89%)'),
+        knobStyle: 'position:absolute; top:3px; left:' + (day.enabled ? '19px' : '3px') + '; width:16px; height:16px; border-radius:9999px; background:hsl(42 33% 99%); transition:left .15s ease',
+        toggle: () => this.updateAvail((a) => {
+          a[i].enabled = !a[i].enabled;
+          if (a[i].enabled && a[i].ranges.length === 0) a[i].ranges.push({ start: '09:00', end: '12:00' });
+        }),
+        addRange: () => this.updateAvail((a) => { a[i].ranges.push({ start: '13:00', end: '15:00' }); }),
+        ranges: day.ranges.map((r, j) => ({
+          start: r.start,
+          end: r.end,
+          setStart: (e) => { const v = e.target.value; this.updateAvail((a) => { a[i].ranges[j].start = v; }); },
+          setEnd: (e) => { const v = e.target.value; this.updateAvail((a) => { a[i].ranges[j].end = v; }); },
+          remove: () => this.updateAvail((a) => { a[i].ranges.splice(j, 1); if (a[i].ranges.length === 0) a[i].enabled = false; })
+        }))
+      };
+    });
+
+    const openDays = st.availability.filter((d) => d.enabled).length;
+    const totalSlots = weekDays.reduce((s, d) => s + d.slots.filter((x) => !x.busy).length, 0);
+    const busyCount = weekDays.reduce((s, d) => s + d.slots.filter((x) => x.busy).length, 0);
+
+    const g = st.google;
+    const setG = (patch) => this.setState({ google: Object.assign({}, g, patch), pick: null });
+    let gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='
+      + encodeURIComponent('Mentorship session · Vânio Antunes')
+      + '&details=' + encodeURIComponent(st.topic || 'Weekly mentorship session — Mentoria MAA')
+      + '&location=' + encodeURIComponent('Google Meet');
+
+    const tabBase = 'height:32px; padding:0 14px; border:0; border-radius:6.6px; font-size:14px; cursor:pointer; ';
+
+    return {
+      navItems: navItems,
+      roleLabel: st.role === 'mentor' ? 'Mentor' : 'Mentee',
+      isDashboard: page === 'dashboard',
+      isCalendar: page === 'calendar',
+      isSessions: page === 'sessions',
+      isMetaTracker: page === 'metatracker',
+      isCourses: page === 'courses',
+      isProfile: page === 'profile',
+      goProfile: this.go('profile'),
+      goCalendar: this.go('calendar'),
+      goCourses: this.go('courses'),
+      goMetaTracker: this.go('metatracker'),
+      profileStyle: 'position:relative; display:flex; align-items:center; gap:8px; height:48px; padding:8px; border-radius:9.6px; background:' + (page === 'profile' ? 'hsl(46 24% 86%)' : 'transparent') + '; color:hsl(234 40% 22%)',
+
+      isMenteeView: st.role === 'mentee',
+      isMentorView: st.role === 'mentor',
+      setMentee: () => this.setState({ role: 'mentee' }),
+      setMentor: () => this.setState({ role: 'mentor' }),
+      menteeTabStyle: tabBase + (st.role === 'mentee' ? 'background:hsl(42 33% 99%); font-weight:600; color:hsl(234 68% 12%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)' : 'background:transparent; font-weight:500; color:hsl(38 6% 42%)'),
+      mentorTabStyle: tabBase + (st.role === 'mentor' ? 'background:hsl(42 33% 99%); font-weight:600; color:hsl(234 68% 12%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)' : 'background:transparent; font-weight:500; color:hsl(38 6% 42%)'),
+
+      durationOptions: [30, 45, 60].map((d) => ({
+        label: d + ' min',
+        pick: () => this.setState({ duration: d, pick: null }),
+        style: tabBase + 'padding:0 12px; ' + (st.duration === d ? 'background:hsl(42 33% 99%); font-weight:600; color:hsl(234 68% 12%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)' : 'background:transparent; font-weight:500; color:hsl(38 6% 42%)')
+      })),
+
+      tzOptions: TZS,
+      tzId: st.tzId,
+      tzShort: tz.short,
+      setTz: (e) => this.setState({ tzId: e.target.value }),
+
+      weekDays: weekDays,
+      weekLabel: weekLabel,
+      prevWeek: () => this.setState({ weekOffset: Math.max(0, st.weekOffset - 1), pick: null }),
+      nextWeek: () => this.setState({ weekOffset: st.weekOffset + 1, pick: null }),
+
+      hasSelection: !!pick && !st.booked,
+      selectedUserTime: selectedUserTime,
+      selectedMentorTime: selectedMentorTime,
+      confirmSubtitle: confirmSubtitle,
+      topic: st.topic,
+      setTopic: (e) => this.setState({ topic: e.target.value }),
+      repeatWeekly: st.repeatWeekly,
+      toggleRepeat: () => this.setState({ repeatWeekly: !st.repeatWeekly }),
+      repeatHint: 'Creates the remaining ' + (sessionsTotal - sessionsDone) + ' sessions of your plan at the same weekday and time.',
+      confirmBooking: () => this.setState({ booked: { when: selectedUserTime }, pick: null }),
+      isBooked: !!st.booked,
+      bookedSummary: st.booked ? st.booked.when + ' · ' + tz.short + (st.repeatWeekly ? ' · repeats weekly' : '') : '',
+      resetBooking: () => this.setState({ booked: null }),
+      clearSelection: () => this.setState({ pick: null }),
+
+      availabilityRows: availabilityRows,
+      timeOptions: TIME_OPTIONS,
+      availabilitySummary: openDays + ' open days this week · ' + totalSlots + ' bookable ' + st.duration + '-minute slots',
+      bookingRules: [
+        { title: 'Allow same-day booking', sub: 'Mentees can take any slot later today.', on: st.rules.sameDay, toggle: () => this.setState({ rules: Object.assign({}, st.rules, { sameDay: !st.rules.sameDay }) }) },
+        { title: 'Let mentees book sessions', sub: 'Without this, only you can schedule.', on: st.rules.menteeBooks, toggle: () => this.setState({ rules: Object.assign({}, st.rules, { menteeBooks: !st.rules.menteeBooks }) }) },
+        { title: 'Offer recurring booking', sub: 'One confirmation creates the whole weekly series.', on: st.rules.recurring, toggle: () => this.setState({ rules: Object.assign({}, st.rules, { recurring: !st.rules.recurring }) }) },
+        { title: '15-minute buffer between sessions', sub: 'Blocks back-to-back bookings.', on: st.rules.buffer, toggle: () => this.setState({ rules: Object.assign({}, st.rules, { buffer: !st.rules.buffer }) }) }
+      ],
+
+      gConnected: g.connected,
+      gDisconnected: !g.connected,
+      gAccount: g.account,
+      gCalendar: g.calendar,
+      gSyncedAt: g.syncedAt,
+      gBusyNote: busyCount > 0 ? busyCount + ' slot' + (busyCount === 1 ? '' : 's') + ' hidden this week — busy on Google Calendar' : 'No conflicts this week',
+      gConnect: () => setG({ connected: true }),
+      gDisconnect: () => setG({ connected: false }),
+      gcalUrl: gcalUrl,
+      gToggles: [
+        { title: 'Block times I am busy', sub: 'Events on ' + g.calendar + ' are removed from the slot list.', on: g.blockConflicts, toggle: () => setG({ blockConflicts: !g.blockConflicts }) },
+        { title: 'Add booked sessions to Google Calendar', sub: 'Both mentor and mentee get the invite.', on: g.autoAdd, toggle: () => setG({ autoAdd: !g.autoAdd }) },
+        { title: 'Create a Google Meet link', sub: 'Attached to every session automatically.', on: g.meetLink, toggle: () => setG({ meetLink: !g.meetLink }) }
+      ],
+
+      sessionsDone: sessionsDone,
+      sessionsTotal: sessionsTotal,
+      sessionsLeft: sessionsTotal - sessionsDone,
+      progressStyle: 'height:100%; width:' + Math.round((sessionsDone / sessionsTotal) * 100) + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%))',
+
+      calendarHighlights: [
+        { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: 'Tue, Aug 25 · ' + fmt(toMin('14:00') + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
+        { eyebrow: 'Next meeting', title: 'Mentorship session · Vânio', when: 'Tue, Sep 1 · ' + fmt(toMin('14:00') + shift) + ' ' + tz.short, note: 'In 1 day · Google Meet', past: false },
+        { eyebrow: 'Last office hours', title: 'Heterogeneity: when to pool', when: 'Thu, Aug 27 · ' + fmt(toMin('18:00') + shift) + ' ' + tz.short, note: 'Recording available', past: true },
+        { eyebrow: 'Next office hours', title: 'Research Methods & Statistics', when: 'Thu, Sep 3 · ' + fmt(toMin('18:00') + shift) + ' ' + tz.short, note: 'In 3 days · open to all mentees', past: false }
+      ].map((h) => ({
+        eyebrow: h.eyebrow,
+        title: h.title,
+        when: h.when,
+        note: h.note,
+        cardStyle: 'display:flex; flex-direction:column; gap:6px; padding:16px; border-radius:13.6px; border:1px solid ' + (h.past ? 'hsl(42 12% 84%)' : 'hsl(234 85% 14% / .25)') + '; background:' + (h.past ? 'hsl(44 26% 96%)' : 'hsl(42 33% 99%)') + '; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)',
+        eyebrowStyle: 'font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:' + (h.past ? 'hsl(38 6% 42%)' : 'hsl(234 85% 14%)')
+      })),
+
+      weekActivities: [
+        { title: 'Mentorship session · Vânio', when: 'Tue, Sep 1 · ' + fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short },
+        { title: 'Office hours · Research methods', when: 'Thu, Sep 3 · ' + fmt(toMin('18:00') + shift) + ' – ' + fmt(toMin('19:00') + shift) + ' ' + tz.short }
+      ],
+      weekTasks: [
+        { title: 'Finish the PICOTT table for Example 1', due: 'Due Wed' },
+        { title: 'Run the duplicate screening in Rayyan', due: 'Due Fri' },
+        { title: 'Send the protocol draft to Vânio', due: 'Before next session' }
+      ],
+
+      quickLinks: [
+        { title: 'Sessions', sub: 'Book & join', icon: { __html: ICONS.video }, go: this.go('sessions') },
+        { title: 'MetaTracker', sub: 'Track research', icon: { __html: ICONS.fileSearch }, go: this.go('metatracker') },
+        { title: 'Calendar', sub: 'Weekly activities', icon: { __html: ICONS.calendar }, go: this.go('calendar') }
+      ],
+      stages: ['Research Question','Protocol','Screening','Data Extraction','Statistics','Quality Assessment','Manuscript Writing','Submission'].map((name) => ({ name: name })),
+      stageDots: [0,1,2,3,4,5,6,7].map((i) => ({
+        style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i === 0 ? 'hsl(234 85% 14%)' : 'hsl(44 14% 89%)') + '; border:1px solid ' + (i === 0 ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)')
+      })),
+      courses: [
+        { title: 'Career', label: 'Career' },
+        { title: 'Research Methods & Statistics', label: 'Research Methods & Statistics' },
+        { title: 'Skills & Productivity', label: 'Skill & Productivity' },
+        { title: 'Writing & Publication', label: 'Writing & Publication' }
+      ],
+      recordings: [
+        { title: 'Heterogeneity: when to pool and when to stop', meta: 'Aug 27, 2026 · 58 min · Research Methods' },
+        { title: 'Writing a results section that survives review', meta: 'Aug 20, 2026 · 46 min · Writing & Publication' },
+        { title: 'Building a screening workflow for two reviewers', meta: 'Aug 13, 2026 · 52 min · Skills & Productivity' },
+        { title: 'Choosing your first research question', meta: 'Aug 6, 2026 · 61 min · Career' }
+      ],
+      stats: [
+        { value: '1', label: 'Research projects', icon: { __html: ICONS.chart }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(234 85% 14%)' },
+        { value: '8', label: 'Stages from question to publication', icon: { __html: ICONS.clock }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(155 40% 27%)' },
+        { value: '37', label: 'Tasks per project', icon: { __html: ICONS.check }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(40 78% 44%)' }
+      ],
+      weekdays: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+      monthCells: cells,
+      selectedLabel: MONTHS[7] + ' ' + st.selected + ', 2026',
+      profileSections: [
+        { title: 'Academic & Research', rows: [
+          { label: 'Professional Status', value: 'Medical Student', icon: { __html: ICONS.capSm } },
+          { label: 'Affiliation', value: 'Federal University of Health Sciences of Porto Alegre', icon: { __html: ICONS.building } }
+        ] },
+        { title: 'Contact', rows: [
+          { label: 'Phone', value: '+55 (48) 99832-0836', icon: { __html: ICONS.phone } },
+          { label: 'City', value: 'Porto Alegre', icon: { __html: ICONS.pin } },
+          { label: 'Country', value: 'Brazil', icon: { __html: ICONS.pin } }
+        ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
+
