@@ -18,6 +18,32 @@
   a { color: hsl(234 85% 14%); text-decoration: none; }
   a:hover { color: hsl(212 85% 20%); }
   button, select, input { font-family: inherit; letter-spacing: inherit; }
+
+  /* ---- mobile adaptation ---- */
+  .mobile-topbar { display: none; }
+  .nav-backdrop { display: none; }
+  @media (max-width: 860px) {
+    .mobile-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 12px; background: hsl(44 26% 96% / .92); backdrop-filter: blur(10px); border-bottom: 1px solid hsl(42 14% 88%); }
+    .mobile-topbar button { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 9.6px; background: transparent; color: hsl(234 40% 22%); }
+    .app-sidebar { position: fixed !important; top: 0; bottom: 0; left: 0; height: 100vh !important; width: 280px !important; z-index: 50 !important; transform: translateX(-105%); transition: transform .25s cubic-bezier(.165, .84, .44, 1); box-shadow: 0 12px 40px -12px hsl(234 45% 18% / .5); }
+    .app-sidebar.nav-open { transform: translateX(0); }
+    .nav-backdrop.nav-open { display: block; position: fixed; inset: 0; z-index: 45; background: hsl(234 68% 12% / .4); border: 0; padding: 0; }
+    .app-sidebar a, .app-sidebar > div > button { min-height: 44px; }
+    .app-main { padding: 72px 14px 28px !important; }
+    .app-main h1[style*="font-size:28px"], .app-main h1[style*="font-size: 28px"] { font-size: 22px !important; }
+    .app-main [style*="padding:24px 28px"], .app-main [style*="padding: 24px 28px"] { padding: 18px !important; }
+    .app-main [style*="grid-template-columns:2fr 1fr"], .app-main [style*="grid-template-columns: 2fr 1fr"] { grid-template-columns: 1fr !important; }
+    .app-main [style*="grid-template-columns:1fr 1fr"], .app-main [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+    .app-main [style*="border-right:1px solid"], .app-main [style*="border-right: 1px solid"] { border-right: 0 !important; border-bottom: 1px solid hsl(42 12% 84%) !important; }
+    .app-main [style*="repeat(4, minmax(0,1fr))"], .app-main [style*="repeat(4, minmax(0, 1fr))"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+    .app-main [style*="repeat(3, minmax(0,1fr))"], .app-main [style*="repeat(3, minmax(0, 1fr))"] { grid-template-columns: 1fr !important; }
+    .app-main [style*="grid-template-columns:repeat(2, minmax(0,1fr))"], .app-main [style*="grid-template-columns: repeat(2, minmax(0, 1fr))"] { grid-template-columns: 1fr !important; }
+    .app-main [style*="grid-template-columns:minmax(104px,132px)"], .app-main [style*="grid-template-columns: minmax(104px, 132px)"] { grid-template-columns: 1fr !important; row-gap: 4px !important; }
+    .app-main [style*="max-width:340px"], .app-main [style*="max-width: 340px"] { max-width: 100% !important; }
+    .app-main [style*="max-width:474px"], .app-main [style*="max-width: 474px"] { max-width: 100% !important; }
+    .app-main .cal-layout { flex-direction: column !important; }
+    .app-main .cal-layout > * { width: 100%; }
+  }
 </style>
 </helmet>
 <div style="display:flex; min-height:100vh; width:100%; background:hsl(40 8% 93%); position:relative">
@@ -29,7 +55,16 @@
     <div style="position:absolute; bottom:-200px; left:35%; width:700px; height:700px; border-radius:9999px; background:hsl(46 45% 68% / .14); filter:blur(100px)"></div>
   </div>
 
-  <aside style="position:sticky; top:0; align-self:flex-start; height:100vh; width:256px; flex-shrink:0; display:flex; flex-direction:column; background:hsl(44 26% 96%); border-right:1px solid hsl(42 14% 88%); z-index:20">
+  <div class="mobile-topbar">
+    <button onClick="{{ toggleNav }}" aria-label="Open navigation">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+    </button>
+    <span style="display:inline-block; height:32px; width:32px"><img src="assets/logo-mentorship-navy.png" alt="Mentoria MAA" style="height:100%; width:100%; object-fit:contain" /></span>
+    <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700; color:hsl(234 68% 12%)">Mentorship</span>
+  </div>
+  <button class="{{ backdropClass }}" onClick="{{ closeNav }}" aria-label="Close navigation"></button>
+
+  <aside class="{{ sidebarClass }}" style="position:sticky; top:0; align-self:flex-start; height:100vh; width:256px; flex-shrink:0; display:flex; flex-direction:column; background:hsl(44 26% 96%); border-right:1px solid hsl(42 14% 88%); z-index:20">
     <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; border-bottom:1px solid hsl(42 14% 88%)">
       <span style="display:inline-block; height:36px; width:36px; flex-shrink:0"><img src="assets/logo-mentorship-navy.png" alt="Mentoria MAA" style="height:100%; width:100%; object-fit:contain" /></span>
       <button style="display:inline-flex; align-items:center; justify-content:center; height:32px; width:32px; border-radius:9.6px; border:0; background:transparent; color:hsl(234 40% 22%)" style-hover="background:hsl(46 24% 86%)">
@@ -76,7 +111,7 @@
     </div>
   </aside>
 
-  <main style="position:relative; z-index:10; flex:1; min-width:0; padding:28px">
+  <main class="app-main" style="position:relative; z-index:10; flex:1; min-width:0; padding:28px">
 
     <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex; flex-direction:column; gap:24px">
@@ -226,7 +261,7 @@
           <p style="margin:8px 0 0; max-width:42rem; font-size:14px; color:hsl(38 6% 42%)">View all scheduled mentorship activities and sessions</p>
         </div>
 
-        <div style="display:flex; gap:24px; align-items:flex-start">
+        <div class="cal-layout" style="display:flex; gap:24px; align-items:flex-start">
           <div style="flex-shrink:0">
             <div style="padding:24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px; width:286px">
               <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
@@ -1402,6 +1437,7 @@ const TIME_OPTIONS = (function () {
 class Component extends DCLogic {
   state = {
     page: 'dashboard',
+    navOpen: false,
     bannerIdx: 0,
     selected: 29,
     role: 'mentee',
@@ -1427,7 +1463,7 @@ class Component extends DCLogic {
     ]
   };
 
-  go = (page) => (e) => { if (e) e.preventDefault(); this.setState({ page }); window.scrollTo(0, 0); };
+  go = (page) => (e) => { if (e) e.preventDefault(); this.setState({ page, navOpen: false }); window.scrollTo(0, 0); };
 
   tz() { return TZS.filter((t) => t.id === this.state.tzId)[0] || TZS[0]; }
   shift() { return (this.tz().offset - MENTOR_OFFSET) * 60; }
@@ -1760,6 +1796,10 @@ class Component extends DCLogic {
       clearSelection: () => this.setState({ pick: null }),
 
       sessionsSubtitle: st.role === 'mentor' ? 'Schedule and manage sessions with your mentees.' : 'Book your weekly mentorship session and see what is coming up.',
+      sidebarClass: 'app-sidebar' + (st.navOpen ? ' nav-open' : ''),
+      backdropClass: 'nav-backdrop' + (st.navOpen ? ' nav-open' : ''),
+      toggleNav: (e) => { e.preventDefault(); this.setState({ navOpen: !st.navOpen }); },
+      closeNav: (e) => { e.preventDefault(); this.setState({ navOpen: false }); },
       mentorMentees: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').map((m) => ({
         name: m.name,
         initials: initials(m.name),
