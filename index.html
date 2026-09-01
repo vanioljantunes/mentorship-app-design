@@ -38,7 +38,7 @@
     </div>
 
     <div style="flex:1; min-height:0; overflow:auto; padding:8px">
-      <div style="display:flex; align-items:center; height:32px; padding:0 8px; font-size:12px; font-weight:500; color:hsl(234 40% 22% / .7)">Overview</div>
+      <div style="display:flex; align-items:center; height:32px; padding:0 8px; font-size:13px; font-weight:500; color:hsl(234 40% 22% / .7)">Overview</div>
       <ul style="display:flex; flex-direction:column; gap:4px; list-style:none; margin:0; padding:0">
         <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
           <li style="position:relative">
@@ -85,18 +85,18 @@
         </div>
 
         <div style="display:grid; grid-template-columns:2fr 1fr; gap:24px; align-items:start">
-          <div style="position:relative; border:1px solid hsl(42 12% 84%); border-radius:17.6px; overflow:hidden; background:hsl(46 22% 90%); aspect-ratio:3/1; display:grid; place-items:center; color:hsl(38 6% 42%); font-size:13px">Mentorship banner image</div>
+          <div style="position:relative; border:1px solid hsl(42 12% 84%); border-radius:17.6px; overflow:hidden; background:hsl(46 22% 90%); aspect-ratio:3/1; display:grid; place-items:center; color:hsl(38 6% 42%); font-size:14px">Mentorship banner image</div>
           <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:20px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
               <h2 style="display:flex; align-items:center; gap:10px; margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
                 Weekly Activities
               </h2>
-              <a href="#" onClick="{{ goCalendar }}" style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500">View All
+              <a href="#" onClick="{{ goCalendar }}" style="display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:500">View All
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
               </a>
             </div>
-            <p style="margin:6px 0 14px; font-size:13px; color:hsl(38 6% 42%)">Aug 31 - Sep 6, 2026 · times in {{ tzShort }}</p>
+            <p style="margin:6px 0 14px; font-size:14px; color:hsl(38 6% 42%)">Aug 31 - Sep 6, 2026 · times in {{ tzShort }}</p>
             <div style="display:flex; flex-direction:column; gap:10px">
               <sc-for list="{{ weekActivities }}" as="a" hint-placeholder-count="2">
                 <div style="display:flex; align-items:center; gap:12px; padding:12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
@@ -105,7 +105,7 @@
                   </span>
                   <span style="display:grid; gap:2px; flex:1; min-width:0">
                     <span style="font-size:14px; font-weight:600">{{ a.title }}</span>
-                    <span style="font-size:12px; color:hsl(38 6% 42%)">{{ a.when }}</span>
+                    <span style="font-size:13px; color:hsl(38 6% 42%)">{{ a.when }}</span>
                   </span>
                 </div>
               </sc-for>
@@ -119,14 +119,14 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M11 12H3"></path><path d="M16 6H3"></path><path d="M16 18H3"></path><path d="m17 12 2 2 4-4"></path></svg>
               Tasks this week
             </h2>
-            <span style="font-size:12px; color:hsl(38 6% 42%)">Set by your mentor on Aug 26</span>
+            <span style="font-size:13px; color:hsl(38 6% 42%)">Set by your mentor on Aug 26</span>
           </div>
           <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px">
             <sc-for list="{{ weekTasks }}" as="t" hint-placeholder-count="3">
               <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
                 <span style="width:16px; height:16px; flex-shrink:0; border-radius:5.6px; border:1px solid hsl(42 12% 84%); background:hsl(44 14% 89%)"></span>
                 <span style="flex:1; font-size:14px">{{ t.title }}</span>
-                <span style="font-size:12px; color:hsl(38 6% 42%)">{{ t.due }}</span>
+                <span style="font-size:13px; color:hsl(38 6% 42%)">{{ t.due }}</span>
               </div>
             </sc-for>
           </div>
@@ -138,7 +138,7 @@
               <span style="display:flex; width:20px; height:20px; color:hsl(234 85% 14%)" dangerouslySetInnerHTML="{{ q.icon }}"></span>
               <span style="display:grid; gap:2px; flex:1">
                 <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:600">{{ q.title }}</span>
-                <span style="font-size:13px; color:hsl(38 6% 42%)">{{ q.sub }}</span>
+                <span style="font-size:14px; color:hsl(38 6% 42%)">{{ q.sub }}</span>
               </span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(38 6% 42%)"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </a>
@@ -158,7 +158,7 @@
             </div>
             <div style="padding:16px 20px; display:flex; flex-direction:column; gap:9px">
               <sc-for list="{{ stages }}" as="s" hint-placeholder-count="8">
-                <div style="display:grid; grid-template-columns:1fr 12px 40px; align-items:center; gap:12px; font-size:12px">
+                <div style="display:grid; grid-template-columns:1fr 12px 40px; align-items:center; gap:12px; font-size:13px">
                   <span style="text-align:right; font-weight:600; color:hsl(234 68% 12%)">{{ s.name }}</span>
                   <span style="width:10px; height:10px; border-radius:3px; background:hsl(44 14% 89%); border:1px solid hsl(42 12% 84%)"></span>
                   <span style="text-align:right; font-family:'JetBrains Mono', monospace; color:hsl(38 6% 42%)">0%</span>
@@ -166,12 +166,12 @@
               </sc-for>
               <div style="text-align:center; font-size:11px; font-weight:700; color:hsl(155 40% 27%); margin-top:4px">Publication</div>
             </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-top:1px solid hsl(42 12% 84%); font-size:13px">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-top:1px solid hsl(42 12% 84%); font-size:14px">
               <span style="font-family:'JetBrains Mono', monospace">0/37 tasks</span>
               <span style="font-weight:600; color:hsl(234 60% 16%)">In progress</span>
             </div>
             <div style="padding:0 20px 20px">
-              <a href="#" onClick="{{ goMetaTracker }}" style="display:flex; align-items:center; justify-content:center; gap:8px; height:44px; border-radius:9.6px; background:hsl(44 16% 88%); font-size:14px; font-weight:600" style-hover="background:hsl(46 24% 84%)">Open project
+              <a href="#" onClick="{{ goProject }}" style="display:flex; align-items:center; justify-content:center; gap:8px; height:44px; border-radius:9.6px; background:hsl(44 16% 88%); font-size:14px; font-weight:600" style-hover="background:hsl(46 24% 84%)">Open project
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
               </a>
             </div>
@@ -184,7 +184,7 @@
               <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Keep learning</div>
               <h2 style="margin:4px 0 0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">Office Hours</h2>
             </div>
-            <a href="#" onClick="{{ goCourses }}" style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500">View all
+            <a href="#" onClick="{{ goCourses }}" style="display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:500">View all
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </a>
           </div>
@@ -192,7 +192,7 @@
             <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
               <div style="border-radius:13.6px; overflow:hidden; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
                 <div style="aspect-ratio:596/1058; background:linear-gradient(160deg, hsl(234 85% 14%), hsl(212 85% 20%)); display:grid; place-items:center; padding:16px; text-align:center; color:hsl(40 30% 96%); font-family:Ruda, sans-serif; font-size:14px; line-height:1.3; font-weight:700; letter-spacing:.06em; text-transform:uppercase">{{ c.title }}</div>
-                <div style="padding:14px; font-size:13px; font-weight:500; text-transform:uppercase; letter-spacing:.02em">{{ c.label }}</div>
+                <div style="padding:14px; font-size:14px; font-weight:500; text-transform:uppercase; letter-spacing:.02em">{{ c.label }}</div>
               </div>
             </sc-for>
           </div>
@@ -227,7 +227,7 @@
               </div>
               <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:0">
                 <sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7">
-                  <div style="text-align:center; font-size:12.8px; font-weight:500; color:hsl(38 6% 42%)">{{ w }}</div>
+                  <div style="text-align:center; font-size:13px; font-weight:500; color:hsl(38 6% 42%)">{{ w }}</div>
                 </sc-for>
               </div>
               <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:0; margin-top:8px">
@@ -239,7 +239,7 @@
                   </div>
                 </sc-for>
               </div>
-              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:16px; margin-top:16px; font-size:12px; color:hsl(38 6% 42%)">
+              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:16px; margin-top:16px; font-size:13px; color:hsl(38 6% 42%)">
                 <div style="display:flex; align-items:center; gap:8px"><span style="width:16px; height:16px; border-radius:4px; background:hsl(234 85% 14%)"></span><span>Selected</span></div>
                 <div style="display:flex; align-items:center; gap:8px"><span style="width:16px; height:16px; border-radius:4px; background:hsl(46 24% 84%)"></span><span>Today</span></div>
                 <div style="display:flex; align-items:center; gap:8px"><span style="width:16px; height:16px; border-radius:4px; box-shadow:0 0 0 1px hsl(42 33% 99%), 0 0 0 3px hsl(44 16% 88%)"></span><span>Has events</span></div>
@@ -248,16 +248,65 @@
           </div>
 
           <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:16px">
-            <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px">
-              <sc-for list="{{ calendarHighlights }}" as="h" hint-placeholder-count="4">
-                <div style="{{ h.cardStyle }}">
-                  <span style="{{ h.eyebrowStyle }}">{{ h.eyebrow }}</span>
-                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700; line-height:1.25">{{ h.title }}</span>
-                  <span style="font-size:13px; color:hsl(38 6% 42%)">{{ h.when }}</span>
-                  <span style="font-size:12px; color:hsl(38 6% 42%); opacity:.85">{{ h.note }}</span>
+            <sc-for list="{{ calendarBlocks }}" as="b" hint-placeholder-count="2">
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+                <div style="display:flex; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid hsl(42 12% 84%)">
+                  <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:9.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)" dangerouslySetInnerHTML="{{ b.icon }}"></span>
+                  <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ b.title }}</h3>
                 </div>
-              </sc-for>
-            </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr">
+                  <div style="padding:20px; border-right:1px solid hsl(42 12% 84%)">
+                    <span style="display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">
+                      <span style="width:8px; height:8px; border-radius:9999px; background:hsl(44 14% 89%); border:1px solid hsl(42 12% 84%)"></span>
+                      {{ b.pastLabel }}
+                    </span>
+                    <div style="margin-top:10px; font-family:Ruda, sans-serif; font-size:17px; font-weight:700; line-height:1.3">{{ b.pastTitle }}</div>
+                    <div style="margin-top:6px; font-size:14px; color:hsl(38 6% 42%)">{{ b.pastWhen }}</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px">
+                      <sc-for list="{{ b.pastChips }}" as="c" hint-placeholder-count="1">
+                        <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:12px; font-weight:600">{{ c }}</span>
+                      </sc-for>
+                    </div>
+                    <div style="margin-top:14px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">{{ b.pastListLabel }}</div>
+                    <ul style="margin:8px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px">
+                      <sc-for list="{{ b.pastList }}" as="item" hint-placeholder-count="3">
+                        <li style="display:flex; align-items:flex-start; gap:8px; font-size:14px; color:hsl(38 6% 42%)">
+                          <span style="margin-top:6px; width:6px; height:6px; flex-shrink:0; border-radius:9999px; background:hsl(234 85% 14%)"></span>
+                          {{ item }}
+                        </li>
+                      </sc-for>
+                    </ul>
+                    <a href="#" style="display:inline-block; margin-top:14px; font-size:14px; font-weight:600">{{ b.pastAction }}</a>
+                  </div>
+                  <div style="padding:20px; background:hsl(234 85% 14% / .04)">
+                    <span style="display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(234 85% 14%)">
+                      <span style="width:8px; height:8px; border-radius:9999px; background:hsl(234 85% 14%)"></span>
+                      {{ b.nextLabel }}
+                    </span>
+                    <div style="margin-top:10px; font-family:Ruda, sans-serif; font-size:17px; font-weight:700; line-height:1.3">{{ b.nextTitle }}</div>
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:6px">
+                      <span style="font-size:14px; color:hsl(38 6% 42%)">{{ b.nextWhen }}</span>
+                      <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(40 78% 44% / .14); color:hsl(40 78% 44%); font-size:12px; font-weight:700">{{ b.nextCountdown }}</span>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px">
+                      <sc-for list="{{ b.nextChips }}" as="c" hint-placeholder-count="1">
+                        <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:12px; font-weight:600">{{ c }}</span>
+                      </sc-for>
+                    </div>
+                    <div style="margin-top:14px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">{{ b.nextListLabel }}</div>
+                    <ul style="margin:8px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px">
+                      <sc-for list="{{ b.nextList }}" as="item" hint-placeholder-count="3">
+                        <li style="display:flex; align-items:flex-start; gap:8px; font-size:14px; color:hsl(38 6% 42%)">
+                          <span style="margin-top:6px; width:6px; height:6px; flex-shrink:0; border-radius:9999px; background:hsl(40 78% 44%)"></span>
+                          {{ item }}
+                        </li>
+                      </sc-for>
+                    </ul>
+                    <a href="https://meet.google.com/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 16px; margin-top:16px; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:14px; font-weight:600">{{ b.nextAction }}</a>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
             <div style="display:flex; align-items:center; gap:8px">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
               <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Activities for {{ selectedLabel }}</h3>
@@ -296,16 +345,53 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:24px; align-items:start">
+        <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start">
 
-          <div style="display:flex; flex-direction:column; gap:24px; min-width:0">
+          <div style="flex:1 1 520px; display:flex; flex-direction:column; gap:24px; min-width:0">
 
             <sc-if value="{{ isMenteeView }}" hint-placeholder-val="{{ true }}">
-              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+              <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:stretch">
+
+              <div style="flex:1 1 240px; max-width:100%; display:flex; flex-direction:column; background:hsl(42 33% 99%); border:1px solid hsl(234 85% 14% / .25); border-radius:17.6px; box-shadow:0 12px 30px -16px hsl(234 45% 18% / .6); overflow:hidden">
+                <div style="padding:18px 20px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%)">
+                  <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; opacity:.85">Next mentorship meeting</div>
+                  <div style="display:flex; align-items:baseline; gap:10px; margin-top:8px">
+                    <span style="font-family:Ruda, sans-serif; font-size:34px; font-weight:800; line-height:1">{{ nextDayNum }}</span>
+                    <span style="display:grid; gap:1px">
+                      <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">{{ nextMonth }}</span>
+                      <span style="font-size:13px; opacity:.85">{{ nextWeekday }}</span>
+                    </span>
+                    <span style="margin-left:auto; display:inline-flex; align-items:center; padding:3px 10px; border-radius:9999px; background:hsl(40 30% 96% / .18); font-size:11px; font-weight:700">{{ nextCountdown }}</span>
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:14px; padding:18px 20px; flex:1">
+                  <div style="display:flex; align-items:center; gap:10px">
+                    <span style="display:grid; place-items:center; width:36px; height:36px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-size:13px; font-weight:700">VA</span>
+                    <span style="display:grid; gap:1px; min-width:0">
+                      <span style="font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">Vânio Antunes</span>
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ nextTime }}</span>
+                    </span>
+                  </div>
+                  <div style="display:flex; flex-wrap:wrap; gap:6px">
+                    <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:11px; font-weight:600">Example 1</span>
+                    <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:11px; font-weight:600">Session 27</span>
+                  </div>
+                  <a href="https://meet.google.com/" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; height:42px; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:14px; font-weight:600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
+                    Join
+                  </a>
+                  <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px">
+                    <a href="#">Reschedule</a>
+                    <a href="{{ gcalUrl }}" target="_blank" rel="noopener">Add to calendar</a>
+                  </div>
+                </div>
+              </div>
+
+              <div style="flex:2.4 1 400px; min-width:0; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
                   <div>
                     <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Book a session</h2>
-                    <p style="margin:4px 0 0; font-size:13px; color:hsl(38 6% 42%)">Pick any open time from Vânio's weekly availability. Same-day booking is allowed.</p>
+                    <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">Pick any open time from Vânio's weekly availability. Same-day booking is allowed.</p>
                   </div>
                   <div style="display:flex; align-items:center; gap:10px">
                     <div style="display:inline-flex; gap:4px; padding:4px; background:hsl(44 14% 89%); border-radius:9.6px">
@@ -326,10 +412,10 @@
                       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
                     </button>
                   </div>
-                  <label style="display:inline-flex; align-items:center; gap:8px; font-size:13px; color:hsl(38 6% 42%)">
+                  <label style="display:inline-flex; align-items:center; gap:8px; font-size:14px; color:hsl(38 6% 42%)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
                     Your timezone
-                    <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:34px; padding:0 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; color:hsl(234 68% 12%)">
+                    <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:34px; padding:0 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%)">
                       <sc-for list="{{ tzOptions }}" as="t" hint-placeholder-count="5">
                         <option value="{{ t.id }}">{{ t.label }}</option>
                       </sc-for>
@@ -337,7 +423,7 @@
                   </label>
                 </div>
 
-                <div style="display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:10px; padding:20px 24px 24px">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(72px, 1fr)); gap:10px; padding:20px 24px 24px">
                   <sc-for list="{{ weekDays }}" as="day" hint-placeholder-count="7">
                     <div style="display:flex; flex-direction:column; gap:8px; min-width:0">
                       <div style="text-align:center; padding-bottom:8px; border-bottom:1px solid hsl(42 12% 84%)">
@@ -350,21 +436,23 @@
                         </sc-for>
                       </sc-if>
                       <sc-if value="{{ day.empty }}" hint-placeholder-val="{{ true }}">
-                        <div style="padding:10px 0; text-align:center; font-size:12px; color:hsl(38 6% 42%); opacity:.7">—</div>
+                        <div style="padding:10px 0; text-align:center; font-size:13px; color:hsl(38 6% 42%); opacity:.7">—</div>
                       </sc-if>
                     </div>
                   </sc-for>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px; padding:0 24px 20px; font-size:12px; color:hsl(38 6% 42%)">
+                <div style="display:flex; align-items:center; gap:8px; padding:0 24px 20px; font-size:13px; color:hsl(38 6% 42%)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
                   {{ gBusyNote }}
                 </div>
               </div>
 
+              </div>
+
               <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ true }}">
                 <div style="background:hsl(42 33% 99%); border:1px solid hsl(234 85% 14% / .25); border-radius:17.6px; padding:24px; box-shadow:0 12px 30px -16px hsl(234 45% 18% / .6)">
                   <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Confirm this time</h2>
-                  <p style="margin:0 0 20px; font-size:13px; color:hsl(38 6% 42%)">{{ confirmSubtitle }}</p>
+                  <p style="margin:0 0 20px; font-size:14px; color:hsl(38 6% 42%)">{{ confirmSubtitle }}</p>
                   <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; margin-bottom:20px">
                     <div style="padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
                       <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Your time · {{ tzShort }}</div>
@@ -375,13 +463,13 @@
                       <div style="margin-top:6px; font-family:Ruda, sans-serif; font-size:17px; font-weight:700">{{ selectedMentorTime }}</div>
                     </div>
                   </div>
-                  <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px">What do you want to cover?</label>
+                  <label style="display:block; font-size:14px; font-weight:600; margin-bottom:6px">What do you want to cover?</label>
                   <input value="{{ topic }}" onChange="{{ setTopic }}" placeholder="e.g. Review the screening strategy for Example 1" style="width:100%; height:44px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%); margin-bottom:16px" />
                   <label style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; margin-bottom:20px; cursor:pointer">
                     <input type="checkbox" checked="{{ repeatWeekly }}" onChange="{{ toggleRepeat }}" style="width:16px; height:16px; margin-top:2px; accent-color:hsl(234 85% 14%)" />
                     <span style="display:grid; gap:2px">
                       <span style="font-size:14px; font-weight:600">Repeat weekly at this time</span>
-                      <span style="font-size:13px; color:hsl(38 6% 42%)">{{ repeatHint }}</span>
+                      <span style="font-size:14px; color:hsl(38 6% 42%)">{{ repeatHint }}</span>
                     </span>
                   </label>
                   <div style="display:flex; align-items:center; gap:12px">
@@ -395,11 +483,11 @@
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px">
                   <div>
                     <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Past sessions</h2>
-                    <p style="margin:4px 0 0; font-size:13px; color:hsl(38 6% 42%)">What was covered and which projects moved forward.</p>
+                    <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">What was covered and which projects moved forward.</p>
                   </div>
-                  <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ sessionsDone }} completed</span>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:14px; color:hsl(38 6% 42%)">{{ sessionsDone }} completed</span>
                 </div>
-                <div style="display:grid; grid-template-columns:132px 104px minmax(0,1fr) 180px; gap:16px; padding:10px 20px; background:hsl(44 26% 96%); border-top:1px solid hsl(42 12% 84%); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(38 6% 42%)">
+                <div style="display:grid; grid-template-columns:minmax(104px,132px) 96px minmax(150px,1fr) minmax(120px,168px); gap:16px; padding:10px 20px; background:hsl(44 26% 96%); border-top:1px solid hsl(42 12% 84%); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(38 6% 42%)">
                   <span>Date</span>
                   <span>Happened</span>
                   <span>Description</span>
@@ -409,7 +497,7 @@
                   <div style="{{ s.rowStyle }}">
                     <span style="display:grid; gap:2px">
                       <span style="font-weight:600">{{ s.date }}</span>
-                      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ s.time }}</span>
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ s.time }}</span>
                     </span>
                     <span style="{{ s.statusStyle }}">{{ s.status }}</span>
                     <span style="line-height:1.45; text-wrap:pretty">{{ s.desc }}</span>
@@ -426,7 +514,7 @@
                     </span>
                     <div style="display:grid; gap:2px">
                       <span style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700">Session booked</span>
-                      <span style="font-size:13px; color:hsl(38 6% 42%)">{{ bookedSummary }}</span>
+                      <span style="font-size:14px; color:hsl(38 6% 42%)">{{ bookedSummary }}</span>
                     </div>
                   </div>
                   <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:18px">
@@ -449,11 +537,11 @@
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
                   <div>
                     <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Weekly availability</h2>
-                    <p style="margin:4px 0 0; font-size:13px; color:hsl(38 6% 42%)">These hours repeat every week. Mentees see them converted into their own timezone.</p>
+                    <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">These hours repeat every week. Mentees see them converted into their own timezone.</p>
                   </div>
-                  <label style="display:inline-flex; align-items:center; gap:8px; font-size:13px; color:hsl(38 6% 42%)">
+                  <label style="display:inline-flex; align-items:center; gap:8px; font-size:14px; color:hsl(38 6% 42%)">
                     Your timezone
-                    <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:34px; padding:0 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; color:hsl(234 68% 12%)">
+                    <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:34px; padding:0 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%)">
                       <sc-for list="{{ tzOptions }}" as="t" hint-placeholder-count="5">
                         <option value="{{ t.id }}">{{ t.label }}</option>
                       </sc-for>
@@ -470,13 +558,13 @@
                         <sc-if value="{{ row.enabled }}" hint-placeholder-val="{{ true }}">
                           <sc-for list="{{ row.ranges }}" as="range" hint-placeholder-count="1">
                             <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 8px 6px 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(44 26% 96%)">
-                              <select onChange="{{ range.setStart }}" value="{{ range.start }}" style="height:30px; border:0; background:transparent; font-size:13px; font-weight:600; color:hsl(234 68% 12%)">
+                              <select onChange="{{ range.setStart }}" value="{{ range.start }}" style="height:30px; border:0; background:transparent; font-size:14px; font-weight:600; color:hsl(234 68% 12%)">
                                 <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="6">
                                   <option value="{{ t }}">{{ t }}</option>
                                 </sc-for>
                               </select>
-                              <span style="font-size:13px; color:hsl(38 6% 42%)">to</span>
-                              <select onChange="{{ range.setEnd }}" value="{{ range.end }}" style="height:30px; border:0; background:transparent; font-size:13px; font-weight:600; color:hsl(234 68% 12%)">
+                              <span style="font-size:14px; color:hsl(38 6% 42%)">to</span>
+                              <select onChange="{{ range.setEnd }}" value="{{ range.end }}" style="height:30px; border:0; background:transparent; font-size:14px; font-weight:600; color:hsl(234 68% 12%)">
                                 <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="6">
                                   <option value="{{ t }}">{{ t }}</option>
                                 </sc-for>
@@ -486,36 +574,36 @@
                               </button>
                             </div>
                           </sc-for>
-                          <button onClick="{{ row.addRange }}" style="display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px; border:1px dashed hsl(42 12% 84%); border-radius:9.6px; background:transparent; font-size:13px; font-weight:600; color:hsl(234 85% 14%)">
+                          <button onClick="{{ row.addRange }}" style="display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px; border:1px dashed hsl(42 12% 84%); border-radius:9.6px; background:transparent; font-size:14px; font-weight:600; color:hsl(234 85% 14%)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
                             Add hours
                           </button>
                         </sc-if>
                         <sc-if value="{{ row.disabled }}" hint-placeholder-val="{{ true }}">
-                          <span style="font-size:13px; color:hsl(38 6% 42%)">Unavailable</span>
+                          <span style="font-size:14px; color:hsl(38 6% 42%)">Unavailable</span>
                         </sc-if>
                       </div>
-                      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ row.count }}</span>
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ row.count }}</span>
                     </div>
                   </sc-for>
                 </div>
 
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:18px 24px; border-top:1px solid hsl(42 12% 84%); background:hsl(44 26% 96%)">
-                  <span style="font-size:13px; color:hsl(38 6% 42%)">{{ availabilitySummary }}</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">{{ availabilitySummary }}</span>
                   <button style="height:40px; padding:0 20px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:14px; font-weight:600">Save availability</button>
                 </div>
               </div>
 
               <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
                 <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Booking rules</h2>
-                <p style="margin:0 0 18px; font-size:13px; color:hsl(38 6% 42%)">Applies to every mentee assigned to you.</p>
+                <p style="margin:0 0 18px; font-size:14px; color:hsl(38 6% 42%)">Applies to every mentee assigned to you.</p>
                 <div style="display:flex; flex-direction:column; gap:10px">
                   <sc-for list="{{ bookingRules }}" as="rule" hint-placeholder-count="4">
                     <label style="display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
                       <input type="checkbox" checked="{{ rule.on }}" onChange="{{ rule.toggle }}" style="width:16px; height:16px; accent-color:hsl(234 85% 14%)" />
                       <span style="display:grid; gap:2px; flex:1">
                         <span style="font-size:14px; font-weight:600">{{ rule.title }}</span>
-                        <span style="font-size:13px; color:hsl(38 6% 42%)">{{ rule.sub }}</span>
+                        <span style="font-size:14px; color:hsl(38 6% 42%)">{{ rule.sub }}</span>
                       </span>
                     </label>
                   </sc-for>
@@ -524,27 +612,27 @@
             </sc-if>
 
             <div style="position:relative; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
-              <span style="position:absolute; top:20px; right:24px; display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:12px; font-weight:600">Active</span>
+              <span style="position:absolute; top:20px; right:24px; display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:13px; font-weight:600">Active</span>
               <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My Mentor</h2>
               <div style="display:flex; align-items:center; gap:16px">
                 <span style="display:grid; place-items:center; height:48px; width:48px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-size:14px; font-weight:700">VA</span>
                 <div style="display:grid; gap:2px">
                   <span style="font-family:Ruda, sans-serif; font-size:16px; font-weight:700">Vânio Antunes do Livramento Junior</span>
                   <span style="font-size:14px; color:hsl(38 6% 42%)">vanio.antunes.md@gmail.com</span>
-                  <span style="font-size:13px; color:hsl(38 6% 42%)">Level 2 mentor · Clinical epidemiology, meta-analysis</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">Level 2 mentor · Clinical epidemiology, meta-analysis</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div style="display:flex; flex-direction:column; gap:24px">
+          <div style="flex:1 1 300px; max-width:340px; display:flex; flex-direction:column; gap:24px">
             <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
               <h2 style="margin:0 0 18px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Mentorship plan</h2>
               <div style="display:grid; place-items:center">
                 <div style="{{ ringStyle }}">
                   <div style="display:grid; place-items:center; gap:0; width:118px; height:118px; border-radius:9999px; background:hsl(42 33% 99%)">
                     <span style="font-family:'JetBrains Mono', monospace; font-size:34px; font-weight:700; line-height:1">{{ sessionsDone }}</span>
-                    <span style="font-size:12px; color:hsl(38 6% 42%)">of {{ sessionsTotal }}</span>
+                    <span style="font-size:13px; color:hsl(38 6% 42%)">of {{ sessionsTotal }}</span>
                   </div>
                 </div>
               </div>
@@ -578,7 +666,7 @@
                 <div style="{{ periodFillStyle }}"></div>
                 <span style="{{ periodMarkerStyle }}"></span>
               </div>
-              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; font-size:12px; color:hsl(38 6% 42%)">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; font-size:13px; color:hsl(38 6% 42%)">
                 <span>6 months in</span>
                 <span>{{ planPct }}</span>
                 <span>6 months left</span>
@@ -593,14 +681,14 @@
                 <div style="display:grid; gap:2px; flex:1; min-width:0">
                   <span style="font-family:Ruda, sans-serif; font-size:16px; font-weight:700">Google Calendar</span>
                   <sc-if value="{{ gConnected }}" hint-placeholder-val="{{ true }}">
-                    <span style="font-size:12px; color:hsl(38 6% 42%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ gAccount }}</span>
+                    <span style="font-size:13px; color:hsl(38 6% 42%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ gAccount }}</span>
                   </sc-if>
                   <sc-if value="{{ gDisconnected }}" hint-placeholder-val="{{ true }}">
-                    <span style="font-size:12px; color:hsl(38 6% 42%)">Not connected</span>
+                    <span style="font-size:13px; color:hsl(38 6% 42%)">Not connected</span>
                   </sc-if>
                 </div>
                 <sc-if value="{{ gConnected }}" hint-placeholder-val="{{ true }}">
-                  <span style="display:inline-flex; align-items:center; gap:6px; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:12px; font-weight:600">Synced</span>
+                  <span style="display:inline-flex; align-items:center; gap:6px; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:13px; font-weight:600">Synced</span>
                 </sc-if>
               </div>
 
@@ -609,39 +697,168 @@
                   <sc-for list="{{ gToggles }}" as="t" hint-placeholder-count="3">
                     <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer">
                       <input type="checkbox" checked="{{ t.on }}" onChange="{{ t.toggle }}" style="width:16px; height:16px; margin-top:2px; accent-color:hsl(234 85% 14%)" />
-                      <span style="font-size:13px; font-weight:600">{{ t.title }}</span>
+                      <span style="font-size:14px; font-weight:600">{{ t.title }}</span>
                     </label>
                   </sc-for>
                 </div>
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:18px; padding-top:14px; border-top:1px solid hsl(42 12% 84%); font-size:12px; color:hsl(38 6% 42%)">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:18px; padding-top:14px; border-top:1px solid hsl(42 12% 84%); font-size:13px; color:hsl(38 6% 42%)">
                   <span>Calendar: {{ gCalendar }} · synced {{ gSyncedAt }}</span>
-                  <button onClick="{{ gDisconnect }}" style="border:0; background:transparent; padding:0; font-size:12px; font-weight:600; color:hsl(4 62% 50%); cursor:pointer">Disconnect</button>
+                  <button onClick="{{ gDisconnect }}" style="border:0; background:transparent; padding:0; font-size:13px; font-weight:600; color:hsl(4 62% 50%); cursor:pointer">Disconnect</button>
                 </div>
               </sc-if>
 
               <sc-if value="{{ gDisconnected }}" hint-placeholder-val="{{ true }}">
-                <p style="margin:14px 0 16px; font-size:13px; color:hsl(38 6% 42%)">Connect to hide the times you are already busy, push booked sessions to your calendar, and attach a Meet link to each one.</p>
+                <p style="margin:14px 0 16px; font-size:14px; color:hsl(38 6% 42%)">Connect to hide the times you are already busy, push booked sessions to your calendar, and attach a Meet link to each one.</p>
                 <button onClick="{{ gConnect }}" style="width:100%; height:42px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; font-weight:600; cursor:pointer">Connect Google Calendar</button>
               </sc-if>
             </div>
 
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isProject }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:20px; max-width:1100px">
+        <a href="#" onClick="{{ backToTracker }}" style="display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:hsl(38 6% 42%)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+          Back to MetaTracker
+        </a>
+        <h1 style="display:flex; align-items:center; gap:10px; margin:0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>
+          Example 1
+        </h1>
+
+        <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px">
+            <div>
+              <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Research journey · forest plot</div>
+              <h2 style="margin:4px 0 0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700">Progress overview</h2>
+              <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">Currently on Stage 1: Research Question</p>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'JetBrains Mono', monospace; font-size:30px; font-weight:700">{{ projectPct }}</div>
+              <div style="font-size:13px; color:hsl(38 6% 42%)">{{ projectCount }}</div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:20px; max-width:640px; margin-left:auto; margin-right:auto">
+            <sc-for list="{{ projectJourney }}" as="j" hint-placeholder-count="8">
+              <div style="display:grid; grid-template-columns:1fr 12px 52px; align-items:center; gap:14px">
+                <span style="text-align:right; font-size:13px; font-weight:600">{{ j.name }}</span>
+                <span style="{{ j.dotStyle }}"></span>
+                <span style="text-align:right; font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ j.pct }}</span>
+              </div>
+            </sc-for>
+            <div style="text-align:center; font-size:12px; font-weight:700; color:hsl(155 40% 27%); margin-top:6px">Publication</div>
+          </div>
+        </div>
+
+        <div style="display:inline-flex; align-self:flex-start; gap:4px; padding:4px; background:hsl(44 14% 89%); border-radius:9.6px">
+          <a href="#" onClick="{{ setTabProgress }}" style="{{ progressTabStyle }}">Progress</a>
+          <a href="#" onClick="{{ setTabDetails }}" style="{{ detailsTabStyle }}">PICOTT &amp; Details</a>
+        </div>
+
+        <sc-if value="{{ projectTabProgress }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; flex-direction:column; gap:20px">
+            <sc-for list="{{ projectStages }}" as="stage" hint-placeholder-count="8">
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:20px 22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+                <div style="display:flex; align-items:center; gap:14px">
+                  <span style="{{ stage.ringStyle }}"></span>
+                  <div style="flex:1; min-width:0">
+                    <div style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700">{{ stage.title }}</div>
+                    <div style="margin-top:2px; font-size:14px; color:hsl(38 6% 42%)">{{ stage.desc }}</div>
+                  </div>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ stage.count }}</span>
+                  <span style="width:96px; height:6px; border-radius:9999px; background:hsl(44 14% 89%); overflow:hidden">
+                    <span style="{{ stage.barStyle }}; display:block"></span>
+                  </span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px">
+                  <sc-for list="{{ stage.tasks }}" as="task" hint-placeholder-count="4">
+                    <label style="{{ task.rowStyle }}">
+                      <input type="checkbox" checked="{{ task.done }}" onChange="{{ task.toggle }}" style="width:16px; height:16px; margin-top:2px; flex-shrink:0; accent-color:hsl(234 85% 14%)" />
+                      <span style="display:grid; gap:2px; flex:1; min-width:0">
+                        <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap">
+                          <span style="{{ task.titleStyle }}">{{ task.title }}</span>
+                          <sc-if value="{{ task.optional }}" hint-placeholder-val="{{ true }}">
+                            <span style="display:inline-flex; padding:2px 8px; border-radius:9999px; background:hsl(40 78% 44% / .14); color:hsl(40 78% 44%); font-size:11px; font-weight:700">Optional</span>
+                          </sc-if>
+                        </span>
+                        <span style="font-size:13px; color:hsl(38 6% 42%)">{{ task.desc }}</span>
+                      </span>
+                    </label>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ projectTabDetails }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; flex-direction:column; gap:20px">
             <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
-              <h2 style="margin:0 0 14px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Upcoming</h2>
-              <div style="display:flex; flex-direction:column; gap:10px">
-                <sc-for list="{{ weekActivities }}" as="a" hint-placeholder-count="2">
-                  <div style="display:grid; gap:2px; padding:12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
-                    <span style="font-size:14px; font-weight:600">{{ a.title }}</span>
-                    <span style="font-size:12px; color:hsl(38 6% 42%)">{{ a.when }}</span>
+              <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Viability assessment</h2>
+              <p style="margin:0 0 18px; font-size:14px; color:hsl(38 6% 42%)">PICOTT of every study included in the assessment.</p>
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <sc-for list="{{ picottStudies }}" as="s" hint-placeholder-count="3">
+                  <div style="padding:16px 18px; border:1px solid hsl(42 12% 84%); border-radius:13.6px">
+                    <div style="font-size:15px; font-weight:600">{{ s.title }}</div>
+                    <div style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%); margin-top:2px">DOI {{ s.doi }}</div>
+                    <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; margin-top:14px">
+                      <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Population</span><span style="font-size:14px">{{ s.p }}</span></span>
+                      <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Intervention</span><span style="font-size:14px">{{ s.i }}</span></span>
+                      <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Comparator</span><span style="font-size:14px">{{ s.c }}</span></span>
+                      <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Outcome</span><span style="font-size:14px">{{ s.o }}</span></span>
+                      <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Timeframe</span><span style="font-size:14px">{{ s.t }}</span></span>
+                      <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(38 6% 42%)">Type of study</span><span style="font-size:14px">{{ s.t2 }}</span></span>
+                    </div>
                   </div>
                 </sc-for>
               </div>
-              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1px solid hsl(42 12% 84%); font-size:13px">
-                <span style="color:hsl(38 6% 42%)">Quarterly feedback</span>
-                <a href="#" style="font-weight:600">Open form</a>
+            </div>
+
+            <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <h2 style="margin:0 0 18px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Files &amp; outputs</h2>
+              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px">
+                <div style="display:grid; gap:6px">
+                  <span style="font-size:13px; font-weight:600">Drive folder</span>
+                  <a href="#" style="font-size:14px">drive.google.com/example-1</a>
+                </div>
+                <div style="display:grid; gap:6px">
+                  <span style="font-size:13px; font-weight:600">Documents</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">Protocol v2.docx · Search log.xlsx</span>
+                </div>
+                <div style="display:grid; gap:6px">
+                  <span style="font-size:13px; font-weight:600">Publication status</span>
+                  <span style="display:inline-flex; align-self:flex-start; padding:2px 10px; border-radius:9999px; background:hsl(40 78% 44% / .14); color:hsl(40 78% 44%); font-size:12px; font-weight:600">In progress</span>
+                </div>
+                <div style="display:grid; gap:6px">
+                  <span style="font-size:13px; font-weight:600">DOI</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">Added on acceptance</span>
+                </div>
+                <div style="display:grid; gap:6px">
+                  <span style="font-size:13px; font-weight:600">Presentations &amp; awards</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">Poster · SBC 2026</span>
+                </div>
+                <div style="display:grid; gap:6px">
+                  <span style="font-size:13px; font-weight:600">Free category</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">Travel grant · ESC Congress</span>
+                </div>
               </div>
             </div>
+
+            <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <h2 style="margin:0 0 14px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Scoring</h2>
+              <label style="display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
+                <input type="checkbox" checked="{{ gradeCounts }}" onChange="{{ toggleGrade }}" style="width:16px; height:16px; accent-color:hsl(234 85% 14%)" />
+                <span style="display:grid; gap:2px">
+                  <span style="font-size:15px; font-weight:600">Count GRADE towards completion</span>
+                  <span style="font-size:13px; color:hsl(38 6% 42%)">{{ gradeNote }}</span>
+                </span>
+              </label>
+            </div>
           </div>
-        </div>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -658,7 +875,7 @@
             </h1>
             <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Everyone in the programme, their area of interest and who mentors them.</p>
           </div>
-          <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ menteeCount }}</span>
+          <span style="font-family:'JetBrains Mono', monospace; font-size:14px; color:hsl(38 6% 42%)">{{ menteeCount }}</span>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:16px; padding:20px 24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
@@ -684,7 +901,7 @@
                 <option value="{{ o.id }}">{{ o.label }}</option>
               </sc-for>
             </select>
-            <button onClick="{{ clearFilters }}" style="height:40px; padding:0 14px; border:0; background:transparent; font-size:13px; font-weight:600; color:hsl(38 6% 42%); cursor:pointer">Clear</button>
+            <button onClick="{{ clearFilters }}" style="height:40px; padding:0 14px; border:0; background:transparent; font-size:14px; font-weight:600; color:hsl(38 6% 42%); cursor:pointer">Clear</button>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:8px">
             <sc-for list="{{ areaChips }}" as="chip" hint-placeholder-count="10">
@@ -704,9 +921,9 @@
               <span style="max-width:70%; font-family:Ruda, sans-serif; font-size:14px; font-weight:700; line-height:1.3; color:hsl(234 85% 14%)">{{ m.area }}</span>
               <div style="position:relative; margin-top:14px; padding-bottom:14px">
                 <span style="display:grid; place-items:center; width:116px; height:116px; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-family:Ruda, sans-serif; font-size:34px; font-weight:700">{{ m.initials }}</span>
-                <span style="position:absolute; left:50%; bottom:0; transform:translateX(-50%); max-width:190px; padding:5px 14px; border:1px solid hsl(42 12% 84%); border-radius:9999px; background:hsl(42 33% 99%); font-family:Ruda, sans-serif; font-size:13px; font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ m.name }}</span>
+                <span style="position:absolute; left:50%; bottom:0; transform:translateX(-50%); max-width:190px; padding:5px 14px; border:1px solid hsl(42 12% 84%); border-radius:9999px; background:hsl(42 33% 99%); font-family:Ruda, sans-serif; font-size:14px; font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ m.name }}</span>
               </div>
-              <span style="margin-top:12px; font-size:13px; line-height:1.4; color:hsl(38 6% 42%); text-wrap:pretty">{{ m.role }}</span>
+              <span style="margin-top:12px; font-size:14px; line-height:1.4; color:hsl(38 6% 42%); text-wrap:pretty">{{ m.role }}</span>
             </div>
           </sc-for>
         </div>
@@ -751,7 +968,7 @@
         </div>
 
         <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">My Research Projects</h2>
-        <div style="max-width:394px; padding:20px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+        <a href="#" onClick="{{ goProject }}" style="display:block; color:inherit; max-width:394px; padding:20px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)" style-hover="border-color:hsl(234 85% 14% / .4)">
           <div style="display:flex; align-items:center; gap:12px">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>
             <span style="flex:1; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">Example 1</span>
@@ -770,14 +987,14 @@
             <span style="font-family:'JetBrains Mono', monospace; font-weight:700">0%</span>
           </div>
           <div style="height:6px; border-radius:9999px; background:hsl(44 14% 89%); margin:8px 0 16px"></div>
-          <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px; color:hsl(38 6% 42%)">
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px; color:hsl(38 6% 42%)">
             <span style="display:inline-flex; align-items:center; gap:6px">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
               Updated 23 minutes ago
             </span>
-            <span style="font-family:'JetBrains Mono', monospace">0/37 tasks</span>
+            <span style="font-family:'JetBrains Mono', monospace">{{ projectCount }}</span>
           </div>
-        </div>
+        </a>
       </div>
     </sc-if>
 
@@ -804,7 +1021,7 @@
 
         <div style="max-width:1000px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
           <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Recordings</h2>
-          <p style="margin:0 0 18px; font-size:13px; color:hsl(38 6% 42%)">Every office hour is recorded and posted here within 24 hours.</p>
+          <p style="margin:0 0 18px; font-size:14px; color:hsl(38 6% 42%)">Every office hour is recorded and posted here within 24 hours.</p>
           <div style="display:flex; flex-direction:column; gap:10px">
             <sc-for list="{{ recordings }}" as="r" hint-placeholder-count="4">
               <div style="display:flex; align-items:center; gap:16px; padding:14px 16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px">
@@ -813,9 +1030,9 @@
                 </span>
                 <span style="display:grid; gap:2px; flex:1; min-width:0">
                   <span style="font-size:15px; font-weight:600">{{ r.title }}</span>
-                  <span style="font-size:13px; color:hsl(38 6% 42%)">{{ r.meta }}</span>
+                  <span style="font-size:14px; color:hsl(38 6% 42%)">{{ r.meta }}</span>
                 </span>
-                <a href="#" style="font-size:13px; font-weight:600">Watch</a>
+                <a href="#" style="font-size:14px; font-weight:600">Watch</a>
               </div>
             </sc-for>
           </div>
@@ -851,9 +1068,9 @@
               metahub@metaanalysis.academy
             </span>
             <span style="display:inline-flex; align-items:center; gap:12px; flex-wrap:wrap">
-              <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(44 16% 88%); color:hsl(234 45% 20%); font-size:12px; font-weight:600">Mentee</span>
-              <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:12px; font-weight:600">Active</span>
-              <span style="display:inline-flex; align-items:center; gap:6px; font-size:13px; color:hsl(38 6% 42%)">
+              <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(44 16% 88%); color:hsl(234 45% 20%); font-size:13px; font-weight:600">Mentee</span>
+              <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:13px; font-weight:600">Active</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; font-size:14px; color:hsl(38 6% 42%)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
                 Member since March 2026
               </span>
@@ -863,7 +1080,7 @@
 
         <div style="padding:24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
           <h2 style="margin:0 0 6px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Timezone</h2>
-          <p style="margin:0 0 16px; font-size:13px; color:hsl(38 6% 42%)">All session times across the platform are converted into this timezone.</p>
+          <p style="margin:0 0 16px; font-size:14px; color:hsl(38 6% 42%)">All session times across the platform are converted into this timezone.</p>
           <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:44px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%); min-width:280px">
             <sc-for list="{{ tzOptions }}" as="t" hint-placeholder-count="5">
               <option value="{{ t.id }}">{{ t.label }}</option>
@@ -959,6 +1176,68 @@ function fmt(min) {
 function addDays(d, n) { const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
 function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
 
+const PROJECT_STAGES = [
+  { title: 'Stage 1: Research Question', desc: 'Define and validate your research question using the PICOTT framework', tasks: [
+    ['Define Research Question', 'Create a research question using the PICOTT format'],
+    ['Check for Relevance', 'Assess if it is relevant and how much it could influence clinical practice'],
+    ['Include Three Viable Studies', 'All included studies must address the same PICOTT question']
+  ] },
+  { title: 'Stage 2: Protocol', desc: 'Develop and register your research protocol', tasks: [
+    ['Write Introduction', 'Draft the introduction section with background and rationale'],
+    ['Define Methodology', 'Describe the methods including eligibility criteria and search strategy'],
+    ['Create Search Strategy', 'Develop search strategies for each database'],
+    ['Submit to PROSPERO', 'Register the protocol in PROSPERO'],
+    ['Get Protocol Approval', 'Receive confirmation of protocol registration']
+  ] },
+  { title: 'Stage 3: Screening', desc: 'Execute database searches and screen studies for inclusion', tasks: [
+    ['Execute Database Searches', 'Run searches in all planned databases'],
+    ['Remove Duplicates', 'Identify and remove duplicate records'],
+    ['Title and Abstract Screening', 'Screen studies by title and abstract'],
+    ['Full-Text Screening', 'Screen remaining studies by full text'],
+    ['Create PRISMA Flow Diagram', 'Document the screening process in a PRISMA diagram']
+  ] },
+  { title: 'Stage 4: Data Extraction', desc: 'Extract and organize data from included studies', tasks: [
+    ['Create Extraction Form', 'Design the data extraction form'],
+    ['Extract Study Characteristics', 'Extract general characteristics from each study'],
+    ['Extract Outcome Data', 'Extract quantitative outcome data for meta-analysis'],
+    ['Verify Extraction', 'Double check extracted data for accuracy']
+  ] },
+  { title: 'Stage 5: Statistics', desc: 'Perform statistical analyses and create visualizations', tasks: [
+    ['Calculate Effect Sizes', 'Compute standardized effect sizes for each study'],
+    ['Create Forest Plots', 'Generate forest plots for main outcomes'],
+    ['Assess Heterogeneity', 'Evaluate heterogeneity using I² and Q statistics'],
+    ['Perform Subgroup Analysis', 'Conduct planned subgroup analyses'],
+    ['Assess Publication Bias', 'Create funnel plots and conduct bias tests']
+  ] },
+  { title: 'Stage 6: Quality Assessment', desc: 'Assess study quality and certainty of evidence', tasks: [
+    ['Select Assessment Tool', 'Choose appropriate risk of bias tool (RoB 2, ROBINS-I, etc.)'],
+    ['Assess Risk of Bias', 'Evaluate each study for risk of bias'],
+    ['Create Summary Table', 'Generate risk of bias summary table/figure'],
+    ['GRADE Assessment', 'Assess certainty of evidence using GRADE', true]
+  ] },
+  { title: 'Stage 7: Manuscript Writing', desc: 'Draft and finalize the manuscript for publication', tasks: [
+    ['Write Methods Section', 'Complete the methods section of the manuscript'],
+    ['Write Results Section', 'Present findings in the results section'],
+    ['Write Discussion', 'Interpret findings and discuss implications'],
+    ['Write Abstract', 'Prepare a structured abstract'],
+    ['Format References', 'Format all references according to target journal'],
+    ['Internal Review', 'Complete internal review with all co-authors']
+  ] },
+  { title: 'Stage 8: Submission', desc: 'Submit manuscript and track journal responses', tasks: [
+    ['Select Target Journal', 'Choose appropriate journal for submission'],
+    ['Prepare Submission Package', 'Prepare cover letter and supplementary materials'],
+    ['Submit Manuscript', 'Submit to selected journal'],
+    ['Address Reviewer Comments', 'Respond to peer review feedback'],
+    ['Final Acceptance', 'Receive final acceptance and complete proofs']
+  ] }
+];
+const JOURNEY = ['Research Question','Protocol','Screening','Data Extraction','Statistics','Quality Assessment','Manuscript Writing','Submission'];
+const PICOTT_STUDIES = [
+  { title: 'Effect of early mobilisation after cardiac surgery', doi: '10.1001/jama.2024.1234', p: 'Adults after cardiac surgery', i: 'Early mobilisation < 24h', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'RCT' },
+  { title: 'Prehabilitation and postoperative complications', doi: '10.1016/j.jclinepi.2023.0456', p: 'Elective surgery patients', i: 'Structured prehabilitation', c: 'Usual preoperative care', o: 'Clavien-Dindo ≥ II', t: '90 days', t2: 'RCT' },
+  { title: 'Remote monitoring after discharge', doi: '10.1136/bmj.2025.0987', p: 'Post-discharge cardiac patients', i: 'Remote monitoring', c: 'In-person follow-up', o: 'Readmission', t: '6 months', t2: 'Cohort' }
+];
+
 const MENTEES = [
   { name: 'Isabella Michelon', area: 'Cardiology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 26, projects: 2, position: 'Medical Student', affiliation: 'UFCSPA', langs: ['BR','EN'] },
   { name: 'Maria L. R. Defante', area: 'Oncology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 24, projects: 1, position: 'Resident', affiliation: 'USP Ribeirão Preto', langs: ['BR','EN'] },
@@ -974,8 +1253,8 @@ const MENTEES = [
   { name: 'Thiago Mendes', area: 'Cardiology', status: 'Cancelled', mentor: 'Caroline Serafim', since: 'Nov 2025', sessions: 9, projects: 0, position: 'MD, MSc', affiliation: 'Instituto do Coração', langs: ['EN'] }
 ];
 const LANG_STYLE = {
-  BR: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:10px; font-weight:700; letter-spacing:.06em; color:hsl(155 40% 27%); background:hsl(155 40% 27% / .14); border:1px solid hsl(155 40% 27% / .3)',
-  EN: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:10px; font-weight:700; letter-spacing:.06em; color:hsl(234 85% 14%); background:hsl(234 85% 14% / .12); border:1px solid hsl(234 85% 14% / .3)'
+  BR: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:11px; font-weight:700; letter-spacing:.06em; color:hsl(155 40% 27%); background:hsl(155 40% 27% / .14); border:1px solid hsl(155 40% 27% / .3)',
+  EN: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:11px; font-weight:700; letter-spacing:.06em; color:hsl(234 85% 14%); background:hsl(234 85% 14% / .12); border:1px solid hsl(234 85% 14% / .3)'
 };
 const AREAS = ['Cardiology','Emergency Medicine','Endocrinology','Infectious Diseases','Nephrology','Neurology','Oncology','Pediatrics','Psychiatry','Surgery'];
 const MENTORS = ['All mentors','Vânio Antunes','Caroline Serafim','Rafael Lima'];
@@ -1008,6 +1287,7 @@ class Component extends DCLogic {
     booked: null,
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
+    projectTab: 'progress', taskDone: {}, gradeCounts: false,
     google: { connected: true, account: 'vanio.antunes.md@gmail.com', calendar: 'Mentoria MAA', blockConflicts: true, autoAdd: true, meetLink: true, syncedAt: '2 minutes ago' },
     availability: [
       { enabled: true, ranges: [{ start: '09:00', end: '12:00' }] },
@@ -1088,7 +1368,7 @@ class Component extends DCLogic {
     }
     while (cells.length % 7 !== 0) cells.push({ day: null });
 
-    const week = this.buildWeek();
+    const week = this.buildWeek().slice(0, 5);
     const weekDays = week.map((d, i) => {
       const slots = d.slots.map((s) => {
         const isPicked = st.pick && st.pick.dayIdx === s.dayIdx && st.pick.mentorMin === s.mentorMin && st.pick.weekOffset === st.weekOffset;
@@ -1098,7 +1378,7 @@ class Component extends DCLogic {
             title: 'Busy on Google Calendar — ' + s.busy,
             busy: true,
             pick: (e) => { e.preventDefault(); },
-            style: 'width:100%; height:38px; border-radius:9.6px; font-size:13px; font-weight:500; font-family:inherit; cursor:not-allowed; border:1px dashed hsl(42 12% 84%); background:hsl(44 14% 89% / .5); color:hsl(38 6% 42%); text-decoration:line-through'
+            style: 'width:100%; height:38px; border-radius:9.6px; font-size:14px; font-weight:500; font-family:inherit; cursor:not-allowed; border:1px dashed hsl(42 12% 84%); background:hsl(44 14% 89% / .5); color:hsl(38 6% 42%); text-decoration:line-through'
           };
         }
         return {
@@ -1106,7 +1386,7 @@ class Component extends DCLogic {
           title: '',
           busy: false,
           pick: (e) => { e.preventDefault(); this.setState({ pick: { dayIdx: s.dayIdx, mentorMin: s.mentorMin, weekOffset: st.weekOffset, date: s.date }, booked: null }); },
-          style: 'width:100%; height:38px; border-radius:9.6px; font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; border:1px solid ' + (isPicked ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)') + '; background:' + (isPicked ? 'hsl(234 85% 14%)' : 'hsl(42 33% 99%)') + '; color:' + (isPicked ? 'hsl(40 30% 96%)' : 'hsl(234 85% 14%)')
+          style: 'width:100%; height:38px; border-radius:9.6px; font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; border:1px solid ' + (isPicked ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)') + '; background:' + (isPicked ? 'hsl(234 85% 14%)' : 'hsl(42 33% 99%)') + '; color:' + (isPicked ? 'hsl(40 30% 96%)' : 'hsl(234 85% 14%)')
         };
       });
       return {
@@ -1119,7 +1399,7 @@ class Component extends DCLogic {
       };
     });
 
-    const first = week[0].date, last = week[6].date;
+    const first = week[0].date, last = week[week.length - 1].date;
     const weekLabel = MONTHS_SHORT[first.getMonth()] + ' ' + first.getDate() + ' – ' + MONTHS_SHORT[last.getMonth()] + ' ' + last.getDate() + ', ' + last.getFullYear();
 
     const pick = st.pick;
@@ -1170,6 +1450,42 @@ class Component extends DCLogic {
       + '&details=' + encodeURIComponent(st.topic || 'Weekly mentorship session — Mentoria MAA')
       + '&location=' + encodeURIComponent('Google Meet');
 
+    let projectDone = 0, projectTotal = 0;
+    const projectStages = PROJECT_STAGES.map((stage, si) => {
+      let sDone = 0, sTotal = 0;
+      const tasks = stage.tasks.map((t, ti) => {
+        const id = si + '-' + ti;
+        const optional = !!t[2] && !st.gradeCounts;
+        const done = !!st.taskDone[id];
+        if (!optional) { sTotal++; if (done) sDone++; }
+        return {
+          title: t[0],
+          desc: t[1],
+          optional: optional,
+          done: done,
+          toggle: () => {
+            const next = Object.assign({}, this.state.taskDone);
+            if (next[id]) delete next[id]; else next[id] = true;
+            this.setState({ taskDone: next });
+          },
+          rowStyle: 'display:flex; align-items:flex-start; gap:12px; padding:14px 18px; border-radius:9.6px; background:' + (done ? 'hsl(155 40% 27% / .08)' : 'hsl(44 26% 96%)'),
+          titleStyle: 'font-size:15px; font-weight:600; ' + (done ? 'color:hsl(38 6% 42%); text-decoration:line-through' : 'color:hsl(234 68% 12%)')
+        };
+      });
+      projectDone += sDone; projectTotal += sTotal;
+      const pct = sTotal ? Math.round((sDone / sTotal) * 100) : 0;
+      return {
+        title: stage.title,
+        desc: stage.desc,
+        tasks: tasks,
+        count: sDone + '/' + sTotal,
+        pct: pct,
+        barStyle: 'height:100%; width:' + pct + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%))',
+        ringStyle: 'width:16px; height:16px; border-radius:9999px; border:2px solid ' + (pct === 100 ? 'hsl(155 40% 27%)' : 'hsl(42 12% 84%)') + '; background:' + (pct === 100 ? 'hsl(155 40% 27%)' : 'transparent')
+      };
+    });
+    const projectPct = projectTotal ? Math.round((projectDone / projectTotal) * 100) : 0;
+
     const q = st.mQuery.trim().toLowerCase();
     let filtered = MENTEES.filter((m) => {
       if (q && m.name.toLowerCase().indexOf(q) === -1 && m.area.toLowerCase().indexOf(q) === -1) return false;
@@ -1194,6 +1510,28 @@ class Component extends DCLogic {
     const tabBase = 'height:32px; padding:0 14px; border:0; border-radius:6.6px; font-size:14px; cursor:pointer; ';
 
     return {
+      isProject: page === 'project',
+      progressTabStyle: 'display:inline-flex; align-items:center; height:34px; padding:0 16px; border-radius:6.6px; font-size:14px; ' + (st.projectTab === 'progress' ? 'background:hsl(42 33% 99%); font-weight:600; color:hsl(234 68% 12%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)' : 'background:transparent; font-weight:500; color:hsl(38 6% 42%)'),
+      detailsTabStyle: 'display:inline-flex; align-items:center; height:34px; padding:0 16px; border-radius:6.6px; font-size:14px; ' + (st.projectTab === 'details' ? 'background:hsl(42 33% 99%); font-weight:600; color:hsl(234 68% 12%); box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)' : 'background:transparent; font-weight:500; color:hsl(38 6% 42%)'),
+      goProject: this.go('project'),
+      backToTracker: this.go('metatracker'),
+      projectTabProgress: st.projectTab === 'progress',
+      projectTabDetails: st.projectTab === 'details',
+      setTabProgress: (e) => { e.preventDefault(); this.setState({ projectTab: 'progress' }); },
+      setTabDetails: (e) => { e.preventDefault(); this.setState({ projectTab: 'details' }); },
+      projectStages: projectStages,
+      projectPct: projectPct + '%',
+      projectCount: projectDone + ' of ' + projectTotal + ' tasks',
+      projectJourney: JOURNEY.map((name, i) => ({
+        name: name,
+        pct: projectStages[i].pct + '%',
+        dotStyle: 'width:10px; height:10px; border-radius:9999px; background:' + (projectStages[i].pct === 100 ? 'hsl(155 40% 27%)' : projectStages[i].pct > 0 ? 'hsl(40 78% 44%)' : 'hsl(44 14% 89%)') + '; border:1px solid ' + (projectStages[i].pct > 0 ? 'transparent' : 'hsl(42 12% 84%)')
+      })),
+      gradeCounts: st.gradeCounts,
+      toggleGrade: () => this.setState({ gradeCounts: !st.gradeCounts }),
+      gradeNote: st.gradeCounts ? 'GRADE counts towards 100%' : 'GRADE is optional — not counted towards 100%',
+      picottStudies: PICOTT_STUDIES,
+
       isMentees: page === 'mentees',
       mQuery: st.mQuery,
       setQuery: (e) => this.setState({ mQuery: e.target.value }),
@@ -1215,7 +1553,7 @@ class Component extends DCLogic {
         return {
           label: a,
           toggle: () => this.setState({ mAreas: on ? st.mAreas.filter((x) => x !== a) : st.mAreas.concat([a]) }),
-          style: 'height:32px; padding:0 14px; border-radius:9999px; font-size:13px; font-family:inherit; cursor:pointer; border:1px solid ' + (on ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)') + '; background:' + (on ? 'hsl(234 85% 14%)' : 'hsl(42 33% 99%)') + '; color:' + (on ? 'hsl(40 30% 96%)' : 'hsl(234 68% 12%)') + '; font-weight:' + (on ? '600' : '500')
+          style: 'height:32px; padding:0 14px; border-radius:9999px; font-size:14px; font-family:inherit; cursor:pointer; border:1px solid ' + (on ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)') + '; background:' + (on ? 'hsl(234 85% 14%)' : 'hsl(42 33% 99%)') + '; color:' + (on ? 'hsl(40 30% 96%)' : 'hsl(234 68% 12%)') + '; font-weight:' + (on ? '600' : '500')
         };
       }),
       clearFilters: () => this.setState({ mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name' }),
@@ -1325,6 +1663,47 @@ class Component extends DCLogic {
       periodMarkerStyle: 'position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:9999px; background:hsl(40 78% 44%); border:3px solid hsl(42 33% 99%); box-shadow:0 0 0 2px hsl(40 78% 44% / .35)',
       periodFillStyle: 'height:100%; width:50%; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%))',
 
+      calendarBlocks: [
+        {
+          icon: { __html: ICONS.video },
+          title: 'Mentorship meetings',
+          pastLabel: 'Last meeting',
+          pastTitle: 'Session 26 · Vânio Antunes',
+          pastWhen: 'Tue, Aug 25 · ' + fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short,
+          pastChips: ['Example 1', 'Held'],
+          pastListLabel: 'Tasks set',
+          pastList: ['Finish the PICOTT table', 'Run duplicate screening in Rayyan', 'Send the protocol draft'],
+          pastAction: 'Open session notes',
+          nextLabel: 'Next meeting',
+          nextTitle: 'Session 27 · Vânio Antunes',
+          nextWhen: 'Tue, Sep 1 · ' + fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short,
+          nextCountdown: 'Tomorrow',
+          nextChips: ['Example 1', 'Google Meet'],
+          nextListLabel: 'On the agenda',
+          nextList: ['Review the protocol draft', 'Agree on the risk-of-bias tool'],
+          nextAction: 'Join meeting'
+        },
+        {
+          icon: { __html: ICONS.cap },
+          title: 'Office hours',
+          pastLabel: 'Last office hours',
+          pastTitle: 'Heterogeneity: when to pool and when to stop',
+          pastWhen: 'Thu, Aug 27 · ' + fmt(toMin('18:00') + shift) + ' – ' + fmt(toMin('19:00') + shift) + ' ' + tz.short,
+          pastChips: ['Research Methods', '58 min'],
+          pastListLabel: 'Covered',
+          pastList: ['I² and τ² in practice', 'Subgroup vs. meta-regression', 'When not to pool at all'],
+          pastAction: 'Watch recording',
+          nextLabel: 'Next office hours',
+          nextTitle: 'Research Methods & Statistics',
+          nextWhen: 'Thu, Sep 3 · ' + fmt(toMin('18:00') + shift) + ' – ' + fmt(toMin('19:00') + shift) + ' ' + tz.short,
+          nextCountdown: 'In 2 days',
+          nextChips: ['Open to all mentees', 'Recorded'],
+          nextListLabel: 'Planned topics',
+          nextList: ['Building a search string that reviewers accept', 'Live Q&A on screening conflicts'],
+          nextAction: 'Join office hours'
+        }
+      ],
+
       calendarHighlights: [
         { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: 'Tue, Aug 25 · ' + fmt(toMin('14:00') + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
         { eyebrow: 'Next meeting', title: 'Mentorship session · Vânio', when: 'Tue, Sep 1 · ' + fmt(toMin('14:00') + shift) + ' ' + tz.short, note: 'In 1 day · Google Meet', past: false },
@@ -1339,6 +1718,12 @@ class Component extends DCLogic {
         eyebrowStyle: 'font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:' + (h.past ? 'hsl(38 6% 42%)' : 'hsl(234 85% 14%)')
       })),
 
+      nextDayNum: '1',
+      nextMonth: 'September',
+      nextWeekday: 'Tuesday',
+      nextCountdown: 'Tomorrow',
+      nextTime: fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short,
+
       pastSessions: [
         { n: '26', date: 'Tue, Aug 25', time: '14:00 – 15:00', status: 'Held', desc: 'Reviewed the screening strategy and agreed on the inclusion criteria for the second reviewer.', projects: 'Example 1' },
         { n: '25', date: 'Tue, Aug 18', time: '14:00 – 15:00', status: 'Held', desc: 'Walked through the search string in Embase and fixed the MeSH terms.', projects: 'Example 1' },
@@ -1348,7 +1733,7 @@ class Component extends DCLogic {
         { n: '21', date: 'Tue, Jul 21', time: '14:00 – 15:00', status: 'Cancelled', desc: 'Cancelled by mentor — clinical duty.', projects: '—' }
       ].map((s) => ({
         n: s.n, date: s.date, time: s.time, status: s.status, desc: s.desc, projects: s.projects,
-        rowStyle: 'display:grid; grid-template-columns:132px 104px minmax(0,1fr) 180px; gap:16px; align-items:start; padding:14px 20px; border-top:1px solid hsl(42 12% 84%); font-size:13px' + (s.status === 'Held' ? '' : '; background:hsl(44 26% 96% / .6)'),
+        rowStyle: 'display:grid; grid-template-columns:minmax(104px,132px) 96px minmax(150px,1fr) minmax(120px,168px); gap:16px; align-items:start; padding:14px 20px; border-top:1px solid hsl(42 12% 84%); font-size:14px' + (s.status === 'Held' ? '' : '; background:hsl(44 26% 96% / .6)'),
         statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; white-space:nowrap; color:' + (s.status === 'Held' ? 'hsl(155 40% 27%)' : s.status === 'No-show' ? 'hsl(40 78% 44%)' : 'hsl(4 62% 50%)') + '; background:' + (s.status === 'Held' ? 'hsl(155 40% 27% / .14)' : s.status === 'No-show' ? 'hsl(40 78% 44% / .14)' : 'hsl(4 62% 50% / .12)')
       })),
 
