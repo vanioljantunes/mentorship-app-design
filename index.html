@@ -1421,6 +1421,11 @@ const BRIEFINGS = {
     ]
   }
 };
+// MetaHub tutoring: biweekly group sessions, 13:00-14:00 Brasilia
+const TUTORING = {
+  last: { date: new Date(2026, 7, 21), start: '13:00', end: '14:00', topic: 'Screening conflicts and PRISMA flow', covered: ['Resolving reviewer disagreements in Rayyan', 'Documenting exclusions for PRISMA', 'Group Q&A on search updates'] },
+  next: { date: new Date(2026, 8, 4), start: '13:00', end: '14:00', topic: 'Data extraction workshop', topics: ['Building the extraction form together', 'Live extraction on a sample study'] }
+};
 // mentor view: this mentor's next sessions across mentees
 const MENTOR_UPCOMING = [
   { date: new Date(2026, 8, 1), start: '14:00', end: '15:00', title: 'Protocol draft and search strategy review', mentee: 'Isabella Michelon' },
@@ -1618,6 +1623,7 @@ class Component extends DCLogic {
     const eventDays = {};
     SESSION_LOG.forEach((sl) => { if (sl.date.getMonth() === 7) eventDays[sl.date.getDate()] = true; });
     RECORDINGS_DATA.forEach((r) => { if (r.date.getMonth() === 7) eventDays[r.date.getDate()] = true; });
+    if (TUTORING.last.date.getMonth() === 7) eventDays[TUTORING.last.date.getDate()] = true;
     const cells = [];
     for (let i = 0; i < 6; i++) cells.push({ day: null });
     for (let d = 1; d <= 31; d++) {
@@ -1763,6 +1769,7 @@ class Component extends DCLogic {
     const pushEv = (d, ev) => { if (d.getMonth() === 7 && d.getFullYear() === 2026) (monthEvents[d.getDate()] = monthEvents[d.getDate()] || []).push(ev); };
     SESSION_LOG.forEach((sl) => pushEv(sl.date, { kind: 'SESSION', title: 'Session ' + sl.n + ' · Vânio Antunes', time: sessTime(sl) + ' ' + tz.short, note: sl.status, desc: sl.desc }));
     RECORDINGS_DATA.forEach((r) => pushEv(r.date, { kind: 'OFFICE HOURS', title: r.title, time: sessTime(OFFICE_HOURS.last) + ' ' + tz.short, note: r.mins + ' min · ' + r.track, desc: 'Recording available' }));
+    pushEv(TUTORING.last.date, { kind: 'TUTORING', title: 'MetaHub tutoring · ' + TUTORING.last.topic, time: sessTime(TUTORING.last) + ' ' + tz.short, note: 'Group session', desc: 'Biweekly MetaHub tutoring, open to all mentees' });
 
     const q = st.mQuery.trim().toLowerCase();
     let filtered = MENTEES.filter((m) => {
@@ -2019,6 +2026,25 @@ class Component extends DCLogic {
           nextListLabel: 'Planned topics',
           nextList: OFFICE_HOURS.next.topics,
           nextAction: 'Join office hours'
+        },
+        {
+          icon: { __html: ICONS.users },
+          title: 'MetaHub tutoring',
+          pastLabel: 'Last tutoring',
+          pastTitle: TUTORING.last.topic,
+          pastWhen: fmtDate(TUTORING.last.date) + ' · ' + sessTime(TUTORING.last) + ' ' + tz.short,
+          pastChips: ['Group session', 'Biweekly'],
+          pastListLabel: 'Covered',
+          pastList: TUTORING.last.covered,
+          pastAction: 'Open tutoring notes',
+          nextLabel: 'Next tutoring',
+          nextTitle: TUTORING.next.topic,
+          nextWhen: fmtDate(TUTORING.next.date) + ' · ' + sessTime(TUTORING.next) + ' ' + tz.short,
+          nextCountdown: countdownLabel(TUTORING.next.date),
+          nextChips: ['Open to all mentees', 'Biweekly'],
+          nextListLabel: 'Planned topics',
+          nextList: TUTORING.next.topics,
+          nextAction: 'Join tutoring'
         }
       ],
 
@@ -2026,7 +2052,8 @@ class Component extends DCLogic {
         { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: fmtDate(SESSION_LOG[0].date) + ' · ' + fmt(toMin(SESSION_LOG[0].start) + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
         { eyebrow: 'Next meeting', title: 'Mentorship session · Vânio', when: fmtDate(NEXT_SESSION.date) + ' · ' + fmt(toMin(NEXT_SESSION.start) + shift) + ' ' + tz.short, note: countdownLabel(NEXT_SESSION.date) + ' · Google Meet', past: false },
         { eyebrow: 'Last office hours', title: OFFICE_HOURS.last.title, when: fmtDate(OFFICE_HOURS.last.date) + ' · ' + fmt(toMin(OFFICE_HOURS.last.start) + shift) + ' ' + tz.short, note: 'Recording available', past: true },
-        { eyebrow: 'Next office hours', title: OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + fmt(toMin(OFFICE_HOURS.next.start) + shift) + ' ' + tz.short, note: countdownLabel(OFFICE_HOURS.next.date) + ' · open to all mentees', past: false }
+        { eyebrow: 'Next office hours', title: OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + fmt(toMin(OFFICE_HOURS.next.start) + shift) + ' ' + tz.short, note: countdownLabel(OFFICE_HOURS.next.date) + ' · open to all mentees', past: false },
+        { eyebrow: 'Next tutoring', title: 'MetaHub tutoring · ' + TUTORING.next.topic, when: fmtDate(TUTORING.next.date) + ' · ' + fmt(toMin(TUTORING.next.start) + shift) + ' ' + tz.short, note: countdownLabel(TUTORING.next.date) + ' · biweekly group session', past: false }
       ].map((h) => ({
         eyebrow: h.eyebrow,
         title: h.title,
@@ -2052,8 +2079,9 @@ class Component extends DCLogic {
 
       weekActivities: [
         { d: NEXT_SESSION.date, title: 'Mentorship session · Vânio', when: fmtDate(NEXT_SESSION.date) + ' · ' + sessTime(NEXT_SESSION) + ' ' + tz.short },
-        { d: OFFICE_HOURS.next.date, title: 'Office hours · ' + OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + sessTime(OFFICE_HOURS.next) + ' ' + tz.short }
-      ].filter((x) => daysFromToday(x.d) >= 0 && daysFromToday(x.d) < 7),
+        { d: OFFICE_HOURS.next.date, title: 'Office hours · ' + OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + sessTime(OFFICE_HOURS.next) + ' ' + tz.short },
+        { d: TUTORING.next.date, title: 'MetaHub tutoring · ' + TUTORING.next.topic, when: fmtDate(TUTORING.next.date) + ' · ' + sessTime(TUTORING.next) + ' ' + tz.short }
+      ].filter((x) => daysFromToday(x.d) >= 0 && daysFromToday(x.d) < 7).sort((a, b) => a.d - b.d),
       tasksSetNote: 'Set by your mentor on ' + MONTHS_SHORT[TASKS_SET_ON.getMonth()] + ' ' + TASKS_SET_ON.getDate(),
       weekTasks: PROJECT_STAGES[0].tasks.map((t, ti) => {
         const id = '0-' + ti;
@@ -2120,7 +2148,7 @@ class Component extends DCLogic {
         time: ev.time,
         note: ev.note,
         desc: ev.desc,
-        kindStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.06em; color:' + (ev.kind === 'SESSION' ? 'hsl(234 85% 14%)' : 'hsl(155 40% 27%)') + '; background:' + (ev.kind === 'SESSION' ? 'hsl(234 85% 14% / .12)' : 'hsl(155 40% 27% / .14)')
+        kindStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.06em; color:' + (ev.kind === 'SESSION' ? 'hsl(234 85% 14%)' : ev.kind === 'TUTORING' ? 'hsl(40 78% 44%)' : 'hsl(155 40% 27%)') + '; background:' + (ev.kind === 'SESSION' ? 'hsl(234 85% 14% / .12)' : ev.kind === 'TUTORING' ? 'hsl(40 78% 44% / .14)' : 'hsl(155 40% 27% / .14)')
       })),
       hasDayActivities: (monthEvents[st.selected] || []).length > 0,
       noDayActivities: (monthEvents[st.selected] || []).length === 0,
