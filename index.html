@@ -132,7 +132,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M11 12H3"></path><path d="M16 6H3"></path><path d="M16 18H3"></path><path d="m17 12 2 2 4-4"></path></svg>
               Tasks this week
             </h2>
-            <span style="font-size:13px; color:hsl(38 6% 42%)">Set by your mentor on Aug 26</span>
+            <span style="font-size:13px; color:hsl(38 6% 42%)">{{ tasksSetNote }}</span>
           </div>
           <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px">
             <sc-for list="{{ weekTasks }}" as="t" hint-placeholder-count="3">
@@ -163,7 +163,7 @@
           <h2 style="margin:4px 0 16px; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">Your research projects</h2>
           <div style="max-width:474px; border-radius:17.6px; overflow:hidden; border:1px solid hsl(42 12% 84%); background:hsl(42 33% 99%); box-shadow:0 12px 30px -16px hsl(234 45% 18% / .6)">
             <div style="background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); padding:16px 20px">
-              <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; opacity:.8">Now · Research question</div>
+              <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; opacity:.8">Now · {{ nowStageName }}</div>
               <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:4px">
                 <span style="font-family:Ruda, sans-serif; font-size:20px; font-weight:700">Example 1</span>
                 <span style="font-family:'JetBrains Mono', monospace; font-size:20px; font-weight:700">{{ projectPct }}</span>
@@ -324,10 +324,27 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(234 85% 14%)"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
               <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Activities for {{ selectedLabel }}</h3>
             </div>
-            <div style="text-align:center; padding:48px 0; color:hsl(38 6% 42%); background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 8px; opacity:.5"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
-              <p style="margin:0; font-size:16px">No activities scheduled for this day</p>
-            </div>
+            <sc-if value="{{ hasDayActivities }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:10px">
+                <sc-for list="{{ dayActivities }}" as="ev" hint-placeholder-count="2">
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px; padding:16px 18px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+                    <span style="{{ ev.kindStyle }}">{{ ev.kind }}</span>
+                    <div style="display:grid; gap:2px; flex:1; min-width:0">
+                      <span style="font-size:15px; font-weight:600">{{ ev.title }}</span>
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ ev.time }}</span>
+                      <span style="font-size:13px; color:hsl(38 6% 42%)">{{ ev.desc }}</span>
+                    </div>
+                    <span style="font-size:13px; font-weight:600; color:hsl(38 6% 42%)">{{ ev.note }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noDayActivities }}" hint-placeholder-val="{{ true }}">
+              <div style="text-align:center; padding:48px 0; color:hsl(38 6% 42%); background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:13.6px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 8px; opacity:.5"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+                <p style="margin:0; font-size:16px">No activities scheduled for this day</p>
+              </div>
+            </sc-if>
           </div>
         </div>
       </div>
@@ -386,8 +403,8 @@
                     </span>
                   </div>
                   <div style="display:flex; flex-wrap:wrap; gap:6px">
-                    <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:11px; font-weight:600">Example 1</span>
-                    <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:11px; font-weight:600">Session 27</span>
+                    <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:11px; font-weight:600">{{ nextProject }}</span>
+                    <span style="display:inline-flex; padding:3px 10px; border-radius:9999px; background:hsl(44 16% 88%); font-size:11px; font-weight:600">{{ nextSessionNo }}</span>
                   </div>
                   <a href="https://meet.google.com/" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; height:42px; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:14px; font-weight:600">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>
@@ -805,7 +822,7 @@
             <div>
               <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Research journey · forest plot</div>
               <h2 style="margin:4px 0 0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700">Progress overview</h2>
-              <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">Currently on Stage 1: Research Question</p>
+              <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">Currently on {{ nowStageTitle }}</p>
             </div>
             <div style="text-align:right">
               <div style="font-family:'JetBrains Mono', monospace; font-size:30px; font-weight:700">{{ projectPct }}</div>
@@ -1054,7 +1071,7 @@
             </sc-for>
           </div>
           <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px">
-            <span style="color:hsl(38 6% 42%)">Now: Research Question</span>
+            <span style="color:hsl(38 6% 42%)">Now: {{ nowStageName }}</span>
             <span style="font-family:'JetBrains Mono', monospace; font-weight:700">0%</span>
           </div>
           <div style="height:6px; border-radius:9999px; background:hsl(44 14% 89%); margin:8px 0 16px"></div>
@@ -1246,6 +1263,40 @@ function fmt(min) {
 }
 function addDays(d, n) { const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
 function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+function dowIdx(d) { return (d.getDay() + 6) % 7; }
+function fmtDate(d) { return DAY_NAMES[dowIdx(d)] + ', ' + MONTHS_SHORT[d.getMonth()] + ' ' + d.getDate(); }
+function daysFromToday(d) { return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - TODAY) / 86400000); }
+function countdownLabel(d) { const n = daysFromToday(d); return n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : n > 1 ? 'In ' + n + ' days' : n === -1 ? 'Yesterday' : Math.abs(n) + ' days ago'; }
+
+// Single source of truth for the mentorship timeline. Every view derives from these.
+const PLAN = { total: 52, start: new Date(2026, 2, 2), end: new Date(2027, 2, 1) };
+const SESSION_LOG = [
+  { n: 26, date: new Date(2026, 7, 25), start: '14:00', end: '15:00', status: 'Held', desc: 'Reviewed the screening strategy and agreed on the inclusion criteria for the second reviewer.', projects: 'Example 1' },
+  { n: 25, date: new Date(2026, 7, 18), start: '14:00', end: '15:00', status: 'Held', desc: 'Walked through the search string in Embase and fixed the MeSH terms.', projects: 'Example 1' },
+  { n: 24, date: new Date(2026, 7, 11), start: '14:00', end: '15:00', status: 'No-show', desc: 'Mentee unavailable, rescheduled to the following week.', projects: '—' },
+  { n: 23, date: new Date(2026, 7, 4), start: '14:00', end: '15:00', status: 'Held', desc: 'Defined the PICOTT and closed the research question.', projects: 'Example 1' },
+  { n: 22, date: new Date(2026, 6, 28), start: '15:00', end: '16:00', status: 'Held', desc: 'Discussed authorship order and journal shortlist for the pilot review.', projects: 'Example 1 · Pilot review' },
+  { n: 21, date: new Date(2026, 6, 21), start: '14:00', end: '15:00', status: 'Cancelled', desc: 'Cancelled by mentor, clinical duty.', projects: '—' }
+];
+const NEXT_SESSION = { n: SESSION_LOG[0].n + 1, date: new Date(2026, 8, 1), start: '14:00', end: '15:00', project: 'Example 1', agenda: ['Review the protocol draft', 'Agree on the risk-of-bias tool'] };
+const OFFICE_HOURS = {
+  last: { title: 'Heterogeneity: when to pool and when to stop', date: new Date(2026, 7, 27), start: '18:00', end: '19:00', track: 'Research Methods', mins: 58, covered: ['I² and τ² in practice', 'Subgroup vs. meta-regression', 'When not to pool at all'] },
+  next: { title: 'Research Methods & Statistics', date: new Date(2026, 8, 3), start: '18:00', end: '19:00', topics: ['Building a search string that reviewers accept', 'Live Q&A on screening conflicts'] }
+};
+const RECORDINGS_DATA = [
+  { title: 'Heterogeneity: when to pool and when to stop', date: new Date(2026, 7, 27), mins: 58, track: 'Research Methods' },
+  { title: 'Writing a results section that survives review', date: new Date(2026, 7, 20), mins: 46, track: 'Writing & Publication' },
+  { title: 'Building a screening workflow for two reviewers', date: new Date(2026, 7, 13), mins: 52, track: 'Skills & Productivity' },
+  { title: 'Choosing your first research question', date: new Date(2026, 7, 6), mins: 61, track: 'Career' }
+];
+// due dates the mentor set for the current-stage tasks (null = before next session)
+const TASK_DUES = [new Date(2026, 8, 2), new Date(2026, 8, 4), null];
+const TASKS_SET_ON = addDays(SESSION_LOG[0].date, 1);
+// mentor view: this mentor's next sessions across mentees
+const MENTOR_UPCOMING = [
+  { date: new Date(2026, 8, 1), start: '14:00', end: '15:00', title: 'Protocol draft and search strategy review', mentee: 'Isabella Michelon' },
+  { date: new Date(2026, 8, 2), start: '10:00', end: '11:00', title: 'Forest plot interpretation and heterogeneity', mentee: 'Camila Rocha' }
+];
 
 const PROJECT_STAGES = [
   { title: 'Stage 1: Research Question', desc: 'Define and validate your research question using the PICOTT framework', tasks: [
@@ -1432,14 +1483,19 @@ class Component extends DCLogic {
     });
 
     // month grid for the calendar page (August 2026 starts on a Saturday)
+    const eventDays = {};
+    SESSION_LOG.forEach((sl) => { if (sl.date.getMonth() === 7) eventDays[sl.date.getDate()] = true; });
+    RECORDINGS_DATA.forEach((r) => { if (r.date.getMonth() === 7) eventDays[r.date.getDate()] = true; });
     const cells = [];
     for (let i = 0; i < 6; i++) cells.push({ day: null });
     for (let d = 1; d <= 31; d++) {
       const isSel = d === st.selected;
+      const isToday = d === TODAY.getDate() && TODAY.getMonth() === 7;
+      const hasEv = !!eventDays[d];
       cells.push({
         day: d,
         select: (e) => { e.preventDefault(); this.setState({ selected: d }); },
-        style: 'width:100%; height:100%; padding:0; border:0; border-radius:9.6px; font-family:inherit; font-size:14px; font-weight:' + (isSel ? '700' : '400') + '; display:flex; align-items:center; justify-content:center; background:' + (isSel ? 'hsl(234 85% 14%)' : 'transparent') + '; color:' + (isSel ? 'hsl(40 30% 96%)' : 'hsl(234 68% 12%)')
+        style: 'width:100%; height:100%; padding:0; border:0; border-radius:9.6px; font-family:inherit; font-size:14px; font-weight:' + (isSel ? '700' : '400') + '; display:flex; align-items:center; justify-content:center; background:' + (isSel ? 'hsl(234 85% 14%)' : isToday ? 'hsl(46 24% 84%)' : 'transparent') + '; color:' + (isSel ? 'hsl(40 30% 96%)' : 'hsl(234 68% 12%)') + (hasEv && !isSel ? '; box-shadow:0 0 0 1px hsl(42 33% 99%), 0 0 0 3px hsl(44 16% 88%)' : '')
       });
     }
     while (cells.length % 7 !== 0) cells.push({ day: null });
@@ -1488,7 +1544,12 @@ class Component extends DCLogic {
       confirmSubtitle = st.duration + '-minute session with Vânio Antunes do Livramento Junior';
     }
 
-    const sessionsTotal = 52, sessionsDone = 26;
+    const sessionsDone = SESSION_LOG[0].n, sessionsTotal = PLAN.total;
+    const noShows = SESSION_LOG.filter((s) => s.status === 'No-show').length;
+    const attendancePct = Math.round(((sessionsDone - noShows) / sessionsDone) * 100);
+    let weekStreak = 0;
+    for (const s of SESSION_LOG) { if (s.status === 'Held') weekStreak++; else break; }
+    const sessTime = (s) => fmt(toMin(s.start) + shift) + ' – ' + fmt(toMin(s.end) + shift);
 
     const availabilityRows = st.availability.map((day, i) => {
       const total = day.ranges.reduce((sum, r) => sum + (toMin(r.end) - toMin(r.start)), 0);
@@ -1561,6 +1622,15 @@ class Component extends DCLogic {
       };
     });
     const projectPct = projectTotal ? Math.round((projectDone / projectTotal) * 100) : 0;
+    let curStageIdx = projectStages.findIndex((sg) => sg.pct < 100);
+    if (curStageIdx === -1) curStageIdx = projectStages.length - 1;
+    const curStageName = projectStages[curStageIdx].title.replace(/^Stage \d+: /, '');
+
+    // calendar events for the displayed month (August 2026), from the session log and office hours
+    const monthEvents = {};
+    const pushEv = (d, ev) => { if (d.getMonth() === 7 && d.getFullYear() === 2026) (monthEvents[d.getDate()] = monthEvents[d.getDate()] || []).push(ev); };
+    SESSION_LOG.forEach((sl) => pushEv(sl.date, { kind: 'SESSION', title: 'Session ' + sl.n + ' · Vânio Antunes', time: sessTime(sl) + ' ' + tz.short, note: sl.status, desc: sl.desc }));
+    RECORDINGS_DATA.forEach((r) => pushEv(r.date, { kind: 'OFFICE HOURS', title: r.title, time: sessTime(OFFICE_HOURS.last) + ' ' + tz.short, note: r.mins + ' min · ' + r.track, desc: 'Recording available' }));
 
     const q = st.mQuery.trim().toLowerCase();
     let filtered = MENTEES.filter((m) => {
@@ -1699,11 +1769,15 @@ class Component extends DCLogic {
         statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; color:' + STATUS_COLOR[m.status] + '; background:' + STATUS_COLOR[m.status].replace(')', ' / .14)')
       })),
       mentorMenteeCount: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').length,
-      mentorUpcoming: [
-        { dayNum: '1', month: 'SEP', title: 'Protocol draft and search strategy review', time: '14:00 – 15:00 GMT-3', mentee: 'Isabella Michelon', initials: 'IM' },
-        { dayNum: '2', month: 'SEP', title: 'Forest plot interpretation and heterogeneity', time: '10:00 – 11:00 GMT-3', mentee: 'Camila Rocha', initials: 'CR' }
-      ],
-      mentorUpcomingCount: 2,
+      mentorUpcoming: MENTOR_UPCOMING.map((u) => ({
+        dayNum: String(u.date.getDate()),
+        month: MONTHS_SHORT[u.date.getMonth()].toUpperCase(),
+        title: u.title,
+        time: sessTime(u) + ' ' + tz.short,
+        mentee: u.mentee,
+        initials: initials(u.mentee)
+      })),
+      mentorUpcomingCount: MENTOR_UPCOMING.length,
 
       availabilityRows: availabilityRows,
       timeOptions: TIME_OPTIONS,
@@ -1744,9 +1818,9 @@ class Component extends DCLogic {
         return out;
       })(),
       planBadges: [
-        { value: '6', label: 'week streak', color: 'hsl(40 78% 44%)' },
-        { value: '92%', label: 'attendance', color: 'hsl(155 40% 27%)' },
-        { value: '26', label: 'to go', color: 'hsl(234 85% 14%)' }
+        { value: String(weekStreak), label: 'week streak', color: 'hsl(40 78% 44%)' },
+        { value: attendancePct + '%', label: 'attendance', color: 'hsl(155 40% 27%)' },
+        { value: String(sessionsTotal - sessionsDone), label: 'to go', color: 'hsl(234 85% 14%)' }
       ].map((b) => ({
         value: b.value, label: b.label,
         style: 'display:grid; gap:2px; justify-items:center; padding:10px 6px; border-radius:9.6px; background:' + b.color.replace(')', ' / .1)'),
@@ -1760,17 +1834,17 @@ class Component extends DCLogic {
           icon: { __html: ICONS.video },
           title: 'Mentorship meetings',
           pastLabel: 'Last meeting',
-          pastTitle: 'Session 26 · Vânio Antunes',
-          pastWhen: 'Tue, Aug 25 · ' + fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short,
-          pastChips: ['Example 1', 'Held'],
+          pastTitle: 'Session ' + SESSION_LOG[0].n + ' · Vânio Antunes',
+          pastWhen: fmtDate(SESSION_LOG[0].date) + ' · ' + sessTime(SESSION_LOG[0]) + ' ' + tz.short,
+          pastChips: [SESSION_LOG[0].projects, SESSION_LOG[0].status],
           pastListLabel: 'Tasks set',
-          pastList: ['Finish the PICOTT table', 'Run duplicate screening in Rayyan', 'Send the protocol draft'],
+          pastList: PROJECT_STAGES[0].tasks.map((t) => t[0]),
           pastAction: 'Open session notes',
           nextLabel: 'Next meeting',
-          nextTitle: 'Session 27 · Vânio Antunes',
-          nextWhen: 'Tue, Sep 1 · ' + fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short,
-          nextCountdown: 'Tomorrow',
-          nextChips: ['Example 1', 'Google Meet'],
+          nextTitle: 'Session ' + NEXT_SESSION.n + ' · Vânio Antunes',
+          nextWhen: fmtDate(NEXT_SESSION.date) + ' · ' + sessTime(NEXT_SESSION) + ' ' + tz.short,
+          nextCountdown: countdownLabel(NEXT_SESSION.date),
+          nextChips: [NEXT_SESSION.project, 'Google Meet'],
           nextListLabel: 'On the agenda',
           nextList: ['Review the protocol draft', 'Agree on the risk-of-bias tool'],
           nextAction: 'Join meeting'
@@ -1779,28 +1853,28 @@ class Component extends DCLogic {
           icon: { __html: ICONS.cap },
           title: 'Office hours',
           pastLabel: 'Last office hours',
-          pastTitle: 'Heterogeneity: when to pool and when to stop',
-          pastWhen: 'Thu, Aug 27 · ' + fmt(toMin('18:00') + shift) + ' – ' + fmt(toMin('19:00') + shift) + ' ' + tz.short,
-          pastChips: ['Research Methods', '58 min'],
+          pastTitle: OFFICE_HOURS.last.title,
+          pastWhen: fmtDate(OFFICE_HOURS.last.date) + ' · ' + sessTime(OFFICE_HOURS.last) + ' ' + tz.short,
+          pastChips: [OFFICE_HOURS.last.track, OFFICE_HOURS.last.mins + ' min'],
           pastListLabel: 'Covered',
-          pastList: ['I² and τ² in practice', 'Subgroup vs. meta-regression', 'When not to pool at all'],
+          pastList: OFFICE_HOURS.last.covered,
           pastAction: 'Watch recording',
           nextLabel: 'Next office hours',
-          nextTitle: 'Research Methods & Statistics',
-          nextWhen: 'Thu, Sep 3 · ' + fmt(toMin('18:00') + shift) + ' – ' + fmt(toMin('19:00') + shift) + ' ' + tz.short,
-          nextCountdown: 'In 2 days',
+          nextTitle: OFFICE_HOURS.next.title,
+          nextWhen: fmtDate(OFFICE_HOURS.next.date) + ' · ' + sessTime(OFFICE_HOURS.next) + ' ' + tz.short,
+          nextCountdown: countdownLabel(OFFICE_HOURS.next.date),
           nextChips: ['Open to all mentees', 'Recorded'],
           nextListLabel: 'Planned topics',
-          nextList: ['Building a search string that reviewers accept', 'Live Q&A on screening conflicts'],
+          nextList: OFFICE_HOURS.next.topics,
           nextAction: 'Join office hours'
         }
       ],
 
       calendarHighlights: [
-        { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: 'Tue, Aug 25 · ' + fmt(toMin('14:00') + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
-        { eyebrow: 'Next meeting', title: 'Mentorship session · Vânio', when: 'Tue, Sep 1 · ' + fmt(toMin('14:00') + shift) + ' ' + tz.short, note: 'In 1 day · Google Meet', past: false },
-        { eyebrow: 'Last office hours', title: 'Heterogeneity: when to pool', when: 'Thu, Aug 27 · ' + fmt(toMin('18:00') + shift) + ' ' + tz.short, note: 'Recording available', past: true },
-        { eyebrow: 'Next office hours', title: 'Research Methods & Statistics', when: 'Thu, Sep 3 · ' + fmt(toMin('18:00') + shift) + ' ' + tz.short, note: 'In 3 days · open to all mentees', past: false }
+        { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: fmtDate(SESSION_LOG[0].date) + ' · ' + fmt(toMin(SESSION_LOG[0].start) + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
+        { eyebrow: 'Next meeting', title: 'Mentorship session · Vânio', when: fmtDate(NEXT_SESSION.date) + ' · ' + fmt(toMin(NEXT_SESSION.start) + shift) + ' ' + tz.short, note: countdownLabel(NEXT_SESSION.date) + ' · Google Meet', past: false },
+        { eyebrow: 'Last office hours', title: OFFICE_HOURS.last.title, when: fmtDate(OFFICE_HOURS.last.date) + ' · ' + fmt(toMin(OFFICE_HOURS.last.start) + shift) + ' ' + tz.short, note: 'Recording available', past: true },
+        { eyebrow: 'Next office hours', title: OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + fmt(toMin(OFFICE_HOURS.next.start) + shift) + ' ' + tz.short, note: countdownLabel(OFFICE_HOURS.next.date) + ' · open to all mentees', past: false }
       ].map((h) => ({
         eyebrow: h.eyebrow,
         title: h.title,
@@ -1810,35 +1884,31 @@ class Component extends DCLogic {
         eyebrowStyle: 'font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:' + (h.past ? 'hsl(38 6% 42%)' : 'hsl(234 85% 14%)')
       })),
 
-      nextDayNum: '1',
-      nextMonth: 'September',
-      nextWeekday: 'Tuesday',
-      nextCountdown: 'Tomorrow',
-      nextTime: fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short,
+      nextDayNum: String(NEXT_SESSION.date.getDate()),
+      nextMonth: MONTHS[NEXT_SESSION.date.getMonth()],
+      nextWeekday: DAY_FULL[dowIdx(NEXT_SESSION.date)],
+      nextCountdown: countdownLabel(NEXT_SESSION.date),
+      nextTime: sessTime(NEXT_SESSION) + ' ' + tz.short,
+      nextSessionNo: 'Session ' + NEXT_SESSION.n,
+      nextProject: NEXT_SESSION.project,
 
-      pastSessions: [
-        { n: '26', date: 'Tue, Aug 25', time: '14:00 – 15:00', status: 'Held', desc: 'Reviewed the screening strategy and agreed on the inclusion criteria for the second reviewer.', projects: 'Example 1' },
-        { n: '25', date: 'Tue, Aug 18', time: '14:00 – 15:00', status: 'Held', desc: 'Walked through the search string in Embase and fixed the MeSH terms.', projects: 'Example 1' },
-        { n: '24', date: 'Tue, Aug 11', time: '14:00 – 15:00', status: 'No-show', desc: 'Mentee unavailable, rescheduled to the following week.', projects: '—' },
-        { n: '23', date: 'Tue, Aug 4', time: '14:00 – 15:00', status: 'Held', desc: 'Defined the PICOTT and closed the research question.', projects: 'Example 1' },
-        { n: '22', date: 'Tue, Jul 28', time: '15:00 – 16:00', status: 'Held', desc: 'Discussed authorship order and journal shortlist for the pilot review.', projects: 'Example 1 · Pilot review' },
-        { n: '21', date: 'Tue, Jul 21', time: '14:00 – 15:00', status: 'Cancelled', desc: 'Cancelled by mentor, clinical duty.', projects: '—' }
-      ].map((s) => ({
-        n: s.n, date: s.date, time: s.time, status: s.status, desc: s.desc, projects: s.projects,
+      pastSessions: SESSION_LOG.map((s) => ({
+        n: String(s.n), date: fmtDate(s.date), time: sessTime(s), status: s.status, desc: s.desc, projects: s.projects,
         rowStyle: 'display:grid; grid-template-columns:minmax(104px,132px) 96px minmax(150px,1fr) minmax(120px,168px); gap:16px; align-items:start; padding:14px 20px; border-top:1px solid hsl(42 12% 84%); font-size:14px' + (s.status === 'Held' ? '' : '; background:hsl(44 26% 96% / .6)'),
         statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; white-space:nowrap; color:' + (s.status === 'Held' ? 'hsl(155 40% 27%)' : s.status === 'No-show' ? 'hsl(40 78% 44%)' : 'hsl(4 62% 50%)') + '; background:' + (s.status === 'Held' ? 'hsl(155 40% 27% / .14)' : s.status === 'No-show' ? 'hsl(40 78% 44% / .14)' : 'hsl(4 62% 50% / .12)')
       })),
 
       weekActivities: [
-        { title: 'Mentorship session · Vânio', when: 'Tue, Sep 1 · ' + fmt(toMin('14:00') + shift) + ' – ' + fmt(toMin('15:00') + shift) + ' ' + tz.short },
-        { title: 'Office hours · Research methods', when: 'Thu, Sep 3 · ' + fmt(toMin('18:00') + shift) + ' – ' + fmt(toMin('19:00') + shift) + ' ' + tz.short }
-      ],
+        { d: NEXT_SESSION.date, title: 'Mentorship session · Vânio', when: fmtDate(NEXT_SESSION.date) + ' · ' + sessTime(NEXT_SESSION) + ' ' + tz.short },
+        { d: OFFICE_HOURS.next.date, title: 'Office hours · ' + OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + sessTime(OFFICE_HOURS.next) + ' ' + tz.short }
+      ].filter((x) => daysFromToday(x.d) >= 0 && daysFromToday(x.d) < 7),
+      tasksSetNote: 'Set by your mentor on ' + MONTHS_SHORT[TASKS_SET_ON.getMonth()] + ' ' + TASKS_SET_ON.getDate(),
       weekTasks: PROJECT_STAGES[0].tasks.map((t, ti) => {
         const id = '0-' + ti;
         const done = !!st.taskDone[id];
         return {
           title: t[0],
-          due: ['Due Wed', 'Due Fri', 'Before next session'][ti] || '',
+          due: TASK_DUES[ti] ? 'Due ' + fmtDate(TASK_DUES[ti]) : 'Before next session',
           done: done,
           toggle: () => {
             const next = Object.assign({}, this.state.taskDone);
@@ -1862,7 +1932,7 @@ class Component extends DCLogic {
       })),
       projectCountShort: projectDone + '/' + projectTotal + ' tasks',
       stageDots: [0,1,2,3,4,5,6,7].map((i) => ({
-        style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i === 0 ? 'hsl(234 85% 14%)' : 'hsl(44 14% 89%)') + '; border:1px solid ' + (i === 0 ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)')
+        style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i < curStageIdx ? 'hsl(155 40% 27%)' : i === curStageIdx ? 'hsl(234 85% 14%)' : 'hsl(44 14% 89%)') + '; border:1px solid ' + (i <= curStageIdx ? 'transparent' : 'hsl(42 12% 84%)')
       })),
       courses: [
         { title: 'Career', label: 'Career', img: './assets/course-career.png' },
@@ -1878,12 +1948,10 @@ class Component extends DCLogic {
         pick: (e) => { e.preventDefault(); this.setState({ bannerIdx: i }); },
         style: 'width:8px; height:8px; padding:0; border:0; border-radius:9999px; cursor:pointer; background:' + (i === st.bannerIdx ? 'hsl(40 30% 96%)' : 'hsl(40 30% 96% / .45)')
       })),
-      recordings: [
-        { title: 'Heterogeneity: when to pool and when to stop', meta: 'Aug 27, 2026 · 58 min · Research Methods' },
-        { title: 'Writing a results section that survives review', meta: 'Aug 20, 2026 · 46 min · Writing & Publication' },
-        { title: 'Building a screening workflow for two reviewers', meta: 'Aug 13, 2026 · 52 min · Skills & Productivity' },
-        { title: 'Choosing your first research question', meta: 'Aug 6, 2026 · 61 min · Career' }
-      ],
+      recordings: RECORDINGS_DATA.map((r) => ({
+        title: r.title,
+        meta: MONTHS_SHORT[r.date.getMonth()] + ' ' + r.date.getDate() + ', ' + r.date.getFullYear() + ' · ' + r.mins + ' min · ' + r.track
+      })),
       stats: [
         { value: '1', label: 'Research projects', icon: { __html: ICONS.chart }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(234 85% 14%)' },
         { value: '8', label: 'Stages from question to publication', icon: { __html: ICONS.clock }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(155 40% 27%)' },
@@ -1892,6 +1960,18 @@ class Component extends DCLogic {
       weekdays: ['Su','Mo','Tu','We','Th','Fr','Sa'],
       monthCells: cells,
       selectedLabel: MONTHS[7] + ' ' + st.selected + ', 2026',
+      nowStageName: curStageName,
+      nowStageTitle: projectStages[curStageIdx].title,
+      dayActivities: (monthEvents[st.selected] || []).map((ev) => ({
+        kind: ev.kind,
+        title: ev.title,
+        time: ev.time,
+        note: ev.note,
+        desc: ev.desc,
+        kindStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.06em; color:' + (ev.kind === 'SESSION' ? 'hsl(234 85% 14%)' : 'hsl(155 40% 27%)') + '; background:' + (ev.kind === 'SESSION' ? 'hsl(234 85% 14% / .12)' : 'hsl(155 40% 27% / .14)')
+      })),
+      hasDayActivities: (monthEvents[st.selected] || []).length > 0,
+      noDayActivities: (monthEvents[st.selected] || []).length === 0,
       profileSections: [
         { title: 'Academic & Research', rows: [
           { label: 'Professional Status', value: 'Medical Student', icon: { __html: ICONS.capSm } },
