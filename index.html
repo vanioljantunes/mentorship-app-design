@@ -43,6 +43,8 @@
     .app-main [style*="max-width:474px"], .app-main [style*="max-width: 474px"] { max-width: 100% !important; }
     .app-main .cal-layout { flex-direction: column !important; }
     .app-main .cal-layout > * { width: 100%; }
+    .app-main .brief-indent { padding-left: 16px !important; padding-right: 16px !important; }
+    .app-main .brief-panel { margin-left: 16px !important; margin-right: 16px !important; }
   }
 </style>
 </helmet>
@@ -605,18 +607,42 @@
                 </div>
                 <div style="display:flex; flex-direction:column">
                   <sc-for list="{{ mentorMentees }}" as="mm" hint-placeholder-count="5">
-                    <div style="display:flex; align-items:center; gap:14px; padding:14px 24px; border-bottom:1px solid hsl(44 14% 89%)">
-                      <span style="display:grid; place-items:center; width:38px; height:38px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-size:12px; font-weight:700">{{ mm.initials }}</span>
-                      <div style="display:grid; gap:1px; min-width:0; flex:1">
-                        <span style="font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ mm.name }}</span>
-                        <span style="font-size:13px; color:hsl(38 6% 42%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ mm.email }}</span>
-                        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ mm.meta }}</span>
+                    <div style="border-bottom:1px solid hsl(44 14% 89%)">
+                      <div style="display:flex; align-items:center; gap:14px; padding:14px 24px 10px">
+                        <span style="display:grid; place-items:center; width:38px; height:38px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-size:12px; font-weight:700">{{ mm.initials }}</span>
+                        <div style="display:grid; gap:1px; min-width:0; flex:1">
+                          <span style="font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ mm.name }}</span>
+                          <span style="font-size:13px; color:hsl(38 6% 42%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ mm.email }}</span>
+                          <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ mm.meta }}</span>
+                        </div>
+                        <span style="{{ mm.statusStyle }}">{{ mm.status }}</span>
+                        <button style="display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(234 85% 14%); cursor:pointer" style-hover="background:hsl(46 24% 84%)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                          Schedule
+                        </button>
                       </div>
-                      <span style="{{ mm.statusStyle }}">{{ mm.status }}</span>
-                      <button style="display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(234 85% 14%); cursor:pointer" style-hover="background:hsl(46 24% 84%)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
-                        Schedule
-                      </button>
+                      <div class="brief-indent" style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:0 24px 14px 76px">
+                        <sc-for list="{{ mm.briefFacts }}" as="bf" hint-placeholder-count="4">
+                          <span style="display:inline-flex; align-items:baseline; gap:6px; max-width:100%; padding:4px 10px; border-radius:9.6px; background:hsl(44 26% 96%); border:1px solid hsl(42 12% 84%); font-size:12px">
+                            <span style="font-weight:700; text-transform:uppercase; letter-spacing:.08em; font-size:10px; color:hsl(38 6% 42%); flex-shrink:0">{{ bf.label }}</span>
+                            <span style="color:hsl(234 68% 12%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ bf.value }}</span>
+                          </span>
+                        </sc-for>
+                        <button onClick="{{ mm.toggleBrief }}" style="display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(234 85% 14% / .08); font-size:12px; font-weight:600; color:hsl(234 85% 14%); cursor:pointer" style-hover="background:hsl(234 85% 14% / .16)">
+                          {{ mm.briefLabel }}
+                          <span style="{{ mm.briefChevronStyle }}"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+                        </button>
+                      </div>
+                      <sc-if value="{{ mm.briefOpen }}" hint-placeholder-val="{{ true }}">
+                        <div class="brief-panel" style="display:flex; flex-direction:column; gap:12px; margin:0 24px 16px 76px; padding:16px 18px; border:1px solid hsl(42 12% 84%); border-radius:13.6px; background:hsl(44 26% 96% / .7)">
+                          <sc-for list="{{ mm.briefSections }}" as="bs" hint-placeholder-count="5">
+                            <div style="display:grid; gap:3px">
+                              <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:hsl(234 85% 14%)">{{ bs.title }}</span>
+                              <p style="margin:0; font-size:13px; line-height:1.55; color:hsl(234 40% 22%)">{{ bs.body }}</p>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
                     </div>
                   </sc-for>
                 </div>
@@ -1327,6 +1353,61 @@ const RECORDINGS_DATA = [
 // due dates the mentor set for the current-stage tasks (null = before next session)
 const TASK_DUES = [new Date(2026, 8, 2), new Date(2026, 8, 4), null];
 const TASKS_SET_ON = addDays(SESSION_LOG[0].date, 1);
+// mentee briefings, filled in from the intake questionnaire each mentee answers on joining
+const BRIEFINGS = {
+  'Isabella Michelon': {
+    goal: 'First first-author meta-analysis before residency match',
+    hours: '6 h/week',
+    tools: ['Excel', 'Rayyan', 'R (learning)'],
+    experience: 'One case report published; no prior systematic reviews',
+    sections: [
+      { title: 'Academic & Professional Background', body: 'Final-year medical student at UFCSPA, from Porto Alegre, RS. Research interest in cardiology, mainly heart failure and cardio-oncology. Member of the academic cardiology league; one case report published in a national journal.' },
+      { title: 'Goals & Expectations', body: 'Publish a first-author meta-analysis in a cardiology journal before the residency match, and build a track record for a research-oriented residency application.' },
+      { title: 'Availability & Commitment', body: 'Around 6 hours per week, concentrated on weekday evenings and Saturday mornings; exam weeks in October may reduce this.' },
+      { title: 'Technical Skills', body: 'Comfortable with Excel and Rayyan; currently learning R through the course material. No prior experience with RevMan.' },
+      { title: 'Personal Expectations', body: 'Expects structured weekly check-ins, clear task lists between sessions, and honest feedback on whether the project pace is compatible with the match timeline.' }
+    ]
+  },
+  'Maria L. R. Defante': {
+    goal: 'Two oncology meta-analyses during residency; PhD application',
+    hours: '5 h/week',
+    tools: ['R', 'RevMan', 'Zotero'],
+    experience: 'Co-author on one systematic review under review',
+    sections: [
+      { title: 'Academic & Professional Background', body: 'Internal medicine resident at USP Ribeirão Preto, from Ribeirão Preto, SP. Research interests in clinical oncology, mainly gastrointestinal tumours and immunotherapy outcomes. Co-author on one systematic review currently under review.' },
+      { title: 'Goals & Expectations', body: 'Lead two meta-analyses in oncology during residency and use them to support a PhD application at USP; wants at least one in a journal with impact factor above 5.' },
+      { title: 'Availability & Commitment', body: 'About 5 hours per week, variable with rotation schedule; night shifts every other week make fixed evening slots unreliable.' },
+      { title: 'Technical Skills', body: 'Solid R user for descriptive statistics, experienced with RevMan and Zotero; wants to learn meta-regression and network meta-analysis.' },
+      { title: 'Personal Expectations', body: 'Expects help prioritising research questions with realistic timelines, statistical mentoring in R, and guidance on journal selection and reviewer responses.' }
+    ]
+  },
+  'Pedro Henrique Costa': {
+    goal: 'Research fellowship abroad in infectious diseases',
+    hours: '8 h/week',
+    tools: ['Excel', 'R', 'Rayyan', 'Python'],
+    experience: '1 systematic review published; 1 meta-analysis under review',
+    sections: [
+      { title: 'Academic & Professional Background', body: 'Medical student at UFMG, from Belo Horizonte, MG. Works with the infectious diseases group; research fields include sporotrichosis, diabetic foot infections, antimicrobial resistance and AI, and transplant infectious diseases. One systematic review on sporotrichosis published in 2026 and one meta-analysis in solid organ transplantation under review.' },
+      { title: 'Goals & Expectations', body: 'Main goal is a 2-year research fellowship abroad in transplant infectious diseases, building the contact through a jointly published meta-analysis, with Cochrane-level methodology in a high-impact journal.' },
+      { title: 'Availability & Commitment', body: '8 hours per week, currently paused for board exams; plans to resume at full pace in November.' },
+      { title: 'Technical Skills', body: 'Experience with all phases of meta-analysis including the statistical part in R; also uses Excel, Rayyan and some Python.' },
+      { title: 'Personal Expectations', body: 'Expects focused career orientation, weekly checkpoints on projects, help recruiting students to contribute to the meta-analyses, and guidance on reaching international collaborators for publications.' }
+    ]
+  },
+  'Camila Rocha': {
+    goal: 'Nephrology meta-analysis published before fellowship',
+    hours: '7 h/week',
+    tools: ['R', 'Rayyan', 'GRADEpro'],
+    experience: 'Two conference abstracts; first full review in progress',
+    sections: [
+      { title: 'Academic & Professional Background', body: 'Nephrology resident at UNICAMP, from Campinas, SP. Research interests in dialysis outcomes and acute kidney injury after cardiac surgery. Two first-author conference abstracts; this mentorship project is her first full systematic review.' },
+      { title: 'Goals & Expectations', body: 'Publish a meta-analysis on dialysis timing before applying for a transplant nephrology fellowship, and become independent in the full review workflow.' },
+      { title: 'Availability & Commitment', body: 'Roughly 7 hours per week, best availability early mornings before rounds; fully protected time on Wednesday afternoons.' },
+      { title: 'Technical Skills', body: 'Uses R for survival analysis, Rayyan for screening and GRADEpro for certainty assessment; wants to improve forest plot customisation in R.' },
+      { title: 'Personal Expectations', body: 'Expects direct feedback on methodology decisions, help with the statistical analysis plan, and support choosing between candidate research questions.' }
+    ]
+  }
+};
 // mentor view: this mentor's next sessions across mentees
 const MENTOR_UPCOMING = [
   { date: new Date(2026, 8, 1), start: '14:00', end: '15:00', title: 'Protocol draft and search strategy review', mentee: 'Isabella Michelon' },
@@ -1438,6 +1519,7 @@ class Component extends DCLogic {
   state = {
     page: 'dashboard',
     navOpen: false,
+    briefOpen: null,
     bannerIdx: 0,
     selected: 29,
     role: 'mentee',
@@ -1800,14 +1882,29 @@ class Component extends DCLogic {
       backdropClass: 'nav-backdrop' + (st.navOpen ? ' nav-open' : ''),
       toggleNav: (e) => { e.preventDefault(); this.setState({ navOpen: !st.navOpen }); },
       closeNav: (e) => { e.preventDefault(); this.setState({ navOpen: false }); },
-      mentorMentees: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').map((m) => ({
-        name: m.name,
-        initials: initials(m.name),
-        email: m.name.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '.') + '@example.com',
-        meta: m.sessions + ' session' + (m.sessions === 1 ? '' : 's') + ' · target 52',
-        status: m.status,
-        statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; color:' + STATUS_COLOR[m.status] + '; background:' + STATUS_COLOR[m.status].replace(')', ' / .14)')
-      })),
+      mentorMentees: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').map((m) => {
+        const brief = BRIEFINGS[m.name];
+        const open = st.briefOpen === m.name;
+        return {
+          name: m.name,
+          initials: initials(m.name),
+          email: m.name.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '.') + '@example.com',
+          meta: m.sessions + ' session' + (m.sessions === 1 ? '' : 's') + ' · target ' + PLAN.total,
+          status: m.status,
+          statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; color:' + STATUS_COLOR[m.status] + '; background:' + STATUS_COLOR[m.status].replace(')', ' / .14)'),
+          briefFacts: brief ? [
+            { label: 'Goal', value: brief.goal },
+            { label: 'Availability', value: brief.hours },
+            { label: 'Tools', value: brief.tools.join(' · ') },
+            { label: 'Experience', value: brief.experience }
+          ] : [],
+          briefSections: brief ? brief.sections : [],
+          briefOpen: open,
+          briefLabel: open ? 'Hide briefing' : 'Read full briefing',
+          toggleBrief: (e) => { e.preventDefault(); this.setState({ briefOpen: open ? null : m.name }); },
+          briefChevronStyle: 'display:inline-flex; transition:transform .2s; transform:rotate(' + (open ? '180deg' : '0deg') + ')'
+        };
+      }),
       mentorMenteeCount: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').length,
       mentorUpcoming: MENTOR_UPCOMING.map((u) => ({
         dayNum: String(u.date.getDate()),
