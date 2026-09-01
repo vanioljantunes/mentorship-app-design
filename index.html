@@ -331,7 +331,7 @@
               </span>
               <span>Sessions</span>
             </h1>
-            <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Book your weekly mentorship session and see what is coming up.</p>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">{{ sessionsSubtitle }}</p>
           </div>
           <div style="display:flex; align-items:center; gap:12px">
             <div style="display:inline-flex; gap:4px; padding:4px; background:hsl(44 14% 89%); border-radius:9.6px">
@@ -534,6 +534,60 @@
 
             <sc-if value="{{ isMentorView }}" hint-placeholder-val="{{ true }}">
               <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+                <div style="padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
+                  <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My Mentees ({{ mentorMenteeCount }})</h2>
+                  <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">Schedule sessions with each of your mentees.</p>
+                </div>
+                <div style="display:flex; flex-direction:column">
+                  <sc-for list="{{ mentorMentees }}" as="mm" hint-placeholder-count="5">
+                    <div style="display:flex; align-items:center; gap:14px; padding:14px 24px; border-bottom:1px solid hsl(44 14% 89%)">
+                      <span style="display:grid; place-items:center; width:38px; height:38px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-size:12px; font-weight:700">{{ mm.initials }}</span>
+                      <div style="display:grid; gap:1px; min-width:0; flex:1">
+                        <span style="font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ mm.name }}</span>
+                        <span style="font-size:13px; color:hsl(38 6% 42%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ mm.email }}</span>
+                        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ mm.meta }}</span>
+                      </div>
+                      <span style="{{ mm.statusStyle }}">{{ mm.status }}</span>
+                      <button style="display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(234 85% 14%); cursor:pointer" style-hover="background:hsl(46 24% 84%)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                        Schedule
+                      </button>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+                <div style="padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
+                  <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Upcoming sessions ({{ mentorUpcomingCount }})</h2>
+                  <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">Record the outcome after each session so the plan stays accurate.</p>
+                </div>
+                <div style="display:flex; flex-direction:column">
+                  <sc-for list="{{ mentorUpcoming }}" as="us" hint-placeholder-count="2">
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px; padding:16px 24px; border-bottom:1px solid hsl(44 14% 89%)">
+                      <div style="display:grid; place-items:center; width:52px; flex-shrink:0; padding:8px 0; border-radius:9.6px; background:hsl(234 85% 14% / .08)">
+                        <span style="font-family:Ruda, sans-serif; font-size:20px; font-weight:800; line-height:1; color:hsl(234 85% 14%)">{{ us.dayNum }}</span>
+                        <span style="font-size:10px; font-weight:700; letter-spacing:.12em; color:hsl(234 85% 14%)">{{ us.month }}</span>
+                      </div>
+                      <div style="display:grid; gap:2px; min-width:0; flex:1">
+                        <span style="font-size:14px; font-weight:600">{{ us.title }}</span>
+                        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ us.time }}</span>
+                        <span style="display:inline-flex; align-items:center; gap:6px; font-size:13px; color:hsl(38 6% 42%)">
+                          <span style="display:grid; place-items:center; width:20px; height:20px; border-radius:9999px; background:hsl(44 16% 88%); font-size:9px; font-weight:700">{{ us.initials }}</span>
+                          {{ us.mentee }}
+                        </span>
+                      </div>
+                      <div style="display:flex; align-items:center; gap:8px">
+                        <button style="height:34px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:13px; font-weight:600; cursor:pointer" style-hover="background:hsl(234 85% 20%)">Record outcome</button>
+                        <button style="height:34px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(234 68% 12%); cursor:pointer" style-hover="background:hsl(46 24% 84%)">Edit</button>
+                        <button style="height:34px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(4 62% 50%); cursor:pointer" style-hover="background:hsl(4 62% 50% / .1)">Cancel</button>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
                   <div>
                     <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Weekly availability</h2>
@@ -611,6 +665,7 @@
               </div>
             </sc-if>
 
+            <sc-if value="{{ isMenteeView }}" hint-placeholder-val="{{ true }}">
             <div style="position:relative; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
               <span style="position:absolute; top:20px; right:24px; display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; background:hsl(155 40% 27% / .15); color:hsl(155 40% 27%); font-size:13px; font-weight:600">Active</span>
               <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My Mentor</h2>
@@ -623,9 +678,11 @@
                 </div>
               </div>
             </div>
+            </sc-if>
           </div>
 
           <div style="flex:1 1 300px; max-width:340px; display:flex; flex-direction:column; gap:24px">
+            <sc-if value="{{ isMenteeView }}" hint-placeholder-val="{{ true }}">
             <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
               <h2 style="margin:0 0 18px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Mentorship plan</h2>
               <div style="display:grid; place-items:center">
@@ -672,6 +729,7 @@
                 <span>6 months left</span>
               </div>
             </div>
+            </sc-if>
 
             <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
               <div style="display:flex; align-items:center; gap:12px">
@@ -1147,11 +1205,11 @@ const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const DAY_FULL = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
 const TZS = [
-  { id: 'sao_paulo', label: 'Brasília — GMT-3', short: 'GMT-3', offset: -3 },
-  { id: 'new_york', label: 'New York — GMT-4', short: 'GMT-4', offset: -4 },
-  { id: 'lisbon', label: 'Lisbon — GMT+1', short: 'GMT+1', offset: 1 },
-  { id: 'london', label: 'London — GMT+1', short: 'GMT+1', offset: 1 },
-  { id: 'utc', label: 'UTC — GMT+0', short: 'UTC', offset: 0 }
+  { id: 'sao_paulo', label: 'Brasília (GMT-3)', short: 'GMT-3', offset: -3 },
+  { id: 'new_york', label: 'New York (GMT-4)', short: 'GMT-4', offset: -4 },
+  { id: 'lisbon', label: 'Lisbon (GMT+1)', short: 'GMT+1', offset: 1 },
+  { id: 'london', label: 'London (GMT+1)', short: 'GMT+1', offset: 1 },
+  { id: 'utc', label: 'UTC (GMT+0)', short: 'UTC', offset: 0 }
 ];
 const MENTOR_OFFSET = -3;
 
@@ -1375,7 +1433,7 @@ class Component extends DCLogic {
         if (s.busy) {
           return {
             label: fmt(s.mentorMin + shift),
-            title: 'Busy on Google Calendar — ' + s.busy,
+            title: 'Busy on Google Calendar: ' + s.busy,
             busy: true,
             pick: (e) => { e.preventDefault(); },
             style: 'width:100%; height:38px; border-radius:9.6px; font-size:14px; font-weight:500; font-family:inherit; cursor:not-allowed; border:1px dashed hsl(42 12% 84%); background:hsl(44 14% 89% / .5); color:hsl(38 6% 42%); text-decoration:line-through'
@@ -1447,7 +1505,7 @@ class Component extends DCLogic {
     const setG = (patch) => this.setState({ google: Object.assign({}, g, patch), pick: null });
     let gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='
       + encodeURIComponent('Mentorship session · Vânio Antunes')
-      + '&details=' + encodeURIComponent(st.topic || 'Weekly mentorship session — Mentoria MAA')
+      + '&details=' + encodeURIComponent(st.topic || 'Weekly mentorship session · Mentoria MAA')
       + '&location=' + encodeURIComponent('Google Meet');
 
     let projectDone = 0, projectTotal = 0;
@@ -1529,7 +1587,7 @@ class Component extends DCLogic {
       })),
       gradeCounts: st.gradeCounts,
       toggleGrade: () => this.setState({ gradeCounts: !st.gradeCounts }),
-      gradeNote: st.gradeCounts ? 'GRADE counts towards 100%' : 'GRADE is optional — not counted towards 100%',
+      gradeNote: st.gradeCounts ? 'GRADE counts towards 100%' : 'GRADE is optional, not counted towards 100%',
       picottStudies: PICOTT_STUDIES,
 
       isMentees: page === 'mentees',
@@ -1613,6 +1671,22 @@ class Component extends DCLogic {
       resetBooking: () => this.setState({ booked: null }),
       clearSelection: () => this.setState({ pick: null }),
 
+      sessionsSubtitle: st.role === 'mentor' ? 'Schedule and manage sessions with your mentees.' : 'Book your weekly mentorship session and see what is coming up.',
+      mentorMentees: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').map((m) => ({
+        name: m.name,
+        initials: initials(m.name),
+        email: m.name.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '.') + '@example.com',
+        meta: m.sessions + ' session' + (m.sessions === 1 ? '' : 's') + ' · target 52',
+        status: m.status,
+        statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; color:' + STATUS_COLOR[m.status] + '; background:' + STATUS_COLOR[m.status].replace(')', ' / .14)')
+      })),
+      mentorMenteeCount: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').length,
+      mentorUpcoming: [
+        { dayNum: '1', month: 'SEP', title: 'Protocol draft and search strategy review', time: '14:00 – 15:00 GMT-3', mentee: 'Isabella Michelon', initials: 'IM' },
+        { dayNum: '2', month: 'SEP', title: 'Forest plot interpretation and heterogeneity', time: '10:00 – 11:00 GMT-3', mentee: 'Camila Rocha', initials: 'CR' }
+      ],
+      mentorUpcomingCount: 2,
+
       availabilityRows: availabilityRows,
       timeOptions: TIME_OPTIONS,
       availabilitySummary: openDays + ' open days this week · ' + totalSlots + ' bookable ' + st.duration + '-minute slots',
@@ -1628,7 +1702,7 @@ class Component extends DCLogic {
       gAccount: g.account,
       gCalendar: g.calendar,
       gSyncedAt: g.syncedAt,
-      gBusyNote: busyCount > 0 ? busyCount + ' slot' + (busyCount === 1 ? '' : 's') + ' hidden this week — busy on Google Calendar' : 'No conflicts this week',
+      gBusyNote: busyCount > 0 ? busyCount + ' slot' + (busyCount === 1 ? '' : 's') + ' hidden this week · busy on Google Calendar' : 'No conflicts this week',
       gConnect: () => setG({ connected: true }),
       gDisconnect: () => setG({ connected: false }),
       gcalUrl: gcalUrl,
@@ -1727,10 +1801,10 @@ class Component extends DCLogic {
       pastSessions: [
         { n: '26', date: 'Tue, Aug 25', time: '14:00 – 15:00', status: 'Held', desc: 'Reviewed the screening strategy and agreed on the inclusion criteria for the second reviewer.', projects: 'Example 1' },
         { n: '25', date: 'Tue, Aug 18', time: '14:00 – 15:00', status: 'Held', desc: 'Walked through the search string in Embase and fixed the MeSH terms.', projects: 'Example 1' },
-        { n: '24', date: 'Tue, Aug 11', time: '14:00 – 15:00', status: 'No-show', desc: 'Mentee unavailable — rescheduled to the following week.', projects: '—' },
+        { n: '24', date: 'Tue, Aug 11', time: '14:00 – 15:00', status: 'No-show', desc: 'Mentee unavailable, rescheduled to the following week.', projects: '—' },
         { n: '23', date: 'Tue, Aug 4', time: '14:00 – 15:00', status: 'Held', desc: 'Defined the PICOTT and closed the research question.', projects: 'Example 1' },
         { n: '22', date: 'Tue, Jul 28', time: '15:00 – 16:00', status: 'Held', desc: 'Discussed authorship order and journal shortlist for the pilot review.', projects: 'Example 1 · Pilot review' },
-        { n: '21', date: 'Tue, Jul 21', time: '14:00 – 15:00', status: 'Cancelled', desc: 'Cancelled by mentor — clinical duty.', projects: '—' }
+        { n: '21', date: 'Tue, Jul 21', time: '14:00 – 15:00', status: 'Cancelled', desc: 'Cancelled by mentor, clinical duty.', projects: '—' }
       ].map((s) => ({
         n: s.n, date: s.date, time: s.time, status: s.status, desc: s.desc, projects: s.projects,
         rowStyle: 'display:grid; grid-template-columns:minmax(104px,132px) 96px minmax(150px,1fr) minmax(120px,168px); gap:16px; align-items:start; padding:14px 20px; border-top:1px solid hsl(42 12% 84%); font-size:14px' + (s.status === 'Held' ? '' : '; background:hsl(44 26% 96% / .6)'),
