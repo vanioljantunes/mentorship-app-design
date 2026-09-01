@@ -391,6 +391,33 @@
                 </div>
               </sc-if>
 
+              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px">
+                  <div>
+                    <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Past sessions</h2>
+                    <p style="margin:4px 0 0; font-size:13px; color:hsl(38 6% 42%)">What was covered and which projects moved forward.</p>
+                  </div>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ sessionsDone }} completed</span>
+                </div>
+                <div style="display:grid; grid-template-columns:132px 104px minmax(0,1fr) 180px; gap:16px; padding:10px 20px; background:hsl(44 26% 96%); border-top:1px solid hsl(42 12% 84%); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(38 6% 42%)">
+                  <span>Date</span>
+                  <span>Happened</span>
+                  <span>Description</span>
+                  <span>Projects worked on</span>
+                </div>
+                <sc-for list="{{ pastSessions }}" as="s" hint-placeholder-count="6">
+                  <div style="{{ s.rowStyle }}">
+                    <span style="display:grid; gap:2px">
+                      <span style="font-weight:600">{{ s.date }}</span>
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ s.time }}</span>
+                    </span>
+                    <span style="{{ s.statusStyle }}">{{ s.status }}</span>
+                    <span style="line-height:1.45; text-wrap:pretty">{{ s.desc }}</span>
+                    <span style="color:hsl(38 6% 42%)">{{ s.projects }}</span>
+                  </div>
+                </sc-for>
+              </div>
+
               <sc-if value="{{ isBooked }}" hint-placeholder-val="{{ true }}">
                 <div style="background:hsl(42 33% 99%); border:1px solid hsl(155 40% 27% / .3); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
                   <div style="display:flex; align-items:center; gap:12px">
@@ -512,28 +539,50 @@
 
           <div style="display:flex; flex-direction:column; gap:24px">
             <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
-              <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Mentorship plan</h2>
-              <p style="margin:0 0 16px; font-size:13px; color:hsl(38 6% 42%)">Calculated from your start date — 1 session per week for 1 year.</p>
-              <div style="display:flex; align-items:baseline; gap:8px">
-                <span style="font-family:'JetBrains Mono', monospace; font-size:28px; font-weight:700">{{ sessionsDone }}</span>
-                <span style="font-size:14px; color:hsl(38 6% 42%)">of {{ sessionsTotal }} sessions</span>
+              <h2 style="margin:0 0 18px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Mentorship plan</h2>
+              <div style="display:grid; place-items:center">
+                <div style="{{ ringStyle }}">
+                  <div style="display:grid; place-items:center; gap:0; width:118px; height:118px; border-radius:9999px; background:hsl(42 33% 99%)">
+                    <span style="font-family:'JetBrains Mono', monospace; font-size:34px; font-weight:700; line-height:1">{{ sessionsDone }}</span>
+                    <span style="font-size:12px; color:hsl(38 6% 42%)">of {{ sessionsTotal }}</span>
+                  </div>
+                </div>
               </div>
-              <div style="height:6px; border-radius:9999px; background:hsl(44 14% 89%); margin:12px 0 14px; overflow:hidden">
-                <div style="{{ progressStyle }}"></div>
+              <div style="display:grid; grid-template-columns:repeat(13, 1fr); gap:4px; margin:20px 0 18px">
+                <sc-for list="{{ planDots }}" as="dot" hint-placeholder-count="52">
+                  <span style="{{ dot.style }}"></span>
+                </sc-for>
               </div>
-              <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:hsl(38 6% 42%)">
-                <span>Started Mar 2, 2026 · ends Mar 1, 2027</span>
-                <span>{{ sessionsLeft }} sessions remaining</span>
+              <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px">
+                <sc-for list="{{ planBadges }}" as="b" hint-placeholder-count="3">
+                  <div style="{{ b.style }}">
+                    <span style="{{ b.valueStyle }}">{{ b.value }}</span>
+                    <span style="font-size:11px; color:hsl(38 6% 42%)">{{ b.label }}</span>
+                  </div>
+                </sc-for>
               </div>
-              <button style="width:100%; height:38px; margin-top:16px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:transparent; font-size:13px; font-weight:600">Adjust plan manually</button>
             </div>
 
-            <div style="background:hsl(40 78% 44% / .08); border:1px solid hsl(40 78% 44% / .4); border-radius:17.6px; padding:20px">
-              <div style="display:flex; align-items:center; gap:10px">
-                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(40 78% 44%)"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
-                <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">Renewal window</span>
+            <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:16px">
+                <span style="display:grid; gap:2px">
+                  <span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Start</span>
+                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">Mar 2, 2026</span>
+                </span>
+                <span style="display:grid; gap:2px; text-align:right">
+                  <span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">End</span>
+                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">Mar 1, 2027</span>
+                </span>
               </div>
-              <p style="margin:10px 0 0; font-size:13px; color:hsl(38 6% 42%)">Coordinators are notified 30 days before Mar 1, 2027 and again on the end date.</p>
+              <div style="position:relative; height:10px; border-radius:9999px; background:hsl(44 14% 89%)">
+                <div style="{{ periodFillStyle }}"></div>
+                <span style="{{ periodMarkerStyle }}"></span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; font-size:12px; color:hsl(38 6% 42%)">
+                <span>6 months in</span>
+                <span>{{ planPct }}</span>
+                <span>6 months left</span>
+              </div>
             </div>
 
             <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
@@ -560,10 +609,7 @@
                   <sc-for list="{{ gToggles }}" as="t" hint-placeholder-count="3">
                     <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer">
                       <input type="checkbox" checked="{{ t.on }}" onChange="{{ t.toggle }}" style="width:16px; height:16px; margin-top:2px; accent-color:hsl(234 85% 14%)" />
-                      <span style="display:grid; gap:2px">
-                        <span style="font-size:13px; font-weight:600">{{ t.title }}</span>
-                        <span style="font-size:12px; color:hsl(38 6% 42%)">{{ t.sub }}</span>
-                      </span>
+                      <span style="font-size:13px; font-weight:600">{{ t.title }}</span>
                     </label>
                   </sc-for>
                 </div>
@@ -596,6 +642,80 @@
             </div>
           </div>
         </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMentees }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px">
+          <div>
+            <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(38 6% 42%)">Community</div>
+            <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+              <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(234 85% 14% / .12); color:hsl(234 85% 14%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </span>
+              <span>Mentees</span>
+            </h1>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(38 6% 42%)">Everyone in the programme, their area of interest and who mentors them.</p>
+          </div>
+          <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(38 6% 42%)">{{ menteeCount }}</span>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px; padding:20px 24px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px">
+            <label style="position:relative; flex:1; min-width:240px; display:flex; align-items:center">
+              <span style="position:absolute; left:12px; display:flex; color:hsl(38 6% 42%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              </span>
+              <input value="{{ mQuery }}" onChange="{{ setQuery }}" placeholder="Search by name or area" style="width:100%; height:40px; padding:0 14px 0 36px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%)" />
+            </label>
+            <select onChange="{{ setStatus }}" value="{{ mStatus }}" style="height:40px; padding:0 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%)">
+              <sc-for list="{{ statusOptions }}" as="s" hint-placeholder-count="5">
+                <option value="{{ s }}">{{ s }}</option>
+              </sc-for>
+            </select>
+            <select onChange="{{ setMentor }}" value="{{ mMentor }}" style="height:40px; padding:0 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%)">
+              <sc-for list="{{ mentorOptions }}" as="m" hint-placeholder-count="4">
+                <option value="{{ m }}">{{ m }}</option>
+              </sc-for>
+            </select>
+            <select onChange="{{ setSort }}" value="{{ mSort }}" style="height:40px; padding:0 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:14px; color:hsl(234 68% 12%)">
+              <sc-for list="{{ sortOptions }}" as="o" hint-placeholder-count="3">
+                <option value="{{ o.id }}">{{ o.label }}</option>
+              </sc-for>
+            </select>
+            <button onClick="{{ clearFilters }}" style="height:40px; padding:0 14px; border:0; background:transparent; font-size:13px; font-weight:600; color:hsl(38 6% 42%); cursor:pointer">Clear</button>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px">
+            <sc-for list="{{ areaChips }}" as="chip" hint-placeholder-count="10">
+              <button onClick="{{ chip.toggle }}" style="{{ chip.style }}">{{ chip.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(232px, 1fr)); gap:20px">
+          <sc-for list="{{ menteeCards }}" as="m" hint-placeholder-count="8">
+            <div style="position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; padding:20px 18px 22px; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)" style-hover="border-color:hsl(234 85% 14% / .4)">
+              <div style="position:absolute; top:14px; right:14px; display:flex; gap:4px">
+                <sc-for list="{{ m.langs }}" as="lang" hint-placeholder-count="2">
+                  <span style="{{ lang.style }}">{{ lang.code }}</span>
+                </sc-for>
+              </div>
+              <span style="max-width:70%; font-family:Ruda, sans-serif; font-size:14px; font-weight:700; line-height:1.3; color:hsl(234 85% 14%)">{{ m.area }}</span>
+              <div style="position:relative; margin-top:14px; padding-bottom:14px">
+                <span style="display:grid; place-items:center; width:116px; height:116px; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%)); color:hsl(40 30% 96%); font-family:Ruda, sans-serif; font-size:34px; font-weight:700">{{ m.initials }}</span>
+                <span style="position:absolute; left:50%; bottom:0; transform:translateX(-50%); max-width:190px; padding:5px 14px; border:1px solid hsl(42 12% 84%); border-radius:9999px; background:hsl(42 33% 99%); font-family:Ruda, sans-serif; font-size:13px; font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ m.name }}</span>
+              </div>
+              <span style="margin-top:12px; font-size:13px; line-height:1.4; color:hsl(38 6% 42%); text-wrap:pretty">{{ m.role }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ menteesEmpty }}" hint-placeholder-val="{{ true }}">
+          <div style="text-align:center; padding:56px 0; background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; color:hsl(38 6% 42%)">
+            <p style="margin:0; font-size:16px">No mentees match these filters.</p>
+          </div>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -791,6 +911,7 @@ const ICONS = {
   phone: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
   pin: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
   building: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M8 10h.01"></path><path d="M16 10h.01"></path><path d="M8 14h.01"></path><path d="M16 14h.01"></path></svg>',
+  users: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
   capSm: '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>'
 };
 
@@ -798,6 +919,7 @@ const NAV = [
   { key: 'dashboard', label: 'Dashboard', icon: ICONS.dashboard },
   { key: 'calendar', label: 'Calendar', icon: ICONS.calendar },
   { key: 'sessions', label: 'Sessions', icon: ICONS.video },
+  { key: 'mentees', label: 'Mentees', icon: ICONS.users },
   { key: 'metatracker', label: 'MetaTracker', icon: ICONS.fileSearch },
   { key: 'courses', label: 'Office Hours', icon: ICONS.cap }
 ];
@@ -837,6 +959,35 @@ function fmt(min) {
 function addDays(d, n) { const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
 function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
 
+const MENTEES = [
+  { name: 'Isabella Michelon', area: 'Cardiology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 26, projects: 2, position: 'Medical Student', affiliation: 'UFCSPA', langs: ['BR','EN'] },
+  { name: 'Maria L. R. Defante', area: 'Oncology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 24, projects: 1, position: 'Resident', affiliation: 'USP Ribeirão Preto', langs: ['BR','EN'] },
+  { name: 'Caroline Dagostin', area: 'Neurology', status: 'Active', mentor: 'Caroline Serafim', since: 'Apr 2026', sessions: 19, projects: 3, position: 'MD, PhD candidate', affiliation: 'UNIFESP', langs: ['BR'] },
+  { name: 'Pedro Henrique Costa', area: 'Infectious Diseases', status: 'Paused', mentor: 'Vânio Antunes', since: 'Jan 2026', sessions: 14, projects: 1, position: 'Medical Student', affiliation: 'UFMG', langs: ['BR'] },
+  { name: 'Ana Beatriz Moraes', area: 'Endocrinology', status: 'Active', mentor: 'Rafael Lima', since: 'Feb 2026', sessions: 29, projects: 2, position: 'Resident', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'] },
+  { name: 'Lucas Ferreira', area: 'Surgery', status: 'Active', mentor: 'Rafael Lima', since: 'May 2026', sessions: 15, projects: 1, position: 'MD', affiliation: 'Hospital Sírio-Libanês', langs: ['BR','EN'] },
+  { name: 'Júlia Nascimento', area: 'Pediatrics', status: 'Finished', mentor: 'Caroline Serafim', since: 'Aug 2025', sessions: 52, projects: 4, position: 'MD, MSc', affiliation: 'UFRJ', langs: ['BR','EN'] },
+  { name: 'Rafael Souza Pinto', area: 'Psychiatry', status: 'Active', mentor: 'Caroline Serafim', since: 'Jun 2026', sessions: 11, projects: 1, position: 'Medical Student', affiliation: 'UFPE', langs: ['BR'] },
+  { name: 'Camila Rocha', area: 'Nephrology', status: 'Active', mentor: 'Vânio Antunes', since: 'Apr 2026', sessions: 20, projects: 2, position: 'Resident', affiliation: 'UNICAMP', langs: ['BR','EN'] },
+  { name: 'Gustavo Almeida', area: 'Emergency Medicine', status: 'Paused', mentor: 'Rafael Lima', since: 'Feb 2026', sessions: 17, projects: 1, position: 'MD', affiliation: 'Hospital das Clínicas FMUSP', langs: ['BR'] },
+  { name: 'Larissa Barbosa', area: 'Oncology', status: 'Active', mentor: 'Rafael Lima', since: 'Jul 2026', sessions: 7, projects: 1, position: 'Medical Student', affiliation: 'UFBA', langs: ['BR','EN'] },
+  { name: 'Thiago Mendes', area: 'Cardiology', status: 'Cancelled', mentor: 'Caroline Serafim', since: 'Nov 2025', sessions: 9, projects: 0, position: 'MD, MSc', affiliation: 'Instituto do Coração', langs: ['EN'] }
+];
+const LANG_STYLE = {
+  BR: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:10px; font-weight:700; letter-spacing:.06em; color:hsl(155 40% 27%); background:hsl(155 40% 27% / .14); border:1px solid hsl(155 40% 27% / .3)',
+  EN: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:10px; font-weight:700; letter-spacing:.06em; color:hsl(234 85% 14%); background:hsl(234 85% 14% / .12); border:1px solid hsl(234 85% 14% / .3)'
+};
+const AREAS = ['Cardiology','Emergency Medicine','Endocrinology','Infectious Diseases','Nephrology','Neurology','Oncology','Pediatrics','Psychiatry','Surgery'];
+const MENTORS = ['All mentors','Vânio Antunes','Caroline Serafim','Rafael Lima'];
+const STATUSES = ['All','Active','Paused','Finished','Cancelled'];
+const STATUS_COLOR = {
+  Active: 'hsl(155 40% 27%)',
+  Paused: 'hsl(40 78% 44%)',
+  Finished: 'hsl(234 45% 20%)',
+  Cancelled: 'hsl(4 62% 50%)'
+};
+function initials(name) { const p = name.split(' '); return (p[0][0] + p[p.length - 1][0]).toUpperCase(); }
+
 const TIME_OPTIONS = (function () {
   const out = [];
   for (let m = 6 * 60; m <= 22 * 60; m += 30) out.push(fmt(m));
@@ -856,6 +1007,7 @@ class Component extends DCLogic {
     repeatWeekly: true,
     booked: null,
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
+    mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
     google: { connected: true, account: 'vanio.antunes.md@gmail.com', calendar: 'Mentoria MAA', blockConflicts: true, autoAdd: true, meetLink: true, syncedAt: '2 minutes ago' },
     availability: [
       { enabled: true, ranges: [{ start: '09:00', end: '12:00' }] },
@@ -1018,9 +1170,59 @@ class Component extends DCLogic {
       + '&details=' + encodeURIComponent(st.topic || 'Weekly mentorship session — Mentoria MAA')
       + '&location=' + encodeURIComponent('Google Meet');
 
+    const q = st.mQuery.trim().toLowerCase();
+    let filtered = MENTEES.filter((m) => {
+      if (q && m.name.toLowerCase().indexOf(q) === -1 && m.area.toLowerCase().indexOf(q) === -1) return false;
+      if (st.mAreas.length && st.mAreas.indexOf(m.area) === -1) return false;
+      if (st.mStatus !== 'All' && m.status !== st.mStatus) return false;
+      if (st.mMentor !== 'All mentors' && m.mentor !== st.mMentor) return false;
+      return true;
+    });
+    if (st.mSort === 'name') filtered = filtered.slice().sort((a, b) => a.name.localeCompare(b.name));
+    if (st.mSort === 'sessions') filtered = filtered.slice().sort((a, b) => b.sessions - a.sessions);
+    if (st.mSort === 'recent') filtered = filtered.slice().sort((a, b) => a.sessions - b.sessions);
+    const menteeCards = filtered.map((m) => ({
+      name: m.name,
+      area: m.area,
+      status: m.status,
+      role: m.position + ', ' + m.affiliation,
+      initials: initials(m.name),
+      langs: m.langs.map((l) => ({ code: l, style: LANG_STYLE[l] })),
+      statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; color:' + STATUS_COLOR[m.status] + '; background:' + STATUS_COLOR[m.status].replace(')', ' / .14)')
+    }));
+
     const tabBase = 'height:32px; padding:0 14px; border:0; border-radius:6.6px; font-size:14px; cursor:pointer; ';
 
     return {
+      isMentees: page === 'mentees',
+      mQuery: st.mQuery,
+      setQuery: (e) => this.setState({ mQuery: e.target.value }),
+      mStatus: st.mStatus,
+      setStatus: (e) => this.setState({ mStatus: e.target.value }),
+      statusOptions: STATUSES,
+      mMentor: st.mMentor,
+      setMentor: (e) => this.setState({ mMentor: e.target.value }),
+      mentorOptions: MENTORS,
+      mSort: st.mSort,
+      setSort: (e) => this.setState({ mSort: e.target.value }),
+      sortOptions: [
+        { id: 'name', label: 'Name A–Z' },
+        { id: 'sessions', label: 'Most sessions' },
+        { id: 'recent', label: 'Recently joined' }
+      ],
+      areaChips: AREAS.map((a) => {
+        const on = st.mAreas.indexOf(a) !== -1;
+        return {
+          label: a,
+          toggle: () => this.setState({ mAreas: on ? st.mAreas.filter((x) => x !== a) : st.mAreas.concat([a]) }),
+          style: 'height:32px; padding:0 14px; border-radius:9999px; font-size:13px; font-family:inherit; cursor:pointer; border:1px solid ' + (on ? 'hsl(234 85% 14%)' : 'hsl(42 12% 84%)') + '; background:' + (on ? 'hsl(234 85% 14%)' : 'hsl(42 33% 99%)') + '; color:' + (on ? 'hsl(40 30% 96%)' : 'hsl(234 68% 12%)') + '; font-weight:' + (on ? '600' : '500')
+        };
+      }),
+      clearFilters: () => this.setState({ mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name' }),
+      menteeCount: menteeCards.length + ' of ' + MENTEES.length + ' mentees',
+      menteeCards: menteeCards,
+      menteesEmpty: menteeCards.length === 0,
+
       navItems: navItems,
       roleLabel: st.role === 'mentor' ? 'Mentor' : 'Mentee',
       isDashboard: page === 'dashboard',
@@ -1093,15 +1295,35 @@ class Component extends DCLogic {
       gDisconnect: () => setG({ connected: false }),
       gcalUrl: gcalUrl,
       gToggles: [
-        { title: 'Block times I am busy', sub: 'Events on ' + g.calendar + ' are removed from the slot list.', on: g.blockConflicts, toggle: () => setG({ blockConflicts: !g.blockConflicts }) },
-        { title: 'Add booked sessions to Google Calendar', sub: 'Both mentor and mentee get the invite.', on: g.autoAdd, toggle: () => setG({ autoAdd: !g.autoAdd }) },
-        { title: 'Create a Google Meet link', sub: 'Attached to every session automatically.', on: g.meetLink, toggle: () => setG({ meetLink: !g.meetLink }) }
+        { title: 'Block times I am busy', on: g.blockConflicts, toggle: () => setG({ blockConflicts: !g.blockConflicts }) },
+        { title: 'Add booked sessions to my calendar', on: g.autoAdd, toggle: () => setG({ autoAdd: !g.autoAdd }) },
+        { title: 'Create a Google Meet link', on: g.meetLink, toggle: () => setG({ meetLink: !g.meetLink }) }
       ],
 
       sessionsDone: sessionsDone,
       sessionsTotal: sessionsTotal,
       sessionsLeft: sessionsTotal - sessionsDone,
-      progressStyle: 'height:100%; width:' + Math.round((sessionsDone / sessionsTotal) * 100) + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%))',
+      planPct: Math.round((sessionsDone / sessionsTotal) * 100) + '%',
+      ringStyle: 'position:relative; display:grid; place-items:center; width:148px; height:148px; border-radius:9999px; background:conic-gradient(hsl(234 85% 14%) 0 ' + Math.round((sessionsDone / sessionsTotal) * 100) + '%, hsl(44 14% 89%) 0)',
+      planDots: (function () {
+        const out = [];
+        for (let i = 0; i < sessionsTotal; i++) {
+          const done = i < sessionsDone, next = i === sessionsDone;
+          out.push({ style: 'width:100%; aspect-ratio:1/1; border-radius:9999px; background:' + (done ? 'hsl(234 85% 14%)' : next ? 'hsl(40 78% 44%)' : 'hsl(44 14% 89%)') + (next ? '; box-shadow:0 0 0 2px hsl(40 78% 44% / .3)' : '') });
+        }
+        return out;
+      })(),
+      planBadges: [
+        { value: '6', label: 'week streak', color: 'hsl(40 78% 44%)' },
+        { value: '92%', label: 'attendance', color: 'hsl(155 40% 27%)' },
+        { value: '26', label: 'to go', color: 'hsl(234 85% 14%)' }
+      ].map((b) => ({
+        value: b.value, label: b.label,
+        style: 'display:grid; gap:2px; justify-items:center; padding:10px 6px; border-radius:9.6px; background:' + b.color.replace(')', ' / .1)'),
+        valueStyle: 'font-family:"JetBrains Mono", monospace; font-size:16px; font-weight:700; color:' + b.color
+      })),
+      periodMarkerStyle: 'position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:9999px; background:hsl(40 78% 44%); border:3px solid hsl(42 33% 99%); box-shadow:0 0 0 2px hsl(40 78% 44% / .35)',
+      periodFillStyle: 'height:100%; width:50%; border-radius:9999px; background:linear-gradient(100deg, hsl(234 85% 14%), hsl(212 85% 20%))',
 
       calendarHighlights: [
         { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: 'Tue, Aug 25 · ' + fmt(toMin('14:00') + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
@@ -1115,6 +1337,19 @@ class Component extends DCLogic {
         note: h.note,
         cardStyle: 'display:flex; flex-direction:column; gap:6px; padding:16px; border-radius:13.6px; border:1px solid ' + (h.past ? 'hsl(42 12% 84%)' : 'hsl(234 85% 14% / .25)') + '; background:' + (h.past ? 'hsl(44 26% 96%)' : 'hsl(42 33% 99%)') + '; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5)',
         eyebrowStyle: 'font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:' + (h.past ? 'hsl(38 6% 42%)' : 'hsl(234 85% 14%)')
+      })),
+
+      pastSessions: [
+        { n: '26', date: 'Tue, Aug 25', time: '14:00 – 15:00', status: 'Held', desc: 'Reviewed the screening strategy and agreed on the inclusion criteria for the second reviewer.', projects: 'Example 1' },
+        { n: '25', date: 'Tue, Aug 18', time: '14:00 – 15:00', status: 'Held', desc: 'Walked through the search string in Embase and fixed the MeSH terms.', projects: 'Example 1' },
+        { n: '24', date: 'Tue, Aug 11', time: '14:00 – 15:00', status: 'No-show', desc: 'Mentee unavailable — rescheduled to the following week.', projects: '—' },
+        { n: '23', date: 'Tue, Aug 4', time: '14:00 – 15:00', status: 'Held', desc: 'Defined the PICOTT and closed the research question.', projects: 'Example 1' },
+        { n: '22', date: 'Tue, Jul 28', time: '15:00 – 16:00', status: 'Held', desc: 'Discussed authorship order and journal shortlist for the pilot review.', projects: 'Example 1 · Pilot review' },
+        { n: '21', date: 'Tue, Jul 21', time: '14:00 – 15:00', status: 'Cancelled', desc: 'Cancelled by mentor — clinical duty.', projects: '—' }
+      ].map((s) => ({
+        n: s.n, date: s.date, time: s.time, status: s.status, desc: s.desc, projects: s.projects,
+        rowStyle: 'display:grid; grid-template-columns:132px 104px minmax(0,1fr) 180px; gap:16px; align-items:start; padding:14px 20px; border-top:1px solid hsl(42 12% 84%); font-size:13px' + (s.status === 'Held' ? '' : '; background:hsl(44 26% 96% / .6)'),
+        statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; white-space:nowrap; color:' + (s.status === 'Held' ? 'hsl(155 40% 27%)' : s.status === 'No-show' ? 'hsl(40 78% 44%)' : 'hsl(4 62% 50%)') + '; background:' + (s.status === 'Held' ? 'hsl(155 40% 27% / .14)' : s.status === 'No-show' ? 'hsl(40 78% 44% / .14)' : 'hsl(4 62% 50% / .12)')
       })),
 
       weekActivities: [
@@ -1173,4 +1408,3 @@ class Component extends DCLogic {
 </script>
 </body>
 </html>
-
