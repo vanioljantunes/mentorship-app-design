@@ -70,14 +70,14 @@
     <button onClick="{{ toggleNav }}" aria-label="Open navigation">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
     </button>
-    <span style="display:inline-block; height:32px; width:32px"><img src="assets/logo-mentorship-navy.png" alt="Mentoria MAA" style="height:100%; width:100%; object-fit:contain" /></span>
+    <span style="display:inline-block; height:32px; width:32px"><img src="assets/logo-mentorship-navy.png" alt="MAA Mentorship" style="height:100%; width:100%; object-fit:contain" /></span>
     <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700; color:hsl(234 68% 12%)">Mentorship</span>
   </div>
   <button class="{{ backdropClass }}" onClick="{{ closeNav }}" aria-label="Close navigation"></button>
 
   <aside class="{{ sidebarClass }}" style="position:sticky; top:0; align-self:flex-start; height:100vh; width:256px; flex-shrink:0; display:flex; flex-direction:column; background:hsl(44 26% 96%); border-right:1px solid hsl(42 14% 88%); z-index:20">
     <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; border-bottom:1px solid hsl(42 14% 88%)">
-      <span style="display:inline-block; height:36px; width:36px; flex-shrink:0"><img src="assets/logo-mentorship-navy.png" alt="Mentoria MAA" style="height:100%; width:100%; object-fit:contain" /></span>
+      <span style="display:inline-block; height:36px; width:36px; flex-shrink:0"><img src="assets/logo-mentorship-navy.png" alt="MAA Mentorship" style="height:100%; width:100%; object-fit:contain" /></span>
       <button onClick="{{ toggleSidebar }}" aria-label="Collapse sidebar" style="display:inline-flex; align-items:center; justify-content:center; height:32px; width:32px; border-radius:9.6px; border:0; background:transparent; color:hsl(234 40% 22%); cursor:pointer" style-hover="background:hsl(46 24% 86%)">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
       </button>
@@ -644,6 +644,76 @@
                           </div>
                         </sc-for>
                       </div>
+                      <div style="display:grid; gap:10px; padding:12px; border:1px solid hsl(42 12% 84%); border-radius:13.6px; background:hsl(44 26% 96% / .6)">
+                        <sc-if value="{{ mm.hasLast }}" hint-placeholder-val="{{ true }}">
+                          <div style="display:grid; gap:4px">
+                            <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(38 6% 42%)">Last meeting</span>
+                            <span style="font-size:13px; font-weight:600">{{ mm.lastTopic }}</span>
+                            <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ mm.lastWhen }}</span>
+                            <sc-if value="{{ mm.hasRecorded }}" hint-placeholder-val="{{ true }}">
+                              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px">
+                                <span style="{{ mm.recStatusStyle }}">{{ mm.recStatus }}</span>
+                                <span style="font-size:12px; color:hsl(234 40% 22%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%">{{ mm.recText }}</span>
+                              </div>
+                              <sc-if value="{{ mm.hasRecShots }}" hint-placeholder-val="{{ true }}">
+                                <div style="display:flex; flex-wrap:wrap; gap:6px">
+                                  <sc-for list="{{ mm.recShots }}" as="sh" hint-placeholder-count="2">
+                                    <a href="{{ sh.url }}" target="_blank" rel="noopener"><img src="{{ sh.url }}" alt="{{ sh.name }}" style="width:44px; height:44px; object-fit:cover; border-radius:6.6px; border:1px solid hsl(42 12% 84%)" /></a>
+                                  </sc-for>
+                                </div>
+                              </sc-if>
+                            </sc-if>
+                            <sc-if value="{{ mm.outcomePending }}" hint-placeholder-val="{{ true }}">
+                              <span style="display:inline-flex; align-self:start; padding:2px 10px; border-radius:9999px; background:hsl(40 78% 44% / .14); color:hsl(40 78% 44%); font-size:11px; font-weight:700">Outcome pending</span>
+                            </sc-if>
+                            <button onClick="{{ mm.openOutcome }}" style="display:inline-flex; align-items:center; justify-content:center; align-self:start; height:30px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:12px; font-weight:600; cursor:pointer" style-hover="background:hsl(234 85% 20%)">{{ mm.recordLabel }}</button>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ mm.outcomeOpen }}" hint-placeholder-val="{{ true }}">
+                          <div style="display:grid; gap:8px; padding:12px; border:1px solid hsl(234 85% 14% / .25); border-radius:9.6px; background:hsl(42 33% 99%)">
+                            <label style="display:grid; gap:4px; font-size:12px; font-weight:600; color:hsl(38 6% 42%)">What happened?
+                              <select onChange="{{ mm.setOStatus }}" value="{{ mm.oStatus }}" style="height:34px; padding:0 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; color:hsl(234 68% 12%)">
+                                <option value="Held">Held</option>
+                                <option value="No-show">No-show</option>
+                                <option value="Cancelled">Cancelled</option>
+                              </select>
+                            </label>
+                            <textarea onInput="{{ mm.setOText }}" value="{{ mm.oText }}" rows="3" placeholder="What was covered, decisions, next steps..." style="padding:8px 10px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-family:inherit; font-size:13px; color:hsl(234 68% 12%); resize:vertical"></textarea>
+                            <label style="display:grid; gap:4px; font-size:12px; color:hsl(38 6% 42%)">{{ mm.evidenceHint }}
+                              <input type="file" accept="image/*" multiple onChange="{{ mm.addShots }}" style="font-size:12px" />
+                            </label>
+                            <sc-for list="{{ mm.draftShots }}" as="ds" hint-placeholder-count="1">
+                              <div style="display:flex; align-items:center; gap:8px">
+                                <img src="{{ ds.url }}" alt="{{ ds.name }}" style="width:36px; height:36px; object-fit:cover; border-radius:6.6px; border:1px solid hsl(42 12% 84%)" />
+                                <span style="font-size:12px; color:hsl(38 6% 42%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ ds.name }}</span>
+                              </div>
+                            </sc-for>
+                            <div style="display:flex; gap:8px">
+                              <button onClick="{{ mm.saveOutcome }}" style="flex:1; height:32px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:12px; font-weight:600; cursor:pointer">Save outcome</button>
+                              <button onClick="{{ mm.cancelOutcome }}" style="height:32px; padding:0 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:12px; font-weight:600; color:hsl(38 6% 42%); cursor:pointer">Discard</button>
+                            </div>
+                          </div>
+                        </sc-if>
+                        <div style="height:1px; background:hsl(42 12% 84%)"></div>
+                        <div style="display:grid; gap:4px">
+                          <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(38 6% 42%)">Next meeting</span>
+                          <sc-if value="{{ mm.hasNext }}" hint-placeholder-val="{{ true }}">
+                            <span style="font-size:13px; font-weight:600">{{ mm.nextTopic }}</span>
+                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px">
+                              <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ mm.nextWhen }}</span>
+                              <span style="display:inline-flex; padding:2px 8px; border-radius:9999px; background:hsl(234 85% 14% / .1); color:hsl(234 85% 14%); font-size:11px; font-weight:700">{{ mm.nextCountdown }}</span>
+                            </div>
+                            <div style="display:flex; gap:6px; margin-top:2px">
+                              <a href="https://meet.google.com/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; justify-content:center; height:30px; padding:0 12px; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:12px; font-weight:600">Join</a>
+                              <button style="height:30px; padding:0 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:12px; font-weight:600; color:hsl(234 68% 12%); cursor:pointer" style-hover="background:hsl(46 24% 84%)">Reschedule</button>
+                              <button style="height:30px; padding:0 12px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:12px; font-weight:600; color:hsl(4 62% 50%); cursor:pointer" style-hover="background:hsl(4 62% 50% / .1)">Cancel</button>
+                            </div>
+                          </sc-if>
+                          <sc-if value="{{ mm.noNext }}" hint-placeholder-val="{{ true }}">
+                            <span style="font-size:13px; color:hsl(38 6% 42%)">Nothing scheduled yet.</span>
+                          </sc-if>
+                        </div>
+                      </div>
                       <div style="display:flex; align-items:center; gap:8px; margin-top:auto">
                         <button style="display:inline-flex; align-items:center; justify-content:center; gap:6px; flex:1; height:36px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(234 85% 14%); cursor:pointer" style-hover="background:hsl(46 24% 84%)">
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
@@ -669,37 +739,7 @@
                 </div>
               </div>
 
-              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
-                <div style="padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
-                  <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Upcoming sessions ({{ mentorUpcomingCount }})</h2>
-                  <p style="margin:4px 0 0; font-size:14px; color:hsl(38 6% 42%)">Record the outcome after each session so the plan stays accurate.</p>
-                </div>
-                <div style="display:flex; flex-direction:column">
-                  <sc-for list="{{ mentorUpcoming }}" as="us" hint-placeholder-count="2">
-                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px; padding:16px 24px; border-bottom:1px solid hsl(44 14% 89%)">
-                      <div style="display:grid; place-items:center; width:52px; flex-shrink:0; padding:8px 0; border-radius:9.6px; background:hsl(234 85% 14% / .08)">
-                        <span style="font-family:Ruda, sans-serif; font-size:20px; font-weight:800; line-height:1; color:hsl(234 85% 14%)">{{ us.dayNum }}</span>
-                        <span style="font-size:10px; font-weight:700; letter-spacing:.12em; color:hsl(234 85% 14%)">{{ us.month }}</span>
-                      </div>
-                      <div style="display:grid; gap:2px; min-width:0; flex:1">
-                        <span style="font-size:14px; font-weight:600">{{ us.title }}</span>
-                        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:hsl(38 6% 42%)">{{ us.time }}</span>
-                        <span style="display:inline-flex; align-items:center; gap:6px; font-size:13px; color:hsl(38 6% 42%)">
-                          <span style="display:grid; place-items:center; width:20px; height:20px; border-radius:9999px; background:hsl(44 16% 88%); font-size:9px; font-weight:700">{{ us.initials }}</span>
-                          {{ us.mentee }}
-                        </span>
-                      </div>
-                      <div style="display:flex; align-items:center; gap:8px">
-                        <button style="height:34px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(234 85% 14%); color:hsl(40 30% 96%); font-size:13px; font-weight:600; cursor:pointer" style-hover="background:hsl(234 85% 20%)">Record outcome</button>
-                        <button style="height:34px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(234 68% 12%); cursor:pointer" style-hover="background:hsl(46 24% 84%)">Edit</button>
-                        <button style="height:34px; padding:0 14px; border:1px solid hsl(42 12% 84%); border-radius:9.6px; background:hsl(42 33% 99%); font-size:13px; font-weight:600; color:hsl(4 62% 50%); cursor:pointer" style-hover="background:hsl(4 62% 50% / .1)">Cancel</button>
-                      </div>
-                    </div>
-                  </sc-for>
-                </div>
-              </div>
-
-              <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
+                            <div style="background:hsl(42 33% 99%); border:1px solid hsl(42 12% 84%); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(234 45% 18% / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(42 12% 84%)">
                   <div>
                     <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Weekly availability</h2>
@@ -1437,11 +1477,25 @@ const TUTORING = {
   last: { date: new Date(2026, 7, 21), start: '13:00', end: '14:00', topic: 'Screening conflicts and PRISMA flow', covered: ['Resolving reviewer disagreements in Rayyan', 'Documenting exclusions for PRISMA', 'Group Q&A on search updates'] },
   next: { date: new Date(2026, 8, 4), start: '13:00', end: '14:00', topic: 'Data extraction workshop', topics: ['Building the extraction form together', 'Live extraction on a sample study'] }
 };
-// mentor view: this mentor's next sessions across mentees
-const MENTOR_UPCOMING = [
-  { date: new Date(2026, 8, 1), start: '14:00', end: '15:00', title: 'Protocol draft and search strategy review', mentee: 'Isabella Michelon' },
-  { date: new Date(2026, 8, 2), start: '10:00', end: '11:00', title: 'Forest plot interpretation and heterogeneity', mentee: 'Camila Rocha' }
-];
+// mentor view: per-mentee last and next meetings
+const MENTOR_SCHED = {
+  'Isabella Michelon': {
+    last: { date: new Date(2026, 7, 25), start: '14:00', end: '15:00', topic: 'Screening strategy review' },
+    next: { date: new Date(2026, 8, 1), start: '14:00', end: '15:00', topic: 'Protocol draft and search strategy review' }
+  },
+  'Maria L. R. Defante': {
+    last: { date: new Date(2026, 7, 27), start: '16:00', end: '17:00', topic: 'Subgroup analysis plan', recorded: { status: 'Held', text: 'Agreed the subgroup list; Maria drafts the SAP by Friday.', shots: [] } },
+    next: null
+  },
+  'Pedro Henrique Costa': {
+    last: { date: new Date(2026, 7, 11), start: '14:00', end: '15:00', topic: 'Extraction form review', recorded: { status: 'No-show', text: 'Pedro on exam leave; mentorship paused until November.', shots: [] } },
+    next: null
+  },
+  'Camila Rocha': {
+    last: { date: new Date(2026, 7, 26), start: '10:00', end: '11:00', topic: 'Forest plot walkthrough' },
+    next: { date: new Date(2026, 8, 2), start: '10:00', end: '11:00', topic: 'Forest plot interpretation and heterogeneity' }
+  }
+};
 
 const PROJECT_STAGES = [
   { title: 'Stage 1: Research Question', desc: 'Define and validate your research question using the PICOTT framework', tasks: [
@@ -1552,6 +1606,9 @@ class Component extends DCLogic {
     briefOpen: null,
     taskLinks: {},
     dismissedTasks: {},
+    outcomes: {},
+    outcomeOpen: null,
+    outcomeDraft: null,
     bannerIdx: 0,
     selected: 29,
     role: 'mentee',
@@ -1565,7 +1622,7 @@ class Component extends DCLogic {
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
     projectTab: 'progress', taskDone: {}, gradeCounts: false,
-    google: { connected: true, account: 'vanio.antunes.md@gmail.com', calendar: 'Mentoria MAA', blockConflicts: true, autoAdd: true, meetLink: true, syncedAt: '2 minutes ago' },
+    google: { connected: true, account: 'vanio.antunes.md@gmail.com', calendar: 'MAA Mentorship', blockConflicts: true, autoAdd: true, meetLink: true, syncedAt: '2 minutes ago' },
     availability: [
       { enabled: true, ranges: [{ start: '09:00', end: '12:00' }] },
       { enabled: true, ranges: [{ start: '14:00', end: '17:00' }] },
@@ -1753,7 +1810,7 @@ class Component extends DCLogic {
     const setG = (patch) => this.setState({ google: Object.assign({}, g, patch), pick: null });
     let gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='
       + encodeURIComponent('Mentorship session · Vânio Antunes')
-      + '&details=' + encodeURIComponent(st.topic || 'Weekly mentorship session · Mentoria MAA')
+      + '&details=' + encodeURIComponent(st.topic || 'Weekly mentorship session · MAA Mentorship')
       + '&location=' + encodeURIComponent('Google Meet');
 
     let projectDone = 0, projectTotal = 0;
@@ -1938,7 +1995,50 @@ class Component extends DCLogic {
       mentorMentees: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').map((m) => {
         const brief = BRIEFINGS[m.name];
         const open = st.briefOpen === m.name;
+        const sched = MENTOR_SCHED[m.name] || {};
+        const recorded = st.outcomes[m.name] || (sched.last && sched.last.recorded) || null;
+        const oOpen = st.outcomeOpen === m.name;
+        const draft = oOpen ? (st.outcomeDraft || { status: 'Held', text: '', shots: [] }) : null;
+        const OSTATUS_COLOR = { Held: 'hsl(155 40% 27%)', 'No-show': 'hsl(40 78% 44%)', Cancelled: 'hsl(4 62% 50%)' };
         return {
+          lastWhen: sched.last ? fmtDate(sched.last.date) + ' \u00b7 ' + sessTime(sched.last) + ' ' + tz.short : '',
+          lastTopic: sched.last ? sched.last.topic : '',
+          hasLast: !!sched.last,
+          hasRecorded: !!recorded,
+          outcomePending: !!sched.last && !recorded,
+          recStatus: recorded ? recorded.status : '',
+          recStatusStyle: recorded ? 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:700; color:' + OSTATUS_COLOR[recorded.status] + '; background:' + OSTATUS_COLOR[recorded.status].replace(')', ' / .14)') : '',
+          recText: recorded ? recorded.text : '',
+          recShots: recorded ? (recorded.shots || []) : [],
+          hasRecShots: !!recorded && (recorded.shots || []).length > 0,
+          outcomeOpen: oOpen,
+          openOutcome: (e) => { e.preventDefault(); this.setState({ outcomeOpen: m.name, outcomeDraft: recorded ? { status: recorded.status, text: recorded.text, shots: (recorded.shots || []).slice() } : { status: 'Held', text: '', shots: [] } }); },
+          recordLabel: recorded ? 'Edit outcome' : 'Record outcome',
+          cancelOutcome: (e) => { e.preventDefault(); this.setState({ outcomeOpen: null, outcomeDraft: null }); },
+          saveOutcome: (e) => {
+            e.preventDefault();
+            const next = Object.assign({}, this.state.outcomes);
+            next[m.name] = this.state.outcomeDraft || { status: 'Held', text: '', shots: [] };
+            this.setState({ outcomes: next, outcomeOpen: null, outcomeDraft: null });
+          },
+          oStatus: draft ? draft.status : 'Held',
+          setOStatus: (e) => this.setState({ outcomeDraft: Object.assign({}, this.state.outcomeDraft, { status: e.target.value }) }),
+          oText: draft ? draft.text : '',
+          setOText: (e) => this.setState({ outcomeDraft: Object.assign({}, this.state.outcomeDraft, { text: e.target.value }) }),
+          addShots: (e) => {
+            const files = [...(e.target.files || [])];
+            if (!files.length) return;
+            const cur = this.state.outcomeDraft || { status: 'Held', text: '', shots: [] };
+            const shots = cur.shots.concat(files.map((f) => ({ name: f.name, url: URL.createObjectURL(f) })));
+            this.setState({ outcomeDraft: Object.assign({}, cur, { shots: shots }) });
+          },
+          draftShots: draft ? draft.shots : [],
+          evidenceHint: draft && draft.status !== 'Held' ? 'Session did not happen: attach a screenshot of the conversation as evidence.' : 'Optional: attach screenshots from the session.',
+          nextWhen: sched.next ? fmtDate(sched.next.date) + ' \u00b7 ' + sessTime(sched.next) + ' ' + tz.short : '',
+          nextTopic: sched.next ? sched.next.topic : '',
+          nextCountdown: sched.next ? countdownLabel(sched.next.date) : '',
+          hasNext: !!sched.next,
+          noNext: !sched.next,
           name: m.name,
           initials: initials(m.name),
           email: m.name.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '.') + '@example.com',
@@ -1959,15 +2059,6 @@ class Component extends DCLogic {
         };
       }),
       mentorMenteeCount: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').length,
-      mentorUpcoming: MENTOR_UPCOMING.map((u) => ({
-        dayNum: String(u.date.getDate()),
-        month: MONTHS_SHORT[u.date.getMonth()].toUpperCase(),
-        title: u.title,
-        time: sessTime(u) + ' ' + tz.short,
-        mentee: u.mentee,
-        initials: initials(u.mentee)
-      })),
-      mentorUpcomingCount: MENTOR_UPCOMING.length,
 
       availabilityRows: availabilityRows,
       timeOptions: TIME_OPTIONS,
