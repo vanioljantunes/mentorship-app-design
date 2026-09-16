@@ -1200,6 +1200,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-234-85-14))"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>
           <span>{{ projectName }}</span>
         </h1>
+        <div style="margin-top:-12px; font-size:14px; color:hsl(var(--c-38-6-42))">{{ projectOwnerLine }}</div>
         <sc-if value="{{ isMentorView }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:-8px">
             <input value="{{ projectName }}" onChange="{{ setProjectName }}" aria-label="Project name" style="width:100%; height:36px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); max-width:340px" />
@@ -1748,34 +1749,53 @@
           </sc-for>
         </div>
 
-        <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">My Research Projects</h2>
-        <a href="#" onClick="{{ goProject }}" style="display:block; color:inherit; max-width:394px; padding:20px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)" style-hover="border-color:hsl(var(--c-234-85-14) / .4)">
-          <div style="display:flex; align-items:center; gap:12px">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-234-85-14))"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>
-            <span style="flex:1; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">{{ projectName }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-38-6-42))"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-          </div>
-          <div style="display:flex; align-items:center; gap:0; margin:20px 0 16px">
-            <sc-for list="{{ stageDots }}" as="dot" hint-placeholder-count="8">
-              <div style="display:flex; align-items:center; flex:1">
-                <span style="{{ dot.style }}"></span>
-                <span style="flex:1; height:2px; background:hsl(var(--c-42-12-84))"></span>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px">
+          <h2 style="margin:0; flex:1; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">{{ projectsHeading }}</h2>
+          <sc-if value="{{ projectsCanFilter }}" hint-placeholder-val="{{ true }}">
+            <select onChange="{{ setProjectFilter }}" value="{{ projectFilter }}" aria-label="Filter projects by mentee" style="height:38px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12))">
+              <sc-for list="{{ projectFilterOptions }}" as="o" hint-placeholder-count="4">
+                <option value="{{ o }}">{{ o }}</option>
+              </sc-for>
+            </select>
+          </sc-if>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:20px">
+          <sc-for list="{{ projectCards }}" as="pc" hint-placeholder-count="4">
+            <a href="#" onClick="{{ pc.open }}" style="display:block; color:inherit; padding:20px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)" style-hover="border-color:hsl(var(--c-234-85-14) / .4)">
+              <div style="display:flex; align-items:flex-start; gap:12px">
+                <span style="margin-top:3px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-234-85-14))"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg></span>
+                <span style="flex:1; min-width:0; display:grid; gap:4px">
+                  <span style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700; line-height:1.3">{{ pc.name }}</span>
+                  <sc-if value="{{ pc.showMentee }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ pc.mentee }}</span>
+                  </sc-if>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-38-6-42))"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
               </div>
-            </sc-for>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px">
-            <span style="color:hsl(var(--c-38-6-42))">Now: {{ nowStageName }}</span>
-            <span style="font-family:'JetBrains Mono', monospace; font-weight:700">0%</span>
-          </div>
-          <div style="height:6px; border-radius:9999px; background:hsl(var(--c-44-14-89)); margin:8px 0 16px"></div>
-          <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px; color:hsl(var(--c-38-6-42))">
-            <span style="display:inline-flex; align-items:center; gap:6px">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              Updated 23 minutes ago
-            </span>
-            <span style="font-family:'JetBrains Mono', monospace">{{ projectCount }}</span>
-          </div>
-        </a>
+              <div style="display:flex; align-items:center; gap:0; margin:18px 0 14px">
+                <sc-for list="{{ pc.dots }}" as="dot" hint-placeholder-count="8">
+                  <div style="display:flex; align-items:center; flex:1">
+                    <span style="{{ dot.style }}"></span>
+                    <span style="flex:1; height:2px; background:hsl(var(--c-42-12-84))"></span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:14px">
+                <span style="color:hsl(var(--c-38-6-42))">Now: {{ pc.stage }}</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-weight:700">{{ pc.pct }}</span>
+              </div>
+              <div style="height:6px; border-radius:9999px; background:hsl(var(--c-44-14-89)); margin:8px 0 14px; overflow:hidden"><span style="{{ pc.barStyle }}"></span></div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; font-size:13px; color:hsl(var(--c-38-6-42))">
+                <span style="display:inline-flex; align-items:center; gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> {{ pc.updated }}</span>
+                <span style="{{ pc.pubStyle }}">{{ pc.pub }}</span>
+                <span style="font-family:'JetBrains Mono', monospace">{{ pc.count }}</span>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+        <sc-if value="{{ projectsEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:40px; text-align:center; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; color:hsl(var(--c-38-6-42))">No projects yet.</div>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -2608,6 +2628,94 @@ function daysBetween(a, b) { return Math.round((b - a) / 86400000); }
 function meetingsWithin(a, total, win) { let n = 0; for (let d = a.lastMeet; d <= win && n < total; d += a.cadence) n++; return n; }
 function waLink(phone) { return 'https://wa.me/' + String(phone).replace(/\D/g, ''); }
 
+// ---- MetaTracker projects: one entry per mentee project (examples use Vânio's mentees) ----
+const ALL_TASK_IDS = [];
+PROJECT_STAGES.forEach((stage, si) => stage.tasks.forEach((t, ti) => ALL_TASK_IDS.push(si + '-' + ti)));
+function tasksDone(n) { const out = {}; ALL_TASK_IDS.slice(0, n).forEach((id) => { out[id] = true; }); return out; }
+function projectProgress(p) {
+  let done = 0, total = 0, stageIdx = -1;
+  PROJECT_STAGES.forEach((stage, si) => {
+    let sd = 0, stt = 0;
+    stage.tasks.forEach((t, ti) => { if (t[2] && !p.gradeCounts) return; stt++; if (p.taskDone[si + '-' + ti]) sd++; });
+    done += sd; total += stt;
+    if (stageIdx === -1 && sd < stt) stageIdx = si;
+  });
+  if (stageIdx === -1) stageIdx = PROJECT_STAGES.length - 1;
+  return { done: done, total: total, pct: total ? Math.round((done / total) * 100) : 0, stageIdx: stageIdx };
+}
+const PICOTT_BLANK = { title: '', doi: '', p: '', i: '', c: '', o: '', t: '', t2: '' };
+function exampleStudies(list) { return list.map((x, i) => Object.assign({ id: i + 1 }, PICOTT_BLANK, x)); }
+function seedProjects() {
+  return [
+    // the original template project; its live data sits in top-level state while open
+    { id: 'p1', mentee: 'Isabella Michelon', name: 'Example 1', updated: new Date(2026, 7, 31), taskDone: {}, taskLinks: {}, gradeCounts: false, studies: [], details: {}, logbook: [] },
+    {
+      id: 'p2', mentee: 'Isabella Michelon', name: 'SGLT2 inhibitors for anthracycline cardiotoxicity', updated: new Date(2026, 7, 27),
+      taskDone: tasksDone(10), taskLinks: {}, gradeCounts: false,
+      studies: exampleStudies([
+        { title: 'Empagliflozin during anthracycline chemotherapy for breast cancer', doi: '10.5555/example.cardio.01', p: 'Women with HER2-negative breast cancer on anthracyclines', i: 'Empagliflozin 10 mg', c: 'Placebo', o: 'Drop in LVEF ≥ 10 points', t: '12 months', t2: 'RCT' },
+        { title: 'SGLT2 inhibitor use and heart failure after lymphoma chemotherapy', doi: '10.5555/example.cardio.02', p: 'Adults with lymphoma and type 2 diabetes', i: 'SGLT2 inhibitor', c: 'Other glucose-lowering drugs', o: 'Heart failure hospitalisation', t: '24 months', t2: 'Cohort' },
+        { title: 'Dapagliflozin and global longitudinal strain in cancer survivors', doi: '10.5555/example.cardio.03', p: 'Anthracycline-treated cancer survivors', i: 'Dapagliflozin', c: 'Standard care', o: 'Global longitudinal strain', t: '6 months', t2: 'RCT' }
+      ]),
+      details: { drive: 'drive.google.com/sglt2-cardio-oncology', docs: 'Protocol v1.docx · Search strings.txt', pubStatus: 'In progress', pubDoi: '', presentations: '—', freeCat: '' },
+      logbook: [
+        { id: 1, date: new Date(2026, 7, 13), author: 'Vânio Antunes', role: 'mentor', stage: 'Protocol', text: 'PROSPERO registration confirmed. Keep LVEF drop ≥ 10 points as the primary outcome.', link: '' },
+        { id: 2, date: new Date(2026, 7, 27), author: 'Isabella Michelon', role: 'mentee', stage: 'Screening', text: 'Deduplicated 1,214 records in Rayyan; title and abstract screening started with a second reviewer.', link: '' }
+      ]
+    },
+    {
+      id: 'p3', mentee: 'Maria L. R. Defante', name: 'Immune checkpoint inhibitors in MSI-high gastrointestinal cancers', updated: new Date(2026, 7, 28),
+      taskDone: tasksDone(21), taskLinks: {}, gradeCounts: true,
+      studies: exampleStudies([
+        { title: 'Pembrolizumab versus chemotherapy in MSI-high metastatic colorectal cancer', doi: '10.5555/example.onco.01', p: 'Metastatic MSI-H/dMMR colorectal cancer', i: 'Pembrolizumab', c: 'Chemotherapy ± targeted therapy', o: 'Overall survival', t: '5 years', t2: 'RCT' },
+        { title: 'Nivolumab plus ipilimumab in dMMR gastric cancer', doi: '10.5555/example.onco.02', p: 'Advanced dMMR gastric or GEJ cancer', i: 'Nivolumab + ipilimumab', c: 'Chemotherapy', o: 'Progression-free survival', t: '3 years', t2: 'RCT' },
+        { title: 'Real-world outcomes of first-line immunotherapy in MSI-high GI tumours', doi: '10.5555/example.onco.03', p: 'MSI-H gastrointestinal tumours', i: 'First-line immune checkpoint inhibitor', c: 'First-line chemotherapy', o: 'Overall survival', t: '2 years', t2: 'Cohort' }
+      ]),
+      details: { drive: 'drive.google.com/ici-msi-gi', docs: 'Extraction sheet.xlsx · R script v3.R', pubStatus: 'In progress', pubDoi: '', presentations: 'Abstract submitted · ESMO GI 2027', freeCat: '' },
+      logbook: [
+        { id: 1, date: new Date(2026, 7, 20), author: 'Maria L. R. Defante', role: 'mentee', stage: 'Statistics', text: 'Random-effects model for OS finished (HR pooled from 6 trials). Heterogeneity moderate.', link: '' },
+        { id: 2, date: new Date(2026, 7, 28), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Add a sensitivity analysis excluding the cohort studies before moving to quality assessment.', link: '' }
+      ]
+    },
+    {
+      id: 'p4', mentee: 'Pedro Henrique Costa', name: 'Letermovir vs valganciclovir for CMV prophylaxis after kidney transplant', updated: new Date(2026, 7, 14),
+      taskDone: tasksDone(35), taskLinks: {}, gradeCounts: true,
+      studies: exampleStudies([
+        { title: 'Letermovir versus valganciclovir for CMV prophylaxis in kidney transplant recipients', doi: '10.5555/example.id.01', p: 'CMV D+/R− adult kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Clinically significant CMV infection', t: '52 weeks', t2: 'RCT' },
+        { title: 'Leukopenia with letermovir compared with valganciclovir after transplant', doi: '10.5555/example.id.02', p: 'Solid organ transplant recipients', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'Leukopenia', t: '28 weeks', t2: 'Cohort' },
+        { title: 'Late-onset CMV disease after letermovir prophylaxis', doi: '10.5555/example.id.03', p: 'High-risk kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Late-onset CMV disease', t: '12 months', t2: 'Cohort' }
+      ]),
+      details: { drive: 'drive.google.com/cmv-prophylaxis-ktx', docs: 'Manuscript v5.docx · Cover letter.docx', pubStatus: 'Under review', pubDoi: '', presentations: 'Poster · ESCMID Global 2026', freeCat: 'Co-authored with a transplant ID group abroad' },
+      logbook: [
+        { id: 1, date: new Date(2026, 7, 3), author: 'Pedro Henrique Costa', role: 'mentee', stage: 'Submission', text: 'Submitted to Transplant Infectious Disease. Mentorship paused for exams; tracking reviewer response.', link: '' }
+      ]
+    },
+    {
+      id: 'p5', mentee: 'Camila Rocha', name: 'Early vs delayed dialysis for AKI after cardiac surgery', updated: new Date(2026, 7, 30),
+      taskDone: tasksDone(29), taskLinks: {}, gradeCounts: true,
+      studies: exampleStudies([
+        { title: 'Early renal replacement therapy after cardiac surgery-associated AKI', doi: '10.5555/example.neph.01', p: 'Adults with KDIGO stage 2 AKI after cardiac surgery', i: 'Early RRT (< 12 h)', c: 'Delayed RRT', o: '90-day mortality', t: '90 days', t2: 'RCT' },
+        { title: 'Timing of dialysis and kidney recovery after cardiopulmonary bypass', doi: '10.5555/example.neph.02', p: 'Patients with AKI after cardiopulmonary bypass', i: 'Early dialysis', c: 'Standard-trigger dialysis', o: 'Dialysis dependence', t: '90 days', t2: 'Cohort' },
+        { title: 'Accelerated versus standard RRT in postoperative AKI', doi: '10.5555/example.neph.03', p: 'Critically ill postoperative AKI', i: 'Accelerated RRT', c: 'Standard RRT', o: 'Mortality', t: '90 days', t2: 'RCT' }
+      ]),
+      details: { drive: 'drive.google.com/rrt-timing-csa-aki', docs: 'Manuscript draft v2.docx · Forest plots.pdf', pubStatus: 'In progress', pubDoi: '', presentations: '—', freeCat: '' },
+      logbook: [
+        { id: 1, date: new Date(2026, 7, 24), author: 'Camila Rocha', role: 'mentee', stage: 'Manuscript Writing', text: 'Methods and results sections drafted; GRADE tables attached to the manuscript folder.', link: '' },
+        { id: 2, date: new Date(2026, 7, 30), author: 'Vânio Antunes', role: 'mentor', stage: 'Manuscript Writing', text: 'Discussion needs to address the heterogeneity in the definition of “early”.', link: '' }
+      ]
+    },
+    {
+      id: 'p6', mentee: 'Camila Rocha', name: 'Remote ischaemic preconditioning to prevent AKI after cardiac surgery', updated: new Date(2026, 7, 11),
+      taskDone: tasksDone(2), taskLinks: {}, gradeCounts: false,
+      studies: exampleStudies([
+        { title: 'Remote ischaemic preconditioning and AKI in high-risk cardiac surgery', doi: '10.5555/example.neph.04', p: 'High-risk adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham preconditioning', o: 'AKI within 72 h', t: '72 hours', t2: 'RCT' }
+      ]),
+      details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
+      logbook: []
+    }
+  ];
+}
+
 const TIME_OPTIONS = (function () {
   const out = [];
   for (let m = 6 * 60; m <= 22 * 60; m += 30) out.push(fmt(m));
@@ -2647,6 +2755,7 @@ class Component extends DCLogic {
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
     oh: seedOfficeHours(), ohView: 'watch', ohLesson: null, ohDone: {}, ohOpen: {}, ohQuery: '',
     dlg: null,
+    projects: seedProjects(), projectId: 'p1', projectFilter: 'All mentees',
     adSort: { key: 'end', dir: 1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
     theme: (function () { try { return localStorage.getItem('mh-theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
@@ -3218,6 +3327,30 @@ class Component extends DCLogic {
     };
   }
 
+  // the open project is edited through top-level keys; switching saves them back and loads the next one
+  workingProject() { const w = this.state; return { name: w.projectName, taskDone: w.taskDone, taskLinks: w.taskLinks, gradeCounts: w.gradeCounts, studies: w.studies, details: w.details, logbook: w.logbook }; }
+  projectData(p) { return p.id === this.state.projectId ? Object.assign({}, p, this.workingProject()) : p; }
+  currentProject() { return this.state.projects.filter((p) => p.id === this.state.projectId)[0] || this.state.projects[0]; }
+  openProject = (id) => (e) => {
+    if (e) e.preventDefault();
+    const w = this.state;
+    const projects = w.projects.map((p) => this.projectData(p));
+    const next = projects.filter((p) => p.id === id)[0];
+    this.setState({
+      projects: projects, projectId: id, page: 'project', projectTab: 'progress', navOpen: false,
+      projectName: next.name, taskDone: next.taskDone, taskLinks: next.taskLinks, gradeCounts: next.gradeCounts,
+      studies: next.studies, details: next.details, logbook: next.logbook,
+      studyEdit: null, studyDraft: null, detailsDraft: null, logEdit: null, logEditDraft: null, dismissedTasks: {}
+    });
+    window.scrollTo(0, 0);
+  };
+  visibleProjects() {
+    const w = this.state;
+    if (w.role === 'mentee') return w.projects.filter((p) => p.mentee === PROJECT_MENTEE);
+    if (w.role === 'mentor') return w.projects.filter((p) => (MENTEES.filter((m) => m.name === p.mentee)[0] || {}).mentor === ME);
+    return w.projects;
+  }
+
   tz() { return TZS.filter((t) => t.id === this.state.tzId)[0] || TZS[0]; }
   shift() { return (this.tz().offset - MENTOR_OFFSET) * 60; }
 
@@ -3459,7 +3592,7 @@ class Component extends DCLogic {
       logbookTabStyle: 'display:inline-flex; align-items:center; height:34px; padding:0 16px; border-radius:6.6px; font-size:14px; ' + (st.projectTab === 'logbook' ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; font-weight:500; color:hsl(var(--c-38-6-42))'),
       journeyOptions: JOURNEY,
       logRule: st.role === 'mentee' ? 'you can edit or delete your own entries.' : 'as mentor you can edit or delete any entry.',
-      logAuthorLabel: st.role === 'mentee' ? PROJECT_MENTEE + ' (mentee)' : ME + ' (mentor)',
+      logAuthorLabel: st.role === 'mentee' ? this.currentProject().mentee + ' (mentee)' : ME + ' (mentor)',
       logDraftStage: st.logDraft.stage,
       logDraftText: st.logDraft.text,
       logDraftLink: st.logDraft.link,
@@ -3472,7 +3605,7 @@ class Component extends DCLogic {
         if (!d.text.trim()) return;
         const mentee = this.state.role === 'mentee';
         const id = this.state.logbook.reduce((mx, x) => Math.max(mx, x.id), 0) + 1;
-        const entry = { id: id, date: TODAY, author: mentee ? PROJECT_MENTEE : ME, role: mentee ? 'mentee' : 'mentor', stage: d.stage, text: d.text.trim(), link: d.link.trim() };
+        const entry = { id: id, date: TODAY, author: mentee ? this.currentProject().mentee : ME, role: mentee ? 'mentee' : 'mentor', stage: d.stage, text: d.text.trim(), link: d.link.trim() };
         this.setState({ logbook: this.state.logbook.concat([entry]), logDraft: { stage: d.stage, text: '', link: '' } });
       },
       logCount: st.logbook.length + (st.logbook.length === 1 ? ' entry' : ' entries'),
@@ -4078,9 +4211,9 @@ class Component extends DCLogic {
         meta: MONTHS_SHORT[r.date.getMonth()] + ' ' + r.date.getDate() + ', ' + r.date.getFullYear() + ' · ' + r.mins + ' min · ' + r.track
       })),
       stats: [
-        { value: '1', label: 'Research projects', icon: { __html: ICONS.chart }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-234-85-14))' },
-        { value: '8', label: 'Stages from question to publication', icon: { __html: ICONS.clock }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-155-40-27))' },
-        { value: '37', label: 'Tasks per project', icon: { __html: ICONS.check }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-40-78-44))' }
+        { value: String(this.visibleProjects().length), label: st.role === 'mentee' ? 'Research projects' : 'Research projects in view', icon: { __html: ICONS.chart }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-234-85-14))' },
+        { value: String(PROJECT_STAGES.length), label: 'Stages from question to publication', icon: { __html: ICONS.clock }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-155-40-27))' },
+        { value: String(ALL_TASK_IDS.length), label: 'Tasks per project (GRADE optional)', icon: { __html: ICONS.check }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-40-78-44))' }
       ],
       weekdays: ['Su','Mo','Tu','We','Th','Fr','Sa'],
       monthCells: cells,
@@ -4126,6 +4259,39 @@ class Component extends DCLogic {
       }),
       ...this.ohVals(),
       ...this.dlgVals(),
+      projectOwnerLine: (function (self) {
+        const p = self.currentProject();
+        const m = MENTEES.filter((x) => x.name === p.mentee)[0];
+        return 'Mentee: ' + p.mentee + (m ? ' · Mentor: ' + m.mentor : '');
+      })(this),
+      projectsHeading: st.role === 'mentee' ? 'My Research Projects' : st.role === 'mentor' ? 'My mentees’ projects' : 'All research projects',
+      projectsCanFilter: st.role !== 'mentee',
+      projectFilter: st.projectFilter,
+      setProjectFilter: (e) => this.setState({ projectFilter: e.target.value }),
+      projectFilterOptions: ['All mentees'].concat(this.visibleProjects().map((p) => p.mentee).filter((v, i, arr) => arr.indexOf(v) === i)),
+      projectsEmpty: this.visibleProjects().length === 0,
+      projectCards: this.visibleProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || p.mentee === st.projectFilter).map((p0) => {
+        const p = this.projectData(p0);
+        const pr = projectProgress(p);
+        const pub = (p.details && p.details.pubStatus) || 'Not started';
+        const pubColor = pub === 'Published' || pub === 'Accepted' ? '155-40-27' : pub === 'Submitted' || pub === 'Under review' ? '234-85-14' : pub === 'In progress' ? '40-78-44' : '38-6-42';
+        return {
+          name: p.name,
+          mentee: p.mentee,
+          showMentee: st.role !== 'mentee',
+          open: this.openProject(p.id),
+          stage: PROJECT_STAGES[pr.stageIdx].title.replace(/^Stage \d+: /, ''),
+          pct: pr.pct + '%',
+          count: pr.done + '/' + pr.total + ' tasks',
+          barStyle: 'display:block; height:100%; width:' + pr.pct + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
+          updated: 'Updated ' + MONTHS_SHORT[p.updated.getMonth()] + ' ' + p.updated.getDate(),
+          pub: pub,
+          pubStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; color:hsl(var(--c-' + pubColor + ')); background:hsl(var(--c-' + pubColor + ') / .13)',
+          dots: PROJECT_STAGES.map((stage, i) => ({
+            style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i < pr.stageIdx || pr.pct === 100 ? 'hsl(var(--c-155-40-27))' : i === pr.stageIdx ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-44-14-89))') + '; box-shadow:0 0 0 1px hsl(var(--c-42-12-84))'
+          }))
+        };
+      }),
       ...this.adminVals(),
       hasDayActivities: (monthEvents[st.selected] || []).length > 0,
       noDayActivities: (monthEvents[st.selected] || []).length === 0,
