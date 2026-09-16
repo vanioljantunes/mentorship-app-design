@@ -108,6 +108,15 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
         <span class="side-text">{{ themeLabel }}</span>
       </button>
+      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ toggleNotif }}" aria-label="{{ notifAria }}" style="{{ notifBtnStyle }}" style-hover="background:hsl(var(--c-46-24-86))">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+          <span class="side-text" style="flex:1">Notifications</span>
+          <sc-if value="{{ notifHasUnread }}" hint-placeholder-val="{{ true }}">
+            <span style="display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 6px; border-radius:9999px; background:hsl(var(--c-4-62-50)); color:hsl(0 0% 100%); font-size:11px; font-weight:700">{{ notifUnread }}</span>
+          </sc-if>
+        </button>
+      </sc-if>
       <div class="side-text" style="display:grid; gap:4px; padding:0 8px">
         <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Viewing as</span>
         <div style="display:flex; gap:4px; padding:3px; background:hsl(var(--c-44-14-89)); border-radius:9.6px">
@@ -134,6 +143,160 @@
   </aside>
 
   <main class="app-main" style="position:relative; z-index:10; flex:1; min-width:0; padding:28px">
+
+    <sc-if value="{{ isAdminPage }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:24px; max-width:1240px">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px">
+          <div>
+            <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Admins only</div>
+            <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+              <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))" dangerouslySetInnerHTML="{{ adIcon }}"></span>
+              <span>Admin dashboard</span>
+            </h1>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Every mentee in the programme, their contract dates and activity.</p>
+          </div>
+          <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">As of {{ adAsOf }}</span>
+        </div>
+
+        <sc-if value="{{ notifAny }}" hint-placeholder-val="{{ true }}">
+          <div role="status" style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:14px 18px; border:1px solid hsl(var(--c-40-78-44) / .45); border-radius:13.6px; background:hsl(var(--c-40-78-44) / .1)">
+            <span style="display:flex; color:hsl(var(--c-40-78-44))"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg></span>
+            <span style="flex:1; min-width:220px; font-size:14px"><strong>{{ notifSummary }}</strong> {{ notifNames }}</span>
+            <button onClick="{{ toggleNotif }}" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; text-decoration:none; height:34px">View notifications</button>
+          </div>
+        </sc-if>
+
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+            <div style="flex:1; min-width:220px">
+              <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">All mentees</h2>
+              <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">Click a column header to sort; click again to reverse.</p>
+            </div>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adCount }}</span>
+          </div>
+          <div style="overflow-x:auto">
+            <div role="table" aria-label="All mentees" style="min-width:1080px">
+              <div role="row" style="display:grid; grid-template-columns:minmax(170px,1.6fr) 160px 104px 128px 96px 72px 76px 92px 90px; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
+                <sc-for list="{{ adHeaders }}" as="h" hint-placeholder-count="9">
+                  <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
+                </sc-for>
+              </div>
+              <sc-for list="{{ adRows }}" as="r" hint-placeholder-count="8">
+                <div role="row" style="{{ r.rowStyle }}">
+                  <span role="cell" style="min-width:0"><a href="#" onClick="{{ r.open }}" style="font-weight:600; color:hsl(var(--c-234-68-12))">{{ r.name }}</a></span>
+                  <span role="cell"><a href="{{ r.wa }}" target="_blank" rel="noopener" title="Open WhatsApp chat" style="display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:600; color:hsl(var(--c-155-40-27))"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg> {{ r.phone }}</a></span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ r.start }}</span>
+                  <span role="cell" style="display:grid; gap:2px"><span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ r.end }}</span><sc-if value="{{ r.hasEndNote }}" hint-placeholder-val="{{ false }}"><span style="{{ r.endNoteStyle }}">{{ r.endNote }}</span></sc-if></span>
+                  <span role="cell"><span style="{{ r.statusStyle }}">{{ r.status }}</span></span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:13px; text-align:right">{{ r.projects }}</span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:13px; text-align:right">{{ r.meetings }}</span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:13px; text-align:right">{{ r.reschedules }}</span>
+                  <span role="cell" style="display:flex; align-items:center; justify-content:flex-end; gap:6px; font-family:'JetBrains Mono', monospace; font-size:13px"><sc-if value="{{ r.renewReq }}" hint-placeholder-val="{{ false }}"><span title="Asked to renew" style="display:inline-flex; padding:1px 6px; border-radius:9999px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14)); font-family:'Hanken Grotesk', sans-serif; font-size:10px; font-weight:700">ASKED</span></sc-if>{{ r.renewals }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px">
+          <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600; flex:1">Overview</h2>
+          <span style="font-size:13px; color:hsl(var(--c-38-6-42))">Meeting activity:</span>
+          <div role="group" aria-label="Meeting activity window" style="display:inline-flex; gap:4px; padding:4px; background:hsl(var(--c-44-14-89)); border-radius:9.6px">
+            <button onClick="{{ adWin7 }}" aria-pressed="{{ adIs7 }}" style="{{ adWin7Style }}">≥1 meeting · last 7 days</button>
+            <button onClick="{{ adWin30 }}" aria-pressed="{{ adIs30 }}" style="{{ adWin30Style }}">≥4 meetings · last 30 days</button>
+          </div>
+        </div>
+
+        <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px">
+          <sc-for list="{{ adTiles }}" as="k" hint-placeholder-count="4">
+            <div style="display:grid; align-content:start; gap:8px; padding:18px 20px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
+              <span style="font-size:13px; font-weight:600; color:hsl(var(--c-38-6-42))">{{ k.label }}</span>
+              <span style="font-family:'Hanken Grotesk', sans-serif; font-size:36px; font-weight:700; line-height:1">{{ k.value }}</span>
+              <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ k.sub }}</span>
+              <span role="meter" aria-valuemin="0" aria-valuemax="{{ k.max }}" aria-valuenow="{{ k.value }}" aria-label="{{ k.label }}" style="display:block; height:6px; border-radius:9999px; background:hsl(var(--c-234-85-14) / .14); overflow:hidden"><span style="{{ k.barStyle }}"></span></span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px">
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+            <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600; font-size:16px">Mentees by status</h3>
+            <p style="margin:2px 0 14px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adStatusSub }}</p>
+            <div style="display:grid; gap:10px">
+              <sc-for list="{{ adStatusBars }}" as="sb" hint-placeholder-count="4">
+                <div tabindex="0" onMouseEnter="{{ sb.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ sb.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:84px 1fr 36px; align-items:center; gap:10px; padding:4px 0">
+                  <span style="font-size:13px">{{ sb.label }}</span>
+                  <span style="display:block; height:14px"><span style="{{ sb.barStyle }}"></span></span>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:13px; text-align:right">{{ sb.value }}</span>
+                  <sc-if value="{{ sb.tip }}" hint-placeholder-val="{{ false }}">
+                    <span role="tooltip" style="position:absolute; z-index:5; padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none; left:94px; bottom:100%">{{ sb.tipText }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+            <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600; font-size:16px">Mentorships ending by month</h3>
+            <p style="margin:2px 0 14px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adEndSub }}</p>
+            <div style="display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:10px; align-items:end; height:168px; padding-top:18px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+              <sc-for list="{{ adEndCols }}" as="ec" hint-placeholder-count="6">
+                <div tabindex="0" onMouseEnter="{{ ec.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ ec.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:4px; height:100%">
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ ec.value }}</span>
+                  <span style="{{ ec.barStyle }}"></span>
+                  <sc-if value="{{ ec.tip }}" hint-placeholder-val="{{ false }}">
+                    <span role="tooltip" style="position:absolute; z-index:5; padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none; bottom:calc(100% + 4px); {{ ec.tipPos }}">{{ ec.tipText }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:10px; margin-top:6px">
+              <sc-for list="{{ adEndCols }}" as="ec" hint-placeholder-count="6">
+                <span style="{{ ec.labelStyle }}">{{ ec.label }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px">
+            <div style="flex:1; min-width:220px">
+              <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600; font-size:16px">{{ adMeetTitle }}</h3>
+              <p style="margin:2px 0 0; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adMeetSub }}</p>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:12px">
+              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:hsl(var(--c-234-85-14))"></span>Meets target</span>
+              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:hsl(var(--c-234-85-14) / .28)"></span>Below target</span>
+              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:0; height:12px; border-left:2px dashed hsl(var(--c-40-78-44))"></span>Target</span>
+            </div>
+          </div>
+          <div style="display:grid; gap:8px; margin-top:16px">
+            <sc-for list="{{ adMeetBars }}" as="mb" hint-placeholder-count="8">
+              <div tabindex="0" onMouseEnter="{{ mb.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ mb.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:170px 1fr 28px; align-items:center; gap:10px">
+                <span style="font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ mb.name }}</span>
+                <span style="position:relative; display:block; height:14px">
+                  <span style="{{ mb.barStyle }}"></span>
+                  <span aria-hidden="true" style="{{ adTargetStyle }}"></span>
+                </span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:13px; text-align:right">{{ mb.value }}</span>
+                <sc-if value="{{ mb.tip }}" hint-placeholder-val="{{ false }}">
+                  <span role="tooltip" style="position:absolute; z-index:5; padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none; left:180px; bottom:100%">{{ mb.tipText }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid; grid-template-columns:170px 1fr 28px; gap:10px; margin-top:6px; font-family:'JetBrains Mono', monospace; font-size:11px; color:hsl(var(--c-38-6-42))">
+            <span></span>
+            <span style="display:flex; justify-content:space-between"><span>0</span><span>{{ adMeetMax }}</span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ adminDenied }}" hint-placeholder-val="{{ false }}">
+      <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:48px; text-align:center; color:hsl(var(--c-38-6-42))">The admin dashboard is only visible to admins. Switch "Viewing as" to Admin.</div>
+    </sc-if>
 
     <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex; flex-direction:column; gap:24px">
@@ -1996,6 +2159,43 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeNotif }}" style="position:fixed; inset:0; z-index:150"></div>
+      <div role="dialog" aria-label="Notifications" style="position:fixed; z-index:160; left:min(270px, calc(100vw - 376px)); bottom:24px; width:min(360px, calc(100vw - 32px)); max-height:70vh; overflow:auto; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:16px">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px">
+          <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600; flex:1">Notifications</h2>
+          <sc-if value="{{ notifHasUnread }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ markAllNotif }}" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; text-decoration:none">Mark all read</button>
+          </sc-if>
+        </div>
+        <p style="margin:0 0 12px; font-size:12px; color:hsl(var(--c-38-6-42))">Mentorships ending within 30 days. Visible to every admin.</p>
+        <sc-if value="{{ notifEmpty }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:0; padding:20px 0; text-align:center; font-size:13px; color:hsl(var(--c-38-6-42))">Nothing ending in the next 30 days.</p>
+        </sc-if>
+        <div style="display:grid; gap:8px">
+          <sc-for list="{{ notifItems }}" as="n" hint-placeholder-count="3">
+            <div style="{{ n.style }}">
+              <div style="display:flex; align-items:center; gap:8px">
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ true }}">
+                  <span aria-label="Unread" style="width:8px; height:8px; flex-shrink:0; border-radius:9999px; background:hsl(var(--c-4-62-50))"></span>
+                </sc-if>
+                <span style="flex:1; font-size:14px; font-weight:600">{{ n.name }}</span>
+                <span style="{{ n.badgeStyle }}">{{ n.badge }}</span>
+              </div>
+              <div style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ n.detail }}</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px">
+                <button onClick="{{ n.open }}" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; text-decoration:none">Open profile</button>
+                <a href="{{ n.wa }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; text-decoration:none"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg> WhatsApp</a>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ n.read }}" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; text-decoration:none">Mark read</button>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
   </main>
 </div>
 </x-dc>
@@ -2006,6 +2206,7 @@ const ICONS = {
   video: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg>',
   fileSearch: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg>',
   cap: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>',
+  shield: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>',
   chart: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>',
   clock: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
   check: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>',
@@ -2023,7 +2224,8 @@ const NAV = [
   { key: 'mentors', label: 'Mentors', icon: ICONS.users },
   { key: 'mentees', label: 'Mentees', icon: ICONS.users },
   { key: 'metatracker', label: 'MetaTracker', icon: ICONS.fileSearch },
-  { key: 'courses', label: 'Office Hours', icon: ICONS.cap }
+  { key: 'courses', label: 'Office Hours', icon: ICONS.cap },
+  { key: 'admin', label: 'Admin dashboard', icon: ICONS.shield, adminOnly: true }
 ];
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -2379,6 +2581,33 @@ function seedOfficeHours() {
   });
 }
 
+// ---- admin dashboard: contract data per mentee (fictional demo numbers) ----
+// phone: WhatsApp number; start/end: contract dates; status: Active | Paused | Expired | Cancelled
+// renewals: times renewed; renewReq: asked to renew; lastMeet/cadence: days since the last meeting and days between meetings
+const MENTEE_ADMIN = {
+  'Isabella Michelon': { phone: '+55 51 99000-0101', start: '2025-09-15', end: '2026-09-15', status: 'Active', reschedules: 3, renewals: 1, renewReq: true, lastMeet: 6, cadence: 7 },
+  'Maria L. R. Defante': { phone: '+55 16 99000-0102', start: '2026-03-02', end: '2027-03-02', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 4, cadence: 7 },
+  'Caroline Dagostin': { phone: '+55 11 99000-0103', start: '2026-04-06', end: '2027-04-06', status: 'Active', reschedules: 2, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 },
+  'Pedro Henrique Costa': { phone: '+55 31 99000-0104', start: '2025-09-29', end: '2026-09-28', status: 'Paused', reschedules: 5, renewals: 1, renewReq: false, lastMeet: 20, cadence: 14 },
+  'Ana Beatriz Moraes': { phone: '+55 51 99000-0105', start: '2025-08-31', end: '2026-08-31', status: 'Active', reschedules: 0, renewals: 2, renewReq: true, lastMeet: 1, cadence: 7 },
+  'Lucas Ferreira': { phone: '+55 11 99000-0106', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
+  'Júlia Nascimento': { phone: '+55 21 99000-0107', start: '2024-08-15', end: '2026-08-15', status: 'Expired', reschedules: 4, renewals: 1, renewReq: false, lastMeet: 18, cadence: 7 },
+  'Rafael Souza Pinto': { phone: '+55 81 99000-0108', start: '2026-06-01', end: '2027-06-01', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 5, cadence: 7 },
+  'Camila Rocha': { phone: '+55 19 99000-0109', start: '2025-09-22', end: '2026-09-20', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 2, cadence: 7 },
+  'Gustavo Almeida': { phone: '+55 11 99000-0110', start: '2025-09-01', end: '2026-09-01', status: 'Paused', reschedules: 6, renewals: 0, renewReq: false, lastMeet: 35, cadence: 14 },
+  'Larissa Barbosa': { phone: '+55 71 99000-0111', start: '2026-07-06', end: '2027-07-06', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 9, cadence: 7 },
+  'Thiago Mendes': { phone: '+55 11 99000-0112', start: '2025-11-03', end: '2026-11-03', status: 'Cancelled', reschedules: 3, renewals: 0, renewReq: false, lastMeet: 60, cadence: 14 },
+  'Letícia Moura': { phone: '+55 48 99000-0113', start: '2026-04-13', end: '2027-04-13', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
+  'Bruno Tavares': { phone: '+55 21 99000-0114', start: '2026-06-08', end: '2027-01-08', status: 'Active', reschedules: 0, renewals: 0, renewReq: true, lastMeet: 8, cadence: 7 },
+  'Sofia Lins': { phone: '+55 81 99000-0115', start: '2026-08-03', end: '2027-02-03', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 }
+};
+const ADMIN_STATUSES = ['Active', 'Paused', 'Expired', 'Cancelled'];
+const NOTIFY_DAYS = 30;
+function daysBetween(a, b) { return Math.round((b - a) / 86400000); }
+// meetings inside the last `win` days, from the last meeting and the usual cadence (capped at total sessions)
+function meetingsWithin(a, total, win) { let n = 0; for (let d = a.lastMeet; d <= win && n < total; d += a.cadence) n++; return n; }
+function waLink(phone) { return 'https://wa.me/' + String(phone).replace(/\D/g, ''); }
+
 const TIME_OPTIONS = (function () {
   const out = [];
   for (let m = 6 * 60; m <= 22 * 60; m += 30) out.push(fmt(m));
@@ -2418,6 +2647,7 @@ class Component extends DCLogic {
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
     oh: seedOfficeHours(), ohView: 'watch', ohLesson: null, ohDone: {}, ohOpen: {}, ohQuery: '',
     dlg: null,
+    adSort: { key: 'end', dir: 1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
     theme: (function () { try { return localStorage.getItem('mh-theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
     logbook: [
@@ -2818,6 +3048,176 @@ class Component extends DCLogic {
     };
   }
 
+  adminVals() {
+    const st = this.state;
+    const admin = st.role === 'admin';
+    const fmtD = (d) => MONTHS_SHORT[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    const enter = (k) => () => { if (this.state.adTip !== k) this.setState({ adTip: k }); };
+    const rows = MENTEES.filter((m) => MENTEE_ADMIN[m.name]).map((m) => {
+      const a = MENTEE_ADMIN[m.name];
+      const start = parseIso(a.start), end = parseIso(a.end);
+      return { m: m, a: a, start: start, end: end, left: daysBetween(TODAY, end), m7: meetingsWithin(a, m.sessions, 7), m30: meetingsWithin(a, m.sessions, 30) };
+    });
+    const alive = (r) => r.a.status === 'Active' || r.a.status === 'Paused';
+    const ending = rows.filter((r) => alive(r) && r.left >= 0 && r.left <= NOTIFY_DAYS).sort((x, y) => x.left - y.left);
+    const readKey = (r) => r.m.name + '|' + r.a.end;
+    const unread = ending.filter((r) => !st.notifRead[readKey(r)]);
+    const leftLabel = (n) => (n === 0 ? 'Ends today' : n === 1 ? 'Ends tomorrow' : 'Ends in ' + n + ' days');
+
+    // ---- sortable table
+    const COLS = [
+      ['name', 'Mentee', (r) => r.m.name], ['phone', 'WhatsApp', (r) => r.a.phone], ['start', 'Start', (r) => r.start.getTime()], ['end', 'End', (r) => r.end.getTime()],
+      ['status', 'Status', (r) => ADMIN_STATUSES.indexOf(r.a.status)], ['projects', 'Projects', (r) => r.m.projects], ['meetings', 'Meetings', (r) => r.m.sessions],
+      ['reschedules', 'Reschedules', (r) => r.a.reschedules], ['renewals', 'Renewals', (r) => r.a.renewals]
+    ];
+    const getter = (COLS.filter((c) => c[0] === st.adSort.key)[0] || COLS[3])[2];
+    const sorted = rows.slice().sort((x, y) => {
+      const a = getter(x), b = getter(y);
+      const c = typeof a === 'string' ? a.localeCompare(b) : a - b;
+      return c ? c * st.adSort.dir : x.m.name.localeCompare(y.m.name);
+    });
+    const SC = { Active: '155-40-27', Paused: '40-78-44', Expired: '38-6-42', Cancelled: '4-62-50' };
+    const pill = (c) => 'display:inline-flex; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:700; white-space:nowrap; color:hsl(var(--c-' + c + ')); background:hsl(var(--c-' + c + ') / .13)';
+    const numeric = { projects: 1, meetings: 1, reschedules: 1, renewals: 1 };
+
+    // ---- charts
+    const total = rows.length;
+    const statusCounts = ADMIN_STATUSES.map((name) => rows.filter((r) => r.a.status === name).length);
+    const maxStatus = Math.max.apply(null, statusCounts.concat([1]));
+    const win = st.adWin, target = win === 7 ? 1 : 4;
+    const meetRows = rows.filter(alive).map((r) => ({ r: r, v: win === 7 ? r.m7 : r.m30 })).sort((x, y) => y.v - x.v || x.r.m.name.localeCompare(y.r.m.name));
+    const meetMax = Math.max(target + 1, Math.max.apply(null, meetRows.map((x) => x.v).concat([0])));
+    const meeting = meetRows.filter((x) => x.v >= target).length;
+    const thisMonth = rows.filter((r) => r.end.getFullYear() === TODAY.getFullYear() && r.end.getMonth() === TODAY.getMonth());
+    const renewReq = rows.filter((r) => r.a.renewReq);
+    const months = [0, 1, 2, 3, 4, 5].map((i) => new Date(TODAY.getFullYear(), TODAY.getMonth() + i, 1));
+    const endBuckets = months.map((d) => rows.filter((r) => r.end.getFullYear() === d.getFullYear() && r.end.getMonth() === d.getMonth()));
+    const endMax = Math.max.apply(null, endBuckets.map((b) => b.length).concat([1]));
+    const bar = (pct, color) => 'display:block; height:100%; min-width:' + (pct > 0 ? '4px' : '0') + '; width:' + pct + '%; border-radius:0 4px 4px 0; background:' + color;
+    const tabStyle = (on) => 'height:30px; padding:0 12px; border:0; border-radius:6.6px; font-size:13px; cursor:pointer; ' + (on ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; font-weight:500; color:hsl(var(--c-38-6-42))');
+
+    return {
+      isAdminPage: st.page === 'admin' && admin,
+      adminDenied: st.page === 'admin' && !admin,
+      adIcon: { __html: ICONS.shield.replace('width="16" height="16"', 'width="20" height="20"') },
+      adAsOf: fmtD(TODAY),
+      adCount: total + ' mentees',
+      adHeaders: COLS.map((c) => {
+        const on = st.adSort.key === c[0];
+        return {
+          label: c[1],
+          arrow: on ? (st.adSort.dir === 1 ? '▲' : '▼') : '',
+          aria: on ? (st.adSort.dir === 1 ? 'ascending' : 'descending') : 'none',
+          style: 'display:flex; align-items:center; gap:4px; width:100%; padding:0; border:0; background:transparent; font-family:inherit; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; cursor:pointer; ' + (numeric[c[0]] ? 'justify-content:flex-end; ' : '') + 'color:' + (on ? 'hsl(var(--c-234-68-12))' : 'hsl(var(--c-38-6-42))'),
+          sort: () => this.setState({ adSort: { key: c[0], dir: on ? -this.state.adSort.dir : 1 } })
+        };
+      }),
+      adRows: sorted.map((r) => {
+        const soon = alive(r) && r.left >= 0 && r.left <= NOTIFY_DAYS;
+        const over = r.left < 0 && r.a.status !== 'Cancelled';
+        return {
+          name: r.m.name,
+          open: this.openMentee(r.m.name),
+          phone: r.a.phone,
+          wa: waLink(r.a.phone),
+          start: fmtD(r.start),
+          end: fmtD(r.end),
+          hasEndNote: soon || over,
+          endNote: soon ? leftLabel(r.left) : 'Ended ' + -r.left + ' days ago',
+          endNoteStyle: 'font-size:11px; font-weight:700; color:' + (soon ? 'hsl(var(--c-40-78-44))' : 'hsl(var(--c-38-6-42))'),
+          status: r.a.status,
+          statusStyle: pill(SC[r.a.status]),
+          projects: r.m.projects,
+          meetings: r.m.sessions,
+          reschedules: r.a.reschedules,
+          renewals: r.a.renewals,
+          renewReq: r.a.renewReq,
+          rowStyle: 'display:grid; grid-template-columns:minmax(170px,1.6fr) 160px 104px 128px 96px 72px 76px 92px 90px; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px' + (soon ? '; background:hsl(var(--c-40-78-44) / .06)' : '')
+        };
+      }),
+
+      adWin7: () => this.setState({ adWin: 7 }),
+      adWin30: () => this.setState({ adWin: 30 }),
+      adIs7: win === 7,
+      adIs30: win === 30,
+      adWin7Style: tabStyle(win === 7),
+      adWin30Style: tabStyle(win === 30),
+      adLeave: () => { if (this.state.adTip) this.setState({ adTip: null }); },
+      adTiles: [
+        { label: 'Active mentees', value: statusCounts[0], sub: 'of ' + total + ' mentees', max: total },
+        { label: win === 7 ? 'Had a meeting · last 7 days' : 'Had 4+ meetings · last 30 days', value: meeting, sub: 'of ' + meetRows.length + ' active or paused mentees', max: meetRows.length },
+        { label: 'Ending this month', value: thisMonth.length, sub: MONTHS[TODAY.getMonth()] + ' ' + TODAY.getFullYear() + (thisMonth.length ? ' · ' + thisMonth.map((r) => r.m.name.split(' ')[0]).join(', ') : ''), max: total },
+        { label: 'Asked to renew', value: renewReq.length, sub: 'of ' + total + ' mentees', max: total }
+      ].map((k) => Object.assign(k, { barStyle: 'display:block; height:100%; border-radius:9999px; background:hsl(var(--c-234-85-14)); width:' + (k.max ? Math.round((k.value / k.max) * 100) : 0) + '%' })),
+
+      adStatusSub: total + ' mentees across ' + ADMIN_STATUSES.length + ' statuses',
+      adStatusBars: ADMIN_STATUSES.map((name, i) => ({
+        label: name,
+        value: statusCounts[i],
+        barStyle: bar(Math.round((statusCounts[i] / maxStatus) * 100), 'hsl(var(--c-234-85-14))'),
+        enter: enter('status-' + i),
+        tip: st.adTip === 'status-' + i,
+        tipText: name + ': ' + statusCounts[i] + ' mentee' + (statusCounts[i] === 1 ? '' : 's') + ' (' + Math.round((statusCounts[i] / total) * 100) + '%)'
+      })),
+
+      adEndSub: 'Contract end dates, ' + MONTHS_SHORT[months[0].getMonth()] + ' ' + months[0].getFullYear() + ' – ' + MONTHS_SHORT[months[5].getMonth()] + ' ' + months[5].getFullYear() + '. Current month highlighted.',
+      adEndCols: months.map((d, i) => {
+        const b = endBuckets[i];
+        return {
+          label: MONTHS_SHORT[d.getMonth()] + (d.getMonth() === 0 || i === 0 ? ' ’' + String(d.getFullYear()).slice(2) : ''),
+          labelStyle: 'text-align:center; font-size:12px; ' + (i === 0 ? 'font-weight:700; color:hsl(var(--c-234-68-12))' : 'color:hsl(var(--c-38-6-42))'),
+          value: b.length,
+          barStyle: 'display:block; width:min(40px, 100%); height:' + Math.round((b.length / endMax) * 120) + 'px; min-height:' + (b.length ? '4px' : '0') + '; border-radius:4px 4px 0 0; background:' + (i === 0 ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-234-85-14) / .35)'),
+          enter: enter('end-' + i),
+          tip: st.adTip === 'end-' + i,
+          tipPos: i < 2 ? 'left:0' : i > 3 ? 'right:0' : 'left:50%; transform:translateX(-50%)',
+          tipText: MONTHS[d.getMonth()] + ': ' + (b.length ? b.map((r) => r.m.name).join(', ') : 'no contracts ending')
+        };
+      }),
+
+      adMeetTitle: win === 7 ? 'Meetings in the last 7 days' : 'Meetings in the last 30 days',
+      adMeetSub: 'Active and paused mentees · target ' + (win === 7 ? 'at least 1 meeting in 7 days' : 'at least 4 meetings in 30 days') + ' · ' + meeting + ' of ' + meetRows.length + ' meet it',
+      adMeetMax: meetMax,
+      adTargetStyle: 'position:absolute; top:-3px; bottom:-3px; left:' + ((target / meetMax) * 100) + '%; border-left:2px dashed hsl(var(--c-40-78-44))',
+      adMeetBars: meetRows.map((x) => ({
+        name: x.r.m.name,
+        value: x.v,
+        barStyle: bar(Math.round((x.v / meetMax) * 100), x.v >= target ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-234-85-14) / .28)'),
+        enter: enter('meet-' + x.r.m.name),
+        tip: st.adTip === 'meet-' + x.r.m.name,
+        tipText: x.r.m.name + ': ' + x.v + ' meeting' + (x.v === 1 ? '' : 's') + ' · last one ' + x.r.a.lastMeet + ' days ago · ' + (x.v >= target ? 'meets target' : 'below target')
+      })),
+
+      // ---- notifications (admins only)
+      notifOpen: admin && st.notifOpen,
+      toggleNotif: (e) => { if (e) e.preventDefault(); this.setState({ notifOpen: !this.state.notifOpen }); },
+      closeNotif: () => this.setState({ notifOpen: false }),
+      notifBtnStyle: 'position:relative; display:flex; align-items:center; gap:8px; height:32px; padding:8px; border:0; border-radius:9.6px; font-size:14px; color:hsl(var(--c-234-40-22)); text-align:left; width:100%; cursor:pointer; background:' + (st.notifOpen ? 'hsl(var(--c-46-24-86))' : 'transparent'),
+      notifUnread: unread.length,
+      notifHasUnread: unread.length > 0,
+      notifAria: 'Notifications, ' + unread.length + ' unread',
+      notifAny: ending.length > 0,
+      notifEmpty: ending.length === 0,
+      notifSummary: ending.length + ' mentorship' + (ending.length === 1 ? ' ends' : 's end') + ' within ' + NOTIFY_DAYS + ' days:',
+      notifNames: ending.map((r) => r.m.name + ' (' + (r.left === 0 ? 'today' : r.left + 'd') + ')').join(', '),
+      markAllNotif: () => { const rd = Object.assign({}, this.state.notifRead); ending.forEach((r) => { rd[readKey(r)] = true; }); this.setState({ notifRead: rd }); },
+      notifItems: ending.map((r) => {
+        const isUnread = !st.notifRead[readKey(r)];
+        return {
+          name: r.m.name,
+          unread: isUnread,
+          badge: leftLabel(r.left),
+          badgeStyle: pill(r.left <= 7 ? '4-62-50' : '40-78-44'),
+          detail: 'Contract ends ' + fmtD(r.end) + ' · ' + r.a.status + ' · renewed ' + r.a.renewals + 'x' + (r.a.renewReq ? ' · asked to renew' : ''),
+          style: 'display:grid; gap:6px; padding:12px; border-radius:12px; border:1px solid hsl(var(--c-42-12-84)); background:' + (isUnread ? 'hsl(var(--c-40-78-44) / .07)' : 'transparent'),
+          open: (e) => { this.openMentee(r.m.name)(e); this.setState({ notifOpen: false }); },
+          wa: waLink(r.a.phone),
+          read: () => { const rd = Object.assign({}, this.state.notifRead); rd[readKey(r)] = true; this.setState({ notifRead: rd }); }
+        };
+      })
+    };
+  }
+
   tz() { return TZS.filter((t) => t.id === this.state.tzId)[0] || TZS[0]; }
   shift() { return (this.tz().offset - MENTOR_OFFSET) * 60; }
 
@@ -2861,7 +3261,7 @@ class Component extends DCLogic {
     const tz = this.tz();
     const shift = this.shift();
 
-    const navItems = NAV.map((n) => {
+    const navItems = NAV.filter((n) => !n.adminOnly || st.role === 'admin').map((n) => {
       const active = n.key === page;
       return {
         label: n.label,
@@ -3726,6 +4126,7 @@ class Component extends DCLogic {
       }),
       ...this.ohVals(),
       ...this.dlgVals(),
+      ...this.adminVals(),
       hasDayActivities: (monthEvents[st.selected] || []).length > 0,
       noDayActivities: (monthEvents[st.selected] || []).length === 0,
       profileSections: [
