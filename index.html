@@ -94,6 +94,9 @@
             <a href="#" onClick="{{ item.go }}" style="{{ item.style }}">
               <span style="display:flex; width:16px; height:16px; flex-shrink:0" dangerouslySetInnerHTML="{{ item.icon }}"></span>
               <span class="side-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ item.label }}</span>
+              <sc-if value="{{ item.hasBadge }}" hint-placeholder-val="{{ false }}">
+                <span class="side-text" aria-label="{{ item.badgeAria }}" style="margin-left:auto; display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 6px; border-radius:9999px; background:hsl(var(--c-40-78-44)); color:hsl(0 0% 100%); font-size:11px; font-weight:700">{{ item.badge }}</span>
+              </sc-if>
               <sc-if value="{{ item.active }}" hint-placeholder-val="{{ true }}">
                 <span style="position:absolute; left:0; top:6px; bottom:6px; width:3px; border-radius:9999px; background:linear-gradient(180deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))"></span>
               </sc-if>
@@ -108,7 +111,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
         <span class="side-text">{{ themeLabel }}</span>
       </button>
-      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ notifVisible }}" hint-placeholder-val="{{ true }}">
         <button onClick="{{ toggleNotif }}" aria-label="{{ notifAria }}" style="{{ notifBtnStyle }}" style-hover="background:hsl(var(--c-46-24-86))">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
           <span class="side-text" style="flex:1">Notifications</span>
@@ -887,8 +890,11 @@
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px; padding:20px 24px; align-items:start">
                   <sc-for list="{{ mentorMentees }}" as="mm" hint-placeholder-count="4">
                     <div style="position:relative; display:flex; flex-direction:column; gap:14px; padding:18px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)" style-hover="border-color:hsl(var(--c-234-85-14) / .4)">
-                      <span style="position:absolute; top:14px; right:14px">
+                      <span style="position:absolute; top:14px; right:14px; display:grid; justify-items:end; gap:6px">
                         <span style="{{ mm.statusStyle }}">{{ mm.status }}</span>
+                        <sc-if value="{{ mm.hasPending }}" hint-placeholder-val="{{ false }}">
+                          <button onClick="{{ mm.openPending }}" title="Open the review queue for this mentee" style="display:inline-flex; align-items:center; padding:2px 8px; border:0; border-radius:9999px; background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700; cursor:pointer">{{ mm.pendingLabel }}</button>
+                        </sc-if>
                       </span>
                       <div style="display:flex; align-items:center; gap:12px; padding-right:64px">
                         <span style="display:grid; place-items:center; width:48px; height:48px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20))); color:hsl(var(--c-40-30-96)); font-family:Ruda, sans-serif; font-size:15px; font-weight:700">{{ mm.initials }}</span>
@@ -1201,6 +1207,21 @@
           <span>{{ projectName }}</span>
         </h1>
         <div style="margin-top:-12px; font-size:14px; color:hsl(var(--c-38-6-42))">{{ projectOwnerLine }}</div>
+        <sc-if value="{{ projHasBanner }}" hint-placeholder-val="{{ false }}">
+          <div role="status" style="{{ projBannerStyle }}">
+            <div style="flex:1; min-width:220px; display:grid; gap:2px">
+              <strong style="font-size:14px">{{ projBannerTitle }}</strong>
+              <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ projBannerText }}</span>
+            </div>
+            <sc-if value="{{ projCanReview }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ projApprove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; height:34px">Approve project</button>
+              <button onClick="{{ projSendBack }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap; height:34px">Send back</button>
+            </sc-if>
+            <sc-if value="{{ projCanResubmit }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ projResubmit }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; height:34px">Resubmit for approval</button>
+            </sc-if>
+          </div>
+        </sc-if>
         <sc-if value="{{ isMentorView }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:-8px">
             <input value="{{ projectName }}" onChange="{{ setProjectName }}" aria-label="Project name" style="width:100%; height:36px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); max-width:340px" />
@@ -1256,15 +1277,30 @@
                 <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px">
                   <sc-for list="{{ stage.tasks }}" as="task" hint-placeholder-count="4">
                     <label style="{{ task.rowStyle }}">
-                      <input type="checkbox" checked="{{ task.done }}" onChange="{{ task.toggle }}" style="width:16px; height:16px; margin-top:2px; flex-shrink:0; accent-color:hsl(var(--c-234-85-14))" />
+                      <input type="checkbox" checked="{{ task.checked }}" disabled="{{ task.locked }}" onChange="{{ task.toggle }}" style="width:16px; height:16px; margin-top:2px; flex-shrink:0; accent-color:hsl(var(--c-234-85-14))" />
                       <span style="display:grid; gap:2px; flex:1; min-width:0">
                         <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap">
                           <span style="{{ task.titleStyle }}">{{ task.title }}</span>
                           <sc-if value="{{ task.optional }}" hint-placeholder-val="{{ true }}">
-                            <span style="display:inline-flex; padding:2px 8px; border-radius:9999px; background:hsl(var(--c-40-78-44) / .14); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700">Optional</span>
+                            <span style="display:inline-flex; padding:2px 8px; border-radius:9999px; background:hsl(var(--c-40-78-44) / .14); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700">Optional · not counted</span>
                           </sc-if>
                         </span>
                         <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ task.desc }}</span>
+                        <sc-if value="{{ task.locked }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size:12px; color:hsl(var(--c-38-6-42)); font-style:italic">{{ task.lockNote }}</span>
+                        </sc-if>
+                        <sc-if value="{{ task.isReady }}" hint-placeholder-val="{{ false }}">
+                          <span style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:4px">
+                            <span style="display:inline-flex; padding:2px 8px; border-radius:9999px; background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700">{{ task.readyLabel }}</span>
+                            <sc-if value="{{ task.canReview }}" hint-placeholder-val="{{ true }}">
+                              <button onClick="{{ task.approve }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; height:26px">Approve</button>
+                              <button onClick="{{ task.sendBack }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap; height:26px">Send back</button>
+                            </sc-if>
+                          </span>
+                        </sc-if>
+                        <sc-if value="{{ task.hasNote }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50))">Sent back: {{ task.note }}</span>
+                        </sc-if>
                       </span>
                       <button onClick="{{ task.driveClick }}" title="{{ task.driveTitle }}" style="{{ task.driveStyle }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.2 2.5h7.6L23 15l-3.8 6.5H4.8L1 15Z"></path><path d="M8.2 2.5 15.2 15"></path><path d="M23 15H6.9"></path></svg>
@@ -1279,6 +1315,40 @@
 
         <sc-if value="{{ projectTabDetails }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex; flex-direction:column; gap:20px">
+            <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:22px">
+              <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px">
+                <div>
+                  <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Project PICOTT</h2>
+                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">The research question this review answers. Papers below should match it.</p>
+                </div>
+                <sc-if value="{{ picottViewing }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ editPicott }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:34px">Edit</button>
+                </sc-if>
+              </div>
+              <sc-if value="{{ picottViewing }}" hint-placeholder-val="{{ true }}">
+                <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; padding:14px 16px; border-radius:13.6px; background:hsl(var(--c-234-85-14) / .05)">
+                  <sc-for list="{{ picottFields }}" as="pf" hint-placeholder-count="6">
+                    <span style="display:grid; gap:2px"><span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">{{ pf.label }}</span><span style="font-size:14px; font-weight:500">{{ pf.value }}</span></span>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ picottEditing }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid; gap:12px">
+                  <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px">
+                    <sc-for list="{{ picottFields }}" as="pf" hint-placeholder-count="6">
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">{{ pf.label }}
+                        <input value="{{ pf.draft }}" onChange="{{ pf.set }}" placeholder="{{ pf.label }}" style="width:100%; height:36px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); text-transform:none; letter-spacing:normal; font-weight:400" />
+                      </label>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex; gap:8px">
+                    <button onClick="{{ savePicott }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; height:34px">Save PICOTT</button>
+                    <button onClick="{{ cancelPicott }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:34px">Cancel</button>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+
             <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
               <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:18px">
                 <div>
@@ -1340,6 +1410,9 @@
                   <button onClick="{{ editDetails }}" style="height:34px; padding:0 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer">Edit</button>
                 </sc-if>
               </div>
+              <sc-if value="{{ detailsHasWarning }}" hint-placeholder-val="{{ false }}">
+                <div role="status" style="display:flex; align-items:flex-start; gap:10px; padding:10px 14px; border:1px solid hsl(var(--c-40-78-44) / .45); border-radius:9.6px; background:hsl(var(--c-40-78-44) / .1); font-size:13px; color:hsl(var(--c-234-68-12)); margin-bottom:14px"><span aria-hidden="true">⚠</span><span>{{ detailsWarning }}</span></div>
+              </sc-if>
               <sc-if value="{{ detailsViewing }}" hint-placeholder-val="{{ true }}">
                 <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px">
                   <div style="display:grid; gap:6px">
@@ -1394,19 +1467,6 @@
               </sc-if>
             </div>
 
-            <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
-              <div style="display:flex; align-items:center; gap:8px; margin:0 0 14px">
-                <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Scoring</h2>
-                <span style="display:inline-flex; align-items:center; padding:2px 8px; border-radius:9999px; background:hsl(var(--c-234-85-14) / .1); color:hsl(var(--c-234-85-14)); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase">Mentor only</span>
-              </div>
-              <label style="{{ gradeRowStyle }}">
-                <input type="checkbox" checked="{{ gradeCounts }}" disabled="{{ isMenteeView }}" onChange="{{ toggleGrade }}" style="width:16px; height:16px; accent-color:hsl(var(--c-234-85-14))" />
-                <span style="display:grid; gap:2px">
-                  <span style="font-size:15px; font-weight:600">Count GRADE towards completion</span>
-                  <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ gradeNote }}</span>
-                </span>
-              </label>
-            </div>
           </div>
         </sc-if>
 
@@ -1731,9 +1791,9 @@
             </h1>
             <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Manage your meta-analysis projects step by step.</p>
           </div>
-          <button style="display:inline-flex; align-items:center; gap:8px; height:44px; padding:0 20px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:15px; font-weight:600">
+          <button onClick="{{ newResearch }}" style="display:inline-flex; align-items:center; gap:8px; height:44px; padding:0 20px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:15px; font-weight:600">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
-            New Research
+            {{ newResearchLabel }}
           </button>
         </div>
 
@@ -1748,6 +1808,29 @@
             </div>
           </sc-for>
         </div>
+
+        <sc-if value="{{ hasReviewItems }}" hint-placeholder-val="{{ true }}">
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+            <div style="display:flex; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-40-78-44) / .08)">
+              <h2 style="margin:0; flex:1; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ reviewHeading }}</h2>
+              <span style="display:inline-grid; place-items:center; min-width:24px; height:24px; padding:0 8px; border-radius:9999px; background:hsl(var(--c-40-78-44)); color:hsl(0 0% 100%); font-size:12px; font-weight:700">{{ reviewCount }}</span>
+            </div>
+            <sc-for list="{{ reviewItems }}" as="ri" hint-placeholder-count="3">
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:12px 20px; border-top:1px solid hsl(var(--c-42-12-84))">
+                <span style="{{ ri.kindStyle }}">{{ ri.kindLabel }}</span>
+                <span style="flex:1; min-width:220px; display:grid; gap:2px">
+                  <span style="font-size:14px; font-weight:600">{{ ri.title }}</span>
+                  <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ ri.meta }}</span>
+                </span>
+                <button onClick="{{ ri.open }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Open</button>
+                <sc-if value="{{ ri.canAct }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ ri.approve }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap">Approve</button>
+                  <button onClick="{{ ri.sendBack }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Send back</button>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
 
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px">
           <h2 style="margin:0; flex:1; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">{{ projectsHeading }}</h2>
@@ -1769,6 +1852,9 @@
                   <sc-if value="{{ pc.showMentee }}" hint-placeholder-val="{{ true }}">
                     <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ pc.mentee }}</span>
                   </sc-if>
+                  <sc-if value="{{ pc.hasStatusTag }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ pc.statusTagStyle }}">{{ pc.statusTag }}</span>
+                  </sc-if>
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-38-6-42))"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
               </div>
@@ -1787,7 +1873,7 @@
               <div style="height:6px; border-radius:9999px; background:hsl(var(--c-44-14-89)); margin:8px 0 14px; overflow:hidden"><span style="{{ pc.barStyle }}"></span></div>
               <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; font-size:13px; color:hsl(var(--c-38-6-42))">
                 <span style="display:inline-flex; align-items:center; gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> {{ pc.updated }}</span>
-                <span style="{{ pc.pubStyle }}">{{ pc.pub }}</span>
+                <span title="{{ pc.pubWarn }}" style="{{ pc.pubStyle }}">{{ pc.pubIcon }}{{ pc.pub }}</span>
                 <span style="font-family:'JetBrains Mono', monospace">{{ pc.count }}</span>
               </div>
             </a>
@@ -2188,7 +2274,7 @@
             <button onClick="{{ markAllNotif }}" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; text-decoration:none">Mark all read</button>
           </sc-if>
         </div>
-        <p style="margin:0 0 12px; font-size:12px; color:hsl(var(--c-38-6-42))">Mentorships ending within 30 days. Visible to every admin.</p>
+        <p style="margin:0 0 12px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ notifSubtitle }}</p>
         <sc-if value="{{ notifEmpty }}" hint-placeholder-val="{{ false }}">
           <p style="margin:0; padding:20px 0; text-align:center; font-size:13px; color:hsl(var(--c-38-6-42))">Nothing ending in the next 30 days.</p>
         </sc-if>
@@ -2628,15 +2714,39 @@ function daysBetween(a, b) { return Math.round((b - a) / 86400000); }
 function meetingsWithin(a, total, win) { let n = 0; for (let d = a.lastMeet; d <= win && n < total; d += a.cadence) n++; return n; }
 function waLink(phone) { return 'https://wa.me/' + String(phone).replace(/\D/g, ''); }
 
+// ---- task review: taskDone[id] is 'ready' (mentee marked it, awaiting mentor) or 'approved'/true (counts toward progress) ----
+function isApproved(v) { return v === true || v === 'approved'; }
+function filledPapers(list) { return (list || []).filter((x) => String(x.title || '').trim()).length; }
+// "Include Three Viable Studies" moves to review when a 3rd paper is listed and resets below 3
+const VIABILITY_TASK = '0-2';
+function syncViability(td, studies) {
+  const out = Object.assign({}, td);
+  if (filledPapers(studies) < 3) delete out[VIABILITY_TASK];
+  else if (!out[VIABILITY_TASK]) out[VIABILITY_TASK] = 'ready';
+  return out;
+}
+// publication status is manual; this explains when it contradicts the approved Stage 8 tasks
+const SUBMIT_TASK = '7-2', ACCEPT_TASK = '7-4';
+function pubMismatch(p) {
+  const status = (p.details && p.details.pubStatus) || 'Not started';
+  const td = p.taskDone || {};
+  const approvedCount = Object.keys(td).filter((k) => isApproved(td[k])).length;
+  if ((status === 'Submitted' || status === 'Under review') && !isApproved(td[SUBMIT_TASK])) return 'Status is "' + status + '" but "Submit Manuscript" is not approved yet.';
+  if ((status === 'Accepted' || status === 'Published') && !isApproved(td[ACCEPT_TASK])) return 'Status is "' + status + '" but "Final Acceptance" is not approved yet.';
+  if (status === 'Not started' && approvedCount > 0) return 'Status is "Not started" but ' + approvedCount + ' task' + (approvedCount === 1 ? ' is' : 's are') + ' already approved.';
+  if ((status === 'Not started' || status === 'In progress') && isApproved(td[SUBMIT_TASK])) return '"Submit Manuscript" is approved; status should be at least "Submitted".';
+  return '';
+}
+
 // ---- MetaTracker projects: one entry per mentee project (examples use Vânio's mentees) ----
 const ALL_TASK_IDS = [];
 PROJECT_STAGES.forEach((stage, si) => stage.tasks.forEach((t, ti) => ALL_TASK_IDS.push(si + '-' + ti)));
-function tasksDone(n) { const out = {}; ALL_TASK_IDS.slice(0, n).forEach((id) => { out[id] = true; }); return out; }
+function tasksDone(n, ready) { const out = {}; ALL_TASK_IDS.slice(0, n).forEach((id) => { out[id] = true; }); ALL_TASK_IDS.slice(n, n + (ready || 0)).forEach((id) => { out[id] = 'ready'; }); return out; }
 function projectProgress(p) {
   let done = 0, total = 0, stageIdx = -1;
   PROJECT_STAGES.forEach((stage, si) => {
     let sd = 0, stt = 0;
-    stage.tasks.forEach((t, ti) => { if (t[2] && !p.gradeCounts) return; stt++; if (p.taskDone[si + '-' + ti]) sd++; });
+    stage.tasks.forEach((t, ti) => { if (t[2]) return; stt++; if (isApproved(p.taskDone[si + '-' + ti])) sd++; });
     done += sd; total += stt;
     if (stageIdx === -1 && sd < stt) stageIdx = si;
   });
@@ -2648,9 +2758,9 @@ function exampleStudies(list) { return list.map((x, i) => Object.assign({ id: i 
 function seedProjects() {
   return [
     // the original template project; its live data sits in top-level state while open
-    { id: 'p1', mentee: 'Isabella Michelon', name: 'Example 1', updated: new Date(2026, 7, 31), taskDone: {}, taskLinks: {}, gradeCounts: false, studies: [], details: {}, logbook: [] },
+    { id: 'p1', mentee: 'Isabella Michelon', name: 'Example 1', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 31), taskDone: {}, taskNotes: {}, taskLinks: {}, gradeCounts: false, picott: {}, studies: [], details: {}, logbook: [] },
     {
-      id: 'p2', mentee: 'Isabella Michelon', name: 'SGLT2 inhibitors for anthracycline cardiotoxicity', updated: new Date(2026, 7, 27),
+      id: 'p2', mentee: 'Isabella Michelon', name: 'SGLT2 inhibitors for anthracycline cardiotoxicity', updated: new Date(2026, 7, 27), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults receiving anthracycline chemotherapy', i: 'SGLT2 inhibitors', c: 'Placebo or standard care', o: 'Cancer therapy-related cardiac dysfunction', t: '6–24 months', t2: 'Systematic review and meta-analysis' },
       taskDone: tasksDone(10), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Empagliflozin during anthracycline chemotherapy for breast cancer', doi: '10.5555/example.cardio.01', p: 'Women with HER2-negative breast cancer on anthracyclines', i: 'Empagliflozin 10 mg', c: 'Placebo', o: 'Drop in LVEF ≥ 10 points', t: '12 months', t2: 'RCT' },
@@ -2664,8 +2774,8 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p3', mentee: 'Maria L. R. Defante', name: 'Immune checkpoint inhibitors in MSI-high gastrointestinal cancers', updated: new Date(2026, 7, 28),
-      taskDone: tasksDone(21), taskLinks: {}, gradeCounts: true,
+      id: 'p3', mentee: 'Maria L. R. Defante', name: 'Immune checkpoint inhibitors in MSI-high gastrointestinal cancers', updated: new Date(2026, 7, 28), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Patients with MSI-H/dMMR gastrointestinal cancers', i: 'Immune checkpoint inhibitors', c: 'Chemotherapy', o: 'Overall and progression-free survival', t: '2–5 years', t2: 'Systematic review and meta-analysis' },
+      taskDone: tasksDone(21, 1), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Pembrolizumab versus chemotherapy in MSI-high metastatic colorectal cancer', doi: '10.5555/example.onco.01', p: 'Metastatic MSI-H/dMMR colorectal cancer', i: 'Pembrolizumab', c: 'Chemotherapy ± targeted therapy', o: 'Overall survival', t: '5 years', t2: 'RCT' },
         { title: 'Nivolumab plus ipilimumab in dMMR gastric cancer', doi: '10.5555/example.onco.02', p: 'Advanced dMMR gastric or GEJ cancer', i: 'Nivolumab + ipilimumab', c: 'Chemotherapy', o: 'Progression-free survival', t: '3 years', t2: 'RCT' },
@@ -2678,8 +2788,8 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p4', mentee: 'Pedro Henrique Costa', name: 'Letermovir vs valganciclovir for CMV prophylaxis after kidney transplant', updated: new Date(2026, 7, 14),
-      taskDone: tasksDone(35), taskLinks: {}, gradeCounts: true,
+      id: 'p4', mentee: 'Pedro Henrique Costa', name: 'Letermovir vs valganciclovir for CMV prophylaxis after kidney transplant', updated: new Date(2026, 7, 14), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Kidney transplant recipients at risk of CMV', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'CMV infection and leukopenia', t: '28–52 weeks', t2: 'Systematic review and meta-analysis' },
+      taskDone: tasksDone(35), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Letermovir versus valganciclovir for CMV prophylaxis in kidney transplant recipients', doi: '10.5555/example.id.01', p: 'CMV D+/R− adult kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Clinically significant CMV infection', t: '52 weeks', t2: 'RCT' },
         { title: 'Leukopenia with letermovir compared with valganciclovir after transplant', doi: '10.5555/example.id.02', p: 'Solid organ transplant recipients', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'Leukopenia', t: '28 weeks', t2: 'Cohort' },
@@ -2691,8 +2801,8 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p5', mentee: 'Camila Rocha', name: 'Early vs delayed dialysis for AKI after cardiac surgery', updated: new Date(2026, 7, 30),
-      taskDone: tasksDone(29), taskLinks: {}, gradeCounts: true,
+      id: 'p5', mentee: 'Camila Rocha', name: 'Early vs delayed dialysis for AKI after cardiac surgery', updated: new Date(2026, 7, 30), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults with AKI after cardiac surgery', i: 'Early renal replacement therapy', c: 'Delayed renal replacement therapy', o: '90-day mortality and dialysis dependence', t: '90 days', t2: 'Systematic review and meta-analysis' },
+      taskDone: tasksDone(29, 1), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Early renal replacement therapy after cardiac surgery-associated AKI', doi: '10.5555/example.neph.01', p: 'Adults with KDIGO stage 2 AKI after cardiac surgery', i: 'Early RRT (< 12 h)', c: 'Delayed RRT', o: '90-day mortality', t: '90 days', t2: 'RCT' },
         { title: 'Timing of dialysis and kidney recovery after cardiopulmonary bypass', doi: '10.5555/example.neph.02', p: 'Patients with AKI after cardiopulmonary bypass', i: 'Early dialysis', c: 'Standard-trigger dialysis', o: 'Dialysis dependence', t: '90 days', t2: 'Cohort' },
@@ -2705,15 +2815,23 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p6', mentee: 'Camila Rocha', name: 'Remote ischaemic preconditioning to prevent AKI after cardiac surgery', updated: new Date(2026, 7, 11),
+      id: 'p6', mentee: 'Camila Rocha', name: 'Remote ischaemic preconditioning to prevent AKI after cardiac surgery', updated: new Date(2026, 7, 11), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham or no preconditioning', o: 'Postoperative AKI', t: '72 hours', t2: 'Systematic review and meta-analysis of RCTs' },
       taskDone: tasksDone(2), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Remote ischaemic preconditioning and AKI in high-risk cardiac surgery', doi: '10.5555/example.neph.04', p: 'High-risk adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham preconditioning', o: 'AKI within 72 h', t: '72 hours', t2: 'RCT' }
       ]),
       details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
       logbook: []
+    },
+    {
+      id: 'p7', mentee: 'Maria L. R. Defante', name: 'Neoadjuvant immunotherapy in dMMR locally advanced rectal cancer', status: 'Proposed', reviewNote: '', updated: new Date(2026, 7, 30),
+      taskDone: {}, taskNotes: {}, taskLinks: {}, gradeCounts: false,
+      picott: { p: 'Patients with dMMR locally advanced rectal cancer', i: 'Neoadjuvant PD-1 blockade', c: 'Chemoradiotherapy', o: 'Clinical complete response', t: '12 months', t2: 'Systematic review and meta-analysis' },
+      studies: [],
+      details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
+      logbook: []
     }
-  ];
+  ].map((p) => Object.assign(p, { taskDone: syncViability(p.taskDone, p.studies) }));
 }
 
 const TIME_OPTIONS = (function () {
@@ -2745,7 +2863,8 @@ class Component extends DCLogic {
     booked: null,
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
-    projectTab: 'progress', taskDone: {}, gradeCounts: false,
+    projectTab: 'progress', taskDone: { '0-2': 'ready' }, taskNotes: {}, gradeCounts: false,
+    projectPicott: { p: 'Adults after cardiac surgery', i: 'Early mobilisation', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'Systematic review and meta-analysis of RCTs' }, picottDraft: null,
     projectName: 'Example 1',
     studies: PICOTT_STUDIES.map((x, i) => Object.assign({ id: i + 1 }, x)),
     studyEdit: null, studyDraft: null,
@@ -2832,6 +2951,7 @@ class Component extends DCLogic {
     const F = (key, label, extra) => Object.assign({ key: key, label: label, type: 'text' }, extra || {});
     if (kind === 'event') return [F('title', 'Title', { placeholder: 'Event title' }), F('category', 'Category', { type: 'select', options: CAL_CATEGORIES }), F('date', 'Date', { type: 'date' }), F('start', 'Start time (Brasília)', { type: 'time' }), F('end', 'End time (Brasília)', { type: 'time' }), F('recurrence', 'Recurrence', { type: 'select', options: CAL_RECURRENCE }), F('link', 'Meeting link (optional)', { placeholder: 'https://zoom.us/...' }), F('note', 'Short note', { placeholder: 'e.g. Group session' }), F('desc', 'Description', { type: 'textarea' }), F('active', 'Status', { type: 'switch' })];
     if (kind === 'block') return [F('title', 'Card title'), F('notice', 'Notice (optional)', { type: 'textarea' }), F('pastLabel', 'Left column label'), F('pastTitle', 'Left title'), F('pastWhen', 'Left date & time'), F('pastChips', 'Left tags (one per line)', { type: 'lines' }), F('pastListLabel', 'Left list heading'), F('pastList', 'Left bullet points (one per line)', { type: 'lines' }), F('pastAction', 'Left link label'), F('nextLabel', 'Right column label'), F('nextTitle', 'Right title'), F('nextWhen', 'Right date & time'), F('nextCountdown', 'Countdown badge'), F('nextChips', 'Right tags (one per line)', { type: 'lines' }), F('nextListLabel', 'Right list heading'), F('nextList', 'Right bullet points (one per line)', { type: 'lines' }), F('nextAction', 'Button label')];
+    if (kind === 'project') return [F('title', 'Project title', { placeholder: 'e.g. SGLT2 inhibitors for anthracycline cardiotoxicity' }), F('mentee', 'Mentee', { type: 'select' }), F('p', 'Population'), F('i', 'Intervention'), F('c', 'Comparator'), F('o', 'Outcome'), F('t', 'Timeframe'), F('t2', 'Type of study', { placeholder: 'e.g. Systematic review and meta-analysis' })];
     if (kind === 'module' || kind === 'submodule') return [F('title', 'Title', { placeholder: kind === 'module' ? 'Module title' : 'Submodule title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('thumb', 'Thumbnail', { type: 'image' }), F('order', 'Order', { type: 'number' }), F('status', 'Status', { type: 'select', options: ['Active', 'Inactive'] })];
     if (kind === 'lesson') return [F('title', 'Title', { placeholder: 'Lesson title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('content', 'Content', { type: 'rich', placeholder: 'Lesson content... (**bold**, _italic_, ## heading, - list)' }), F('videoUrl', 'Video URL', { placeholder: 'YouTube, Vimeo or https:// embed link' }), F('mins', 'Duration (minutes)', { type: 'number' }), F('thumb', 'Thumbnail', { type: 'image' }), F('files', 'Lesson files', { type: 'files' }), F('subId', 'Submodule', { type: 'select' }), F('order', 'Order', { type: 'number' }), F('active', 'Status', { type: 'switch' })];
     return [];
@@ -2861,6 +2981,17 @@ class Component extends DCLogic {
     });
     if (d.kind !== 'block' && !String(v.title || '').trim()) return fail('Title is required.');
     const editing = d.meta.mode === 'edit';
+    if (d.kind === 'project') {
+      const proposed = this.state.role === 'mentee';
+      const proj = {
+        id: 'p' + Date.now(), mentee: v.mentee || this.newProjectMentees()[0], name: v.title.trim(), status: proposed ? 'Proposed' : 'Active', reviewNote: '', updated: TODAY,
+        taskDone: {}, taskNotes: {}, taskLinks: {}, gradeCounts: false,
+        picott: { p: v.p, i: v.i, c: v.c, o: v.o, t: v.t, t2: v.t2 },
+        studies: [], details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' }, logbook: []
+      };
+      this.setState({ projects: this.state.projects.concat([proj]), dlg: null, projectFilter: 'All mentees' });
+      return;
+    }
     if (d.kind === 'event') {
       const day = parseIso(v.date);
       if (!day) return fail('Pick a date.');
@@ -2915,7 +3046,7 @@ class Component extends DCLogic {
     const d = this.state.dlg;
     const noop = () => {};
     if (!d) return { dlgOpen: false, dlgFields: [], dlgTitle: '', dlgSubtitle: '', dlgError: '', dlgHasError: false, dlgSaveLabel: '', dlgCanDelete: false, dlgDeleteLabel: '', dlgSave: noop, dlgCancel: noop, dlgDelete: noop, dlgStop: noop };
-    const NAMES = { event: 'Event', block: 'Calendar card', module: 'Module', submodule: 'Submodule', lesson: 'Lesson' };
+    const NAMES = { event: 'Event', block: 'Calendar card', module: 'Module', submodule: 'Submodule', lesson: 'Lesson', project: 'Research project' };
     const setVal = (k, val) => { const cur = this.state.dlg; const values = Object.assign({}, cur.values); values[k] = val; this.setState({ dlg: Object.assign({}, cur, { values: values, error: '' }) }); };
     return {
       dlgOpen: true,
@@ -2965,7 +3096,7 @@ class Component extends DCLogic {
           hasPreview: f.type === 'rich' && !!String(val || '').trim(),
           previewHtml: { __html: f.type === 'rich' ? renderRich(val) : '' },
           isSelect: f.type === 'select',
-          options: f.key === 'subId' ? this.ohSubOptions() : (f.options || []).map((o) => ({ value: o, label: o })),
+          options: f.key === 'subId' ? this.ohSubOptions() : f.key === 'mentee' ? this.newProjectMentees().map((o) => ({ value: o, label: o })) : (f.options || []).map((o) => ({ value: o, label: o })),
           isSwitch: f.type === 'switch',
           switchOn: on,
           switchLabel: on ? 'Active' : 'Inactive',
@@ -3297,38 +3428,63 @@ class Component extends DCLogic {
         tipText: x.r.m.name + ': ' + x.v + ' meeting' + (x.v === 1 ? '' : 's') + ' · last one ' + x.r.a.lastMeet + ' days ago · ' + (x.v >= target ? 'meets target' : 'below target')
       })),
 
-      // ---- notifications (admins only)
-      notifOpen: admin && st.notifOpen,
-      toggleNotif: (e) => { if (e) e.preventDefault(); this.setState({ notifOpen: !this.state.notifOpen }); },
-      closeNotif: () => this.setState({ notifOpen: false }),
-      notifBtnStyle: 'position:relative; display:flex; align-items:center; gap:8px; height:32px; padding:8px; border:0; border-radius:9.6px; font-size:14px; color:hsl(var(--c-234-40-22)); text-align:left; width:100%; cursor:pointer; background:' + (st.notifOpen ? 'hsl(var(--c-46-24-86))' : 'transparent'),
-      notifUnread: unread.length,
-      notifHasUnread: unread.length > 0,
-      notifAria: 'Notifications, ' + unread.length + ' unread',
-      notifAny: ending.length > 0,
-      notifEmpty: ending.length === 0,
-      notifSummary: ending.length + ' mentorship' + (ending.length === 1 ? ' ends' : 's end') + ' within ' + NOTIFY_DAYS + ' days:',
-      notifNames: ending.map((r) => r.m.name + ' (' + (r.left === 0 ? 'today' : r.left + 'd') + ')').join(', '),
-      markAllNotif: () => { const rd = Object.assign({}, this.state.notifRead); ending.forEach((r) => { rd[readKey(r)] = true; }); this.setState({ notifRead: rd }); },
-      notifItems: ending.map((r) => {
-        const isUnread = !st.notifRead[readKey(r)];
+      // ---- notifications: approvals for mentors and admins; contract endings for admins
+      ...(function (self) {
+        const approvals = self.pendingItems();
+        const apprKey = (it) => 'appr|' + it.pid + '|' + it.tid;
+        const endings = admin ? ending : [];
+        const unreadCount = endings.filter((r) => !st.notifRead[readKey(r)]).length + approvals.filter((it) => !st.notifRead[apprKey(it)]).length;
+        const cardStyle = (on) => 'display:grid; gap:6px; padding:12px; border-radius:12px; border:1px solid hsl(var(--c-42-12-84)); background:' + (on ? 'hsl(var(--c-40-78-44) / .07)' : 'transparent');
+        const markRead = (key) => () => { const rd = Object.assign({}, self.state.notifRead); rd[key] = true; self.setState({ notifRead: rd }); };
         return {
-          name: r.m.name,
-          unread: isUnread,
-          badge: leftLabel(r.left),
-          badgeStyle: pill(r.left <= 7 ? '4-62-50' : '40-78-44'),
-          detail: 'Contract ends ' + fmtD(r.end) + ' · ' + r.a.status + ' · renewed ' + r.a.renewals + 'x' + (r.a.renewReq ? ' · asked to renew' : ''),
-          style: 'display:grid; gap:6px; padding:12px; border-radius:12px; border:1px solid hsl(var(--c-42-12-84)); background:' + (isUnread ? 'hsl(var(--c-40-78-44) / .07)' : 'transparent'),
-          open: (e) => { this.openMentee(r.m.name)(e); this.setState({ notifOpen: false }); },
-          wa: waLink(r.a.phone),
-          read: () => { const rd = Object.assign({}, this.state.notifRead); rd[readKey(r)] = true; this.setState({ notifRead: rd }); }
+          notifVisible: st.role !== 'mentee',
+          notifOpen: st.role !== 'mentee' && st.notifOpen,
+          toggleNotif: (e) => { if (e) e.preventDefault(); self.setState({ notifOpen: !self.state.notifOpen }); },
+          closeNotif: () => self.setState({ notifOpen: false }),
+          notifBtnStyle: 'position:relative; display:flex; align-items:center; gap:8px; height:32px; padding:8px; border:0; border-radius:9.6px; font-size:14px; color:hsl(var(--c-234-40-22)); text-align:left; width:100%; cursor:pointer; background:' + (st.notifOpen ? 'hsl(var(--c-46-24-86))' : 'transparent'),
+          notifSubtitle: admin ? 'Items waiting for approval and mentorships ending within 30 days.' : 'Tasks and project proposals from your mentees waiting for approval.',
+          notifUnread: unreadCount,
+          notifHasUnread: unreadCount > 0,
+          notifAria: 'Notifications, ' + unreadCount + ' unread',
+          notifAny: ending.length > 0,
+          notifEmpty: endings.length + approvals.length === 0,
+          notifSummary: ending.length + ' mentorship' + (ending.length === 1 ? ' ends' : 's end') + ' within ' + NOTIFY_DAYS + ' days:',
+          notifNames: ending.map((r) => r.m.name + ' (' + (r.left === 0 ? 'today' : r.left + 'd') + ')').join(', '),
+          markAllNotif: () => { const rd = Object.assign({}, self.state.notifRead); endings.forEach((r) => { rd[readKey(r)] = true; }); approvals.forEach((it) => { rd[apprKey(it)] = true; }); self.setState({ notifRead: rd }); },
+          notifItems: approvals.map((it) => {
+            const on = !st.notifRead[apprKey(it)];
+            return {
+              name: it.kind === 'project' ? it.project : it.title,
+              unread: on,
+              badge: it.kind === 'project' ? 'Proposal' : 'Ready for review',
+              badgeStyle: pill('234-85-14'),
+              detail: (it.kind === 'project' ? 'New project proposal' : it.project + ' · ' + it.stage) + ' · ' + it.mentee,
+              style: cardStyle(on),
+              open: (e) => { self.openProject(it.pid)(e); self.setState({ notifOpen: false }); },
+              wa: waLink((MENTEE_ADMIN[it.mentee] || { phone: '' }).phone),
+              read: markRead(apprKey(it))
+            };
+          }).concat(endings.map((r) => {
+            const on = !st.notifRead[readKey(r)];
+            return {
+              name: r.m.name,
+              unread: on,
+              badge: leftLabel(r.left),
+              badgeStyle: pill(r.left <= 7 ? '4-62-50' : '40-78-44'),
+              detail: 'Contract ends ' + fmtD(r.end) + ' · ' + r.a.status + ' · renewed ' + r.a.renewals + 'x' + (r.a.renewReq ? ' · asked to renew' : ''),
+              style: cardStyle(on),
+              open: (e) => { self.openMentee(r.m.name)(e); self.setState({ notifOpen: false }); },
+              wa: waLink(r.a.phone),
+              read: markRead(readKey(r))
+            };
+          }))
         };
-      })
+      })(this)
     };
   }
 
   // the open project is edited through top-level keys; switching saves them back and loads the next one
-  workingProject() { const w = this.state; return { name: w.projectName, taskDone: w.taskDone, taskLinks: w.taskLinks, gradeCounts: w.gradeCounts, studies: w.studies, details: w.details, logbook: w.logbook }; }
+  workingProject() { const w = this.state; return { name: w.projectName, taskDone: w.taskDone, taskNotes: w.taskNotes, picott: w.projectPicott, taskLinks: w.taskLinks, gradeCounts: false, studies: w.studies, details: w.details, logbook: w.logbook }; }
   projectData(p) { return p.id === this.state.projectId ? Object.assign({}, p, this.workingProject()) : p; }
   currentProject() { return this.state.projects.filter((p) => p.id === this.state.projectId)[0] || this.state.projects[0]; }
   openProject = (id) => (e) => {
@@ -3339,11 +3495,60 @@ class Component extends DCLogic {
     this.setState({
       projects: projects, projectId: id, page: 'project', projectTab: 'progress', navOpen: false,
       projectName: next.name, taskDone: next.taskDone, taskLinks: next.taskLinks, gradeCounts: next.gradeCounts,
-      studies: next.studies, details: next.details, logbook: next.logbook,
+      studies: next.studies, details: next.details, logbook: next.logbook, taskNotes: next.taskNotes || {}, projectPicott: next.picott || {}, picottDraft: null,
       studyEdit: null, studyDraft: null, detailsDraft: null, logEdit: null, logEditDraft: null, dismissedTasks: {}
     });
     window.scrollTo(0, 0);
   };
+  // ---- review flow (approval never blocks editing; it only decides what counts) ----
+  setTaskState(pid, tid, value, note) {
+    const apply = (td, tn) => {
+      const d = Object.assign({}, td), n = Object.assign({}, tn || {});
+      if (value) d[tid] = value; else delete d[tid];
+      if (note) n[tid] = note; else delete n[tid];
+      return { taskDone: d, taskNotes: n };
+    };
+    const w = this.state;
+    if (pid === w.projectId) {
+      this.setState(Object.assign(apply(w.taskDone, w.taskNotes), { projects: w.projects.map((p) => (p.id === pid ? Object.assign({}, p, { updated: TODAY }) : p)) }));
+      return;
+    }
+    this.setState({ projects: w.projects.map((p) => (p.id === pid ? Object.assign({}, p, apply(p.taskDone, p.taskNotes), { updated: TODAY }) : p)) });
+  }
+  toggleTask(id) {
+    const v = this.state.taskDone[id];
+    if (v) this.setTaskState(this.state.projectId, id, null, '');
+    else this.setTaskState(this.state.projectId, id, this.state.role === 'mentee' ? 'ready' : 'approved', '');
+  }
+  setProjectStatus(pid, status, note) {
+    this.setState({ projects: this.state.projects.map((p) => (p.id === pid ? Object.assign({}, p, { status: status, reviewNote: note || '', updated: TODAY }) : p)) });
+  }
+  setStudies(patch) { this.setState(Object.assign({}, patch, { taskDone: syncViability(this.state.taskDone, patch.studies) })); }
+  pendingItems() {
+    const out = [];
+    this.visibleProjects().forEach((p0) => {
+      const p = this.projectData(p0);
+      if (p.status === 'Proposed') out.push({ kind: 'project', pid: p.id, tid: '', project: p.name, mentee: p.mentee, title: 'New project proposal', stage: '' });
+      PROJECT_STAGES.forEach((stage, si) => stage.tasks.forEach((t, ti) => {
+        const id = si + '-' + ti;
+        if (p.taskDone[id] === 'ready') out.push({ kind: 'task', pid: p.id, tid: id, project: p.name, mentee: p.mentee, title: t[0], stage: stage.title.replace(/^Stage \d+: /, '') });
+      }));
+    });
+    return out;
+  }
+  approveItem(it) { if (it.kind === 'project') this.setProjectStatus(it.pid, 'Active', ''); else this.setTaskState(it.pid, it.tid, 'approved', ''); }
+  sendBackItem(it) {
+    const note = window.prompt('Why are you sending this back? The mentee will see this note.', '');
+    if (note === null) return;
+    if (it.kind === 'project') this.setProjectStatus(it.pid, 'Sent back', note.trim() || 'Sent back for changes');
+    else this.setTaskState(it.pid, it.tid, null, note.trim() || 'Sent back for changes');
+  }
+  newProjectMentees() {
+    const role = this.state.role;
+    if (role === 'mentee') return [PROJECT_MENTEE];
+    return MENTEES.filter((m) => role === 'admin' || m.mentor === ME).map((m) => m.name);
+  }
+
   visibleProjects() {
     const w = this.state;
     if (w.role === 'mentee') return w.projects.filter((p) => p.mentee === PROJECT_MENTEE);
@@ -3394,9 +3599,13 @@ class Component extends DCLogic {
     const tz = this.tz();
     const shift = this.shift();
 
+    const pendingCount = st.role === 'mentee' ? 0 : this.pendingItems().length;
     const navItems = NAV.filter((n) => !n.adminOnly || st.role === 'admin').map((n) => {
       const active = n.key === page;
       return {
+        hasBadge: n.key === 'metatracker' && pendingCount > 0,
+        badge: pendingCount,
+        badgeAria: pendingCount + ' waiting for your review',
         label: n.label,
         icon: { __html: n.icon },
         active: active,
@@ -3517,20 +3726,28 @@ class Component extends DCLogic {
       let sDone = 0, sTotal = 0;
       const tasks = stage.tasks.map((t, ti) => {
         const id = si + '-' + ti;
-        const optional = !!t[2] && !st.gradeCounts;
-        const done = !!st.taskDone[id];
+        const optional = !!t[2];
+        const done = isApproved(st.taskDone[id]);
+        const ready = st.taskDone[id] === 'ready';
+        const locked = id === VIABILITY_TASK && filledPapers(st.studies) < 3 && !done && !ready;
         if (!optional) { sTotal++; if (done) sDone++; }
         return Object.assign(this.driveProps('task-' + id), {
           title: t[0],
           desc: t[1],
           optional: optional,
           done: done,
-          toggle: () => {
-            const next = Object.assign({}, this.state.taskDone);
-            if (next[id]) delete next[id]; else next[id] = true;
-            this.setState({ taskDone: next });
-          },
-          rowStyle: 'display:flex; align-items:flex-start; gap:12px; padding:14px 18px; border-radius:9.6px; background:' + (done ? 'hsl(var(--c-155-40-27) / .08)' : 'hsl(var(--c-44-26-96))'),
+          checked: done || ready,
+          isReady: ready,
+          readyLabel: st.role === 'mentee' ? 'Waiting for mentor review' : 'Ready for review',
+          canReview: ready && st.role !== 'mentee',
+          approve: (e) => { e.preventDefault(); e.stopPropagation(); this.setTaskState(this.state.projectId, id, 'approved', ''); },
+          sendBack: (e) => { e.preventDefault(); e.stopPropagation(); this.sendBackItem({ kind: 'task', pid: this.state.projectId, tid: id }); },
+          hasNote: !done && !ready && !!(st.taskNotes || {})[id],
+          note: (st.taskNotes || {})[id] || '',
+          locked: locked,
+          lockNote: 'Moves to review automatically once 3 papers are listed in PICOTT & Details (' + filledPapers(st.studies) + '/3).',
+          toggle: () => this.toggleTask(id),
+          rowStyle: 'display:flex; align-items:flex-start; gap:12px; padding:14px 18px; border-radius:9.6px; background:' + (done ? 'hsl(var(--c-155-40-27) / .08)' : ready ? 'hsl(var(--c-40-78-44) / .1)' : 'hsl(var(--c-44-26-96))'),
           titleStyle: 'font-size:15px; font-weight:600; ' + (done ? 'color:hsl(var(--c-38-6-42)); text-decoration:line-through' : 'color:hsl(var(--c-234-68-12))')
         });
       });
@@ -3728,19 +3945,19 @@ class Component extends DCLogic {
           save: (e) => {
             e.preventDefault();
             const d = this.state.studyDraft;
-            this.setState({ studies: this.state.studies.map((y) => (y.id === x.id ? Object.assign({}, d, { id: x.id }) : y)), studyEdit: null, studyDraft: null });
+            this.setStudies({ studies: this.state.studies.map((y) => (y.id === x.id ? Object.assign({}, d, { id: x.id }) : y)), studyEdit: null, studyDraft: null });
           },
           cancel: (e) => {
             e.preventDefault();
             // a paper that was just added and never saved is discarded
             const studies = isBlank(x) ? this.state.studies.filter((y) => y.id !== x.id) : this.state.studies;
-            this.setState({ studies: studies, studyEdit: null, studyDraft: null });
+            this.setStudies({ studies: studies, studyEdit: null, studyDraft: null });
           },
           canRemove: st.role !== 'mentee' || isBlank(x),
           remove: (e) => {
             e.preventDefault();
             if (!isBlank(x) && !window.confirm('Remove "' + (x.title || 'this paper') + '" from the viability assessment?')) return;
-            this.setState({ studies: this.state.studies.filter((y) => y.id !== x.id), studyEdit: null, studyDraft: null });
+            this.setStudies({ studies: this.state.studies.filter((y) => y.id !== x.id), studyEdit: null, studyDraft: null });
           }
         };
       }),
@@ -3930,6 +4147,9 @@ class Component extends DCLogic {
           hasNext: !!sched.next,
           noNext: !sched.next,
           name: m.name,
+          hasPending: this.pendingItems().filter((it) => it.mentee === m.name).length > 0,
+          pendingLabel: this.pendingItems().filter((it) => it.mentee === m.name).length + ' to review',
+          openPending: (e) => { e.preventDefault(); this.setState({ page: 'metatracker', projectFilter: m.name }); window.scrollTo(0, 0); },
           initials: initials(m.name),
           email: m.name.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '.') + '@example.com',
           meta: m.sessions + ' session' + (m.sessions === 1 ? '' : 's') + ' · target ' + PLAN.total,
@@ -4163,11 +4383,7 @@ class Component extends DCLogic {
           project: st.projectName,
           due: TASK_DUES[ti] ? 'Due ' + fmtDate(TASK_DUES[ti]) : 'Before next session',
           done: done,
-          toggle: () => {
-            const next = Object.assign({}, this.state.taskDone);
-            if (next[id]) delete next[id]; else next[id] = true;
-            this.setState({ taskDone: next });
-          },
+          toggle: () => this.toggleTask(id),
           dismiss: (e) => {
             e.preventDefault(); e.stopPropagation();
             const next = Object.assign({}, this.state.dismissedTasks); next[id] = true;
@@ -4213,7 +4429,7 @@ class Component extends DCLogic {
       stats: [
         { value: String(this.visibleProjects().length), label: st.role === 'mentee' ? 'Research projects' : 'Research projects in view', icon: { __html: ICONS.chart }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-234-85-14))' },
         { value: String(PROJECT_STAGES.length), label: 'Stages from question to publication', icon: { __html: ICONS.clock }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-155-40-27))' },
-        { value: String(ALL_TASK_IDS.length), label: 'Tasks per project (GRADE optional)', icon: { __html: ICONS.check }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-40-78-44))' }
+        { value: String(ALL_TASK_IDS.length - 1), label: 'Counted tasks per project (GRADE listed, not counted)', icon: { __html: ICONS.check }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-40-78-44))' }
       ],
       weekdays: ['Su','Mo','Tu','We','Th','Fr','Sa'],
       monthCells: cells,
@@ -4259,6 +4475,52 @@ class Component extends DCLogic {
       }),
       ...this.ohVals(),
       ...this.dlgVals(),
+      newResearchLabel: st.role === 'mentee' ? 'Propose research' : 'New Research',
+      newResearch: (e) => { e.preventDefault(); this.openDlg('project', { title: '', mentee: this.newProjectMentees()[0], p: '', i: '', c: '', o: '', t: '', t2: 'Systematic review and meta-analysis' }, { mode: 'create' }); },
+      hasReviewItems: this.pendingItems().length > 0,
+      reviewHeading: st.role === 'mentee' ? 'Waiting for your mentor’s review' : 'Awaiting your review',
+      reviewCount: this.pendingItems().length,
+      reviewItems: this.pendingItems().map((it) => ({
+        kindLabel: it.kind === 'project' ? 'Proposal' : 'Task',
+        kindStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (it.kind === 'project' ? 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))' : 'background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))'),
+        title: it.kind === 'project' ? it.project : it.title,
+        meta: it.kind === 'project' ? 'New project proposal · ' + it.mentee : it.project + ' · ' + it.stage + ' · ' + it.mentee,
+        canAct: st.role !== 'mentee',
+        open: this.openProject(it.pid),
+        approve: (e) => { e.preventDefault(); this.approveItem(it); },
+        sendBack: (e) => { e.preventDefault(); this.sendBackItem(it); }
+      })),
+      detailsWarning: pubMismatch(this.projectData(this.currentProject())),
+      detailsHasWarning: !!pubMismatch(this.projectData(this.currentProject())),
+      picottViewing: !st.picottDraft,
+      picottEditing: !!st.picottDraft,
+      picottFields: PICOTT_FIELDS.map((f) => ({
+        label: f[1],
+        value: (st.projectPicott || {})[f[0]] || '—',
+        draft: st.picottDraft ? st.picottDraft[f[0]] || '' : '',
+        set: (e) => { const d = Object.assign({}, this.state.picottDraft); d[f[0]] = e.target.value; this.setState({ picottDraft: d }); }
+      })),
+      editPicott: (e) => { e.preventDefault(); this.setState({ picottDraft: Object.assign({}, st.projectPicott || {}) }); },
+      cancelPicott: (e) => { e.preventDefault(); this.setState({ picottDraft: null }); },
+      savePicott: (e) => { e.preventDefault(); this.setState({ projectPicott: this.state.picottDraft, picottDraft: null }); },
+      ...(function (self) {
+        const p = self.currentProject();
+        const status = p.status || 'Active';
+        const reviewer = st.role !== 'mentee';
+        return {
+          projHasBanner: status !== 'Active',
+          projBannerTitle: status === 'Proposed' ? 'Proposed project · awaiting mentor approval' : 'Sent back by the mentor',
+          projBannerText: status === 'Proposed'
+            ? (reviewer ? 'Check the title and PICOTT, then approve it or send it back. Everything stays editable meanwhile.' : 'You can keep filling in every step while your mentor reviews it.')
+            : (p.reviewNote || 'Changes requested.') + (reviewer ? '' : ' Update the project and resubmit when ready.'),
+          projBannerStyle: 'display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:14px 18px; border-radius:13.6px; border:1px solid ' + (status === 'Proposed' ? 'hsl(var(--c-40-78-44) / .45); background:hsl(var(--c-40-78-44) / .1)' : 'hsl(var(--c-4-62-50) / .35); background:hsl(var(--c-4-62-50) / .07)'),
+          projCanReview: reviewer && status === 'Proposed',
+          projCanResubmit: !reviewer && status === 'Sent back',
+          projApprove: (e) => { e.preventDefault(); self.approveItem({ kind: 'project', pid: p.id }); },
+          projSendBack: (e) => { e.preventDefault(); self.sendBackItem({ kind: 'project', pid: p.id }); },
+          projResubmit: (e) => { e.preventDefault(); self.setProjectStatus(p.id, 'Proposed', ''); }
+        };
+      })(this),
       projectOwnerLine: (function (self) {
         const p = self.currentProject();
         const m = MENTEES.filter((x) => x.name === p.mentee)[0];
@@ -4286,6 +4548,11 @@ class Component extends DCLogic {
           barStyle: 'display:block; height:100%; width:' + pr.pct + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
           updated: 'Updated ' + MONTHS_SHORT[p.updated.getMonth()] + ' ' + p.updated.getDate(),
           pub: pub,
+          pubWarn: pubMismatch(p),
+          pubIcon: pubMismatch(p) ? '⚠ ' : '',
+          hasStatusTag: !!p.status && p.status !== 'Active',
+          statusTag: p.status === 'Proposed' ? 'Proposed · awaiting approval' : 'Sent back',
+          statusTagStyle: 'display:inline-flex; justify-self:start; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (p.status === 'Proposed' ? 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))' : 'background:hsl(var(--c-4-62-50) / .12); color:hsl(var(--c-4-62-50))'),
           pubStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; color:hsl(var(--c-' + pubColor + ')); background:hsl(var(--c-' + pubColor + ') / .13)',
           dots: PROJECT_STAGES.map((stage, i) => ({
             style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i < pr.stageIdx || pr.pct === 100 ? 'hsl(var(--c-155-40-27))' : i === pr.stageIdx ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-44-14-89))') + '; box-shadow:0 0 0 1px hsl(var(--c-42-12-84))'
