@@ -290,6 +290,17 @@
           </h1>
           <p style="margin:8px 0 0; max-width:42rem; font-size:14px; color:hsl(var(--c-38-6-42))">View all scheduled mentorship activities and sessions</p>
         </div>
+        <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:12px 16px; border:1px dashed hsl(var(--c-234-85-14) / .35); border-radius:13.6px; background:hsl(var(--c-234-85-14) / .05)">
+            <span style="display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:11px; font-weight:700; letter-spacing:.06em">ADMIN</span>
+            <span style="flex:1; min-width:200px; font-size:13px; color:hsl(var(--c-38-6-42))">Add, edit or remove any event or card on this calendar.</span>
+            <sc-if value="{{ hasHiddenBlocks }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ restoreBlocks }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:36px">Restore removed cards</button>
+            </sc-if>
+            <button onClick="{{ calAddBlock }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:36px">+ Add card</button>
+            <button onClick="{{ calAddEvent }}" style="display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap">+ Add event</button>
+          </div>
+        </sc-if>
 
         <div class="cal-layout" style="display:flex; gap:24px; align-items:flex-start">
           <div style="flex-shrink:0">
@@ -331,7 +342,12 @@
                 <div style="display:flex; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                   <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:9.6px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))" dangerouslySetInnerHTML="{{ b.icon }}"></span>
                   <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ b.title }}</h3>
+                  <span style="flex:1"></span>
                   <span style="{{ b.tagStyle }}">{{ b.tag }}</span>
+                  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ b.editBlock }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Edit</button>
+                    <button onClick="{{ b.removeBlock }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Remove</button>
+                  </sc-if>
                 </div>
                 <sc-if value="{{ b.hasNotice }}" hint-placeholder-val="{{ false }}">
                   <div style="display:grid; gap:12px; padding:14px 20px; background:hsl(var(--c-40-78-44) / .08); border-bottom:1px solid hsl(var(--c-42-12-84))">
@@ -413,6 +429,9 @@
             <div style="display:flex; align-items:center; gap:8px">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-234-85-14))"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
               <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Activities for {{ selectedLabel }}</h3>
+              <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ calAddEvent }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; margin-left:auto">+ Add event on this day</button>
+              </sc-if>
             </div>
             <sc-if value="{{ hasDayActivities }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex; flex-direction:column; gap:10px">
@@ -420,11 +439,22 @@
                   <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px; padding:16px 18px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:13.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
                     <span style="{{ ev.kindStyle }}">{{ ev.kind }}</span>
                     <div style="display:grid; gap:2px; flex:1; min-width:0">
-                      <span style="font-size:15px; font-weight:600">{{ ev.title }}</span>
+                      <span style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:15px; font-weight:600">{{ ev.title }}<sc-if value="{{ ev.inactive }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; padding:1px 8px; border-radius:9999px; background:hsl(var(--c-44-14-89)); color:hsl(var(--c-38-6-42)); font-size:11px; font-weight:700">Inactive</span></sc-if></span>
                       <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">{{ ev.time }}</span>
                       <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ ev.desc }}</span>
                     </div>
-                    <span style="font-size:13px; font-weight:600; color:hsl(var(--c-38-6-42))">{{ ev.note }}</span>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px">
+                      <span style="font-size:13px; font-weight:600; color:hsl(var(--c-38-6-42))">{{ ev.note }}</span>
+                      <sc-if value="{{ ev.hasLink }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ ev.link }}" target="_blank" rel="noopener" style="font-size:13px; font-weight:600">Join link</a>
+                      </sc-if>
+                      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+                        <div style="display:flex; gap:6px">
+                          <button onClick="{{ ev.edit }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Edit</button>
+                          <button onClick="{{ ev.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Delete</button>
+                        </div>
+                      </sc-if>
+                    </div>
                   </div>
                 </sc-for>
               </div>
@@ -437,6 +467,39 @@
             </sc-if>
           </div>
         </div>
+        <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+              <div style="flex:1; min-width:200px">
+                <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Calendar management</h2>
+                <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">Every event, including inactive ones. Times in Brasília (GMT-3).</p>
+              </div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">{{ calEventCount }}</span>
+              <button onClick="{{ calAddEvent }}" style="display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap">+ Add event</button>
+            </div>
+            <div style="overflow-x:auto">
+              <div style="min-width:860px">
+                <div style="display:grid; grid-template-columns:minmax(220px,2fr) 130px 130px 110px 100px 90px 140px; gap:12px; padding:10px 20px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); background:hsl(var(--c-44-26-96))">
+                  <span>Title</span><span>Category</span><span>Date</span><span>Time</span><span>Recurrence</span><span>Status</span><span>Actions</span>
+                </div>
+                <sc-for list="{{ calAdminRows }}" as="r" hint-placeholder-count="5">
+                  <div style="display:grid; grid-template-columns:minmax(220px,2fr) 130px 130px 110px 100px 90px 140px; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px">
+                    <span style="font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="{{ r.title }}">{{ r.title }}</span>
+                    <span><span style="{{ r.catStyle }}">{{ r.category }}</span></span>
+                    <span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ r.date }}</span>
+                    <span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ r.time }}</span>
+                    <span style="color:hsl(var(--c-38-6-42))">{{ r.recurrence }}</span>
+                    <span><span style="{{ r.statusStyle }}">{{ r.status }}</span></span>
+                    <span style="display:flex; gap:6px">
+                      <button onClick="{{ r.edit }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Edit</button>
+                      <button onClick="{{ r.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Delete</button>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -1555,43 +1618,218 @@
 
     <sc-if value="{{ isCourses }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex; flex-direction:column; gap:24px">
-        <div>
-          <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">Learning</div>
-          <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
-            <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
-            </span>
-            <span>Office Hours</span>
-          </h1>
-          <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Structured content and session recordings to support your meta-analysis journey.</p>
-        </div>
-        <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:24px; max-width:1000px">
-          <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
-            <div style="border-radius:13.6px; overflow:hidden; border:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-42-33-99)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
-              <img src="{{ c.img }}" alt="{{ c.title }}" style="display:block; width:100%; aspect-ratio:596/1058; object-fit:cover" />
-              <div style="padding:18px; font-size:14px; font-weight:500; text-transform:uppercase; letter-spacing:.02em">{{ c.label }}</div>
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px">
+          <div>
+            <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">Learning</div>
+            <h1 style="display:flex; align-items:center; gap:10px; margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">
+              <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+              </span>
+              <span>Office Hours</span>
+            </h1>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Structured content and session recordings to support your meta-analysis journey.</p>
+          </div>
+          <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+            <div style="display:inline-flex; gap:4px; padding:4px; background:hsl(var(--c-44-14-89)); border-radius:9.6px">
+              <button onClick="{{ ohSetWatch }}" style="{{ ohWatchTabStyle }}">Watch</button>
+              <button onClick="{{ ohSetManage }}" style="{{ ohManageTabStyle }}">Manage content</button>
             </div>
-          </sc-for>
+          </sc-if>
         </div>
 
-        <div style="max-width:1000px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
-          <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Recordings</h2>
-          <p style="margin:0 0 18px; font-size:14px; color:hsl(var(--c-38-6-42))">Every office hour is recorded and posted here within 24 hours.</p>
-          <div style="display:flex; flex-direction:column; gap:10px">
-            <sc-for list="{{ recordings }}" as="r" hint-placeholder-count="4">
-              <div style="display:flex; align-items:center; gap:16px; padding:14px 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px">
-                <span style="display:grid; place-items:center; width:36px; height:36px; flex-shrink:0; border-radius:9999px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+        <sc-if value="{{ ohWatch }}" hint-placeholder-val="{{ true }}">
+          <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; max-width:1100px">
+            <sc-for list="{{ ohTracks }}" as="t" hint-placeholder-count="4">
+              <button onClick="{{ t.open }}" style="{{ t.style }}">
+                <sc-if value="{{ t.hasImg }}" hint-placeholder-val="{{ true }}">
+                  <img src="{{ t.img }}" alt="{{ t.title }}" style="display:block; width:100%; height:88px; object-fit:cover; object-position:top" />
+                </sc-if>
+                <sc-if value="{{ t.noImg }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:block; width:100%; height:88px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))"></span>
+                </sc-if>
+                <span style="display:grid; gap:2px; padding:12px 14px">
+                  <span style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.02em">{{ t.title }}</span>
+                  <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ t.count }}</span>
                 </span>
-                <span style="display:grid; gap:2px; flex:1; min-width:0">
-                  <span style="font-size:15px; font-weight:600">{{ r.title }}</span>
-                  <span style="font-size:14px; color:hsl(var(--c-38-6-42))">{{ r.meta }}</span>
-                </span>
-                <a href="#" style="font-size:14px; font-weight:600">Watch</a>
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ ohEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:48px; text-align:center; color:hsl(var(--c-38-6-42))">No lessons published yet.</div>
+          </sc-if>
+          <sc-if value="{{ ohHasLesson }}" hint-placeholder-val="{{ true }}">
+            <div class="cal-layout" style="display:flex; gap:24px; align-items:flex-start; max-width:1100px">
+              <div style="flex:1; min-width:0; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+                <div style="position:relative; aspect-ratio:16/9; background:hsl(234 60% 8%)">
+                  <sc-if value="{{ ohP.hasVideo }}" hint-placeholder-val="{{ false }}">
+                    <iframe src="{{ ohP.src }}" title="{{ ohP.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" allowfullscreen="true" style="position:absolute; inset:0; width:100%; height:100%; border:0"></iframe>
+                  </sc-if>
+                  <sc-if value="{{ ohP.noVideo }}" hint-placeholder-val="{{ true }}">
+                    <div style="position:absolute; inset:0; display:grid; place-content:center; justify-items:center; gap:10px; padding:20px; text-align:center; color:hsl(40 30% 96%)">
+                      <span style="display:grid; place-items:center; width:64px; height:64px; border-radius:9999px; background:hsl(40 30% 96% / .14)"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"></polygon></svg></span>
+                      <span style="font-family:Ruda, sans-serif; font-size:18px; font-weight:700">{{ ohP.title }}</span>
+                      <span style="font-size:13px; opacity:.7">{{ ohP.noVideoNote }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+                <div style="display:grid; gap:14px; padding:20px 22px">
+                  <div style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px">
+                    <div style="flex:1; min-width:220px">
+                      <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">{{ ohP.crumb }}</div>
+                      <h2 style="margin:4px 0 0; font-family:Ruda, sans-serif; font-size:22px; font-weight:800">{{ ohP.title }}</h2>
+                      <div style="margin-top:4px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ ohP.meta }}</div>
+                    </div>
+                    <button onClick="{{ ohP.toggleDone }}" style="{{ ohP.doneStyle }}">{{ ohP.doneLabel }}</button>
+                    <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ ohP.edit }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:36px">Edit lesson</button>
+                    </sc-if>
+                  </div>
+                  <sc-if value="{{ ohP.hasDescription }}" hint-placeholder-val="{{ true }}">
+                    <p style="margin:0; font-size:15px; line-height:1.6">{{ ohP.description }}</p>
+                  </sc-if>
+                  <sc-if value="{{ ohP.hasContent }}" hint-placeholder-val="{{ true }}">
+                    <div style="padding-top:12px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:14px; line-height:1.6; color:hsl(var(--c-234-68-12))" dangerouslySetInnerHTML="{{ ohP.contentHtml }}"></div>
+                  </sc-if>
+                  <sc-if value="{{ ohP.hasFiles }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid; gap:8px; padding-top:12px; border-top:1px solid hsl(var(--c-42-12-84))">
+                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Lesson files</span>
+                      <sc-for list="{{ ohP.files }}" as="fl" hint-placeholder-count="1">
+                        <a href="{{ fl.href }}" download="{{ fl.name }}" style="display:flex; align-items:center; gap:10px; padding:8px 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; font-size:13px; font-weight:600">📎 {{ fl.name }}</a>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <div style="display:flex; flex-wrap:wrap; gap:8px; padding-top:12px; border-top:1px solid hsl(var(--c-42-12-84))">
+                    <sc-if value="{{ ohP.hasPrev }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ ohP.prev }}" title="{{ ohP.prevTitle }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:36px">← Previous</button>
+                    </sc-if>
+                    <span style="flex:1"></span>
+                    <sc-if value="{{ ohP.hasNext }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ ohP.next }}" title="{{ ohP.nextTitle }}" style="display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap">Next lesson →</button>
+                    </sc-if>
+                  </div>
+                </div>
+              </div>
+
+              <div style="width:340px; flex-shrink:0; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:18px">
+                <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:17px; font-weight:700">Course content</h3>
+                <div style="margin-top:4px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ ohProgress }}</div>
+                <span style="display:block; height:6px; margin:8px 0 14px; border-radius:9999px; background:hsl(var(--c-44-14-89)); overflow:hidden"><span style="{{ ohBarStyle }}"></span></span>
+                <div style="display:grid; gap:14px">
+                  <sc-for list="{{ ohOutline }}" as="om" hint-placeholder-count="2">
+                    <div style="display:grid; gap:6px">
+                      <span style="font-size:14px; font-weight:700">{{ om.title }}</span>
+                      <sc-for list="{{ om.subs }}" as="os" hint-placeholder-count="1">
+                        <div style="display:grid; gap:2px">
+                          <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); font-size:10px; margin:4px 0 2px">{{ os.title }}</span>
+                          <sc-for list="{{ os.lessons }}" as="ol" hint-placeholder-count="2">
+                            <button onClick="{{ ol.go }}" style="{{ ol.rowStyle }}">
+                              <span style="{{ ol.markStyle }}">{{ ol.mark }}</span>
+                              <span style="flex:1; min-width:0">{{ ol.title }}</span>
+                              <span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ ol.mins }}</span>
+                            </button>
+                          </sc-for>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ ohManage }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flex-direction:column; gap:16px; max-width:1100px">
+            <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:18px 20px; display:flex; flex-wrap:wrap; align-items:center; gap:12px">
+              <div style="flex:1; min-width:220px">
+                <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Course management</h2>
+                <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">Modules → submodules → lessons. Inactive items are hidden from mentees.</p>
+              </div>
+              <input value="{{ ohQuery }}" onChange="{{ setOhQuery }}" placeholder="Search modules..." style="width:100%; height:38px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-family:inherit; font-size:14px; color:hsl(var(--c-234-68-12)); width:220px" />
+              <button onClick="{{ ohNewModule }}" style="display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap">+ New Module</button>
+            </div>
+            <sc-if value="{{ ohNoModules }}" hint-placeholder-val="{{ false }}">
+              <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:40px; text-align:center; color:hsl(var(--c-38-6-42))">No modules match.</div>
+            </sc-if>
+            <sc-for list="{{ ohModulesAdmin }}" as="m" hint-placeholder-count="3">
+              <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px; padding:14px 18px">
+                  <sc-if value="{{ m.hasThumb }}" hint-placeholder-val="{{ true }}">
+                    <img src="{{ m.thumb }}" alt="" style="width:64px; height:44px; object-fit:cover; object-position:top; border-radius:8px; border:1px solid hsl(var(--c-42-12-84))" />
+                  </sc-if>
+                  <sc-if value="{{ m.noThumb }}" hint-placeholder-val="{{ false }}">
+                    <span style="width:64px; height:44px; border-radius:8px; background:hsl(var(--c-44-14-89))"></span>
+                  </sc-if>
+                  <button onClick="{{ m.toggle }}" style="flex:1; min-width:200px; display:grid; gap:2px; padding:0; border:0; background:transparent; text-align:left; font-family:inherit; color:inherit; cursor:pointer">
+                    <span style="display:flex; align-items:center; gap:8px; font-family:Ruda, sans-serif; font-size:16px; font-weight:700">{{ m.caret }} {{ m.title }} <span style="{{ m.statusStyle }}">{{ m.statusLabel }}</span></span>
+                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ m.meta }}</span>
+                  </button>
+                  <div style="display:flex; gap:6px">
+                    <button onClick="{{ m.edit }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Edit</button>
+                    <button onClick="{{ m.up }}" title="Move up" aria-label="Move up" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">↑</button>
+                    <button onClick="{{ m.down }}" title="Move down" aria-label="Move down" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">↓</button>
+                    <button onClick="{{ m.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Delete</button>
+                  </div>
+                </div>
+                <sc-if value="{{ m.expanded }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid; gap:10px; padding:14px 18px 18px 36px; border-top:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-44-26-96))">
+                    <div style="display:flex; align-items:center; gap:10px">
+                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1">Submodules</span>
+                      <button onClick="{{ m.addSub }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">+ Add Submodule</button>
+                    </div>
+                    <sc-if value="{{ m.noSubs }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:13px; color:hsl(var(--c-38-6-42))">No submodules yet.</span>
+                    </sc-if>
+                    <sc-for list="{{ m.subs }}" as="sm" hint-placeholder-count="2">
+                      <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:13.6px; overflow:hidden">
+                        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:10px 14px">
+                          <button onClick="{{ sm.toggle }}" style="flex:1; min-width:180px; display:grid; gap:2px; padding:0; border:0; background:transparent; text-align:left; font-family:inherit; color:inherit; cursor:pointer">
+                            <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700">{{ sm.caret }} {{ sm.title }} <span style="{{ sm.statusStyle }}">{{ sm.statusLabel }}</span></span>
+                            <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ sm.meta }}</span>
+                          </button>
+                          <div style="display:flex; gap:6px">
+                            <button onClick="{{ sm.edit }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Edit</button>
+                            <button onClick="{{ sm.up }}" title="Move up" aria-label="Move up" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">↑</button>
+                            <button onClick="{{ sm.down }}" title="Move down" aria-label="Move down" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">↓</button>
+                            <button onClick="{{ sm.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Delete</button>
+                          </div>
+                        </div>
+                        <sc-if value="{{ sm.expanded }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:grid; gap:8px; padding:10px 14px 14px; border-top:1px solid hsl(var(--c-42-12-84))">
+                            <div style="display:flex; align-items:center; gap:10px">
+                              <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1">Lessons</span>
+                              <button onClick="{{ sm.addLesson }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">+ Add Lesson</button>
+                            </div>
+                            <sc-if value="{{ sm.noLessons }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-size:13px; color:hsl(var(--c-38-6-42))">No lessons yet.</span>
+                            </sc-if>
+                            <sc-for list="{{ sm.lessons }}" as="ls" hint-placeholder-count="3">
+                              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:8px 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px">
+                                <span style="display:flex; color:hsl(var(--c-234-85-14))"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg></span>
+                                <span style="flex:1; min-width:160px; display:grid; gap:1px">
+                                  <span style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600">{{ ls.title }} <span style="{{ ls.statusStyle }}">{{ ls.statusLabel }}</span></span>
+                                  <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ ls.meta }}</span>
+                                </span>
+                                <div style="display:flex; gap:6px">
+                                  <button onClick="{{ ls.preview }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Preview</button>
+                                  <button onClick="{{ ls.edit }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Edit</button>
+                                  <button onClick="{{ ls.up }}" title="Move up" aria-label="Move up" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">↑</button>
+                                  <button onClick="{{ ls.down }}" title="Move down" aria-label="Move down" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">↓</button>
+                                  <button onClick="{{ ls.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Delete</button>
+                                </div>
+                              </div>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
               </div>
             </sc-for>
           </div>
-        </div>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -1663,6 +1901,97 @@
         <div style="padding:24px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
           <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Bio</h2>
           <p style="margin:0; font-size:15px; font-style:italic; color:hsl(var(--c-38-6-42))">Not set</p>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ dlgOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ dlgCancel }}" style="position:fixed; inset:0; z-index:200; display:grid; place-items:center; padding:16px; background:rgb(0 0 0 / .45)">
+        <div role="dialog" aria-modal="true" onClick="{{ dlgStop }}" style="width:min(640px, 100%); max-height:90vh; overflow:auto; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:24px">
+          <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:18px">
+            <div style="flex:1">
+              <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700">{{ dlgTitle }}</h2>
+              <p style="margin:4px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">{{ dlgSubtitle }}</p>
+            </div>
+            <button onClick="{{ dlgCancel }}" aria-label="Close" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">✕</button>
+          </div>
+          <div style="display:grid; gap:14px">
+            <sc-for list="{{ dlgFields }}" as="f" hint-placeholder-count="4">
+              <div style="display:grid; gap:6px">
+                <span style="font-size:13px; font-weight:600">{{ f.label }}</span>
+                <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                  <input type="{{ f.inputType }}" value="{{ f.value }}" onChange="{{ f.set }}" placeholder="{{ f.placeholder }}" style="width:100%; height:38px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-family:inherit; font-size:14px; color:hsl(var(--c-234-68-12))" />
+                </sc-if>
+                <sc-if value="{{ f.isTextarea }}" hint-placeholder-val="{{ false }}">
+                  <textarea onInput="{{ f.set }}" value="{{ f.value }}" rows="3" placeholder="{{ f.placeholder }}" style="width:100%; height:38px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-family:inherit; font-size:14px; color:hsl(var(--c-234-68-12)); height:auto; padding:10px 12px; resize:vertical"></textarea>
+                </sc-if>
+                <sc-if value="{{ f.isRich }}" hint-placeholder-val="{{ false }}">
+                  <div style="border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; overflow:hidden">
+                    <div style="display:flex; flex-wrap:wrap; gap:4px; padding:6px; background:hsl(var(--c-44-26-96)); border-bottom:1px solid hsl(var(--c-42-12-84))">
+                      <sc-for list="{{ f.tools }}" as="tool" hint-placeholder-count="6">
+                        <button onClick="{{ tool.apply }}" title="{{ tool.title }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:28px">{{ tool.label }}</button>
+                      </sc-for>
+                    </div>
+                    <textarea id="{{ f.richId }}" onInput="{{ f.set }}" value="{{ f.value }}" rows="7" placeholder="{{ f.placeholder }}" style="display:block; width:100%; padding:10px 12px; border:0; background:hsl(var(--c-42-33-99)); font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-234-68-12)); resize:vertical"></textarea>
+                  </div>
+                  <sc-if value="{{ f.hasPreview }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:10px 14px; border:1px dashed hsl(var(--c-42-12-84)); border-radius:9.6px; font-size:14px; line-height:1.55">
+                      <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); margin-bottom:4px">Preview</div>
+                      <div dangerouslySetInnerHTML="{{ f.previewHtml }}"></div>
+                    </div>
+                  </sc-if>
+                </sc-if>
+                <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                  <select onChange="{{ f.set }}" value="{{ f.value }}" style="width:100%; height:38px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-family:inherit; font-size:14px; color:hsl(var(--c-234-68-12))">
+                    <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3">
+                      <option value="{{ o.value }}">{{ o.label }}</option>
+                    </sc-for>
+                  </select>
+                </sc-if>
+                <sc-if value="{{ f.isSwitch }}" hint-placeholder-val="{{ false }}">
+                  <button role="switch" aria-checked="{{ f.switchOn }}" onClick="{{ f.toggle }}" style="display:inline-flex; align-items:center; gap:10px; justify-self:start; padding:0; border:0; background:transparent; font-size:14px; color:hsl(var(--c-234-68-12)); cursor:pointer">
+                    <span style="{{ f.switchStyle }}"><span style="{{ f.knobStyle }}"></span></span>
+                    {{ f.switchLabel }}
+                  </button>
+                </sc-if>
+                <sc-if value="{{ f.isImage }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap">
+                    <sc-if value="{{ f.hasImage }}" hint-placeholder-val="{{ false }}">
+                      <img src="{{ f.imageSrc }}" alt="Thumbnail" style="width:96px; height:64px; object-fit:cover; border-radius:9.6px; border:1px solid hsl(var(--c-42-12-84))" />
+                      <button onClick="{{ f.clearImage }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Remove image</button>
+                    </sc-if>
+                    <label style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; position:relative; overflow:hidden">Upload image
+                      <input type="file" accept="image/*" onChange="{{ f.pickImage }}" style="position:absolute; inset:0; opacity:0; cursor:pointer" />
+                    </label>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ f.isFiles }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid; gap:8px">
+                    <sc-for list="{{ f.files }}" as="fl" hint-placeholder-count="1">
+                      <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; font-size:13px">
+                        <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ fl.name }}</span>
+                        <button onClick="{{ fl.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap">Remove</button>
+                      </div>
+                    </sc-for>
+                    <label style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; justify-self:start; position:relative; overflow:hidden">Add files
+                      <input type="file" multiple onChange="{{ f.addFiles }}" style="position:absolute; inset:0; opacity:0; cursor:pointer" />
+                    </label>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ dlgHasError }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:14px 0 0; font-size:13px; font-weight:600; color:hsl(var(--c-4-62-50))">{{ dlgError }}</p>
+          </sc-if>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:22px">
+            <sc-if value="{{ dlgCanDelete }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ dlgDelete }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer; white-space:nowrap; height:36px">{{ dlgDeleteLabel }}</button>
+            </sc-if>
+            <span style="flex:1"></span>
+            <button onClick="{{ dlgCancel }}" style="display:inline-flex; align-items:center; justify-content:center; height:30px; min-width:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:36px">Cancel</button>
+            <button onClick="{{ dlgSave }}" style="display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap">{{ dlgSaveLabel }}</button>
+          </div>
         </div>
       </div>
     </sc-if>
@@ -1957,6 +2286,99 @@ const BANNERS = [
   { src: './assets/banner-calendar.png', alt: 'Calendar' }
 ];
 
+// ---- activity calendar (admin-editable) ----
+const CAL_CATEGORIES = ['Session', 'Office hours', 'Tutoring', 'ICU of Abstracts', 'Deadline', 'Other'];
+const CAL_RECURRENCE = ['None', 'Weekly', 'Biweekly', 'Monthly'];
+const CAL_COLOR = { 'Session': '234-85-14', 'Office hours': '155-40-27', 'Tutoring': '40-78-44', 'ICU of Abstracts': '4-62-50', 'Deadline': '212-85-20', 'Other': '38-6-42' };
+function isoDate(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function parseIso(v) { const p = String(v || '').split('-').map(Number); return p.length === 3 && p[0] ? new Date(p[0], p[1] - 1, p[2]) : null; }
+function seedCalEvents() {
+  let n = 0;
+  const ev = (o) => Object.assign({ id: 'ev' + (++n), start: '', end: '', recurrence: 'None', link: '', desc: '', note: '', active: true }, o);
+  const at = (x) => ({ date: isoDate(x.date), start: x.start, end: x.end });
+  return [].concat(
+    SESSION_LOG.map((x) => ev(Object.assign(at(x), { title: 'Session ' + x.n + ' · Vânio Antunes', category: 'Session', note: x.status, desc: x.desc }))),
+    [ev(Object.assign(at(NEXT_SESSION), { title: 'Session ' + NEXT_SESSION.n + ' · Vânio Antunes', category: 'Session', note: 'Scheduled', desc: NEXT_SESSION.agenda.join(' · '), link: 'https://meet.google.com/' }))],
+    RECORDINGS_DATA.map((r) => ev({ title: r.title, category: 'Office hours', date: isoDate(r.date), start: OFFICE_HOURS.last.start, end: OFFICE_HOURS.last.end, note: r.mins + ' min · ' + r.track, desc: 'Recording available' })),
+    [
+      ev(Object.assign(at(OFFICE_HOURS.next), { title: OFFICE_HOURS.next.title, category: 'Office hours', note: 'Open to all mentees', desc: OFFICE_HOURS.next.topics.join(' · ') })),
+      ev(Object.assign(at(TUTORING.last), { title: 'MetaHub tutoring · ' + TUTORING.last.topic, category: 'Tutoring', note: 'Group session', desc: 'Biweekly MetaHub tutoring, open to all mentees' })),
+      ev(Object.assign(at(TUTORING.next), { title: 'MetaHub tutoring · ' + TUTORING.next.topic, category: 'Tutoring', note: 'Group session', desc: TUTORING.next.topics.join(' · ') })),
+      ev(Object.assign(at(ICU_ABSTRACTS.last), { title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.last.topic, category: 'ICU of Abstracts', note: 'Monthly', desc: 'Monthly MetaHub clinic: abstracts corrected live, free for all MAA alumni' })),
+      ev(Object.assign(at(ICU_ABSTRACTS.next), { title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.next.topic, category: 'ICU of Abstracts', note: 'Monthly', desc: ICU_ABSTRACTS.next.topics.join(' · ') }))
+    ]
+  );
+}
+// day-of-month numbers on which an event (with its recurrence) falls in the given month
+function occurrencesInMonth(ev, year, month) {
+  const d0 = parseIso(ev.date);
+  if (!d0) return [];
+  const first = new Date(year, month, 1), last = new Date(year, month + 1, 0);
+  if (d0 > last) return [];
+  if (ev.recurrence === 'Monthly') { const d = new Date(year, month, d0.getDate()); return d.getMonth() === month && d >= d0 ? [d.getDate()] : []; }
+  if (ev.recurrence !== 'Weekly' && ev.recurrence !== 'Biweekly') return d0 >= first ? [d0.getDate()] : [];
+  const out = [];
+  for (let d = new Date(d0); d <= last; d = addDays(d, ev.recurrence === 'Weekly' ? 7 : 14)) if (d >= first) out.push(d.getDate());
+  return out;
+}
+
+// ---- office hours video platform: modules -> submodules -> lessons (mirrors MetaHub course admin) ----
+function escHtml(v) { return String(v || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function renderRich(src) {
+  const inline = (t) => escHtml(t)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|\s)_(.+?)_(?=\s|$)/g, '$1<em>$2</em>');
+  let html = '', list = null;
+  const close = () => { if (list) { html += '</' + list + '>'; list = null; } };
+  String(src || '').split('\n').forEach((line) => {
+    let m;
+    if ((m = line.match(/^##\s+(.*)/))) { close(); html += '<h4 style="margin:12px 0 4px; font-family:Ruda, sans-serif; font-size:16px">' + inline(m[1]) + '</h4>'; }
+    else if ((m = line.match(/^[-*]\s+(.*)/))) { if (list !== 'ul') { close(); html += '<ul style="margin:4px 0; padding-left:20px">'; list = 'ul'; } html += '<li>' + inline(m[1]) + '</li>'; }
+    else if ((m = line.match(/^\d+\.\s+(.*)/))) { if (list !== 'ol') { close(); html += '<ol style="margin:4px 0; padding-left:20px">'; list = 'ol'; } html += '<li>' + inline(m[1]) + '</li>'; }
+    else if (!line.trim()) close();
+    else { close(); html += '<p style="margin:6px 0">' + inline(line) + '</p>'; }
+  });
+  close();
+  return html;
+}
+function videoEmbed(url) {
+  const u = String(url || '').trim();
+  let m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+  if (m) return 'https://www.youtube.com/embed/' + m[1];
+  m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (m) return 'https://player.vimeo.com/video/' + m[1];
+  return /^https:\/\//.test(u) ? u : '';
+}
+function seedOfficeHours() {
+  let n = 0;
+  const id = (p) => p + (++n);
+  const lesson = (o, i) => Object.assign({ id: id('l'), description: '', content: '', videoUrl: '', thumb: '', files: [], order: i + 1, active: true, mins: 0, date: '' }, o);
+  const TRACKS = [
+    ['Career', './assets/course-career.png', 'Planning a research-oriented career: questions, mentors and applications.', 'Career'],
+    ['Research Methods & Statistics', './assets/course-research.png', 'The methods and statistics behind a meta-analysis that survives peer review.', 'Research Methods'],
+    ['Skills & Productivity', './assets/course-skills.png', 'Workflows and tools that keep a review moving week to week.', 'Skills & Productivity'],
+    ['Writing & Publication', './assets/course-writing.png', 'From the results section to submission and the response to reviewers.', 'Writing & Publication']
+  ];
+  return TRACKS.map((t, i) => {
+    const recs = RECORDINGS_DATA.filter((r) => r.track === t[3]).map((r, k) => lesson({
+      title: r.title, mins: r.mins, date: isoDate(r.date),
+      description: 'Full recording of the office hour held on ' + MONTHS[r.date.getMonth()] + ' ' + r.date.getDate() + '.',
+      content: '## Covered\n' + (r.title === OFFICE_HOURS.last.title ? OFFICE_HOURS.last.covered : ['Live walkthrough of the topic', 'Questions from mentees']).map((c) => '- ' + c).join('\n') + '\n\n**Before the next office hour:** post your questions in the MetaHub group.',
+      files: r.title === OFFICE_HOURS.last.title ? [{ name: 'heterogeneity-slides.pdf', url: '' }] : []
+    }, k));
+    return {
+      id: id('m'), title: t[0], thumb: t[1], description: t[2], order: i + 1, status: 'Active',
+      submodules: [
+        { id: id('s'), title: 'Start here', description: 'What to watch first in this track.', thumb: '', order: 1, status: 'Active', lessons: [
+          lesson({ title: 'How this track works', mins: 5, description: 'How the recordings are organised and how to bring questions to the live session.', content: '## In this lesson\n- How recordings are organised\n- Where to post questions before the live session\n- Where to find slides and files' }, 0)
+        ] },
+        { id: id('s'), title: 'Recordings', description: 'Office hour recordings, posted within 24 hours.', thumb: '', order: 2, status: 'Active', lessons: recs }
+      ]
+    };
+  });
+}
+
 const TIME_OPTIONS = (function () {
   const out = [];
   for (let m = 6 * 60; m <= 22 * 60; m += 30) out.push(fmt(m));
@@ -1993,6 +2415,9 @@ class Component extends DCLogic {
     details: { drive: 'drive.google.com/example-1', docs: 'Protocol v2.docx · Search log.xlsx', pubStatus: 'In progress', pubDoi: '', presentations: 'Poster · SBC 2026', freeCat: 'Travel grant · ESC Congress' },
     detailsDraft: null,
     hubLinks: { metawriters: '', icu: '' },
+    calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
+    oh: seedOfficeHours(), ohView: 'watch', ohLesson: null, ohDone: {}, ohOpen: {}, ohQuery: '',
+    dlg: null,
     menteeSel: null, prevPage: 'mentees',
     theme: (function () { try { return localStorage.getItem('mh-theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
     logbook: [
@@ -2063,6 +2488,336 @@ class Component extends DCLogic {
     };
   }
 
+  // ---- admin form dialog, shared by calendar events/cards and office hours content ----
+  dlgSchema(kind) {
+    const F = (key, label, extra) => Object.assign({ key: key, label: label, type: 'text' }, extra || {});
+    if (kind === 'event') return [F('title', 'Title', { placeholder: 'Event title' }), F('category', 'Category', { type: 'select', options: CAL_CATEGORIES }), F('date', 'Date', { type: 'date' }), F('start', 'Start time (Brasília)', { type: 'time' }), F('end', 'End time (Brasília)', { type: 'time' }), F('recurrence', 'Recurrence', { type: 'select', options: CAL_RECURRENCE }), F('link', 'Meeting link (optional)', { placeholder: 'https://zoom.us/...' }), F('note', 'Short note', { placeholder: 'e.g. Group session' }), F('desc', 'Description', { type: 'textarea' }), F('active', 'Status', { type: 'switch' })];
+    if (kind === 'block') return [F('title', 'Card title'), F('notice', 'Notice (optional)', { type: 'textarea' }), F('pastLabel', 'Left column label'), F('pastTitle', 'Left title'), F('pastWhen', 'Left date & time'), F('pastChips', 'Left tags (one per line)', { type: 'lines' }), F('pastListLabel', 'Left list heading'), F('pastList', 'Left bullet points (one per line)', { type: 'lines' }), F('pastAction', 'Left link label'), F('nextLabel', 'Right column label'), F('nextTitle', 'Right title'), F('nextWhen', 'Right date & time'), F('nextCountdown', 'Countdown badge'), F('nextChips', 'Right tags (one per line)', { type: 'lines' }), F('nextListLabel', 'Right list heading'), F('nextList', 'Right bullet points (one per line)', { type: 'lines' }), F('nextAction', 'Button label')];
+    if (kind === 'module' || kind === 'submodule') return [F('title', 'Title', { placeholder: kind === 'module' ? 'Module title' : 'Submodule title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('thumb', 'Thumbnail', { type: 'image' }), F('order', 'Order', { type: 'number' }), F('status', 'Status', { type: 'select', options: ['Active', 'Inactive'] })];
+    if (kind === 'lesson') return [F('title', 'Title', { placeholder: 'Lesson title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('content', 'Content', { type: 'rich', placeholder: 'Lesson content... (**bold**, _italic_, ## heading, - list)' }), F('videoUrl', 'Video URL', { placeholder: 'YouTube, Vimeo or https:// embed link' }), F('mins', 'Duration (minutes)', { type: 'number' }), F('thumb', 'Thumbnail', { type: 'image' }), F('files', 'Lesson files', { type: 'files' }), F('subId', 'Submodule', { type: 'select' }), F('order', 'Order', { type: 'number' }), F('active', 'Status', { type: 'switch' })];
+    return [];
+  }
+
+  openDlg(kind, src, meta) {
+    const values = {};
+    this.dlgSchema(kind).forEach((f) => {
+      let v = src[f.key];
+      if (f.type === 'lines') v = Array.isArray(v) ? v.join('\n') : (v || '');
+      else if (f.type === 'switch') v = v !== false;
+      else if (f.type === 'files') v = (v || []).slice();
+      else if (v === undefined || v === null) v = '';
+      values[f.key] = v;
+    });
+    this.setState({ dlg: { kind: kind, meta: meta || {}, values: values, error: '' } });
+  }
+
+  saveDlg() {
+    const d = this.state.dlg;
+    if (!d) return;
+    const fail = (msg) => this.setState({ dlg: Object.assign({}, d, { error: msg }) });
+    const v = Object.assign({}, d.values);
+    this.dlgSchema(d.kind).forEach((f) => {
+      if (f.type === 'lines') v[f.key] = String(v[f.key] || '').split('\n').map((x) => x.trim()).filter(Boolean);
+      if (f.type === 'number') v[f.key] = Number(v[f.key]) || 0;
+    });
+    if (d.kind !== 'block' && !String(v.title || '').trim()) return fail('Title is required.');
+    const editing = d.meta.mode === 'edit';
+    if (d.kind === 'event') {
+      const day = parseIso(v.date);
+      if (!day) return fail('Pick a date.');
+      const events = editing ? this.state.calEvents.map((x) => (x.id === d.meta.id ? Object.assign({}, x, v) : x)) : this.state.calEvents.concat([Object.assign({ id: 'ev' + Date.now() }, v)]);
+      const jump = day.getFullYear() === 2026 && day.getMonth() === 7 ? { selected: day.getDate() } : {};
+      this.setState(Object.assign({ calEvents: events, dlg: null }, jump));
+      return;
+    }
+    if (d.kind === 'block') {
+      if (!editing) { this.setState({ customBlocks: this.state.customBlocks.concat([Object.assign({ key: 'custom-' + Date.now(), icon: { __html: ICONS.calendar } }, v)]), dlg: null }); return; }
+      if (String(d.meta.key).indexOf('custom-') === 0) { this.setState({ customBlocks: this.state.customBlocks.map((x) => (x.key === d.meta.key ? Object.assign({}, x, v) : x)), dlg: null }); return; }
+      const edits = Object.assign({}, this.state.blockEdits); edits[d.meta.key] = v;
+      this.setState({ blockEdits: edits, dlg: null });
+      return;
+    }
+    this.ohUpdate((oh) => {
+      const subs = [];
+      oh.forEach((m) => m.submodules.forEach((sub) => subs.push(sub)));
+      if (d.kind === 'module') {
+        if (editing) Object.assign(oh.find((m) => m.id === d.meta.id), v);
+        else oh.push(Object.assign({ id: 'm' + Date.now(), submodules: [] }, v));
+      }
+      if (d.kind === 'submodule') {
+        if (editing) Object.assign(subs.find((sub) => sub.id === d.meta.id), v);
+        else oh.find((m) => m.id === d.meta.parentId).submodules.push(Object.assign({ id: 's' + Date.now(), lessons: [] }, v));
+      }
+      if (d.kind === 'lesson') {
+        const target = subs.find((sub) => sub.id === v.subId) || subs[0];
+        const data = Object.assign({}, v); delete data.subId;
+        if (!editing) { target.lessons.push(Object.assign({ id: 'l' + Date.now(), date: isoDate(TODAY) }, data)); return; }
+        const from = subs.find((sub) => sub.lessons.some((l) => l.id === d.meta.id));
+        const old = from.lessons.find((l) => l.id === d.meta.id);
+        if (from === target) { Object.assign(old, data); return; }
+        from.lessons = from.lessons.filter((l) => l.id !== d.meta.id);
+        target.lessons.push(Object.assign({}, old, data, { order: target.lessons.length + 1 }));
+      }
+    });
+    this.setState({ dlg: null });
+  }
+
+  deleteDlg() {
+    const d = this.state.dlg;
+    if (!d || d.meta.mode !== 'edit') return;
+    if (d.kind === 'block') { this.removeBlock(d.meta.key, d.values.title); return; }
+    if (!window.confirm('Delete this ' + d.kind + (d.kind === 'module' || d.kind === 'submodule' ? ' and everything inside it' : '') + '?')) return;
+    if (d.kind === 'event') { this.setState({ calEvents: this.state.calEvents.filter((x) => x.id !== d.meta.id), dlg: null }); return; }
+    this.ohRemove(d.kind, d.meta.id);
+    this.setState({ dlg: null });
+  }
+
+  dlgVals() {
+    const d = this.state.dlg;
+    const noop = () => {};
+    if (!d) return { dlgOpen: false, dlgFields: [], dlgTitle: '', dlgSubtitle: '', dlgError: '', dlgHasError: false, dlgSaveLabel: '', dlgCanDelete: false, dlgDeleteLabel: '', dlgSave: noop, dlgCancel: noop, dlgDelete: noop, dlgStop: noop };
+    const NAMES = { event: 'Event', block: 'Calendar card', module: 'Module', submodule: 'Submodule', lesson: 'Lesson' };
+    const setVal = (k, val) => { const cur = this.state.dlg; const values = Object.assign({}, cur.values); values[k] = val; this.setState({ dlg: Object.assign({}, cur, { values: values, error: '' }) }); };
+    return {
+      dlgOpen: true,
+      dlgTitle: (d.meta.mode === 'edit' ? 'Edit ' : 'New ') + NAMES[d.kind],
+      dlgSubtitle: 'Fill in the ' + NAMES[d.kind].toLowerCase() + ' details below.',
+      dlgError: d.error || '',
+      dlgHasError: !!d.error,
+      dlgSaveLabel: d.meta.mode === 'edit' ? 'Save' : 'Create',
+      dlgCanDelete: d.meta.mode === 'edit',
+      dlgDeleteLabel: d.kind === 'block' ? 'Remove card' : 'Delete',
+      dlgSave: (e) => { e.preventDefault(); this.saveDlg(); },
+      dlgCancel: (e) => { if (e) e.preventDefault(); this.setState({ dlg: null }); },
+      dlgDelete: (e) => { e.preventDefault(); this.deleteDlg(); },
+      dlgStop: (e) => e.stopPropagation(),
+      dlgFields: this.dlgSchema(d.kind).map((f) => {
+        const val = d.values[f.key];
+        const richId = 'dlg-rich-' + f.key;
+        const edit = (fn) => (e) => {
+          e.preventDefault();
+          const ta = document.getElementById(richId);
+          const cur = String(this.state.dlg.values[f.key] || '');
+          const a = ta ? ta.selectionStart : cur.length, b = ta ? ta.selectionEnd : cur.length;
+          setVal(f.key, fn(cur, a, b));
+          if (ta) setTimeout(() => ta.focus(), 0);
+        };
+        const wrap = (pre, post) => edit((cur, a, b) => cur.slice(0, a) + pre + (cur.slice(a, b) || 'text') + post + cur.slice(b));
+        const prefix = (p) => edit((cur, a) => { const ls = cur.lastIndexOf('\n', a - 1) + 1; return cur.slice(0, ls) + p + cur.slice(ls); });
+        const on = !!val;
+        return {
+          label: f.label,
+          placeholder: f.placeholder || '',
+          value: f.type === 'switch' || f.type === 'files' ? '' : String(val === undefined || val === null ? '' : val),
+          set: (e) => setVal(f.key, e.target.value),
+          isInput: ['text', 'number', 'date', 'time'].indexOf(f.type) !== -1,
+          inputType: f.type,
+          isTextarea: f.type === 'textarea' || f.type === 'lines',
+          isRich: f.type === 'rich',
+          richId: richId,
+          tools: [
+            { label: 'B', title: 'Bold', apply: wrap('**', '**') },
+            { label: 'I', title: 'Italic', apply: wrap('_', '_') },
+            { label: 'H2', title: 'Heading', apply: prefix('## ') },
+            { label: '• List', title: 'Bullet list', apply: prefix('- ') },
+            { label: '1. List', title: 'Ordered list', apply: prefix('1. ') },
+            { label: 'Link', title: 'Add link', apply: wrap('[', '](https://)') }
+          ],
+          hasPreview: f.type === 'rich' && !!String(val || '').trim(),
+          previewHtml: { __html: f.type === 'rich' ? renderRich(val) : '' },
+          isSelect: f.type === 'select',
+          options: f.key === 'subId' ? this.ohSubOptions() : (f.options || []).map((o) => ({ value: o, label: o })),
+          isSwitch: f.type === 'switch',
+          switchOn: on,
+          switchLabel: on ? 'Active' : 'Inactive',
+          switchStyle: 'position:relative; display:inline-block; width:40px; height:22px; border-radius:9999px; transition:background .15s; background:' + (on ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-42-12-84))'),
+          knobStyle: 'position:absolute; top:3px; left:' + (on ? '21px' : '3px') + '; width:16px; height:16px; border-radius:9999px; background:hsl(var(--c-42-33-99)); transition:left .15s',
+          toggle: (e) => { e.preventDefault(); setVal(f.key, !this.state.dlg.values[f.key]); },
+          isImage: f.type === 'image',
+          hasImage: f.type === 'image' && !!val,
+          imageSrc: f.type === 'image' ? String(val || '') : '',
+          pickImage: (e) => { const file = (e.target.files || [])[0]; if (file) setVal(f.key, URL.createObjectURL(file)); },
+          clearImage: (e) => { e.preventDefault(); setVal(f.key, ''); },
+          isFiles: f.type === 'files',
+          files: f.type === 'files' ? (val || []).map((x, i) => ({ name: x.name, remove: (e) => { e.preventDefault(); const list = (this.state.dlg.values[f.key] || []).slice(); list.splice(i, 1); setVal(f.key, list); } })) : [],
+          addFiles: (e) => { const picked = [...(e.target.files || [])]; if (picked.length) setVal(f.key, (this.state.dlg.values[f.key] || []).concat(picked.map((x) => ({ name: x.name, url: URL.createObjectURL(x) })))); }
+        };
+      })
+    };
+  }
+
+  removeBlock(key, title) {
+    if (!window.confirm('Remove the "' + (title || 'this') + '" card from the calendar?')) return;
+    if (String(key).indexOf('custom-') === 0) { this.setState({ customBlocks: this.state.customBlocks.filter((x) => x.key !== key), dlg: null }); return; }
+    const hidden = Object.assign({}, this.state.blockHidden); hidden[key] = true;
+    this.setState({ blockHidden: hidden, dlg: null });
+  }
+
+  // ---- office hours content tree ----
+  ohSorted(list) { return list.slice().sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0)); }
+  ohUpdate(fn) { const oh = JSON.parse(JSON.stringify(this.state.oh)); fn(oh); this.setState({ oh: oh }); }
+  ohMove(list, id, dir) {
+    const sorted = this.ohSorted(list);
+    const i = sorted.findIndex((x) => x.id === id), j = i + dir;
+    if (i < 0 || j < 0 || j >= sorted.length) return;
+    const t = sorted[i]; sorted[i] = sorted[j]; sorted[j] = t;
+    sorted.forEach((x, k) => { x.order = k + 1; });
+  }
+  ohRemove(kind, id) {
+    this.ohUpdate((oh) => {
+      if (kind === 'module') { const i = oh.findIndex((m) => m.id === id); if (i >= 0) oh.splice(i, 1); }
+      oh.forEach((m) => {
+        if (kind === 'submodule') m.submodules = m.submodules.filter((sub) => sub.id !== id);
+        if (kind === 'lesson') m.submodules.forEach((sub) => { sub.lessons = sub.lessons.filter((l) => l.id !== id); });
+      });
+    });
+  }
+  ohSubOptions() {
+    const out = [];
+    this.ohSorted(this.state.oh).forEach((m) => this.ohSorted(m.submodules).forEach((sub) => out.push({ value: sub.id, label: m.title + ' › ' + sub.title })));
+    return out;
+  }
+
+  ohVals() {
+    const st = this.state;
+    const admin = st.role === 'admin';
+    const manage = admin && st.ohView === 'manage';
+    const tab = (on) => 'height:32px; padding:0 14px; border:0; border-radius:6.6px; font-size:14px; cursor:pointer; ' + (on ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; font-weight:500; color:hsl(var(--c-38-6-42))');
+    const pill = (on) => 'display:inline-flex; padding:1px 8px; border-radius:9999px; font-family:inherit; font-size:11px; font-weight:700; ' + (on ? 'background:hsl(var(--c-155-40-27) / .14); color:hsl(var(--c-155-40-27))' : 'background:hsl(var(--c-44-14-89)); color:hsl(var(--c-38-6-42))');
+    // mentees and mentors only see active content; admins see everything
+    const shown = (flag) => admin || flag;
+    const mods = this.ohSorted(st.oh).filter((m) => shown(m.status === 'Active'));
+    const flat = [];
+    mods.forEach((m) => this.ohSorted(m.submodules).filter((sub) => shown(sub.status === 'Active')).forEach((sub) => this.ohSorted(sub.lessons).filter((l) => shown(l.active)).forEach((l) => flat.push({ m: m, s: sub, l: l }))));
+    const idx = Math.max(0, flat.findIndex((x) => x.l.id === st.ohLesson));
+    const cur = flat[idx];
+    const go = (lid) => (e) => { if (e) e.preventDefault(); this.setState({ ohLesson: lid, ohView: 'watch' }); window.scrollTo(0, 0); };
+    const doneCount = flat.filter((x) => st.ohDone[x.l.id]).length;
+    const toggleOpen = (key) => (e) => { e.preventDefault(); const o = Object.assign({}, this.state.ohOpen); o[key] = !o[key]; this.setState({ ohOpen: o }); };
+    const q = st.ohQuery.trim().toLowerCase();
+    const matching = this.ohSorted(st.oh).filter((m) => !q || m.title.toLowerCase().indexOf(q) !== -1);
+    let player = {};
+    if (cur) {
+      const l = cur.l, embed = videoEmbed(l.videoUrl), done = !!st.ohDone[l.id];
+      const dt = parseIso(l.date);
+      player = {
+        hasVideo: !!embed, noVideo: !embed, src: embed || 'about:blank',
+        noVideoNote: admin ? 'No video yet. Use "Edit lesson" to add the video URL.' : 'The video for this lesson will be available soon.',
+        title: l.title,
+        crumb: cur.m.title + ' › ' + cur.s.title,
+        meta: [l.mins ? l.mins + ' min' : '', dt ? fmtDate(dt) + ', ' + dt.getFullYear() : '', l.active ? '' : 'Inactive (hidden from mentees)'].filter(Boolean).join(' · '),
+        description: l.description, hasDescription: !!l.description,
+        contentHtml: { __html: renderRich(l.content) }, hasContent: !!String(l.content || '').trim(),
+        files: (l.files || []).map((f) => ({ name: f.name, href: f.url || '#' })), hasFiles: (l.files || []).length > 0,
+        doneLabel: done ? '✓ Watched' : 'Mark as watched',
+        doneStyle: 'height:36px; padding:0 14px; border-radius:9.6px; font-size:13px; font-weight:600; cursor:pointer; ' + (done ? 'border:0; background:hsl(var(--c-155-40-27) / .14); color:hsl(var(--c-155-40-27))' : 'border:1px solid hsl(var(--c-42-12-84)); background:transparent; color:hsl(var(--c-234-40-22))'),
+        toggleDone: (e) => { e.preventDefault(); const dn = Object.assign({}, this.state.ohDone); dn[l.id] = !dn[l.id]; this.setState({ ohDone: dn }); },
+        hasPrev: idx > 0, hasNext: idx < flat.length - 1,
+        prev: go(idx > 0 ? flat[idx - 1].l.id : l.id), next: go(idx < flat.length - 1 ? flat[idx + 1].l.id : l.id),
+        prevTitle: idx > 0 ? flat[idx - 1].l.title : '', nextTitle: idx < flat.length - 1 ? flat[idx + 1].l.title : '',
+        edit: (e) => { e.preventDefault(); this.openDlg('lesson', Object.assign({}, l, { subId: cur.s.id }), { mode: 'edit', id: l.id }); }
+      };
+    }
+    return {
+      ohWatch: !manage,
+      ohManage: manage,
+      ohSetWatch: () => this.setState({ ohView: 'watch' }),
+      ohSetManage: () => this.setState({ ohView: 'manage' }),
+      ohWatchTabStyle: tab(!manage),
+      ohManageTabStyle: tab(manage),
+      ohHasLesson: !!cur,
+      ohEmpty: !cur,
+      ohP: player,
+      ohTracks: mods.map((m) => {
+        const inMod = flat.filter((x) => x.m.id === m.id);
+        const on = !!cur && cur.m.id === m.id;
+        return {
+          title: m.title,
+          img: m.thumb || '',
+          hasImg: !!m.thumb,
+          noImg: !m.thumb,
+          count: inMod.length + (inMod.length === 1 ? ' lesson' : ' lessons') + (m.status === 'Active' ? '' : ' · Inactive'),
+          open: inMod.length ? go(inMod[0].l.id) : (e) => e.preventDefault(),
+          style: 'display:block; width:100%; padding:0; text-align:left; cursor:pointer; border-radius:13.6px; overflow:hidden; background:hsl(var(--c-42-33-99)); font-family:inherit; color:inherit; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); border:' + (on ? '2px solid hsl(var(--c-234-85-14))' : '1px solid hsl(var(--c-42-12-84))')
+        };
+      }),
+      ohOutline: mods.map((m) => ({
+        title: m.title,
+        subs: this.ohSorted(m.submodules).filter((sub) => shown(sub.status === 'Active')).map((sub) => ({
+          title: sub.title,
+          lessons: this.ohSorted(sub.lessons).filter((l) => shown(l.active)).map((l) => {
+            const on = !!cur && cur.l.id === l.id, done = !!st.ohDone[l.id];
+            return {
+              title: l.title,
+              mins: l.mins ? l.mins + ' min' : '',
+              go: go(l.id),
+              mark: done ? '✓' : on ? '▶' : '',
+              markStyle: 'display:grid; place-items:center; width:18px; height:18px; flex-shrink:0; border-radius:9999px; font-size:10px; font-weight:700; ' + (done ? 'background:hsl(var(--c-155-40-27)); color:hsl(var(--c-40-30-96))' : on ? 'background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96))' : 'border:1.5px solid hsl(var(--c-42-12-84))'),
+              rowStyle: 'display:flex; align-items:center; gap:8px; width:100%; padding:7px 8px; border:0; border-radius:8px; text-align:left; font-family:inherit; font-size:13px; line-height:1.3; cursor:pointer; color:hsl(var(--c-234-68-12)); ' + (on ? 'background:hsl(var(--c-234-85-14) / .1); font-weight:600' : 'background:transparent; font-weight:500') + (l.active ? '' : '; opacity:.55')
+            };
+          })
+        }))
+      })),
+      ohProgress: doneCount + ' of ' + flat.length + ' lessons watched',
+      ohBarStyle: 'display:block; height:100%; border-radius:9999px; background:hsl(var(--c-155-40-27)); width:' + (flat.length ? Math.round((doneCount / flat.length) * 100) : 0) + '%',
+      ohQuery: st.ohQuery,
+      setOhQuery: (e) => this.setState({ ohQuery: e.target.value }),
+      ohNewModule: (e) => { e.preventDefault(); this.openDlg('module', { title: '', description: '', thumb: '', order: st.oh.length + 1, status: 'Active' }, { mode: 'create' }); },
+      ohNoModules: matching.length === 0,
+      ohModulesAdmin: matching.map((m) => {
+        const subs = this.ohSorted(m.submodules);
+        const open = !!st.ohOpen[m.id];
+        const lessonTotal = subs.reduce((n, sub) => n + sub.lessons.length, 0);
+        const inMod = (fn) => (oh) => fn(oh.find((x) => x.id === m.id));
+        return {
+          title: m.title,
+          hasThumb: !!m.thumb, noThumb: !m.thumb, thumb: m.thumb || '',
+          statusLabel: m.status, statusStyle: pill(m.status === 'Active'),
+          meta: 'Order ' + m.order + ' · ' + subs.length + ' submodule' + (subs.length === 1 ? '' : 's') + ' · ' + lessonTotal + ' lesson' + (lessonTotal === 1 ? '' : 's') + (m.description ? ' · ' + m.description : ''),
+          caret: open ? '▾' : '▸',
+          expanded: open,
+          toggle: toggleOpen(m.id),
+          edit: (e) => { e.preventDefault(); this.openDlg('module', m, { mode: 'edit', id: m.id }); },
+          up: (e) => { e.preventDefault(); this.ohUpdate((oh) => this.ohMove(oh, m.id, -1)); },
+          down: (e) => { e.preventDefault(); this.ohUpdate((oh) => this.ohMove(oh, m.id, 1)); },
+          remove: (e) => { e.preventDefault(); if (window.confirm('Delete module "' + m.title + '" and everything inside it?')) this.ohRemove('module', m.id); },
+          addSub: (e) => { e.preventDefault(); this.openDlg('submodule', { title: '', description: '', thumb: '', order: subs.length + 1, status: 'Active' }, { mode: 'create', parentId: m.id }); },
+          noSubs: subs.length === 0,
+          subs: subs.map((sub) => {
+            const lessons = this.ohSorted(sub.lessons);
+            const sOpen = !!st.ohOpen[sub.id];
+            const inSub = (fn) => inMod((mod) => fn(mod.submodules.find((x) => x.id === sub.id)));
+            return {
+              title: sub.title,
+              statusLabel: sub.status, statusStyle: pill(sub.status === 'Active'),
+              meta: 'Order ' + sub.order + ' · ' + lessons.length + ' lesson' + (lessons.length === 1 ? '' : 's'),
+              caret: sOpen ? '▾' : '▸',
+              expanded: sOpen,
+              toggle: toggleOpen(sub.id),
+              edit: (e) => { e.preventDefault(); this.openDlg('submodule', sub, { mode: 'edit', id: sub.id }); },
+              up: (e) => { e.preventDefault(); this.ohUpdate(inMod((mod) => this.ohMove(mod.submodules, sub.id, -1))); },
+              down: (e) => { e.preventDefault(); this.ohUpdate(inMod((mod) => this.ohMove(mod.submodules, sub.id, 1))); },
+              remove: (e) => { e.preventDefault(); if (window.confirm('Delete submodule "' + sub.title + '" and its lessons?')) this.ohRemove('submodule', sub.id); },
+              addLesson: (e) => { e.preventDefault(); this.openDlg('lesson', { title: '', description: '', content: '', videoUrl: '', mins: 0, thumb: '', files: [], subId: sub.id, order: lessons.length + 1, active: true }, { mode: 'create' }); },
+              noLessons: lessons.length === 0,
+              lessons: lessons.map((l) => ({
+                title: l.title,
+                statusLabel: l.active ? 'Active' : 'Inactive',
+                statusStyle: pill(l.active),
+                meta: ['Order ' + l.order, l.mins ? l.mins + ' min' : '', videoEmbed(l.videoUrl) ? 'Video set' : 'No video', (l.files || []).length + ' file' + ((l.files || []).length === 1 ? '' : 's')].filter(Boolean).join(' · '),
+                preview: go(l.id),
+                edit: (e) => { e.preventDefault(); this.openDlg('lesson', Object.assign({}, l, { subId: sub.id }), { mode: 'edit', id: l.id }); },
+                up: (e) => { e.preventDefault(); this.ohUpdate(inSub((x) => this.ohMove(x.lessons, l.id, -1))); },
+                down: (e) => { e.preventDefault(); this.ohUpdate(inSub((x) => this.ohMove(x.lessons, l.id, 1))); },
+                remove: (e) => { e.preventDefault(); if (window.confirm('Delete lesson "' + l.title + '"?')) this.ohRemove('lesson', l.id); }
+              }))
+            };
+          })
+        };
+      })
+    };
+  }
+
   tz() { return TZS.filter((t) => t.id === this.state.tzId)[0] || TZS[0]; }
   shift() { return (this.tz().offset - MENTOR_OFFSET) * 60; }
 
@@ -2119,10 +2874,10 @@ class Component extends DCLogic {
 
     // month grid for the calendar page (August 2026 starts on a Saturday)
     const eventDays = {};
-    SESSION_LOG.forEach((sl) => { if (sl.date.getMonth() === 7) eventDays[sl.date.getDate()] = true; });
-    RECORDINGS_DATA.forEach((r) => { if (r.date.getMonth() === 7) eventDays[r.date.getDate()] = true; });
-    if (TUTORING.last.date.getMonth() === 7) eventDays[TUTORING.last.date.getDate()] = true;
-    if (ICU_ABSTRACTS.last.date.getMonth() === 7) eventDays[ICU_ABSTRACTS.last.date.getDate()] = true;
+    // events live in state so admins can add, edit and delete them; inactive ones are only shown to admins
+    const calByDay = {};
+    st.calEvents.filter((ev) => ev.active || st.role === 'admin').forEach((ev) => occurrencesInMonth(ev, 2026, 7).forEach((day) => { (calByDay[day] = calByDay[day] || []).push(ev); }));
+    Object.keys(calByDay).forEach((day) => { eventDays[day] = true; });
     const cells = [];
     for (let i = 0; i < 6; i++) cells.push({ day: null });
     for (let d = 1; d <= 31; d++) {
@@ -2265,11 +3020,7 @@ class Component extends DCLogic {
 
     // calendar events for the displayed month (August 2026), from the session log and office hours
     const monthEvents = {};
-    const pushEv = (d, ev) => { if (d.getMonth() === 7 && d.getFullYear() === 2026) (monthEvents[d.getDate()] = monthEvents[d.getDate()] || []).push(ev); };
-    SESSION_LOG.forEach((sl) => pushEv(sl.date, { kind: 'SESSION', title: 'Session ' + sl.n + ' · Vânio Antunes', time: sessTime(sl) + ' ' + tz.short, note: sl.status, desc: sl.desc }));
-    RECORDINGS_DATA.forEach((r) => pushEv(r.date, { kind: 'OFFICE HOURS', title: r.title, time: sessTime(OFFICE_HOURS.last) + ' ' + tz.short, note: r.mins + ' min · ' + r.track, desc: 'Recording available' }));
-    pushEv(TUTORING.last.date, { kind: 'TUTORING', title: 'MetaHub tutoring · ' + TUTORING.last.topic, time: sessTime(TUTORING.last) + ' ' + tz.short, note: 'Group session', desc: 'Biweekly MetaHub tutoring, open to all mentees' });
-    pushEv(ICU_ABSTRACTS.last.date, { kind: 'ICU OF ABSTRACTS', title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.last.topic, time: sessTime(ICU_ABSTRACTS.last) + ' ' + tz.short, note: 'Monthly', desc: 'Monthly MetaHub clinic: abstracts corrected live, free for all MAA alumni' });
+    Object.keys(calByDay).forEach((day) => { monthEvents[day] = calByDay[day].slice().sort((x, y) => (x.start || '').localeCompare(y.start || '')); });
 
     const q = st.mQuery.trim().toLowerCase();
     let filtered = MENTEES.filter((m) => {
@@ -2795,15 +3546,21 @@ class Component extends DCLogic {
           notice: 'A monthly MetaHub event: bring your abstract and it is corrected live, free for all MAA alumni.',
           links: ['icu']
         }
-      ].map((b) => {
+      ].concat(st.customBlocks).map((b0, bi) => {
+        const key = b0.key || 'base-' + bi;
+        const b = Object.assign({}, b0, st.blockEdits[key] || {});
         const HUB = {
           metawriters: { label: 'MetaWriters', sub: 'Manuscript correction' },
           icu: { label: 'ICU of Abstracts', sub: 'Abstract correction · monthly' }
         };
         const canSet = st.role !== 'mentee';
         return Object.assign({}, b, {
+          key: key,
+          pastChips: b.pastChips || [], pastList: b.pastList || [], nextChips: b.nextChips || [], nextList: b.nextList || [],
+          editBlock: (e) => { e.preventDefault(); this.openDlg('block', b, { mode: 'edit', key: key }); },
+          removeBlock: (e) => { e.preventDefault(); this.removeBlock(key, b.title); },
           tag: b.notice ? 'MetaHub' : '',
-          tagStyle: b.notice ? 'margin-left:auto; display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(var(--c-40-78-44) / .14); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700; letter-spacing:.06em' : 'display:none',
+          tagStyle: b.notice ? 'display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(var(--c-40-78-44) / .14); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700; letter-spacing:.06em' : 'display:none',
           hasNotice: !!b.notice,
           notice: b.notice || '',
           links: (b.links || []).map((k) => {
@@ -2825,7 +3582,7 @@ class Component extends DCLogic {
             };
           })
         });
-      }),
+      }).filter((b) => !st.blockHidden[b.key]),
 
       calendarHighlights: [
         { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: fmtDate(SESSION_LOG[0].date) + ' · ' + fmt(toMin(SESSION_LOG[0].start) + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
@@ -2930,14 +3687,45 @@ class Component extends DCLogic {
       selectedLabel: MONTHS[7] + ' ' + st.selected + ', 2026',
       nowStageName: curStageName,
       nowStageTitle: projectStages[curStageIdx].title,
-      dayActivities: (monthEvents[st.selected] || []).map((ev) => ({
-        kind: ev.kind,
-        title: ev.title,
-        time: ev.time,
-        note: ev.note,
-        desc: ev.desc,
-        kindStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.06em; color:' + (ev.kind === 'SESSION' ? 'hsl(var(--c-234-85-14))' : ev.kind === 'TUTORING' ? 'hsl(var(--c-40-78-44))' : ev.kind === 'ICU OF ABSTRACTS' ? 'hsl(var(--c-4-62-50))' : 'hsl(var(--c-155-40-27))') + '; background:' + (ev.kind === 'SESSION' ? 'hsl(var(--c-234-85-14) / .12)' : ev.kind === 'TUTORING' ? 'hsl(var(--c-40-78-44) / .14)' : ev.kind === 'ICU OF ABSTRACTS' ? 'hsl(var(--c-4-62-50) / .12)' : 'hsl(var(--c-155-40-27) / .14)')
-      })),
+      dayActivities: (monthEvents[st.selected] || []).map((ev) => {
+        const c = CAL_COLOR[ev.category] || CAL_COLOR.Other;
+        return {
+          kind: String(ev.category).toUpperCase(),
+          title: ev.title,
+          time: ev.start ? fmt(toMin(ev.start) + shift) + (ev.end ? ' – ' + fmt(toMin(ev.end) + shift) : '') + ' ' + tz.short : 'All day',
+          note: [ev.note, ev.recurrence !== 'None' ? ev.recurrence : ''].filter(Boolean).join(' · '),
+          desc: ev.desc,
+          hasLink: !!ev.link,
+          link: ev.link,
+          inactive: !ev.active,
+          kindStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.06em; color:hsl(var(--c-' + c + ')); background:hsl(var(--c-' + c + ') / .12)',
+          edit: (e) => { e.preventDefault(); this.openDlg('event', ev, { mode: 'edit', id: ev.id }); },
+          remove: (e) => { e.preventDefault(); if (window.confirm('Delete "' + ev.title + '"' + (ev.recurrence !== 'None' ? ' and all its repeats' : '') + '?')) this.setState({ calEvents: this.state.calEvents.filter((x) => x.id !== ev.id) }); }
+        };
+      }),
+      calAddEvent: (e) => { e.preventDefault(); this.openDlg('event', { title: '', category: 'Other', date: isoDate(new Date(2026, 7, st.selected)), start: '13:00', end: '14:00', recurrence: 'None', link: '', note: '', desc: '', active: true }, { mode: 'create' }); },
+      calAddBlock: (e) => { e.preventDefault(); this.openDlg('block', { title: 'New activity', pastLabel: 'Last', pastListLabel: 'Covered', nextLabel: 'Next', nextListLabel: 'Planned topics', nextAction: 'Join' }, { mode: 'create' }); },
+      hasHiddenBlocks: Object.keys(st.blockHidden).length > 0,
+      restoreBlocks: (e) => { e.preventDefault(); this.setState({ blockHidden: {} }); },
+      calEventCount: st.calEvents.length + ' events',
+      calAdminRows: st.calEvents.slice().sort((x, y) => (x.date + (x.start || '')).localeCompare(y.date + (y.start || ''))).map((ev) => {
+        const c = CAL_COLOR[ev.category] || CAL_COLOR.Other;
+        const day = parseIso(ev.date);
+        return {
+          title: ev.title,
+          category: ev.category,
+          catStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; white-space:nowrap; color:hsl(var(--c-' + c + ')); background:hsl(var(--c-' + c + ') / .12)',
+          date: day ? fmtDate(day) + ', ' + day.getFullYear() : '—',
+          time: ev.start ? ev.start + (ev.end ? '–' + ev.end : '') : 'All day',
+          recurrence: ev.recurrence,
+          status: ev.active ? 'Active' : 'Inactive',
+          statusStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (ev.active ? 'background:hsl(var(--c-155-40-27) / .14); color:hsl(var(--c-155-40-27))' : 'background:hsl(var(--c-44-14-89)); color:hsl(var(--c-38-6-42))'),
+          edit: (e) => { e.preventDefault(); this.openDlg('event', ev, { mode: 'edit', id: ev.id }); },
+          remove: (e) => { e.preventDefault(); if (window.confirm('Delete "' + ev.title + '"?')) this.setState({ calEvents: this.state.calEvents.filter((x) => x.id !== ev.id) }); }
+        };
+      }),
+      ...this.ohVals(),
+      ...this.dlgVals(),
       hasDayActivities: (monthEvents[st.selected] || []).length > 0,
       noDayActivities: (monthEvents[st.selected] || []).length === 0,
       profileSections: [
