@@ -363,7 +363,7 @@
                 <input type="checkbox" checked="{{ t.done }}" onChange="{{ t.toggle }}" style="width:16px; height:16px; flex-shrink:0; accent-color:hsl(var(--c-234-85-14))" />
                 <span style="{{ t.titleStyle }}">{{ t.title }}</span>
                 <span style="display:inline-flex; flex-shrink:0; padding:2px 10px; border-radius:9999px; background:hsl(var(--c-44-16-88)); font-size:11px; font-weight:600; color:hsl(var(--c-234-68-12))">{{ t.project }}</span>
-                <button onClick="{{ t.driveClick }}" title="{{ t.driveTitle }}" style="{{ t.driveStyle }}">
+                <button onClick="{{ t.driveClick }}" title="{{ t.driveTitle }}" aria-label="{{ t.driveTitle }}" style="{{ t.driveStyle }}">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.2 2.5h7.6L23 15l-3.8 6.5H4.8L1 15Z"></path><path d="M8.2 2.5 15.2 15"></path><path d="M23 15H6.9"></path></svg>
                 </button>
                 <span style="flex:1"></span>
@@ -391,35 +391,50 @@
 
         <div>
           <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">From question to publication</div>
-          <h2 style="margin:4px 0 16px; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">Your research projects</h2>
-          <div style="max-width:474px; border-radius:17.6px; overflow:hidden; border:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-42-33-99)); box-shadow:0 12px 30px -16px hsl(var(--c-234-45-18) / .6)">
-            <div style="background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20))); color:hsl(var(--c-40-30-96)); padding:16px 20px">
-              <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; opacity:.8">Now · {{ nowStageName }}</div>
-              <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:4px">
-                <span style="font-family:Ruda, sans-serif; font-size:20px; font-weight:700">{{ projectName }}</span>
-                <span style="font-family:'JetBrains Mono', monospace; font-size:20px; font-weight:700">{{ projectPct }}</span>
-              </div>
-            </div>
-            <div style="padding:16px 20px; display:flex; flex-direction:column; gap:9px">
-              <sc-for list="{{ stages }}" as="s" hint-placeholder-count="8">
-                <div style="display:grid; grid-template-columns:1fr 12px 40px; align-items:center; gap:12px; font-size:13px">
-                  <span style="text-align:right; font-weight:600; color:hsl(var(--c-234-68-12))">{{ s.name }}</span>
-                  <span style="{{ s.dotStyle }}"></span>
-                  <span style="text-align:right; font-family:'JetBrains Mono', monospace; color:hsl(var(--c-38-6-42))">{{ s.pct }}</span>
-                </div>
-              </sc-for>
-              <div style="text-align:center; font-size:11px; font-weight:700; color:hsl(var(--c-155-40-27)); margin-top:4px">Publication</div>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:14px">
-              <span style="font-family:'JetBrains Mono', monospace">{{ projectCountShort }}</span>
-              <span style="font-weight:600; color:hsl(var(--c-234-60-16))">In progress</span>
-            </div>
-            <div style="padding:0 20px 20px">
-              <a href="#" onClick="{{ goProject }}" style="display:flex; align-items:center; justify-content:center; gap:8px; height:44px; border-radius:9.6px; background:hsl(var(--c-44-16-88)); font-size:14px; font-weight:600" style-hover="background:hsl(var(--c-46-24-84))">Open project
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-              </a>
-            </div>
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px; margin:4px 0 16px">
+            <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.02em">{{ dashProjectsHeading }}</h2>
+            <a href="#" onClick="{{ goMetaTracker }}" style="font-size:14px; font-weight:600">Open MetaTracker →</a>
           </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:20px">
+          <sc-for list="{{ dashProjects }}" as="pc" hint-placeholder-count="4">
+            <a href="#" onClick="{{ pc.open }}" style="display:block; color:inherit; padding:20px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)" style-hover="border-color:hsl(var(--c-234-85-14) / .4)">
+              <div style="display:flex; align-items:flex-start; gap:12px">
+                <span style="margin-top:3px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-234-85-14))"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg></span>
+                <span style="flex:1; min-width:0; display:grid; gap:4px">
+                  <span style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700; line-height:1.3">{{ pc.name }}</span>
+                  <sc-if value="{{ pc.showMentee }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ pc.mentee }}</span>
+                  </sc-if>
+                  <sc-if value="{{ pc.hasStatusTag }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ pc.statusTagStyle }}">{{ pc.statusTag }}</span>
+                  </sc-if>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-38-6-42))"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+              </div>
+              <div style="display:flex; align-items:center; gap:0; margin:18px 0 14px">
+                <sc-for list="{{ pc.dots }}" as="dot" hint-placeholder-count="8">
+                  <div style="display:flex; align-items:center; flex:1">
+                    <span style="{{ dot.style }}"></span>
+                    <span style="flex:1; height:2px; background:hsl(var(--c-42-12-84))"></span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:14px">
+                <span style="color:hsl(var(--c-38-6-42))">Now: {{ pc.stage }}</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-weight:700">{{ pc.pct }}</span>
+              </div>
+              <div style="height:6px; border-radius:9999px; background:hsl(var(--c-44-14-89)); margin:8px 0 14px; overflow:hidden"><span style="{{ pc.barStyle }}"></span></div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; font-size:13px; color:hsl(var(--c-38-6-42))">
+                <span style="display:inline-flex; align-items:center; gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> {{ pc.updated }}</span>
+                <span title="{{ pc.pubWarn }}" style="{{ pc.pubStyle }}">{{ pc.pubIcon }}{{ pc.pub }}</span>
+                <span style="font-family:'JetBrains Mono', monospace">{{ pc.count }}</span>
+              </div>
+            </a>
+          </sc-for>
+          </div>
+          <sc-if value="{{ dashProjectsEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:32px; text-align:center; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; color:hsl(var(--c-38-6-42))">No research projects yet.</div>
+          </sc-if>
         </div>
 
         <div>
@@ -472,11 +487,11 @@
           <div style="flex-shrink:0">
             <div style="padding:24px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:13.6px; width:286px">
               <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
-                <button style="display:inline-flex; align-items:center; justify-content:center; height:40px; width:40px; border:1px solid hsl(var(--c-42-12-84)); background:transparent; border-radius:9.6px; color:hsl(var(--c-234-68-12))" style-hover="background:hsl(var(--c-46-24-84))">
+                <button onClick="{{ calPrev }}" aria-label="Previous month" style="display:inline-flex; align-items:center; justify-content:center; height:40px; width:40px; border:1px solid hsl(var(--c-42-12-84)); background:transparent; border-radius:9.6px; color:hsl(var(--c-234-68-12))" style-hover="background:hsl(var(--c-46-24-84))">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
                 </button>
-                <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">August 2026</h2>
-                <button style="display:inline-flex; align-items:center; justify-content:center; height:40px; width:40px; border:1px solid hsl(var(--c-42-12-84)); background:transparent; border-radius:9.6px; color:hsl(var(--c-234-68-12))" style-hover="background:hsl(var(--c-46-24-84))">
+                <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ calMonthLabel }}</h2>
+                <button onClick="{{ calNext }}" aria-label="Next month" style="display:inline-flex; align-items:center; justify-content:center; height:40px; width:40px; border:1px solid hsl(var(--c-42-12-84)); background:transparent; border-radius:9.6px; color:hsl(var(--c-234-68-12))" style-hover="background:hsl(var(--c-46-24-84))">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
                 </button>
               </div>
@@ -730,7 +745,7 @@
                     Join
                   </a>
                   <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px">
-                    <a href="#">Reschedule</a>
+                    <a href="#book-session">Reschedule</a>
                     <a href="{{ gcalUrl }}" target="_blank" rel="noopener">Add to calendar</a>
                   </div>
                 </div>
@@ -739,7 +754,7 @@
               <div style="flex:2.4 1 400px; min-width:0; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                   <div>
-                    <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Book a session</h2>
+                    <h2 id="book-session" style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Book a session</h2>
                     <p style="margin:4px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Pick any open time from Vânio's weekly availability. Same-day booking is allowed.</p>
                   </div>
                   <div style="display:flex; align-items:center; gap:10px">
@@ -973,8 +988,8 @@
                             </div>
                             <div style="display:flex; gap:6px; margin-top:2px">
                               <a href="https://meet.google.com/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; justify-content:center; height:30px; padding:0 12px; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600">Join</a>
-                              <button style="height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-68-12)); cursor:pointer" style-hover="background:hsl(var(--c-46-24-84))">Reschedule</button>
-                              <button style="height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer" style-hover="background:hsl(var(--c-4-62-50) / .1)">Cancel</button>
+                              <button onClick="{{ mm.reschedule }}" style="height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-68-12)); cursor:pointer" style-hover="background:hsl(var(--c-46-24-84))">Reschedule</button>
+                              <button onClick="{{ mm.cancelNext }}" style="height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer" style-hover="background:hsl(var(--c-4-62-50) / .1)">Cancel</button>
                             </div>
                           </sc-if>
                           <sc-if value="{{ mm.noNext }}" hint-placeholder-val="{{ true }}">
@@ -983,7 +998,7 @@
                         </div>
                       </div>
                       <div style="display:flex; align-items:center; gap:8px; margin-top:auto">
-                        <button style="display:inline-flex; align-items:center; justify-content:center; gap:6px; flex:1; height:36px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; font-weight:600; color:hsl(var(--c-234-85-14)); cursor:pointer" style-hover="background:hsl(var(--c-46-24-84))">
+                        <button onClick="{{ mm.schedule }}" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; flex:1; height:36px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; font-weight:600; color:hsl(var(--c-234-85-14)); cursor:pointer" style-hover="background:hsl(var(--c-46-24-84))">
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
                           Schedule
                         </button>
@@ -1064,7 +1079,7 @@
 
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:18px 24px; border-top:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-44-26-96))">
                   <span style="font-size:14px; color:hsl(var(--c-38-6-42))">{{ availabilitySummary }}</span>
-                  <button style="height:40px; padding:0 20px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600">Save availability</button>
+                  <button onClick="{{ saveAvailability }}" style="height:40px; padding:0 20px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600">{{ saveAvailLabel }}</button>
                 </div>
               </div>
 
@@ -1132,11 +1147,11 @@
               <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:16px">
                 <span style="display:grid; gap:2px">
                   <span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">Start</span>
-                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">Mar 2, 2026</span>
+                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">{{ planStartLabel }}</span>
                 </span>
                 <span style="display:grid; gap:2px; text-align:right">
                   <span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">End</span>
-                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">Mar 1, 2027</span>
+                  <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700">{{ planEndLabel }}</span>
                 </span>
               </div>
               <div style="position:relative; height:10px; border-radius:9999px; background:hsl(var(--c-44-14-89))">
@@ -1144,9 +1159,9 @@
                 <span style="{{ periodMarkerStyle }}"></span>
               </div>
               <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; font-size:13px; color:hsl(var(--c-38-6-42))">
-                <span>6 months in</span>
-                <span>{{ planPct }}</span>
-                <span>6 months left</span>
+                <span>{{ planMonthsIn }}</span>
+                <span>{{ planTimePct }}</span>
+                <span>{{ planMonthsLeft }}</span>
               </div>
             </div>
             </sc-if>
@@ -1286,6 +1301,13 @@
                           </sc-if>
                         </span>
                         <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ task.desc }}</span>
+                        <sc-if value="{{ task.hasEmail }}" hint-placeholder-val="{{ false }}">
+                          <span style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:13px">
+                            <span style="color:hsl(var(--c-38-6-42))">{{ task.emailLabel }}</span>
+                            <a href="mailto:{{ task.email }}" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:600">{{ task.email }}</a>
+                            <button onClick="{{ task.copyEmail }}" style="display:inline-flex; align-items:center; height:24px; padding:0 8px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:11px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer">{{ task.copyLabel }}</button>
+                          </span>
+                        </sc-if>
                         <sc-if value="{{ task.locked }}" hint-placeholder-val="{{ false }}">
                           <span style="font-size:12px; color:hsl(var(--c-38-6-42)); font-style:italic">{{ task.lockNote }}</span>
                         </sc-if>
@@ -1302,7 +1324,7 @@
                           <span style="font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50))">Sent back: {{ task.note }}</span>
                         </sc-if>
                       </span>
-                      <button onClick="{{ task.driveClick }}" title="{{ task.driveTitle }}" style="{{ task.driveStyle }}">
+                      <button onClick="{{ task.driveClick }}" title="{{ task.driveTitle }}" aria-label="{{ task.driveTitle }}" style="{{ task.driveStyle }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.2 2.5h7.6L23 15l-3.8 6.5H4.8L1 15Z"></path><path d="M8.2 2.5 15.2 15"></path><path d="M23 15H6.9"></path></svg>
                       </button>
                     </label>
@@ -2115,7 +2137,7 @@
             </h1>
             <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Your account information and mentorship role.</p>
           </div>
-          <button style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99) / .6); font-size:14px; font-weight:500">
+          <button onClick="{{ editProfile }}" style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99) / .6); font-size:14px; font-weight:500">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>
             Edit Profile
           </button>
@@ -2169,7 +2191,7 @@
 
         <div style="padding:24px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
           <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Bio</h2>
-          <p style="margin:0; font-size:15px; font-style:italic; color:hsl(var(--c-38-6-42))">Not set</p>
+          <p style="{{ bioStyle }}">{{ bioText }}</p>
         </div>
       </div>
     </sc-if>
@@ -2484,6 +2506,10 @@ const MENTOR_SCHED = {
 };
 
 const PROJECT_STAGES = [
+  { title: 'Stage 0: Idea', desc: 'Set up the shared space for the idea before any research work', tasks: [
+    ['Create Google Drive Folder', 'Create a Google Drive folder named after the idea; every project file lives there'],
+    ['Invite Your Mentor', 'Share the Drive folder with your mentor as Editor', false, 'invite']
+  ] },
   { title: 'Stage 1: Research Question', desc: 'Define and validate your research question using the PICOTT framework', tasks: [
     ['Define Research Question', 'Create a research question using the PICOTT format'],
     ['Check for Relevance', 'Assess if it is relevant and how much it could influence clinical practice'],
@@ -2538,7 +2564,7 @@ const PROJECT_STAGES = [
     ['Final Acceptance', 'Receive final acceptance and complete proofs']
   ] }
 ];
-const JOURNEY = ['Research Question','Protocol','Screening','Data Extraction','Statistics','Quality Assessment','Manuscript Writing','Submission'];
+const JOURNEY = ['Idea','Research Question','Protocol','Screening','Data Extraction','Statistics','Quality Assessment','Manuscript Writing','Submission'];
 const PUB_STATUSES = ['Not started', 'In progress', 'Submitted', 'Under review', 'Accepted', 'Published'];
 const PICOTT_FIELDS = [['p', 'Population'], ['i', 'Intervention'], ['c', 'Comparator'], ['o', 'Outcome'], ['t', 'Timeframe'], ['t2', 'Type of study']];
 const PICOTT_STUDIES = [
@@ -2554,10 +2580,10 @@ const MENTEES = [
   { name: 'Pedro Henrique Costa', area: 'Infectious Diseases', status: 'Paused', mentor: 'Vânio Antunes', since: 'Jan 2026', sessions: 14, projects: 1, position: 'Medical Student', affiliation: 'UFMG', langs: ['BR'] },
   { name: 'Ana Beatriz Moraes', area: 'Endocrinology', status: 'Active', mentor: 'Rafael Lima', since: 'Feb 2026', sessions: 29, projects: 2, position: 'Resident', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'] },
   { name: 'Lucas Ferreira', area: 'Surgery', status: 'Active', mentor: 'Rafael Lima', since: 'May 2026', sessions: 15, projects: 1, position: 'MD', affiliation: 'Hospital Sírio-Libanês', langs: ['BR','EN'] },
-  { name: 'Júlia Nascimento', area: 'Pediatrics', status: 'Finished', mentor: 'Caroline Serafim', since: 'Aug 2025', sessions: 52, projects: 4, position: 'MD, MSc', affiliation: 'UFRJ', langs: ['BR','EN'] },
+  { name: 'Júlia Miranda', area: 'Radiology', status: 'Active', mentor: 'Vânio Antunes', since: 'May 2026', sessions: 9, projects: 1, position: 'Mentee', affiliation: 'Meta-Analysis Academy', langs: ['BR'] },
   { name: 'Rafael Souza Pinto', area: 'Psychiatry', status: 'Active', mentor: 'Caroline Serafim', since: 'Jun 2026', sessions: 11, projects: 1, position: 'Medical Student', affiliation: 'UFPE', langs: ['BR'] },
   { name: 'Camila Rocha', area: 'Nephrology', status: 'Active', mentor: 'Vânio Antunes', since: 'Apr 2026', sessions: 20, projects: 2, position: 'Resident', affiliation: 'UNICAMP', langs: ['BR','EN'] },
-  { name: 'Gustavo Almeida', area: 'Emergency Medicine', status: 'Paused', mentor: 'Rafael Lima', since: 'Feb 2026', sessions: 17, projects: 1, position: 'MD', affiliation: 'Hospital das Clínicas FMUSP', langs: ['BR'] },
+  { name: 'Gustavo Gurian', area: 'Gastroenterology', status: 'Active', mentor: 'Vânio Antunes', since: 'Dec 2025', sessions: 17, projects: 2, position: 'Mentee', affiliation: 'Meta-Analysis Academy', langs: ['BR'] },
   { name: 'Larissa Barbosa', area: 'Oncology', status: 'Active', mentor: 'Rafael Lima', since: 'Jul 2026', sessions: 7, projects: 1, position: 'Medical Student', affiliation: 'UFBA', langs: ['BR','EN'] },
   { name: 'Thiago Mendes', area: 'Cardiology', status: 'Cancelled', mentor: 'Caroline Serafim', since: 'Nov 2025', sessions: 9, projects: 0, position: 'MD, MSc', affiliation: 'Instituto do Coração', langs: ['EN'] },
   { name: 'Letícia Moura', area: 'Cardiology', status: 'Active', mentor: 'Beatriz Carvalho', since: 'Apr 2026', sessions: 18, projects: 1, position: 'Medical Student', affiliation: 'UFSC', langs: ['BR'] },
@@ -2566,20 +2592,21 @@ const MENTEES = [
 ];
 // mentor ladder: Level 1 mentors are promoted to Level 2 after a six-month track (start -> end)
 const MENTORS_DATA = [
-  { name: 'Vânio Antunes', level: 1, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2026, 3, 3), end: new Date(2026, 9, 3) },
-  { name: 'Caroline Serafim', level: 2, area: 'Neurology', position: 'MD, PhD', affiliation: 'UNIFESP', langs: ['BR','EN'], start: new Date(2025, 2, 10), end: new Date(2025, 8, 10) },
-  { name: 'Rafael Lima', level: 2, area: 'Endocrinology', position: 'MD, MSc', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'], start: new Date(2025, 4, 5), end: new Date(2025, 10, 5) },
-  { name: 'Beatriz Carvalho', level: 1, area: 'Cardiology', position: 'MD', affiliation: 'Instituto do Coração', langs: ['BR','EN'], start: new Date(2026, 2, 16), end: new Date(2026, 8, 16) },
-  { name: 'Felipe Andrade', level: 1, area: 'Oncology', position: 'MD, MSc', affiliation: 'INCA', langs: ['BR'], start: new Date(2026, 4, 4), end: new Date(2026, 10, 4) },
-  { name: 'Juliana Prado', level: 1, area: 'Pediatrics', position: 'MD', affiliation: 'UFPE', langs: ['BR','EN'], start: new Date(2026, 6, 20), end: new Date(2027, 0, 20) }
+  { name: 'Vânio Antunes', email: 'vanio.antunes.md@gmail.com', level: 1, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2026, 3, 3), end: new Date(2026, 9, 3) },
+  { name: 'Caroline Serafim', email: 'caroline.serafim@example.com', level: 2, area: 'Neurology', position: 'MD, PhD', affiliation: 'UNIFESP', langs: ['BR','EN'], start: new Date(2025, 2, 10), end: new Date(2025, 8, 10) },
+  { name: 'Rafael Lima', email: 'rafael.lima@example.com', level: 2, area: 'Endocrinology', position: 'MD, MSc', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'], start: new Date(2025, 4, 5), end: new Date(2025, 10, 5) },
+  { name: 'Beatriz Carvalho', email: 'beatriz.carvalho@example.com', level: 1, area: 'Cardiology', position: 'MD', affiliation: 'Instituto do Coração', langs: ['BR','EN'], start: new Date(2026, 2, 16), end: new Date(2026, 8, 16) },
+  { name: 'Felipe Andrade', email: 'felipe.andrade@example.com', level: 1, area: 'Oncology', position: 'MD, MSc', affiliation: 'INCA', langs: ['BR'], start: new Date(2026, 4, 4), end: new Date(2026, 10, 4) },
+  { name: 'Juliana Prado', email: 'juliana.prado@example.com', level: 1, area: 'Pediatrics', position: 'MD', affiliation: 'UFPE', langs: ['BR','EN'], start: new Date(2026, 6, 20), end: new Date(2027, 0, 20) }
 ];
 const ME = 'Vânio Antunes';
+function mentorOf(mentee) { const m = MENTEES.filter((x) => x.name === mentee)[0]; const md = m && MENTORS_DATA.filter((x) => x.name === m.mentor)[0]; return { name: m ? m.mentor : '', email: md ? md.email : '' }; }
 const PROJECT_MENTEE = 'Isabella Michelon';
 const LANG_STYLE = {
   BR: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:11px; font-weight:700; letter-spacing:.06em; color:hsl(var(--c-155-40-27)); background:hsl(var(--c-155-40-27) / .14); border:1px solid hsl(var(--c-155-40-27) / .3)',
   EN: 'display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:20px; padding:0 6px; border-radius:5.6px; font-size:11px; font-weight:700; letter-spacing:.06em; color:hsl(var(--c-234-85-14)); background:hsl(var(--c-234-85-14) / .12); border:1px solid hsl(var(--c-234-85-14) / .3)'
 };
-const AREAS = ['Cardiology','Emergency Medicine','Endocrinology','Infectious Diseases','Nephrology','Neurology','Oncology','Pediatrics','Psychiatry','Surgery'];
+const AREAS = ['Cardiology','Emergency Medicine','Endocrinology','Gastroenterology','Infectious Diseases','Nephrology','Neurology','Oncology','Pediatrics','Psychiatry','Radiology','Surgery'];
 const MENTORS = ['All mentors'].concat(MENTORS_DATA.map((m) => m.name));
 const STATUSES = ['All','Active','Paused','Finished','Cancelled'];
 const STATUS_COLOR = {
@@ -2697,10 +2724,10 @@ const MENTEE_ADMIN = {
   'Pedro Henrique Costa': { phone: '+55 31 99000-0104', start: '2025-09-29', end: '2026-09-28', status: 'Paused', reschedules: 5, renewals: 1, renewReq: false, lastMeet: 20, cadence: 14 },
   'Ana Beatriz Moraes': { phone: '+55 51 99000-0105', start: '2025-08-31', end: '2026-08-31', status: 'Active', reschedules: 0, renewals: 2, renewReq: true, lastMeet: 1, cadence: 7 },
   'Lucas Ferreira': { phone: '+55 11 99000-0106', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
-  'Júlia Nascimento': { phone: '+55 21 99000-0107', start: '2024-08-15', end: '2026-08-15', status: 'Expired', reschedules: 4, renewals: 1, renewReq: false, lastMeet: 18, cadence: 7 },
+  'Júlia Miranda': { phone: '+55 21 99000-0107', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 12, cadence: 14 },
   'Rafael Souza Pinto': { phone: '+55 81 99000-0108', start: '2026-06-01', end: '2027-06-01', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 5, cadence: 7 },
   'Camila Rocha': { phone: '+55 19 99000-0109', start: '2025-09-22', end: '2026-09-20', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 2, cadence: 7 },
-  'Gustavo Almeida': { phone: '+55 11 99000-0110', start: '2025-09-01', end: '2026-09-01', status: 'Paused', reschedules: 6, renewals: 0, renewReq: false, lastMeet: 35, cadence: 14 },
+  'Gustavo Gurian': { phone: '+55 11 99000-0110', start: '2025-09-01', end: '2026-09-01', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 5, cadence: 7 },
   'Larissa Barbosa': { phone: '+55 71 99000-0111', start: '2026-07-06', end: '2027-07-06', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 9, cadence: 7 },
   'Thiago Mendes': { phone: '+55 11 99000-0112', start: '2025-11-03', end: '2026-11-03', status: 'Cancelled', reschedules: 3, renewals: 0, renewReq: false, lastMeet: 60, cadence: 14 },
   'Letícia Moura': { phone: '+55 48 99000-0113', start: '2026-04-13', end: '2027-04-13', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
@@ -2718,7 +2745,7 @@ function waLink(phone) { return 'https://wa.me/' + String(phone).replace(/\D/g, 
 function isApproved(v) { return v === true || v === 'approved'; }
 function filledPapers(list) { return (list || []).filter((x) => String(x.title || '').trim()).length; }
 // "Include Three Viable Studies" moves to review when a 3rd paper is listed and resets below 3
-const VIABILITY_TASK = '0-2';
+const VIABILITY_TASK = '1-2';
 function syncViability(td, studies) {
   const out = Object.assign({}, td);
   if (filledPapers(studies) < 3) delete out[VIABILITY_TASK];
@@ -2726,7 +2753,7 @@ function syncViability(td, studies) {
   return out;
 }
 // publication status is manual; this explains when it contradicts the approved Stage 8 tasks
-const SUBMIT_TASK = '7-2', ACCEPT_TASK = '7-4';
+const SUBMIT_TASK = '8-2', ACCEPT_TASK = '8-4';
 function pubMismatch(p) {
   const status = (p.details && p.details.pubStatus) || 'Not started';
   const td = p.taskDone || {};
@@ -2761,7 +2788,7 @@ function seedProjects() {
     { id: 'p1', mentee: 'Isabella Michelon', name: 'Example 1', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 31), taskDone: {}, taskNotes: {}, taskLinks: {}, gradeCounts: false, picott: {}, studies: [], details: {}, logbook: [] },
     {
       id: 'p2', mentee: 'Isabella Michelon', name: 'SGLT2 inhibitors for anthracycline cardiotoxicity', updated: new Date(2026, 7, 27), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults receiving anthracycline chemotherapy', i: 'SGLT2 inhibitors', c: 'Placebo or standard care', o: 'Cancer therapy-related cardiac dysfunction', t: '6–24 months', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(10), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(12), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Empagliflozin during anthracycline chemotherapy for breast cancer', doi: '10.5555/example.cardio.01', p: 'Women with HER2-negative breast cancer on anthracyclines', i: 'Empagliflozin 10 mg', c: 'Placebo', o: 'Drop in LVEF ≥ 10 points', t: '12 months', t2: 'RCT' },
         { title: 'SGLT2 inhibitor use and heart failure after lymphoma chemotherapy', doi: '10.5555/example.cardio.02', p: 'Adults with lymphoma and type 2 diabetes', i: 'SGLT2 inhibitor', c: 'Other glucose-lowering drugs', o: 'Heart failure hospitalisation', t: '24 months', t2: 'Cohort' },
@@ -2775,7 +2802,7 @@ function seedProjects() {
     },
     {
       id: 'p3', mentee: 'Maria L. R. Defante', name: 'Immune checkpoint inhibitors in MSI-high gastrointestinal cancers', updated: new Date(2026, 7, 28), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Patients with MSI-H/dMMR gastrointestinal cancers', i: 'Immune checkpoint inhibitors', c: 'Chemotherapy', o: 'Overall and progression-free survival', t: '2–5 years', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(21, 1), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(23, 1), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Pembrolizumab versus chemotherapy in MSI-high metastatic colorectal cancer', doi: '10.5555/example.onco.01', p: 'Metastatic MSI-H/dMMR colorectal cancer', i: 'Pembrolizumab', c: 'Chemotherapy ± targeted therapy', o: 'Overall survival', t: '5 years', t2: 'RCT' },
         { title: 'Nivolumab plus ipilimumab in dMMR gastric cancer', doi: '10.5555/example.onco.02', p: 'Advanced dMMR gastric or GEJ cancer', i: 'Nivolumab + ipilimumab', c: 'Chemotherapy', o: 'Progression-free survival', t: '3 years', t2: 'RCT' },
@@ -2789,7 +2816,7 @@ function seedProjects() {
     },
     {
       id: 'p4', mentee: 'Pedro Henrique Costa', name: 'Letermovir vs valganciclovir for CMV prophylaxis after kidney transplant', updated: new Date(2026, 7, 14), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Kidney transplant recipients at risk of CMV', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'CMV infection and leukopenia', t: '28–52 weeks', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(35), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(37), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Letermovir versus valganciclovir for CMV prophylaxis in kidney transplant recipients', doi: '10.5555/example.id.01', p: 'CMV D+/R− adult kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Clinically significant CMV infection', t: '52 weeks', t2: 'RCT' },
         { title: 'Leukopenia with letermovir compared with valganciclovir after transplant', doi: '10.5555/example.id.02', p: 'Solid organ transplant recipients', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'Leukopenia', t: '28 weeks', t2: 'Cohort' },
@@ -2802,7 +2829,7 @@ function seedProjects() {
     },
     {
       id: 'p5', mentee: 'Camila Rocha', name: 'Early vs delayed dialysis for AKI after cardiac surgery', updated: new Date(2026, 7, 30), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults with AKI after cardiac surgery', i: 'Early renal replacement therapy', c: 'Delayed renal replacement therapy', o: '90-day mortality and dialysis dependence', t: '90 days', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(29, 1), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(31, 1), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Early renal replacement therapy after cardiac surgery-associated AKI', doi: '10.5555/example.neph.01', p: 'Adults with KDIGO stage 2 AKI after cardiac surgery', i: 'Early RRT (< 12 h)', c: 'Delayed RRT', o: '90-day mortality', t: '90 days', t2: 'RCT' },
         { title: 'Timing of dialysis and kidney recovery after cardiopulmonary bypass', doi: '10.5555/example.neph.02', p: 'Patients with AKI after cardiopulmonary bypass', i: 'Early dialysis', c: 'Standard-trigger dialysis', o: 'Dialysis dependence', t: '90 days', t2: 'Cohort' },
@@ -2816,7 +2843,7 @@ function seedProjects() {
     },
     {
       id: 'p6', mentee: 'Camila Rocha', name: 'Remote ischaemic preconditioning to prevent AKI after cardiac surgery', updated: new Date(2026, 7, 11), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham or no preconditioning', o: 'Postoperative AKI', t: '72 hours', t2: 'Systematic review and meta-analysis of RCTs' },
-      taskDone: tasksDone(2), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(4), taskLinks: {}, gradeCounts: false,
       studies: exampleStudies([
         { title: 'Remote ischaemic preconditioning and AKI in high-risk cardiac surgery', doi: '10.5555/example.neph.04', p: 'High-risk adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham preconditioning', o: 'AKI within 72 h', t: '72 hours', t2: 'RCT' }
       ]),
@@ -2830,6 +2857,100 @@ function seedProjects() {
       studies: [],
       details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
       logbook: []
+    },
+    // ---- real projects (from claudeOS/mentorship/mentees), task states mapped by hand; ids are stage-task ----
+    {
+      id: 'p8', mentee: 'Gustavo Gurian', name: 'Antibiotic prophylaxis and PEECS after endoscopic submucosal dissection', status: 'Active', reviewNote: '', updated: new Date(2026, 8, 9),
+      picott: { p: 'Adults undergoing ESD or related procedures (POEM, EFTR): colorectal, oesophageal, gastric', i: 'Systemic antibiotic prophylaxis', c: 'No prophylaxis (placebo or usual care)', o: 'PEECS (primary); length of stay, fever, bacteraemia, infection, mortality', t: 'Index admission or within 30 days', t2: 'Systematic review and meta-analysis (RCTs and observational), stratified by anatomical site' },
+      taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '2-3': true, '2-4': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '4-2': true, '5-0': true, '5-1': true, '5-2': true, '5-3': 'ready', '7-0': 'ready', '7-1': 'ready' },
+      taskNotes: {}, gradeCounts: false,
+      taskLinks: {
+        'task-0-0': 'https://drive.google.com/drive/folders/1Q9gO9D6jwwXZgk30T22d8s-PFSxA3qDD',
+        'task-2-3': 'https://www.crd.york.ac.uk/PROSPERO/view/1379673',
+        'task-4-1': 'https://docs.google.com/spreadsheets/d/1a1RqHUUl46yOGhLKNbJXgM2tdDRFQX2n052rK6ajZpg/edit',
+        'task-4-2': 'https://docs.google.com/spreadsheets/d/1a1RqHUUl46yOGhLKNbJXgM2tdDRFQX2n052rK6ajZpg/edit',
+        'task-5-0': 'https://drive.google.com/drive/u/1/folders/1bMzKFgPAbqUlCClpdJsnxo39475Yu4QZ',
+        'task-5-1': 'https://drive.google.com/drive/folders/15FtPgwDTpUuuJstORp7BPMghgYneMpWV',
+        'task-5-3': 'https://drive.google.com/drive/folders/1yz4muaibIowr4VqjKSsK_Bwd3ROjPMG5',
+        'task-7-0': 'https://docs.google.com/document/d/1bNLx4I5T9CmTiHfSr1z3Y7F5KUqhO8RNKQiwF4CTVm4/edit',
+        'task-7-1': 'https://docs.google.com/document/d/1bNLx4I5T9CmTiHfSr1z3Y7F5KUqhO8RNKQiwF4CTVm4/edit',
+        'task-8-1': 'https://drive.google.com/drive/folders/1JN8zQgsJFK1Jcht90LjXzVqwJlUZ4LzA'
+      },
+      studies: exampleStudies([
+        { title: 'Muro 2015 · Japan', p: 'Colorectal ESD', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 421' },
+        { title: 'Lee 2017 · Korea', p: 'Colorectal ESD', i: 'Ampicillin/sulbactam', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'RCT · n = 100' },
+        { title: 'Shichijo 2022 · Japan', p: 'Colorectal ESD', i: 'Ampicillin-sulbactam 3 g ×3', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'RCT · n = 380' },
+        { title: 'Hastier-De Chelle 2022 · France', p: 'Oesophagus (POEM)', i: 'Cefazolin or amoxicillin-clavulanate', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 226' },
+        { title: 'Liao 2024 · China', p: 'Oesophageal ESD', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 552' },
+        { title: 'Qiu 2024 · China', p: 'Colorectal ESD', i: 'Antibiotics at endoscopist discretion', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 555' },
+        { title: 'Steinbruck 2024 · Germany', p: 'ESD (organ NR)', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS (defined as fever only)', t: 'NR', t2: 'Observational · n = 384' },
+        { title: 'Zhao 2025 · China', p: 'Oesophageal ESD', i: 'Cefoperazone-sulbactam / ceftriaxone', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 262' },
+        { title: 'Chen 2025 · China', p: 'Gastric EFTR', i: 'Cefoperazone / ceftazidime', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 81' }
+      ]),
+      details: { drive: 'https://drive.google.com/drive/folders/1Q9gO9D6jwwXZgk30T22d8s-PFSxA3qDD', docs: 'Data sheet (Google Sheets) · Manuscript (Google Docs, Portuguese) · Figures and subgroup folders', pubStatus: 'In progress', pubDoi: '', presentations: 'Standalone abstract drafted (pre-exclusion numbers)', freeCat: 'PROSPERO CRD420261379673 (notes say CRD420261334207, which is a different review)' },
+      logbook: [
+        { id: 1, date: new Date(2026, 3, 26), author: 'Gustavo Gurian', role: 'mentee', stage: 'Protocol', text: 'Registered the review on PROSPERO.', link: 'https://www.crd.york.ac.uk/PROSPERO/view/1379673' },
+        { id: 2, date: new Date(2026, 6, 31), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Restructured the workbook, ran first forest plots for the four PICOTs (A–D) and fixed the analysis settings.', link: '' },
+        { id: 3, date: new Date(2026, 7, 22), author: 'Vânio Antunes', role: 'mentor', stage: 'Manuscript Writing', text: 'Moved to the MetaHub folder layout and wrote the Portuguese manuscript skeleton with results filled in.', link: '' },
+        { id: 4, date: new Date(2026, 8, 2), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Excluded Liao-Zhu 2022 (patient overlap with Liao 2024) and reran everything: PEECS RR 0.75 (0.55–1.02), no longer significant. Abstract numbers are now stale.', link: '' },
+        { id: 5, date: new Date(2026, 8, 6), author: 'Gustavo Gurian', role: 'mentee', stage: 'Statistics', text: 'Filled the antibiotic-timing subgroup column. Six extraction CHECK items still open (e.g. Chen 2025).', link: '' },
+        { id: 6, date: new Date(2026, 8, 9), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Added the subgroup by procedure. Duplicate PROSPERO draft in the mentor account to be deleted; Gustavo to amend his own record.', link: '' }
+      ]
+    },
+    {
+      id: 'p9', mentee: 'Gustavo Gurian', name: 'Cap-assisted forward-viewing endoscope vs side-viewing duodenoscope for ERCP in Billroth II', status: 'Active', reviewNote: '', updated: new Date(2026, 4, 25),
+      picott: { p: 'Adults undergoing ERCP with Billroth II anatomy', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Afferent limb intubation, biliary cannulation, clinical success; pancreatitis, perforation, unintended PD cannulation', t: 'Not reported', t2: 'Systematic review and meta-analysis with GRADE and trial sequential analysis' },
+      taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-0': true, '2-1': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '3-4': true, '4-0': true, '4-1': true, '4-2': true, '4-3': true, '5-0': true, '5-1': true, '5-2': true, '5-3': true, '5-4': true, '6-0': true, '6-1': true, '6-2': true, '6-3': true, '7-0': true, '7-1': true, '7-2': true, '7-3': true, '7-4': true, '7-5': true, '8-0': true, '8-1': true, '8-2': true },
+      taskNotes: {}, gradeCounts: false,
+      taskLinks: { 'task-8-3': 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh' },
+      studies: exampleStudies([
+        { title: 'Kim SB 2023', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
+        { title: 'Li JS 2019', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
+        { title: 'Lee KH 2025', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
+        { title: 'Fortunati F 2025', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
+        { title: 'Wang F 2016', p: 'Billroth II ERCP (arms 44 vs 8)', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB serious' },
+        { title: 'Zhu Yijin 2020', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB serious' },
+        { title: 'Tuyet 2024', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB critical' }
+      ]),
+      details: { drive: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh', docs: 'Revision 2 package (Drive) · reviewer edits split between mentor and mentee', pubStatus: 'Under review', pubDoi: '', presentations: '—', freeCat: 'Gastrointestinal Endoscopy · revision round 2 · 350 patients, 727 procedures from 2,015 records' },
+      logbook: [
+        { id: 1, date: new Date(2025, 11, 20), author: 'Vânio Antunes', role: 'mentor', stage: 'Manuscript Writing', text: 'Manuscript editing guidance; create the supplementary search-strategy table.', link: '' },
+        { id: 2, date: new Date(2026, 0, 18), author: 'Vânio Antunes', role: 'mentor', stage: 'Submission', text: 'Results reviewed. Send the manuscript for English review on Wednesday, submit on Sunday.', link: '' },
+        { id: 3, date: new Date(2026, 4, 21), author: 'Vânio Antunes', role: 'mentor', stage: 'Submission', text: 'Revision 2 audit: reviewer points split (mentor 3.1, 3.2, 3.5, 3.9; mentee 2.1, 2.2, 3.3, 3.4, 3.6–3.8, 4.1, 4.3). New prediction intervals and a risk-of-bias subgroup (Supp Table 11). Reviewer 3 broadly accepts.', link: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh' }
+      ]
+    },
+    {
+      id: 'p10', mentee: 'Júlia Miranda', name: 'Tumour contact length on MRI for predicting muscle-invasive bladder cancer', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 23),
+      picott: { p: 'Bladder tumours staged with multiparametric MRI before histology (lesion level)', i: 'Index test: tumour contact length (TCL), curvilinear or transverse', c: 'Comparator test: VI-RADS ≥3 (paired)', o: 'Sensitivity, specificity, AUC against histopathology (TURBT or cystectomy)', t: 'Not applicable (diagnostic accuracy)', t2: 'Diagnostic test accuracy meta-analysis' },
+      taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '5-0': true, '5-1': true, '5-2': true, '7-0': 'ready', '7-1': 'ready', '7-2': 'ready', '7-3': 'ready' },
+      taskNotes: {}, gradeCounts: false,
+      taskLinks: {
+        'task-0-0': 'https://drive.google.com/drive/folders/1MmNvETRwOiOEDIg_6OQt0vdfsOWTZ1z8',
+        'task-1-0': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit',
+        'task-1-2': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit',
+        'task-2-2': 'https://docs.google.com/document/d/1bJYRHgknKRspFyoNhuKhkXD9ZCFUAny57ds8-t6MaeQ/edit?usp=drivesdk',
+        'task-4-1': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit',
+        'task-4-2': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit'
+      },
+      studies: exampleStudies([
+        { title: 'Ahn H 2023', p: '247 lesions · 26 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Akcay A 2021', p: '73 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 1.95', c: 'VI-RADS ≥3 (2 observers)', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Elshewy 2024', p: '80 lesions · 39 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Gong Y 2024', p: '198 lesions · 72 MIBC', i: 'TCL transverse, cutoff 3.0 (2x2 not extractable)', c: 'VI-RADS ≥3, ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Ikuma S 2025', p: '101 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 4.0 (2x2 not extractable)', c: 'VI-RADS ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Li Q 2022', p: '97 lesions · 33 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Qin C 2024', p: '68 lesions · 24 MIBC', i: 'TCL curvilinear 3.0; transverse 2.39', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Selvaraju A 2025', p: '55 lesions · 19 MIBC', i: 'TCL curvilinear, cutoff 3.47', c: 'VI-RADS ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Wang X 2021', p: '179 lesions · 65 MIBC', i: 'TCL curvilinear, cutoff 3.0 (3 readers averaged)', c: 'VI-RADS 1–5', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Xiao W 2026', p: '92 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 2.8', c: 'VI-RADS not extractable', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { title: 'Yu R 2024', p: '235 lesions · 80 MIBC', i: 'TCL curvilinear, cutoff not reported', c: 'None', o: 'MIBC detection', t: 'NA', t2: 'DTA study' }
+      ]),
+      details: { drive: 'https://drive.google.com/drive/folders/1MmNvETRwOiOEDIg_6OQt0vdfsOWTZ1z8', docs: 'Extraction/viability sheet (Google Sheets) · meeting notes (Google Docs) · analysis.Rmd', pubStatus: 'In progress', pubDoi: '', presentations: 'SAR 2027 abstract in preparation', freeCat: 'Not registered on PROSPERO' },
+      logbook: [
+        { id: 1, date: new Date(2026, 4, 19), author: 'Vânio Antunes', role: 'mentor', stage: 'Protocol', text: 'Search strategy finalised (VI-RADS term kept, about 165 results). Use 2x2 tables; viability needs at least three studies; screening in Rayyan; invite co-authors Sara and Beatriz.', link: 'https://docs.google.com/document/d/1bJYRHgknKRspFyoNhuKhkXD9ZCFUAny57ds8-t6MaeQ/edit?usp=drivesdk' },
+        { id: 2, date: new Date(2026, 7, 4), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Built data.xlsx from the Google Sheet and ran analysis.Rmd for the first time; agreed to average Wang’s three readers.', link: '' },
+        { id: 3, date: new Date(2026, 7, 11), author: 'Júlia Miranda', role: 'mentee', stage: 'Manuscript Writing', text: 'First full manuscript draft. Protocol registration, search details and QUADAS-2 are still placeholders; 2x2 data blocked for Gong, Ikuma and Yu R.', link: '' }
+      ]
     }
   ].map((p) => Object.assign(p, { taskDone: syncViability(p.taskDone, p.studies) }));
 }
@@ -2863,7 +2984,7 @@ class Component extends DCLogic {
     booked: null,
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
-    projectTab: 'progress', taskDone: { '0-2': 'ready' }, taskNotes: {}, gradeCounts: false,
+    projectTab: 'progress', taskDone: { '1-2': 'ready' }, taskNotes: {}, gradeCounts: false,
     projectPicott: { p: 'Adults after cardiac surgery', i: 'Early mobilisation', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'Systematic review and meta-analysis of RCTs' }, picottDraft: null,
     projectName: 'Example 1',
     studies: PICOTT_STUDIES.map((x, i) => Object.assign({ id: i + 1 }, x)),
@@ -2874,6 +2995,9 @@ class Component extends DCLogic {
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
     oh: seedOfficeHours(), ohView: 'watch', ohLesson: null, ohDone: {}, ohOpen: {}, ohQuery: '',
     dlg: null,
+    calYear: TODAY.getFullYear(), calMonth: TODAY.getMonth(), availSaved: false, cancelledNext: {},
+    profile: { affiliation: 'Meta-Analysis Academy', country: 'Brazil', bio: '' },
+    copiedEmail: '',
     projects: seedProjects(), projectId: 'p1', projectFilter: 'All mentees',
     adSort: { key: 'end', dir: 1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
@@ -2902,13 +3026,13 @@ class Component extends DCLogic {
     const link = this.state.taskLinks[id];
     return {
       hasLink: !!link,
-      driveTitle: link ? 'Open the linked Google Drive file' : 'Attach the Google Drive link for this task',
+      driveTitle: link ? 'Open the linked Google Drive file (Shift+click to change it)' : 'Attach the Google Drive link for this task',
       driveStyle: 'display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; flex-shrink:0; border:0; border-radius:6.6px; cursor:pointer; background:' + (link ? 'hsl(var(--c-155-40-27) / .14)' : 'transparent') + '; color:' + (link ? 'hsl(var(--c-155-40-27))' : 'hsl(var(--c-38-6-42) / .6)'),
       driveClick: (e) => {
         e.preventDefault(); e.stopPropagation();
         const cur = this.state.taskLinks[id];
-        if (cur) { window.open(cur, '_blank', 'noopener'); return; }
-        const url = window.prompt('Paste the Google Drive link for this task:', '');
+        if (cur && !e.shiftKey) { window.open(cur, '_blank', 'noopener'); return; }
+        const url = window.prompt('Paste the Google Drive link for this task:', cur || '');
         if (url) {
           const next = Object.assign({}, this.state.taskLinks); next[id] = url;
           this.setState({ taskLinks: next });
@@ -2951,6 +3075,7 @@ class Component extends DCLogic {
     const F = (key, label, extra) => Object.assign({ key: key, label: label, type: 'text' }, extra || {});
     if (kind === 'event') return [F('title', 'Title', { placeholder: 'Event title' }), F('category', 'Category', { type: 'select', options: CAL_CATEGORIES }), F('date', 'Date', { type: 'date' }), F('start', 'Start time (Brasília)', { type: 'time' }), F('end', 'End time (Brasília)', { type: 'time' }), F('recurrence', 'Recurrence', { type: 'select', options: CAL_RECURRENCE }), F('link', 'Meeting link (optional)', { placeholder: 'https://zoom.us/...' }), F('note', 'Short note', { placeholder: 'e.g. Group session' }), F('desc', 'Description', { type: 'textarea' }), F('active', 'Status', { type: 'switch' })];
     if (kind === 'block') return [F('title', 'Card title'), F('notice', 'Notice (optional)', { type: 'textarea' }), F('pastLabel', 'Left column label'), F('pastTitle', 'Left title'), F('pastWhen', 'Left date & time'), F('pastChips', 'Left tags (one per line)', { type: 'lines' }), F('pastListLabel', 'Left list heading'), F('pastList', 'Left bullet points (one per line)', { type: 'lines' }), F('pastAction', 'Left link label'), F('nextLabel', 'Right column label'), F('nextTitle', 'Right title'), F('nextWhen', 'Right date & time'), F('nextCountdown', 'Countdown badge'), F('nextChips', 'Right tags (one per line)', { type: 'lines' }), F('nextListLabel', 'Right list heading'), F('nextList', 'Right bullet points (one per line)', { type: 'lines' }), F('nextAction', 'Button label')];
+    if (kind === 'profile') return [F('affiliation', 'Affiliation'), F('country', 'Country'), F('bio', 'Bio', { type: 'textarea', placeholder: 'A few lines about your research and mentoring' })];
     if (kind === 'project') return [F('title', 'Project title', { placeholder: 'e.g. SGLT2 inhibitors for anthracycline cardiotoxicity' }), F('mentee', 'Mentee', { type: 'select' }), F('p', 'Population'), F('i', 'Intervention'), F('c', 'Comparator'), F('o', 'Outcome'), F('t', 'Timeframe'), F('t2', 'Type of study', { placeholder: 'e.g. Systematic review and meta-analysis' })];
     if (kind === 'module' || kind === 'submodule') return [F('title', 'Title', { placeholder: kind === 'module' ? 'Module title' : 'Submodule title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('thumb', 'Thumbnail', { type: 'image' }), F('order', 'Order', { type: 'number' }), F('status', 'Status', { type: 'select', options: ['Active', 'Inactive'] })];
     if (kind === 'lesson') return [F('title', 'Title', { placeholder: 'Lesson title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('content', 'Content', { type: 'rich', placeholder: 'Lesson content... (**bold**, _italic_, ## heading, - list)' }), F('videoUrl', 'Video URL', { placeholder: 'YouTube, Vimeo or https:// embed link' }), F('mins', 'Duration (minutes)', { type: 'number' }), F('thumb', 'Thumbnail', { type: 'image' }), F('files', 'Lesson files', { type: 'files' }), F('subId', 'Submodule', { type: 'select' }), F('order', 'Order', { type: 'number' }), F('active', 'Status', { type: 'switch' })];
@@ -2979,8 +3104,9 @@ class Component extends DCLogic {
       if (f.type === 'lines') v[f.key] = String(v[f.key] || '').split('\n').map((x) => x.trim()).filter(Boolean);
       if (f.type === 'number') v[f.key] = Number(v[f.key]) || 0;
     });
-    if (d.kind !== 'block' && !String(v.title || '').trim()) return fail('Title is required.');
+    if (d.kind !== 'block' && d.kind !== 'profile' && !String(v.title || '').trim()) return fail('Title is required.');
     const editing = d.meta.mode === 'edit';
+    if (d.kind === 'profile') { this.setState({ profile: Object.assign({}, this.state.profile, v), dlg: null }); return; }
     if (d.kind === 'project') {
       const proposed = this.state.role === 'mentee';
       const proj = {
@@ -2996,7 +3122,7 @@ class Component extends DCLogic {
       const day = parseIso(v.date);
       if (!day) return fail('Pick a date.');
       const events = editing ? this.state.calEvents.map((x) => (x.id === d.meta.id ? Object.assign({}, x, v) : x)) : this.state.calEvents.concat([Object.assign({ id: 'ev' + Date.now() }, v)]);
-      const jump = day.getFullYear() === 2026 && day.getMonth() === 7 ? { selected: day.getDate() } : {};
+      const jump = { calYear: day.getFullYear(), calMonth: day.getMonth(), selected: day.getDate() };
       this.setState(Object.assign({ calEvents: events, dlg: null }, jump));
       return;
     }
@@ -3046,7 +3172,7 @@ class Component extends DCLogic {
     const d = this.state.dlg;
     const noop = () => {};
     if (!d) return { dlgOpen: false, dlgFields: [], dlgTitle: '', dlgSubtitle: '', dlgError: '', dlgHasError: false, dlgSaveLabel: '', dlgCanDelete: false, dlgDeleteLabel: '', dlgSave: noop, dlgCancel: noop, dlgDelete: noop, dlgStop: noop };
-    const NAMES = { event: 'Event', block: 'Calendar card', module: 'Module', submodule: 'Submodule', lesson: 'Lesson', project: 'Research project' };
+    const NAMES = { event: 'Event', block: 'Calendar card', module: 'Module', submodule: 'Submodule', lesson: 'Lesson', project: 'Research project', profile: 'Profile' };
     const setVal = (k, val) => { const cur = this.state.dlg; const values = Object.assign({}, cur.values); values[k] = val; this.setState({ dlg: Object.assign({}, cur, { values: values, error: '' }) }); };
     return {
       dlgOpen: true,
@@ -3055,7 +3181,7 @@ class Component extends DCLogic {
       dlgError: d.error || '',
       dlgHasError: !!d.error,
       dlgSaveLabel: d.meta.mode === 'edit' ? 'Save' : 'Create',
-      dlgCanDelete: d.meta.mode === 'edit',
+      dlgCanDelete: d.meta.mode === 'edit' && d.kind !== 'profile',
       dlgDeleteLabel: d.kind === 'block' ? 'Remove card' : 'Delete',
       dlgSave: (e) => { e.preventDefault(); this.saveDlg(); },
       dlgCancel: (e) => { if (e) e.preventDefault(); this.setState({ dlg: null }); },
@@ -3549,11 +3675,54 @@ class Component extends DCLogic {
     return MENTEES.filter((m) => role === 'admin' || m.mentor === ME).map((m) => m.name);
   }
 
+  projectCardVals(list) {
+    const st = this.state;
+    return list.map((p0) => {
+        const p = this.projectData(p0);
+        const pr = projectProgress(p);
+        const pub = (p.details && p.details.pubStatus) || 'Not started';
+        const pubColor = pub === 'Published' || pub === 'Accepted' ? '155-40-27' : pub === 'Submitted' || pub === 'Under review' ? '234-85-14' : pub === 'In progress' ? '40-78-44' : '38-6-42';
+        return {
+          name: p.name,
+          mentee: p.mentee,
+          showMentee: st.role !== 'mentee',
+          open: this.openProject(p.id),
+          stage: PROJECT_STAGES[pr.stageIdx].title.replace(/^Stage \d+: /, ''),
+          pct: pr.pct + '%',
+          count: pr.done + '/' + pr.total + ' tasks',
+          barStyle: 'display:block; height:100%; width:' + pr.pct + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
+          updated: 'Updated ' + MONTHS_SHORT[p.updated.getMonth()] + ' ' + p.updated.getDate(),
+          pub: pub,
+          pubWarn: pubMismatch(p),
+          pubIcon: pubMismatch(p) ? '⚠ ' : '',
+          hasStatusTag: !!p.status && p.status !== 'Active',
+          statusTag: p.status === 'Proposed' ? 'Proposed · awaiting approval' : 'Sent back',
+          statusTagStyle: 'display:inline-flex; justify-self:start; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (p.status === 'Proposed' ? 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))' : 'background:hsl(var(--c-4-62-50) / .12); color:hsl(var(--c-4-62-50))'),
+          pubStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; color:hsl(var(--c-' + pubColor + ')); background:hsl(var(--c-' + pubColor + ') / .13)',
+          dots: PROJECT_STAGES.map((stage, i) => ({
+            style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i < pr.stageIdx || pr.pct === 100 ? 'hsl(var(--c-155-40-27))' : i === pr.stageIdx ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-44-14-89))') + '; box-shadow:0 0 0 1px hsl(var(--c-42-12-84))'
+          }))
+        };
+    });
+  }
+
   visibleProjects() {
     const w = this.state;
     if (w.role === 'mentee') return w.projects.filter((p) => p.mentee === PROJECT_MENTEE);
     if (w.role === 'mentor') return w.projects.filter((p) => (MENTEES.filter((m) => m.name === p.mentee)[0] || {}).mentor === ME);
     return w.projects;
+  }
+
+  shiftCalMonth(dir) {
+    const d = new Date(this.state.calYear, this.state.calMonth + dir, 1);
+    const isNow = d.getFullYear() === TODAY.getFullYear() && d.getMonth() === TODAY.getMonth();
+    this.setState({ calYear: d.getFullYear(), calMonth: d.getMonth(), selected: isNow ? TODAY.getDate() : 1 });
+  }
+
+  // schedule/reschedule from Sessions creates a Session event on the activity calendar
+  openSessionDialog(mentee, next) {
+    const d = next ? next.date : addDays(TODAY, 1);
+    this.openDlg('event', { title: 'Session · ' + mentee, category: 'Session', date: isoDate(d), start: next ? next.start : '14:00', end: next ? next.end : '15:00', recurrence: 'None', link: 'https://meet.google.com/', note: next ? 'Rescheduled' : 'Scheduled', desc: next ? next.topic : '', active: true }, { mode: 'create' });
   }
 
   tz() { return TZS.filter((t) => t.id === this.state.tzId)[0] || TZS[0]; }
@@ -3562,7 +3731,7 @@ class Component extends DCLogic {
   updateAvail(fn) {
     const next = this.state.availability.map((d) => ({ enabled: d.enabled, ranges: d.ranges.map((r) => ({ start: r.start, end: r.end })) }));
     fn(next);
-    this.setState({ availability: next, pick: null });
+    this.setState({ availability: next, pick: null, availSaved: false });
   }
 
   buildWeek() {
@@ -3614,17 +3783,19 @@ class Component extends DCLogic {
       };
     });
 
-    // month grid for the calendar page (August 2026 starts on a Saturday)
+    // month grid for the calendar page (Sunday-first), for the month being viewed
     const eventDays = {};
     // events live in state so admins can add, edit and delete them; inactive ones are only shown to admins
     const calByDay = {};
-    st.calEvents.filter((ev) => ev.active || st.role === 'admin').forEach((ev) => occurrencesInMonth(ev, 2026, 7).forEach((day) => { (calByDay[day] = calByDay[day] || []).push(ev); }));
+    st.calEvents.filter((ev) => ev.active || st.role === 'admin').forEach((ev) => occurrencesInMonth(ev, st.calYear, st.calMonth).forEach((day) => { (calByDay[day] = calByDay[day] || []).push(ev); }));
     Object.keys(calByDay).forEach((day) => { eventDays[day] = true; });
     const cells = [];
-    for (let i = 0; i < 6; i++) cells.push({ day: null });
-    for (let d = 1; d <= 31; d++) {
+    const firstDow = new Date(st.calYear, st.calMonth, 1).getDay();
+    const monthDays = new Date(st.calYear, st.calMonth + 1, 0).getDate();
+    for (let i = 0; i < firstDow; i++) cells.push({ day: null });
+    for (let d = 1; d <= monthDays; d++) {
       const isSel = d === st.selected;
-      const isToday = d === TODAY.getDate() && TODAY.getMonth() === 7;
+      const isToday = d === TODAY.getDate() && TODAY.getMonth() === st.calMonth && TODAY.getFullYear() === st.calYear;
       const hasEv = !!eventDays[d];
       cells.push({
         day: d,
@@ -3736,6 +3907,16 @@ class Component extends DCLogic {
           desc: t[1],
           optional: optional,
           done: done,
+          hasEmail: t[3] === 'invite',
+          email: mentorOf(this.currentProject().mentee).email,
+          emailLabel: 'Mentor: ' + mentorOf(this.currentProject().mentee).name + ' · ',
+          copyEmail: (e) => {
+            e.preventDefault(); e.stopPropagation();
+            const mail = mentorOf(this.currentProject().mentee).email;
+            try { navigator.clipboard.writeText(mail); } catch (err) {}
+            this.setState({ copiedEmail: mail });
+          },
+          copyLabel: st.copiedEmail === mentorOf(this.currentProject().mentee).email ? 'Copied' : 'Copy',
           checked: done || ready,
           isReady: ready,
           readyLabel: st.role === 'mentee' ? 'Waiting for mentor review' : 'Ready for review',
@@ -3768,7 +3949,11 @@ class Component extends DCLogic {
     if (curStageIdx === -1) curStageIdx = projectStages.length - 1;
     const curStageName = projectStages[curStageIdx].title.replace(/^Stage \d+: /, '');
 
-    // calendar events for the displayed month (August 2026), from the session log and office hours
+    // calendar events for the displayed month, from state (admins can add, edit and delete them)
+    // plan period position from PLAN.start/end and TODAY (was a hardcoded 50%)
+    const planFrac100 = Math.round(Math.max(0, Math.min(1, (TODAY - PLAN.start) / (PLAN.end - PLAN.start))) * 100);
+    const monthsBetween = (a, b) => Math.max(0, Math.round((b - a) / (86400000 * 30.44)));
+    const planMonthsIn = monthsBetween(PLAN.start, TODAY), planMonthsLeft = monthsBetween(TODAY, PLAN.end);
     const monthEvents = {};
     Object.keys(calByDay).forEach((day) => { monthEvents[day] = calByDay[day].slice().sort((x, y) => (x.start || '').localeCompare(y.start || '')); });
 
@@ -3800,7 +3985,6 @@ class Component extends DCLogic {
       isProject: page === 'project',
       progressTabStyle: 'display:inline-flex; align-items:center; height:34px; padding:0 16px; border-radius:6.6px; font-size:14px; ' + (st.projectTab === 'progress' ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; font-weight:500; color:hsl(var(--c-38-6-42))'),
       detailsTabStyle: 'display:inline-flex; align-items:center; height:34px; padding:0 16px; border-radius:6.6px; font-size:14px; ' + (st.projectTab === 'details' ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; font-weight:500; color:hsl(var(--c-38-6-42))'),
-      goProject: this.go('project'),
       backToTracker: this.go('metatracker'),
       projectTabProgress: st.projectTab === 'progress',
       projectTabDetails: st.projectTab === 'details',
@@ -3913,9 +4097,6 @@ class Component extends DCLogic {
         pct: projectStages[i].pct + '%',
         dotStyle: 'width:10px; height:10px; border-radius:9999px; background:' + (projectStages[i].pct === 100 ? 'hsl(var(--c-155-40-27))' : projectStages[i].pct > 0 ? 'hsl(var(--c-40-78-44))' : 'hsl(var(--c-44-14-89))') + '; border:1px solid ' + (projectStages[i].pct > 0 ? 'transparent' : 'hsl(var(--c-42-12-84))')
       })),
-      gradeCounts: st.gradeCounts,
-      toggleGrade: () => { if (st.role !== 'mentee') this.setState({ gradeCounts: !st.gradeCounts }); },
-      gradeNote: st.gradeCounts ? 'GRADE counts towards 100%' : 'GRADE is optional, not counted towards 100%',
       projectName: st.projectName,
       setProjectName: (e) => this.setState({ projectName: e.target.value }),
       papersCount: st.studies.length + (st.studies.length === 1 ? ' paper.' : ' papers.'),
@@ -3999,8 +4180,6 @@ class Component extends DCLogic {
         const next = this.state.role !== 'mentee' ? d : Object.assign({}, d, { pubStatus: this.state.details.pubStatus, pubDoi: this.state.details.pubDoi });
         this.setState({ details: next, detailsDraft: null });
       },
-      gradeRowStyle: 'display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px' + (st.role === 'mentee' ? '; opacity:.6' : ''),
-
       isMentees: page === 'mentees',
       mQuery: st.mQuery,
       setQuery: (e) => this.setState({ mQuery: e.target.value }),
@@ -4102,7 +4281,8 @@ class Component extends DCLogic {
       mentorMentees: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').map((m) => {
         const brief = BRIEFINGS[m.name];
         const open = st.briefOpen === m.name;
-        const sched = MENTOR_SCHED[m.name] || {};
+        const sched0 = MENTOR_SCHED[m.name] || {};
+        const sched = st.cancelledNext[m.name] ? { last: sched0.last } : sched0;
         const recorded = st.outcomes[m.name] || (sched.last && sched.last.recorded) || null;
         const oOpen = st.outcomeOpen === m.name;
         const draft = oOpen ? (st.outcomeDraft || { status: 'Held', text: '', shots: [] }) : null;
@@ -4147,6 +4327,14 @@ class Component extends DCLogic {
           hasNext: !!sched.next,
           noNext: !sched.next,
           name: m.name,
+          schedule: (e) => { e.preventDefault(); this.openSessionDialog(m.name, null); },
+          reschedule: (e) => { e.preventDefault(); this.openSessionDialog(m.name, sched.next); },
+          cancelNext: (e) => {
+            e.preventDefault();
+            if (!window.confirm('Cancel the next meeting with ' + m.name + '?')) return;
+            const next = Object.assign({}, this.state.cancelledNext); next[m.name] = true;
+            this.setState({ cancelledNext: next });
+          },
           hasPending: this.pendingItems().filter((it) => it.mentee === m.name).length > 0,
           pendingLabel: this.pendingItems().filter((it) => it.mentee === m.name).length + ' to review',
           openPending: (e) => { e.preventDefault(); this.setState({ page: 'metatracker', projectFilter: m.name }); window.scrollTo(0, 0); },
@@ -4170,6 +4358,8 @@ class Component extends DCLogic {
 
       availabilityRows: availabilityRows,
       timeOptions: TIME_OPTIONS,
+      saveAvailability: () => this.setState({ availSaved: true }),
+      saveAvailLabel: st.availSaved ? 'Saved ✓' : 'Save availability',
       availabilitySummary: openDays + ' open days this week · ' + totalSlots + ' bookable ' + st.duration + '-minute slots',
       bookingRules: [
         { title: 'Allow same-day booking', sub: 'Mentees can take any slot later today.', on: st.rules.sameDay, toggle: () => this.setState({ rules: Object.assign({}, st.rules, { sameDay: !st.rules.sameDay }) }) },
@@ -4215,8 +4405,13 @@ class Component extends DCLogic {
         style: 'display:grid; gap:2px; justify-items:center; padding:10px 6px; border-radius:9.6px; background:' + b.color.replace(/\)$/, ' / .1)'),
         valueStyle: 'font-family:"JetBrains Mono", monospace; font-size:16px; font-weight:700; color:' + b.color
       })),
-      periodMarkerStyle: 'position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:9999px; background:hsl(var(--c-40-78-44)); border:3px solid hsl(var(--c-42-33-99)); box-shadow:0 0 0 2px hsl(var(--c-40-78-44) / .35)',
-      periodFillStyle: 'height:100%; width:50%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
+      periodMarkerStyle: 'position:absolute; top:50%; left:' + planFrac100 + '%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:9999px; background:hsl(var(--c-40-78-44)); border:3px solid hsl(var(--c-42-33-99)); box-shadow:0 0 0 2px hsl(var(--c-40-78-44) / .35)',
+      planStartLabel: MONTHS_SHORT[PLAN.start.getMonth()] + ' ' + PLAN.start.getDate() + ', ' + PLAN.start.getFullYear(),
+      planEndLabel: MONTHS_SHORT[PLAN.end.getMonth()] + ' ' + PLAN.end.getDate() + ', ' + PLAN.end.getFullYear(),
+      planTimePct: planFrac100 + '% of the plan',
+      planMonthsIn: planMonthsIn + (planMonthsIn === 1 ? ' month in' : ' months in'),
+      planMonthsLeft: planMonthsLeft + (planMonthsLeft === 1 ? ' month left' : ' months left'),
+      periodFillStyle: 'height:100%; width:' + planFrac100 + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
 
       calendarBlocks: [
         {
@@ -4227,7 +4422,7 @@ class Component extends DCLogic {
           pastWhen: fmtDate(SESSION_LOG[0].date) + ' · ' + sessTime(SESSION_LOG[0]) + ' ' + tz.short,
           pastChips: [SESSION_LOG[0].projects, SESSION_LOG[0].status],
           pastListLabel: 'Tasks set',
-          pastList: PROJECT_STAGES[0].tasks.map((t) => t[0]),
+          pastList: PROJECT_STAGES[curStageIdx].tasks.map((t) => t[0]),
           pastAction: 'Open session notes',
           nextLabel: 'Next meeting',
           nextTitle: 'Session ' + NEXT_SESSION.n + ' · Vânio Antunes',
@@ -4337,22 +4532,6 @@ class Component extends DCLogic {
         });
       }).filter((b) => !st.blockHidden[b.key]),
 
-      calendarHighlights: [
-        { eyebrow: 'Last meeting', title: 'Mentorship session · Vânio', when: fmtDate(SESSION_LOG[0].date) + ' · ' + fmt(toMin(SESSION_LOG[0].start) + shift) + ' ' + tz.short, note: 'Notes and tasks recorded', past: true },
-        { eyebrow: 'Next meeting', title: 'Mentorship session · Vânio', when: fmtDate(NEXT_SESSION.date) + ' · ' + fmt(toMin(NEXT_SESSION.start) + shift) + ' ' + tz.short, note: countdownLabel(NEXT_SESSION.date) + ' · Google Meet', past: false },
-        { eyebrow: 'Last office hours', title: OFFICE_HOURS.last.title, when: fmtDate(OFFICE_HOURS.last.date) + ' · ' + fmt(toMin(OFFICE_HOURS.last.start) + shift) + ' ' + tz.short, note: 'Recording available', past: true },
-        { eyebrow: 'Next office hours', title: OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + fmt(toMin(OFFICE_HOURS.next.start) + shift) + ' ' + tz.short, note: countdownLabel(OFFICE_HOURS.next.date) + ' · open to all mentees', past: false },
-        { eyebrow: 'Next tutoring', title: 'MetaHub tutoring · ' + TUTORING.next.topic, when: fmtDate(TUTORING.next.date) + ' · ' + fmt(toMin(TUTORING.next.start) + shift) + ' ' + tz.short, note: countdownLabel(TUTORING.next.date) + ' · biweekly group session', past: false },
-        { eyebrow: 'Next ICU of Abstracts', title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.next.topic, when: fmtDate(ICU_ABSTRACTS.next.date) + ' · ' + fmt(toMin(ICU_ABSTRACTS.next.start) + shift) + ' ' + tz.short, note: countdownLabel(ICU_ABSTRACTS.next.date) + ' · monthly abstract clinic', past: false },
-      ].map((h) => ({
-        eyebrow: h.eyebrow,
-        title: h.title,
-        when: h.when,
-        note: h.note,
-        cardStyle: 'display:flex; flex-direction:column; gap:6px; padding:16px; border-radius:13.6px; border:1px solid ' + (h.past ? 'hsl(var(--c-42-12-84))' : 'hsl(var(--c-234-85-14) / .25)') + '; background:' + (h.past ? 'hsl(var(--c-44-26-96))' : 'hsl(var(--c-42-33-99))') + '; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)',
-        eyebrowStyle: 'font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:' + (h.past ? 'hsl(var(--c-38-6-42))' : 'hsl(var(--c-234-85-14))')
-      })),
-
       nextDayNum: String(NEXT_SESSION.date.getDate()),
       nextMonth: MONTHS[NEXT_SESSION.date.getMonth()],
       nextWeekday: DAY_FULL[dowIdx(NEXT_SESSION.date)],
@@ -4374,8 +4553,8 @@ class Component extends DCLogic {
         { d: ICU_ABSTRACTS.next.date, title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.next.topic, when: fmtDate(ICU_ABSTRACTS.next.date) + ' · ' + sessTime(ICU_ABSTRACTS.next) + ' ' + tz.short }
       ].filter((x) => daysFromToday(x.d) >= 0 && daysFromToday(x.d) < 7).sort((a, b) => a.d - b.d),
       tasksSetNote: 'Set by your mentor on ' + MONTHS_SHORT[TASKS_SET_ON.getMonth()] + ' ' + TASKS_SET_ON.getDate(),
-      weekTasks: PROJECT_STAGES[0].tasks.map((t, ti) => {
-        const id = '0-' + ti;
+      weekTasks: PROJECT_STAGES[curStageIdx].tasks.map((t, ti) => {
+        const id = curStageIdx + '-' + ti;
         const done = !!st.taskDone[id];
         return Object.assign(this.driveProps('task-' + id), {
           id: id,
@@ -4399,15 +4578,6 @@ class Component extends DCLogic {
         { title: 'MetaTracker', sub: 'Track research', icon: { __html: ICONS.fileSearch }, go: this.go('metatracker') },
         { title: 'Calendar', sub: 'Weekly activities', icon: { __html: ICONS.calendar }, go: this.go('calendar') }
       ],
-      stages: projectStages.slice(0, 8).map((s) => ({
-        name: s.title.replace(/^Stage \d+: /, ''),
-        pct: s.pct + '%',
-        dotStyle: 'width:10px; height:10px; border-radius:3px; background:' + (s.pct === 100 ? 'hsl(var(--c-155-40-27))' : s.pct > 0 ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-44-14-89))') + '; border:1px solid ' + (s.pct > 0 ? 'transparent' : 'hsl(var(--c-42-12-84))')
-      })),
-      projectCountShort: projectDone + '/' + projectTotal + ' tasks',
-      stageDots: [0,1,2,3,4,5,6,7].map((i) => ({
-        style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i < curStageIdx ? 'hsl(var(--c-155-40-27))' : i === curStageIdx ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-44-14-89))') + '; border:1px solid ' + (i <= curStageIdx ? 'transparent' : 'hsl(var(--c-42-12-84))')
-      })),
       courses: [
         { title: 'Career', label: 'Career', img: './assets/course-career.png' },
         { title: 'Research Methods & Statistics', label: 'Research Methods & Statistics', img: './assets/course-research.png' },
@@ -4422,10 +4592,6 @@ class Component extends DCLogic {
         pick: (e) => { e.preventDefault(); this.setState({ bannerIdx: i }); },
         style: 'width:8px; height:8px; padding:0; border:0; border-radius:9999px; cursor:pointer; background:' + (i === st.bannerIdx ? 'hsl(var(--c-40-30-96))' : 'hsl(var(--c-40-30-96) / .45)')
       })),
-      recordings: RECORDINGS_DATA.map((r) => ({
-        title: r.title,
-        meta: MONTHS_SHORT[r.date.getMonth()] + ' ' + r.date.getDate() + ', ' + r.date.getFullYear() + ' · ' + r.mins + ' min · ' + r.track
-      })),
       stats: [
         { value: String(this.visibleProjects().length), label: st.role === 'mentee' ? 'Research projects' : 'Research projects in view', icon: { __html: ICONS.chart }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-234-85-14))' },
         { value: String(PROJECT_STAGES.length), label: 'Stages from question to publication', icon: { __html: ICONS.clock }, iconStyle: 'display:flex; width:20px; height:20px; color:hsl(var(--c-155-40-27))' },
@@ -4433,8 +4599,10 @@ class Component extends DCLogic {
       ],
       weekdays: ['Su','Mo','Tu','We','Th','Fr','Sa'],
       monthCells: cells,
-      selectedLabel: MONTHS[7] + ' ' + st.selected + ', 2026',
-      nowStageName: curStageName,
+      selectedLabel: MONTHS[st.calMonth] + ' ' + st.selected + ', ' + st.calYear,
+      calMonthLabel: MONTHS[st.calMonth] + ' ' + st.calYear,
+      calPrev: () => this.shiftCalMonth(-1),
+      calNext: () => this.shiftCalMonth(1),
       nowStageTitle: projectStages[curStageIdx].title,
       dayActivities: (monthEvents[st.selected] || []).map((ev) => {
         const c = CAL_COLOR[ev.category] || CAL_COLOR.Other;
@@ -4452,7 +4620,7 @@ class Component extends DCLogic {
           remove: (e) => { e.preventDefault(); if (window.confirm('Delete "' + ev.title + '"' + (ev.recurrence !== 'None' ? ' and all its repeats' : '') + '?')) this.setState({ calEvents: this.state.calEvents.filter((x) => x.id !== ev.id) }); }
         };
       }),
-      calAddEvent: (e) => { e.preventDefault(); this.openDlg('event', { title: '', category: 'Other', date: isoDate(new Date(2026, 7, st.selected)), start: '13:00', end: '14:00', recurrence: 'None', link: '', note: '', desc: '', active: true }, { mode: 'create' }); },
+      calAddEvent: (e) => { e.preventDefault(); this.openDlg('event', { title: '', category: 'Other', date: isoDate(new Date(st.calYear, st.calMonth, st.selected)), start: '13:00', end: '14:00', recurrence: 'None', link: '', note: '', desc: '', active: true }, { mode: 'create' }); },
       calAddBlock: (e) => { e.preventDefault(); this.openDlg('block', { title: 'New activity', pastLabel: 'Last', pastListLabel: 'Covered', nextLabel: 'Next', nextListLabel: 'Planned topics', nextAction: 'Join' }, { mode: 'create' }); },
       hasHiddenBlocks: Object.keys(st.blockHidden).length > 0,
       restoreBlocks: (e) => { e.preventDefault(); this.setState({ blockHidden: {} }); },
@@ -4532,43 +4700,23 @@ class Component extends DCLogic {
       setProjectFilter: (e) => this.setState({ projectFilter: e.target.value }),
       projectFilterOptions: ['All mentees'].concat(this.visibleProjects().map((p) => p.mentee).filter((v, i, arr) => arr.indexOf(v) === i)),
       projectsEmpty: this.visibleProjects().length === 0,
-      projectCards: this.visibleProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || p.mentee === st.projectFilter).map((p0) => {
-        const p = this.projectData(p0);
-        const pr = projectProgress(p);
-        const pub = (p.details && p.details.pubStatus) || 'Not started';
-        const pubColor = pub === 'Published' || pub === 'Accepted' ? '155-40-27' : pub === 'Submitted' || pub === 'Under review' ? '234-85-14' : pub === 'In progress' ? '40-78-44' : '38-6-42';
-        return {
-          name: p.name,
-          mentee: p.mentee,
-          showMentee: st.role !== 'mentee',
-          open: this.openProject(p.id),
-          stage: PROJECT_STAGES[pr.stageIdx].title.replace(/^Stage \d+: /, ''),
-          pct: pr.pct + '%',
-          count: pr.done + '/' + pr.total + ' tasks',
-          barStyle: 'display:block; height:100%; width:' + pr.pct + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
-          updated: 'Updated ' + MONTHS_SHORT[p.updated.getMonth()] + ' ' + p.updated.getDate(),
-          pub: pub,
-          pubWarn: pubMismatch(p),
-          pubIcon: pubMismatch(p) ? '⚠ ' : '',
-          hasStatusTag: !!p.status && p.status !== 'Active',
-          statusTag: p.status === 'Proposed' ? 'Proposed · awaiting approval' : 'Sent back',
-          statusTagStyle: 'display:inline-flex; justify-self:start; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (p.status === 'Proposed' ? 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))' : 'background:hsl(var(--c-4-62-50) / .12); color:hsl(var(--c-4-62-50))'),
-          pubStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; color:hsl(var(--c-' + pubColor + ')); background:hsl(var(--c-' + pubColor + ') / .13)',
-          dots: PROJECT_STAGES.map((stage, i) => ({
-            style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i < pr.stageIdx || pr.pct === 100 ? 'hsl(var(--c-155-40-27))' : i === pr.stageIdx ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-44-14-89))') + '; box-shadow:0 0 0 1px hsl(var(--c-42-12-84))'
-          }))
-        };
-      }),
+      dashProjectsHeading: st.role === 'mentee' ? 'Your research projects' : st.role === 'mentor' ? 'Your mentees’ research projects' : 'All research projects',
+      dashProjectsEmpty: this.visibleProjects().length === 0,
+      dashProjects: this.projectCardVals(this.visibleProjects()),
+      projectCards: this.projectCardVals(this.visibleProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || p.mentee === st.projectFilter)),
       ...this.adminVals(),
       hasDayActivities: (monthEvents[st.selected] || []).length > 0,
       noDayActivities: (monthEvents[st.selected] || []).length === 0,
+      editProfile: (e) => { e.preventDefault(); this.openDlg('profile', st.profile, { mode: 'edit' }); },
+      bioText: st.profile.bio || 'Not set',
+      bioStyle: 'margin:0; font-size:15px; line-height:1.6; white-space:pre-wrap; ' + (st.profile.bio ? 'color:hsl(var(--c-234-68-12))' : 'font-style:italic; color:hsl(var(--c-38-6-42))'),
       profileSections: [
         { title: 'Academic & Research', rows: [
           { label: 'Mentorship role', value: 'Mentor · ' + MENTEES.filter((m) => m.mentor === 'Vânio Antunes').length + ' mentees', icon: { __html: ICONS.capSm } },
-          { label: 'Affiliation', value: 'Meta-Analysis Academy', icon: { __html: ICONS.building } }
+          { label: 'Affiliation', value: st.profile.affiliation || '—', icon: { __html: ICONS.building } }
         ] },
         { title: 'Contact', rows: [
-          { label: 'Country', value: 'Brazil', icon: { __html: ICONS.pin } }
+          { label: 'Country', value: st.profile.country || '—', icon: { __html: ICONS.pin } }
         ] }
       ]
     };
