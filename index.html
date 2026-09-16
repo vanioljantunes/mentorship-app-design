@@ -1267,7 +1267,7 @@
             </div>
             <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700; color:hsl(var(--c-234-85-14))">{{ me.area }}</span>
             <span style="font-size:14px; color:hsl(var(--c-38-6-42))">{{ me.role }}</span>
-            <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ meShowPanel }}" hint-placeholder-val="{{ true }}">
               <div style="display:grid; gap:12px; margin-top:6px; padding-top:14px; border-top:1px solid hsl(var(--c-42-12-84))">
                       <sc-if value="{{ me.tracking }}" hint-placeholder-val="{{ true }}">
                         <div style="display:grid; gap:6px">
@@ -1277,9 +1277,10 @@
                           <span style="font-size:12px; font-weight:600">{{ me.remaining }}</span>
                         </div>
                       </sc-if>
-                      <sc-if value="{{ me.notTracking }}" hint-placeholder-val="{{ false }}">
+                      <sc-if value="{{ meAdminNote }}" hint-placeholder-val="{{ false }}">
                         <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ me.levelNote }}</span>
                       </sc-if>
+                      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
                       <div style="display:grid; gap:6px">
                         <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Mentees · {{ me.menteeCount }}</span>
                         <div style="display:flex; flex-wrap:wrap; gap:6px">
@@ -1291,6 +1292,7 @@
                           </sc-if>
                         </div>
                       </div>
+                      </sc-if>
               </div>
             </sc-if>
           </div>
@@ -1896,7 +1898,7 @@ const MENTEES = [
 ];
 // mentor ladder: Level 1 mentors are promoted to Level 2 after a six-month track (start -> end)
 const MENTORS_DATA = [
-  { name: 'Vânio Antunes', level: 2, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2025, 1, 3), end: new Date(2025, 7, 4) },
+  { name: 'Vânio Antunes', level: 1, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2026, 3, 3), end: new Date(2026, 9, 3) },
   { name: 'Caroline Serafim', level: 2, area: 'Neurology', position: 'MD, PhD', affiliation: 'UNIFESP', langs: ['BR','EN'], start: new Date(2025, 2, 10), end: new Date(2025, 8, 10) },
   { name: 'Rafael Lima', level: 2, area: 'Endocrinology', position: 'MD, MSc', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'], start: new Date(2025, 4, 5), end: new Date(2025, 10, 5) },
   { name: 'Beatriz Carvalho', level: 1, area: 'Cardiology', position: 'MD', affiliation: 'Instituto do Coração', langs: ['BR','EN'], start: new Date(2026, 2, 16), end: new Date(2026, 8, 16) },
@@ -2329,6 +2331,9 @@ class Component extends DCLogic {
       }),
 
       isMentors: page === 'mentors',
+      // your own Level 1 -> 2 track is always visible to you; level note and mentees stay admin-only
+      meShowPanel: st.role === 'admin' || MENTORS_DATA.filter((m) => m.name === ME)[0].level === 1,
+      meAdminNote: st.role === 'admin' && MENTORS_DATA.filter((m) => m.name === ME)[0].level !== 1,
       mentorsCount: MENTORS_DATA.length + ' mentors',
       me: this.mentorCard(MENTORS_DATA.filter((m) => m.name === ME)[0]),
       mentorGroups: [2, 1].map((lvl) => {
