@@ -2389,6 +2389,103 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ isStart }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:24px; max-width:1100px">
+        <div>
+          <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">Walkthrough</div>
+          <h1 style="margin:4px 0 0; font-family:Ruda, sans-serif; font-size:28px; font-weight:800; letter-spacing:-0.025em">{{ startTitle }}</h1>
+          <p style="margin:8px 0 0; max-width:760px; font-size:15px; line-height:1.6; color:hsl(var(--c-234-68-12))">{{ startIntro }}</p>
+          <p style="margin:6px 0 0; font-size:12px; color:hsl(var(--c-38-6-42))">{{ startViewNote }}</p>
+        </div>
+
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:22px">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:14px">
+            <h2 style="flex:1; margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">1 · Your first week</h2>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">{{ startProgress }}</span>
+            <span style="width:140px; height:8px; border-radius:9999px; background:hsl(var(--c-44-14-89)); overflow:hidden"><span style="{{ startBar }}"></span></span>
+          </div>
+          <div style="display:grid; gap:8px">
+            <sc-for list="{{ startSteps }}" as="sp" hint-placeholder-count="6">
+              <div style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px; padding:12px 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px">
+                <input type="checkbox" checked="{{ sp.done }}" onChange="{{ sp.toggle }}" aria-label="Mark step as done" style="width:18px; height:18px; margin-top:2px; accent-color:hsl(var(--c-155-40-27))" />
+                <span style="display:grid; gap:2px; flex:1; min-width:240px">
+                  <span style="{{ sp.titleStyle }}">{{ sp.n }}. {{ sp.title }}</span>
+                  <span style="font-size:13px; line-height:1.5; color:hsl(var(--c-38-6-42))">{{ sp.text }}</span>
+                </span>
+                <button onClick="{{ sp.go }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">{{ sp.goLabel }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:22px">
+          <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">2 · A typical month</h2>
+          <p style="margin:0 0 14px; font-size:13px; color:hsl(var(--c-38-6-42))">Repeat this rhythm every month. Tags open the page where each step happens.</p>
+          <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px">
+            <sc-for list="{{ startMonth }}" as="wk" hint-placeholder-count="4">
+              <div style="display:grid; align-content:start; gap:10px; padding:14px; border-radius:13.6px; background:hsl(var(--c-44-26-96))">
+                <span style="font-family:Ruda, sans-serif; font-size:15px; font-weight:700; color:hsl(var(--c-234-85-14))">{{ wk.week }}</span>
+                <sc-for list="{{ wk.items }}" as="it" hint-placeholder-count="3">
+                  <div style="display:grid; gap:4px; padding:10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99))">
+                    <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:hsl(var(--c-38-6-42))">{{ it.when }}</span>
+                    <span style="font-size:13px; line-height:1.45">{{ it.text }}</span>
+                    <button onClick="{{ it.go }}" style="justify-self:start; display:inline-flex; align-items:center; height:22px; padding:0 8px; border:0; border-radius:9999px; background:hsl(var(--c-234-85-14) / .1); color:hsl(var(--c-234-85-14)); font-size:11px; font-weight:700; cursor:pointer">{{ it.tag }} →</button>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:22px">
+          <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">3 · Workflows, step by step</h2>
+          <p style="margin:0 0 14px; font-size:13px; color:hsl(var(--c-38-6-42))">Open the one you need right now.</p>
+          <div style="display:grid; gap:10px">
+            <sc-for list="{{ startFlows }}" as="fl" hint-placeholder-count="4">
+              <details style="border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; padding:12px 14px">
+                <summary style="cursor:pointer; font-size:15px; font-weight:600">{{ fl.title }}</summary>
+                <ol style="margin:12px 0 0; padding-left:22px; display:grid; gap:6px; font-size:14px; line-height:1.5">
+                  <sc-for list="{{ fl.steps }}" as="fs" hint-placeholder-count="4">
+                    <li>{{ fs.text }}</li>
+                  </sc-for>
+                </ol>
+                <button onClick="{{ fl.go }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; margin-top:12px">{{ fl.goLabel }}</button>
+              </details>
+            </sc-for>
+            <sc-if value="{{ startIsAdmin }}" hint-placeholder-val="{{ false }}">
+              <span style="margin-top:6px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Admins</span>
+              <sc-for list="{{ startAdminFlows }}" as="fl" hint-placeholder-count="2">
+                <details style="border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; padding:12px 14px">
+                  <summary style="cursor:pointer; font-size:15px; font-weight:600">{{ fl.title }}</summary>
+                  <ol style="margin:12px 0 0; padding-left:22px; display:grid; gap:6px; font-size:14px; line-height:1.5">
+                    <sc-for list="{{ fl.steps }}" as="fs" hint-placeholder-count="4">
+                      <li>{{ fs.text }}</li>
+                    </sc-for>
+                  </ol>
+                  <button onClick="{{ fl.go }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; margin-top:12px">{{ fl.goLabel }}</button>
+                </details>
+              </sc-for>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:22px">
+          <h2 style="margin:0 0 14px; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">4 · Where things are</h2>
+          <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px">
+            <sc-for list="{{ startMap }}" as="mp" hint-placeholder-count="6">
+              <a href="#" onClick="{{ mp.go }}" style="display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; color:inherit">
+                <span style="display:grid; place-items:center; width:30px; height:30px; flex-shrink:0; border-radius:8px; background:hsl(var(--c-234-85-14) / .1); color:hsl(var(--c-234-85-14))" dangerouslySetInnerHTML="{{ mp.icon }}"></span>
+                <span style="display:grid; gap:2px">
+                  <span style="font-size:14px; font-weight:700">{{ mp.label }}</span>
+                  <span style="font-size:13px; line-height:1.45; color:hsl(var(--c-38-6-42))">{{ mp.text }}</span>
+                </span>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ isMentors }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex; flex-direction:column; gap:24px">
         <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px">
@@ -3271,6 +3368,7 @@ const ICONS = {
 };
 
 const NAV = [
+  { key: 'start', label: 'Start here', icon: ICONS.check },
   { key: 'dashboard', label: 'Dashboard', icon: ICONS.dashboard },
   { key: 'calendar', label: 'Calendar', icon: ICONS.calendar },
   { key: 'sessions', label: 'Sessions', icon: ICONS.video },
@@ -3280,6 +3378,60 @@ const NAV = [
   { key: 'courses', label: 'Office Hours', icon: ICONS.cap },
   { key: 'admin', label: 'Admin dashboard', icon: ICONS.shield, adminOnly: true }
 ];
+
+// ---- Start here: role-based walkthrough. page keys match NAV. ----
+const START_GUIDE = {
+  mentee: {
+    intro: 'Everything in the mentorship happens in five places: Sessions (meetings), MetaTracker (your research), Calendar (group activities), Office Hours (recorded lessons) and your mentor. This page shows the order to use them in.',
+    firstWeek: [
+      ['Check your next meeting', 'Open Sessions, confirm the date in your timezone and save the Google Meet link. Need another time? Use Reschedule, not WhatsApp.', 'sessions', 'Sessions'],
+      ['Open your project in MetaTracker', 'See your stage, the tasks agreed with your mentor and the PICOTT & Details tab. Every step is editable from day one.', 'metatracker', 'MetaTracker'],
+      ['Set up Stage 0', 'Create the Google Drive folder named after the idea, add it to Project documents, and share it with your mentor (their email is on the task).', 'metatracker', 'MetaTracker'],
+      ['Write your first logbook entry', 'Project → Logbook: note what you decided and why. Your mentor reads this before each meeting.', 'metatracker', 'MetaTracker'],
+      ['Put the group activities in your calendar', 'Office hours, MetaHub tutoring and ICU of Abstracts are open to you. Tutoring is first come, first served on Zoom.', 'calendar', 'Calendar'],
+      ['Watch “How this track works”', 'Office Hours → any track → Start here. Recordings are posted within 24 hours of each live session.', 'courses', 'Office Hours']
+    ],
+    month: [
+      ['Week 1', [['Mon–Tue', 'Meeting with your mentor: agree 2–4 tasks for the next two weeks', 'Sessions'], ['Same day', 'Log the decisions in the project logbook', 'MetaTracker'], ['During the week', 'Tick each task when done: it goes to “Ready for review”', 'MetaTracker']]],
+      ['Week 2', [['Any day', 'Attach the files you produce to the task (Drive, Sheets, Docs)', 'MetaTracker'], ['Thursday 18:00', 'Office hours for methods questions', 'Calendar'], ['Biweekly', 'MetaHub tutoring for quick doubts, in Portuguese or English', 'Calendar']]],
+      ['Week 3', [['Mon–Tue', 'Meeting: your mentor approves tasks or sends them back with a note', 'Sessions'], ['After the meeting', 'Fix sent-back tasks and tick them again', 'MetaTracker'], ['Monthly', 'ICU of Abstracts: send your abstract through the form first', 'Calendar']]],
+      ['Week 4', [['Friday', 'Check your progress and “open earlier tasks” on the project card', 'MetaTracker'], ['Friday', 'Update papers, PICOTT and documents so nothing lives only on WhatsApp', 'MetaTracker'], ['Before week 1', 'Write the goals for next month in the logbook', 'MetaTracker']]]
+    ],
+    workflows: [
+      ['A task, start to finish', 'metatracker', ['Do the work and save the file in the project Drive folder.', 'In MetaTracker, attach the document to the task (“Attach document…”).', 'Tick the task: it shows “Waiting for mentor review” and does not count yet.', 'Your mentor approves it (counts toward progress) or sends it back with a note.', 'If sent back, fix it and tick again. Nothing is ever locked while you wait.']],
+      ['From idea to registered protocol (about 6 weeks)', 'metatracker', ['Week 1: Stage 0, Drive folder and invite your mentor.', 'Week 2: write the PICOTT and pick the review type (intervention, diagnostic accuracy or prognostic).', 'Week 3: list at least three viable papers as “Author, Year”; the viability task moves to review automatically.', 'Weeks 4–5: introduction, methods and search strategy.', 'Week 6: register on PROSPERO or OSF and record the ID and status in the Register Protocol task.']],
+      ['Submitting to a journal', 'metatracker', ['Stage 8 → + Add journal: journal name, submission date and the link to the submission files.', 'When reviews arrive, add a review round with the decision and the reviewer questions.', 'Rejected? Keep the round, then add the next journal: the history stays in one place.', 'Accepted: your mentor updates the publication status and DOI.']],
+      ['Rescheduling a meeting', 'sessions', ['Sessions → Reschedule on your next meeting.', 'Pick a slot from your mentor’s availability (shown in your timezone).', 'The calendar and the Meet link update for both of you.']]
+    ]
+  },
+  mentor: {
+    intro: 'As a mentor you run meetings in Sessions, review work in MetaTracker, and everything you record also feeds the admin tables and your Level II bonus. Filling things in is how your work gets counted.',
+    firstWeek: [
+      ['Read each mentee’s briefing', 'Sessions → mentee card → Read full briefing: goals, weekly hours, skills and expectations.', 'sessions', 'Sessions'],
+      ['Record the outcome of past meetings', 'Cards with “Outcome pending” need Held / No-show / Cancelled and a short note.', 'sessions', 'Sessions'],
+      ['Set your weekly availability and open slots', 'Sessions → Weekly availability, then Open mentorship slots (area, language and note are optional). Admins use the slots to assign new mentees.', 'sessions', 'Sessions'],
+      ['Clear “Awaiting your review”', 'MetaTracker → approve tasks or send them back with a note. Proposals from mentees appear here too.', 'metatracker', 'MetaTracker'],
+      ['Check your bonus card', 'Mentors → your card → Show breakdown. Fill the missing submission dates and file links it lists.', 'mentors', 'Mentors'],
+      ['Share the group activities', 'Office hours, MetaHub tutoring and ICU of Abstracts are open to your mentees; point them to the Calendar.', 'calendar', 'Calendar']
+    ],
+    month: [
+      ['Week 1', [['Mon–Tue', 'Meetings with each mentee; agree 2–4 tasks per project', 'Sessions'], ['Same day', 'Record the outcome and a one-line note', 'Sessions'], ['After the meeting', 'Approve tasks that are ready or send them back with a note', 'MetaTracker']]],
+      ['Week 2', [['Twice a week', 'Empty the review queue (badge on MetaTracker)', 'MetaTracker'], ['Any day', 'Look for projects not updated for a week and ask why in the logbook', 'MetaTracker'], ['Thursday 18:00', 'Office hours: send mentees with methods questions', 'Calendar']]],
+      ['Week 3', [['Mon–Tue', 'Meetings; reopen approved tasks that need rework, with a reason', 'MetaTracker'], ['When it happens', 'Add co-authors, senior authors and the content expert per stage', 'MetaTracker'], ['When it happens', 'Record each journal submission: date and files link', 'MetaTracker']]],
+      ['Week 4', [['Friday', 'Update open slots and availability for next month', 'Sessions'], ['Friday', 'Check your bonus card: missing info, points at risk, mentees close to a point', 'Mentors'], ['Jun 30 / Dec 31', 'Semester closing: everything filled by then counts', 'Mentors']]]
+    ],
+    workflows: [
+      ['After every meeting (5 minutes)', 'sessions', ['Sessions → Record outcome: Held, No-show or Cancelled, plus a one-line note.', 'MetaTracker → approve the tasks that were shown to you, or send them back with what is missing.', 'Add a logbook entry for any decision that changes the protocol or the analysis.', 'Schedule the next meeting before closing the card.']],
+      ['Onboarding a new mentee', 'sessions', ['Read the briefing on their card.', 'Schedule the first meeting from your availability.', 'Check that Stage 0 is done: Drive folder created and shared with you.', 'Approve or send back their proposed project in MetaTracker.']],
+      ['Reopening work after a rerun', 'metatracker', ['Open the project and find the approved task that needs rework.', 'Click Reopen and write the reason (for example, “study excluded for patient overlap”).', 'The reason appears on the task and in the logbook; the progress bar updates.']],
+      ['Making sure your work counts for the bonus', 'mentors', ['For every submission, record journal, submission date and the submission files link in Stage 8.', 'Mark co-authors from the mentee list and flag the senior (last) author.', 'Keep each mentee’s status current: points stay only while they are active and paid.', 'Before Jun 30 and Dec 31, open your bonus card and clear the “to keep or earn points” list.']]
+    ]
+  },
+  admin: [
+    ['Semester bonus closing', 'admin', ['Admin dashboard → Bonus → pick the semester.', 'Enter the value in reais and say whether it is the pool or the profit (30% applied).', 'Check the “Missing info” column and ask mentors to fill it.', 'Export CSV: points per category, proofs with links and the value per mentor.']],
+    ['Weekly admin check', 'admin', ['Mentees: contracts ending within 30 days and renewal requests.', 'Mentors: open slots, waiting time for a mentee and areas with mentees but no slot.', 'Projects: filter “4+ weeks without update” and follow up with the mentor.']]
+  ]
+};
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -3397,6 +3549,32 @@ const BRIEFINGS = {
       { title: 'Technical Skills', body: 'Uses R for survival analysis, Rayyan for screening and GRADEpro for certainty assessment; wants to improve forest plot customisation in R.' },
       { title: 'Personal Expectations', body: 'Expects direct feedback on methodology decisions, help with the statistical analysis plan, and support choosing between candidate research questions.' }
     ]
+  },
+  'Júlia Miranda': {
+    goal: 'First diagnostic accuracy meta-analysis in radiology, presented at SAR 2027',
+    hours: '6 h/week',
+    tools: ['Google Sheets', 'Rayyan', 'R Markdown'],
+    experience: 'First systematic review; full manuscript draft in progress',
+    sections: [
+      { title: 'Academic & Professional Background', body: 'Radiology-focused mentee working on MRI for bladder cancer staging (tumour contact length vs VI-RADS). New to diagnostic test accuracy methods.' },
+      { title: 'Goals & Expectations', body: 'Finish the TCL diagnostic accuracy review, submit the abstract to SAR 2027 and then a full manuscript with the team.' },
+      { title: 'Availability & Commitment', body: 'About 6 hours per week, mostly weekday evenings; meetings every two weeks.' },
+      { title: 'Technical Skills', body: 'Uses Google Sheets for extraction and Rayyan for screening; learning bivariate models and QUADAS-2 through the analysis.Rmd shared by the mentor.' },
+      { title: 'Personal Expectations', body: 'Wants clear next steps after each meeting and help unblocking the 2x2 data for the studies that do not report it directly.' }
+    ]
+  },
+  'Gustavo Gurian': {
+    goal: 'Endoscopy meta-analyses as first and senior author',
+    hours: '8 h/week',
+    tools: ['R', 'Rayyan', 'Google Sheets'],
+    experience: 'One review in revision at Gastrointestinal Endoscopy',
+    sections: [
+      { title: 'Academic & Professional Background', body: 'Gastroenterology-focused mentee with two endoscopy projects: antibiotic prophylaxis and PEECS after ESD, and cap-assisted forward-viewing ERCP in Billroth II anatomy.' },
+      { title: 'Goals & Expectations', body: 'Get the Billroth II review accepted, finish the PEECS manuscript and start leading projects as senior author for newer mentees.' },
+      { title: 'Availability & Commitment', body: 'About 8 hours per week; weekly meetings while a revision is open.' },
+      { title: 'Technical Skills', body: 'Comfortable with extraction sheets and screening in Rayyan; runs meta-analyses in R with support; handles reviewer responses with the mentor.' },
+      { title: 'Personal Expectations', body: 'Wants fast turnaround on reviewer points and a clear split of who answers each comment.' }
+    ]
   }
 };
 // MetaHub tutoring sessions: biweekly open Q&A on Zoom, 13:00-14:00 Brasilia; no set topic
@@ -3428,6 +3606,14 @@ const MENTOR_SCHED = {
   'Pedro Henrique Costa': {
     last: { date: new Date(2026, 7, 11), start: '14:00', end: '15:00', topic: 'Extraction form review', recorded: { status: 'No-show', text: 'Pedro on exam leave; mentorship paused until November.', shots: [] } },
     next: null
+  },
+  'Júlia Miranda': {
+    last: { date: new Date(2026, 7, 24), start: '18:00', end: '19:00', topic: 'First manuscript draft review', recorded: { status: 'Held', text: 'Placeholders left: registration, search details and QUADAS-2. Júlia contacts authors for the missing 2x2 data.', shots: [] } },
+    next: { date: new Date(2026, 8, 7), start: '18:00', end: '19:00', topic: 'QUADAS-2 and 2x2 data for Gong, Ikuma and Yu R' }
+  },
+  'Gustavo Gurian': {
+    last: { date: new Date(2026, 7, 28), start: '20:00', end: '21:00', topic: 'PEECS rerun after excluding Liao-Zhu 2022' },
+    next: { date: new Date(2026, 8, 3), start: '20:00', end: '21:00', topic: 'PEECS results section and Billroth II revision 2' }
   },
   'Camila Rocha': {
     last: { date: new Date(2026, 7, 26), start: '10:00', end: '11:00', topic: 'Forest plot walkthrough' },
@@ -3947,6 +4133,7 @@ class Component extends DCLogic {
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
     oh: seedOfficeHours(), ohView: 'watch', ohLesson: null, ohDone: {}, ohOpen: {}, ohQuery: '',
     dlg: null,
+    startDone: {},
     mentorSlots: seedMentorSlots(),
     calYear: TODAY.getFullYear(), calMonth: TODAY.getMonth(), availSaved: false, cancelledNext: {},
     profile: { affiliation: 'Meta-Analysis Academy', country: 'Brazil', bio: '' },
@@ -5636,6 +5823,54 @@ class Component extends DCLogic {
       }),
 
       isMentors: page === 'mentors',
+      isStart: page === 'start',
+      ...(function (self) {
+        const key = st.role === 'mentee' ? 'mentee' : 'mentor';
+        const g = START_GUIDE[key];
+        const done = st.startDone || {};
+        const TAG = { Sessions: 'sessions', MetaTracker: 'metatracker', Calendar: 'calendar', Mentors: 'mentors', 'Office Hours': 'courses' };
+        const doneCount = g.firstWeek.filter((x, i) => done[key + i]).length;
+        const flow = (w) => ({ title: w[0], go: self.go(w[1]), goLabel: 'Open ' + NAV.filter((n) => n.key === w[1])[0].label + ' →', steps: w[2].map((t, i) => ({ n: String(i + 1), text: t })) });
+        return {
+          startTitle: key === 'mentee' ? 'Start here · mentee guide' : 'Start here · mentor guide',
+          startIntro: g.intro,
+          startViewNote: 'Showing the ' + key + ' guide. Switch “Viewing as” at the bottom of the sidebar to see the other one.',
+          startProgress: doneCount + ' of ' + g.firstWeek.length + ' done',
+          startBar: 'display:block; height:100%; width:' + Math.round((doneCount / g.firstWeek.length) * 100) + '%; border-radius:9999px; background:hsl(var(--c-155-40-27))',
+          startSteps: g.firstWeek.map((x, i) => ({
+            n: String(i + 1),
+            title: x[0],
+            text: x[1],
+            done: !!done[key + i],
+            toggle: () => { const d = Object.assign({}, self.state.startDone); d[key + i] = !d[key + i]; self.setState({ startDone: d }); },
+            go: self.go(x[2]),
+            goLabel: 'Open ' + x[3] + ' →',
+            titleStyle: 'font-size:15px; font-weight:600; ' + (done[key + i] ? 'text-decoration:line-through; color:hsl(var(--c-38-6-42))' : '')
+          })),
+          startMonth: g.month.map((w) => ({
+            week: w[0],
+            items: w[1].map((it) => ({ when: it[0], text: it[1], tag: it[2], go: self.go(TAG[it[2]] || 'dashboard') }))
+          })),
+          startFlows: g.workflows.map(flow),
+          startIsAdmin: st.role === 'admin',
+          startAdminFlows: START_GUIDE.admin.map(flow),
+          startMap: NAV.filter((n) => n.key !== 'start' && (!n.adminOnly || st.role === 'admin')).map((n) => ({
+            label: n.label,
+            icon: { __html: n.icon },
+            go: self.go(n.key),
+            text: ({
+              dashboard: key === 'mentee' ? 'Your next meeting, tasks for this week and project progress at a glance.' : 'Your mentees’ projects and what needs attention today.',
+              calendar: 'Group activities: office hours, MetaHub tutoring, ICU of Abstracts and MetaWriters.',
+              sessions: key === 'mentee' ? 'Book, join and reschedule meetings with your mentor.' : 'Mentee cards with briefings and outcomes, weekly availability and open slots.',
+              mentors: key === 'mentee' ? 'Who the mentors are and their areas.' : 'Mentors by level; your own card shows Level 2 progress and bonus points.',
+              mentees: 'Mentee profiles by area and status.',
+              metatracker: key === 'mentee' ? 'Your projects step by step: tasks, PICOTT, papers, documents, logbook and submissions.' : 'Review queue and every project your mentees lead or co-author.',
+              courses: 'Recorded office hours by track, with notes and files.',
+              admin: 'Mentees, mentors, projects and the semester bonus.'
+            })[n.key] || ''
+          }))
+        };
+      })(this),
       // your own Level 1 -> 2 track is always visible to you; level note and mentees stay admin-only
       meShowPanel: st.role === 'admin' || MENTORS_DATA.filter((m) => m.name === ME)[0].level === 1,
       meAdminNote: st.role === 'admin' && MENTORS_DATA.filter((m) => m.name === ME)[0].level !== 1,
@@ -6054,7 +6289,7 @@ class Component extends DCLogic {
           pendingLabel: this.pendingItems().filter((it) => it.mentee === m.name).length + ' to review',
           openPending: (e) => { e.preventDefault(); this.setState({ page: 'metatracker', projectFilter: m.name }); window.scrollTo(0, 0); },
           initials: initials(m.name),
-          email: m.name.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '.') + '@example.com',
+          email: m.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '.') + '@example.com',
           meta: m.sessions + ' session' + (m.sessions === 1 ? '' : 's') + ' · target ' + PLAN.total,
           status: m.status,
           statusStyle: 'display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; font-size:11px; font-weight:600; color:' + STATUS_COLOR[m.status] + '; background:' + STATUS_COLOR[m.status].replace(/\)$/, ' / .14)'),
