@@ -638,6 +638,7 @@
                     </div>
                   </div>
                 </sc-if>
+                <sc-if value="{{ b.hasSchedule }}" hint-placeholder-val="{{ true }}">
                 <div style="display:grid; grid-template-columns:1fr 1fr">
                   <div style="padding:20px; border-right:1px solid hsl(var(--c-42-12-84))">
                     <span style="display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">
@@ -660,7 +661,9 @@
                         </li>
                       </sc-for>
                     </ul>
-                    <a href="#" style="display:inline-block; margin-top:14px; font-size:14px; font-weight:600">{{ b.pastAction }}</a>
+                    <sc-if value="{{ b.hasPastAction }}" hint-placeholder-val="{{ true }}">
+                      <a href="#" style="display:inline-block; margin-top:14px; font-size:14px; font-weight:600">{{ b.pastAction }}</a>
+                    </sc-if>
                   </div>
                   <div style="padding:20px; background:hsl(var(--c-234-85-14) / .04)">
                     <span style="display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-234-85-14))">
@@ -686,9 +689,10 @@
                         </li>
                       </sc-for>
                     </ul>
-                    <a href="https://meet.google.com/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 16px; margin-top:16px; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600">{{ b.nextAction }}</a>
+                    <a href="{{ b.joinHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 16px; margin-top:16px; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600">{{ b.nextAction }}</a>
                   </div>
                 </div>
+                </sc-if>
               </div>
             </sc-for>
             <div style="display:flex; align-items:center; gap:8px">
@@ -2909,17 +2913,22 @@ const BRIEFINGS = {
     ]
   }
 };
-// MetaHub tutoring: biweekly group sessions, 13:00-14:00 Brasilia
+// MetaHub tutoring sessions: biweekly open Q&A on Zoom, 13:00-14:00 Brasilia; no set topic
 const TUTORING = {
-  last: { date: new Date(2026, 7, 21), start: '13:00', end: '14:00', topic: 'Screening conflicts and PRISMA flow', covered: ['Resolving reviewer disagreements in Rayyan', 'Documenting exclusions for PRISMA', 'Group Q&A on search updates'] },
-  next: { date: new Date(2026, 8, 4), start: '13:00', end: '14:00', topic: 'Data extraction workshop', topics: ['Building the extraction form together', 'Live extraction on a sample study'] }
+  last: { date: new Date(2026, 7, 21), start: '13:00', end: '14:00' },
+  next: { date: new Date(2026, 8, 4), start: '13:00', end: '14:00' }
 };
-// ICU of Abstracts: monthly MetaHub clinic where abstracts are corrected live, 18:00-19:30 Brasilia
+const TUTORING_HOW = ['Bring any question or problem; there is no set topic', 'First come, first served: join the Zoom and raise your hand', 'Bilingual: ask in Portuguese or English'];
+const TUTORING_WHO = ['Everyone in MetaHub, not only mentorship mentees', 'No sign-up needed'];
+const TUTORING_NOTICE = 'MetaHub tutoring sessions are open to everyone in MetaHub, not only mentorship mentees. Bring any question or problem, in Portuguese or English. First come, first served: join the Zoom and raise your hand.';
+// ICU of Abstracts: monthly MetaHub clinic where abstracts are corrected live, 18:00-19:30 Brasilia; no set topic
 const ICU_ABSTRACTS = {
-  last: { date: new Date(2026, 7, 12), start: '18:00', end: '19:30', topic: 'Structured abstracts for systematic reviews', covered: ['Five abstracts corrected live', 'Reporting effect sizes and heterogeneity', 'PRISMA for Abstracts checklist'] },
-  next: { date: new Date(2026, 8, 9), start: '18:00', end: '19:30', topic: 'Congress abstract submissions', topics: ['Word limits without losing results', 'Conclusions that match the data'] }
+  last: { date: new Date(2026, 7, 12), start: '18:00', end: '19:30' },
+  next: { date: new Date(2026, 8, 9), start: '18:00', end: '19:30' }
 };
-const METAHUB_NOTICE = 'MetaHub is a side product every mentee has access to: a community for all alumni students of MAA. It offers free services: ICU of Abstracts (abstract correction), tutoring sessions for general questions, and MetaWriters (manuscript correction).';
+const ICU_HOW = ['Send your abstract through the submission form before the session', 'Abstracts are corrected in the order they were sent', 'Did not send one? Join anyway: yours is corrected after the submitted ones'];
+const ICU_NOTICE = 'A monthly MetaHub event where abstracts are corrected live. Submit yours through the form: the first abstracts sent are corrected first. You can still bring one without sending it, and it is corrected after those.';
+const METAWRITERS_NOTICE = 'MetaWriters is the MetaHub manuscript correction service, free for all MAA alumni. Use the link to send your manuscript.';
 // mentor view: per-mentee last and next meetings
 const MENTOR_SCHED = {
   'Isabella Michelon': {
@@ -3086,10 +3095,10 @@ function seedCalEvents() {
     RECORDINGS_DATA.map((r) => ev({ title: r.title, category: 'Office hours', date: isoDate(r.date), start: OFFICE_HOURS.last.start, end: OFFICE_HOURS.last.end, note: r.mins + ' min · ' + r.track, desc: 'Recording available' })),
     [
       ev(Object.assign(at(OFFICE_HOURS.next), { title: OFFICE_HOURS.next.title, category: 'Office hours', note: 'Open to all mentees', desc: OFFICE_HOURS.next.topics.join(' · ') })),
-      ev(Object.assign(at(TUTORING.last), { title: 'MetaHub tutoring · ' + TUTORING.last.topic, category: 'Tutoring', note: 'Group session', desc: 'Biweekly MetaHub tutoring, open to all mentees' })),
-      ev(Object.assign(at(TUTORING.next), { title: 'MetaHub tutoring · ' + TUTORING.next.topic, category: 'Tutoring', note: 'Group session', desc: TUTORING.next.topics.join(' · ') })),
-      ev(Object.assign(at(ICU_ABSTRACTS.last), { title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.last.topic, category: 'ICU of Abstracts', note: 'Monthly', desc: 'Monthly MetaHub clinic: abstracts corrected live, free for all MAA alumni' })),
-      ev(Object.assign(at(ICU_ABSTRACTS.next), { title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.next.topic, category: 'ICU of Abstracts', note: 'Monthly', desc: ICU_ABSTRACTS.next.topics.join(' · ') }))
+      ev(Object.assign(at(TUTORING.last), { title: 'MetaHub tutoring session', category: 'Tutoring', note: 'Open Q&A · Zoom', desc: TUTORING_NOTICE })),
+      ev(Object.assign(at(TUTORING.next), { title: 'MetaHub tutoring session', category: 'Tutoring', note: 'Open Q&A · Zoom', desc: TUTORING_NOTICE })),
+      ev(Object.assign(at(ICU_ABSTRACTS.last), { title: 'ICU of Abstracts', category: 'ICU of Abstracts', note: 'Monthly · Zoom', desc: ICU_NOTICE })),
+      ev(Object.assign(at(ICU_ABSTRACTS.next), { title: 'ICU of Abstracts', category: 'ICU of Abstracts', note: 'Monthly · Zoom', desc: ICU_NOTICE }))
     ]
   );
 }
@@ -3408,7 +3417,7 @@ class Component extends DCLogic {
     studyEdit: null, studyDraft: null,
     details: SEED_PROJECTS[0].details,
     detailsDraft: null,
-    hubLinks: { metawriters: '', icu: '' },
+    hubLinks: { metawriters: '', tutoringZoom: '', icuZoom: '', icuForm: '' },
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
     oh: seedOfficeHours(), ohView: 'watch', ohLesson: null, ohDone: {}, ohOpen: {}, ohQuery: '',
     dlg: null,
@@ -5226,52 +5235,63 @@ class Component extends DCLogic {
         },
         {
           icon: { __html: ICONS.users },
-          title: 'MetaHub tutoring',
-          pastLabel: 'Last tutoring',
-          pastTitle: TUTORING.last.topic,
+          title: 'MetaHub tutoring sessions',
+          pastLabel: 'Last session',
+          pastTitle: 'MetaHub tutoring session',
           pastWhen: fmtDate(TUTORING.last.date) + ' · ' + sessTime(TUTORING.last) + ' ' + tz.short,
-          pastChips: ['Group session', 'Biweekly'],
-          pastListLabel: 'Covered',
-          pastList: TUTORING.last.covered,
-          pastAction: 'Open tutoring notes',
-          nextLabel: 'Next tutoring',
-          nextTitle: TUTORING.next.topic,
+          pastChips: ['Open Q&A', 'Biweekly'],
+          pastListLabel: 'How it works',
+          pastList: TUTORING_HOW,
+          pastAction: '',
+          nextLabel: 'Next session',
+          nextTitle: 'MetaHub tutoring session',
           nextWhen: fmtDate(TUTORING.next.date) + ' · ' + sessTime(TUTORING.next) + ' ' + tz.short,
           nextCountdown: countdownLabel(TUTORING.next.date),
-          nextChips: ['Open to all mentees', 'Biweekly'],
-          nextListLabel: 'Planned topics',
-          nextList: TUTORING.next.topics,
-          nextAction: 'Join tutoring',
-          notice: METAHUB_NOTICE,
-          links: ['metawriters', 'icu']
+          nextChips: ['Zoom', 'Portuguese / English'],
+          nextListLabel: 'Who can join',
+          nextList: TUTORING_WHO,
+          nextAction: 'Join on Zoom',
+          notice: TUTORING_NOTICE,
+          links: ['tutoringZoom'],
+          joinLink: 'tutoringZoom'
         },
         {
           icon: { __html: ICONS.fileSearch },
           title: 'ICU of Abstracts',
           pastLabel: 'Last ICU of Abstracts',
-          pastTitle: ICU_ABSTRACTS.last.topic,
+          pastTitle: 'ICU of Abstracts',
           pastWhen: fmtDate(ICU_ABSTRACTS.last.date) + ' · ' + sessTime(ICU_ABSTRACTS.last) + ' ' + tz.short,
           pastChips: ['MetaHub', 'Monthly'],
-          pastListLabel: 'Covered',
-          pastList: ICU_ABSTRACTS.last.covered,
-          pastAction: 'Open corrected abstracts',
+          pastListLabel: 'How it works',
+          pastList: ICU_HOW,
+          pastAction: '',
           nextLabel: 'Next ICU of Abstracts',
-          nextTitle: ICU_ABSTRACTS.next.topic,
+          nextTitle: 'ICU of Abstracts',
           nextWhen: fmtDate(ICU_ABSTRACTS.next.date) + ' · ' + sessTime(ICU_ABSTRACTS.next) + ' ' + tz.short,
           nextCountdown: countdownLabel(ICU_ABSTRACTS.next.date),
-          nextChips: ['Free for MAA alumni', 'Once a month'],
-          nextListLabel: 'Planned topics',
-          nextList: ICU_ABSTRACTS.next.topics,
-          nextAction: 'Join ICU of Abstracts',
-          notice: 'A monthly MetaHub event: bring your abstract and it is corrected live, free for all MAA alumni.',
-          links: ['icu']
+          nextChips: ['Zoom', 'Free for MAA alumni'],
+          nextListLabel: 'Before the session',
+          nextList: ['Send your abstract through the form to be corrected first'],
+          nextAction: 'Join on Zoom',
+          notice: ICU_NOTICE,
+          links: ['icuZoom', 'icuForm'],
+          joinLink: 'icuZoom'
+        },
+        {
+          icon: { __html: ICONS.fileSearch },
+          title: 'MetaWriters',
+          simple: true,
+          notice: METAWRITERS_NOTICE,
+          links: ['metawriters']
         }
       ].concat(st.customBlocks).map((b0, bi) => {
         const key = b0.key || 'base-' + bi;
         const b = Object.assign({}, b0, st.blockEdits[key] || {});
         const HUB = {
           metawriters: { label: 'MetaWriters', sub: 'Manuscript correction' },
-          icu: { label: 'ICU of Abstracts', sub: 'Abstract correction · monthly' }
+          tutoringZoom: { label: 'Zoom · tutoring sessions', sub: 'Join link' },
+          icuZoom: { label: 'Zoom · ICU of Abstracts', sub: 'Join link' },
+          icuForm: { label: 'Abstract submission form', sub: 'Send your abstract before the session' }
         };
         const canSet = st.role !== 'mentee';
         return Object.assign({}, b, {
@@ -5282,6 +5302,9 @@ class Component extends DCLogic {
           tag: b.notice ? 'MetaHub' : '',
           tagStyle: b.notice ? 'display:inline-flex; padding:2px 10px; border-radius:9999px; background:hsl(var(--c-40-78-44) / .14); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700; letter-spacing:.06em' : 'display:none',
           hasNotice: !!b.notice,
+          hasSchedule: !b.simple,
+          hasPastAction: !!b.pastAction,
+          joinHref: b.joinLink ? (st.hubLinks[b.joinLink] ? (/^https?:\/\//.test(st.hubLinks[b.joinLink]) ? st.hubLinks[b.joinLink] : 'https://' + st.hubLinks[b.joinLink]) : '#') : 'https://meet.google.com/',
           notice: b.notice || '',
           links: (b.links || []).map((k) => {
             const url = st.hubLinks[k];
@@ -5321,8 +5344,8 @@ class Component extends DCLogic {
       weekActivities: [
         { d: NEXT_SESSION.date, title: 'Mentorship session · Vânio', when: fmtDate(NEXT_SESSION.date) + ' · ' + sessTime(NEXT_SESSION) + ' ' + tz.short },
         { d: OFFICE_HOURS.next.date, title: 'Office hours · ' + OFFICE_HOURS.next.title, when: fmtDate(OFFICE_HOURS.next.date) + ' · ' + sessTime(OFFICE_HOURS.next) + ' ' + tz.short },
-        { d: TUTORING.next.date, title: 'MetaHub tutoring · ' + TUTORING.next.topic, when: fmtDate(TUTORING.next.date) + ' · ' + sessTime(TUTORING.next) + ' ' + tz.short },
-        { d: ICU_ABSTRACTS.next.date, title: 'ICU of Abstracts · ' + ICU_ABSTRACTS.next.topic, when: fmtDate(ICU_ABSTRACTS.next.date) + ' · ' + sessTime(ICU_ABSTRACTS.next) + ' ' + tz.short }
+        { d: TUTORING.next.date, title: 'MetaHub tutoring session', when: fmtDate(TUTORING.next.date) + ' · ' + sessTime(TUTORING.next) + ' ' + tz.short },
+        { d: ICU_ABSTRACTS.next.date, title: 'ICU of Abstracts', when: fmtDate(ICU_ABSTRACTS.next.date) + ' · ' + sessTime(ICU_ABSTRACTS.next) + ' ' + tz.short }
       ].filter((x) => daysFromToday(x.d) >= 0 && daysFromToday(x.d) < 7).sort((a, b) => a.d - b.d),
       tasksSetNote: 'Set by your mentor on ' + MONTHS_SHORT[TASKS_SET_ON.getMonth()] + ' ' + TASKS_SET_ON.getDate(),
       weekTasks: PROJECT_STAGES[curStageIdx].tasks.map((t, ti) => {
