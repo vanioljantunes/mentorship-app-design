@@ -2482,6 +2482,27 @@
               </a>
             </sc-for>
           </div>
+        <sc-if value="{{ startBonusShow }}" hint-placeholder-val="{{ false }}">
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:22px">
+          <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">5 · How your bonus is calculated</h2>
+          <p style="margin:0 0 14px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ startBonusIntro }}</p>
+          <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px">
+            <sc-for list="{{ startBonusParts }}" as="bp" hint-placeholder-count="4">
+              <div style="display:grid; align-content:start; gap:6px; padding:14px; border-radius:13.6px; background:hsl(var(--c-44-26-96))">
+                <span style="display:flex; align-items:center; gap:8px"><span style="display:inline-grid; place-items:center; width:22px; height:22px; border-radius:9999px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:700">{{ bp.n }}</span><span style="font-size:14px; font-weight:700">{{ bp.title }}</span></span>
+                <span style="font-size:13px; line-height:1.45">{{ bp.rule }}</span>
+                <span style="font-size:12px; font-weight:600; color:hsl(var(--c-234-85-14))">{{ bp.mine }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <ul style="margin:14px 0 0; padding-left:20px; display:grid; gap:4px; font-size:13px; line-height:1.5; color:hsl(var(--c-38-6-42))">
+            <sc-for list="{{ startBonusRules }}" as="br" hint-placeholder-count="5">
+              <li>{{ br }}</li>
+            </sc-for>
+          </ul>
+          <button onClick="{{ startBonusGo }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; margin-top:14px">Open your bonus breakdown →</button>
+        </div>
+        </sc-if>
         </div>
       </div>
     </sc-if>
@@ -5853,6 +5874,31 @@ class Component extends DCLogic {
           })),
           startFlows: g.workflows.map(flow),
           startIsAdmin: st.role === 'admin',
+          ...(function () {
+            const semKey = semesterKey(TODAY), range = semesterRange(semKey);
+            const r = self.bonusData(semKey).filter((x) => x.md.name === ME)[0];
+            const show = key === 'mentor' && !!r && r.eligible;
+            if (!show) return { startBonusShow: false, startBonusParts: [], startBonusRules: [] };
+            const ex = r.total * 2000;
+            return {
+              startBonusShow: true,
+              startBonusIntro: (r.md.level === 2 ? 'You are a Level 2 mentor' : 'You become Level 2 on ' + fmtDateY(r.md.end)) + ', so you share the bonus at the ' + fmtDateY(range.end) + ' closing. Here is the calculation with your numbers today.',
+              startBonusParts: [
+                { n: '1', title: 'Productivity points', rule: '1 point per mentee who, within a semester, has 1 submission or publication as first or last author, or 3 as co-author.', mine: 'You now: ' + r.prod.length + (r.prod.length ? ' (' + r.prod.map((a) => a.name).join(', ') + ')' : '') },
+                { n: '2', title: 'Volume points', rule: '1 point for every 4 paid mentees under your responsibility on the closing date.', mine: 'You now: ' + r.paid.length + ' paid mentees → ' + r.volume + ' point' + (r.volume === 1 ? '' : 's') + ' (' + r.toNextVolume + ' more for the next)' },
+                { n: '3', title: 'Point value', rule: '30% of the semester profit divided by the points of all Level 2 mentors together.', mine: 'Contract example: R$ 100.000 ÷ 50 points = R$ 2.000 per point' },
+                { n: '4', title: 'Your bonus', rule: 'Your total points × point value.', mine: 'You now: ' + r.total + ' point' + (r.total === 1 ? '' : 's') + ' → ' + brl(ex) + ' in the contract example' }
+              ],
+              startBonusRules: [
+                'A productivity point stays in later semesters while that mentee remains active and paid.',
+                'If the mentee moves to another mentor, the point is not transferred: neither mentor keeps it.',
+                'Only what is filled in MetaTracker counts: journal, submission date and submission files link, plus co-author and senior (last) author roles.',
+                'Semesters close on June 30 and December 31. Volume points are recalculated at every closing.',
+                'The bonus is a discretionary benefit tied to profit and may change or be suspended (contract addendum, item 4.8).'
+              ],
+              startBonusGo: self.go('mentors')
+            };
+          })(),
           startAdminFlows: START_GUIDE.admin.map(flow),
           startMap: NAV.filter((n) => n.key !== 'start' && (!n.adminOnly || st.role === 'admin')).map((n) => ({
             label: n.label,
