@@ -502,6 +502,7 @@
         </sc-if>
 
         <sc-if value="{{ adSecProjects }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:20px">
         <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
           <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
             <div style="flex:1; min-width:220px">
@@ -510,27 +511,130 @@
             </div>
             <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adProjCount }}</span>
           </div>
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; padding:14px 20px; border-bottom:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-44-26-96) / .6)">
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); flex:1; min-width:180px">Search
+              <input value="{{ adProjQ }}" onChange="{{ adProjSetQ }}" placeholder="Project, mentee or mentor" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%" />
+            </label>
+            <sc-for list="{{ adProjFilters }}" as="f" hint-placeholder-count="3">
+              <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); min-width:160px">{{ f.label }}
+                <select onChange="{{ f.set }}" value="{{ f.value }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                  <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="4">
+                    <option value="{{ o.value }}">{{ o.label }}</option>
+                  </sc-for>
+                </select>
+              </label>
+            </sc-for>
+            <sc-if value="{{ adProjFiltered }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ adProjClear }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); cursor:pointer; color:hsl(var(--c-38-6-42))">Clear filters</button>
+            </sc-if>
+          </div>
           <div style="overflow-x:auto">
-            <div role="table" class="ad-table" aria-label="All research projects" style="min-width:1280px">
-              <div role="row" style="display:grid; grid-template-columns:minmax(260px,2.2fr) 150px 130px 104px 150px 92px minmax(170px,1fr) minmax(150px,1fr); gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
-                <sc-for list="{{ adProjHeaders }}" as="h" hint-placeholder-count="8">
+            <div role="table" class="ad-table" aria-label="All research projects" style="min-width:1560px">
+              <div role="row" style="display:grid; grid-template-columns:minmax(240px,2fr) 140px 150px 130px 104px 120px 150px 92px minmax(160px,1fr) minmax(140px,1fr); gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
+                <sc-for list="{{ adProjHeaders }}" as="h" hint-placeholder-count="10">
                   <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
                 </sc-for>
               </div>
               <sc-for list="{{ adProjRows }}" as="pr" hint-placeholder-count="3">
                 <div role="row" style="{{ pr.rowStyle }}">
                   <span role="cell" style="display:grid; gap:2px; min-width:0"><a href="#" onClick="{{ pr.open }}" style="font-weight:600; color:hsl(var(--c-234-68-12))">{{ pr.name }}</a><sc-if value="{{ pr.hasCoauthors }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ pr.coauthors }}</span></sc-if></span>
+                  <span role="cell">{{ pr.area }}</span>
                   <span role="cell"><a href="#" onClick="{{ pr.openMentee }}">{{ pr.mentee }}</a></span>
                   <span role="cell">{{ pr.mentor }}</span>
                   <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ pr.started }}</span>
+                  <span role="cell" style="display:grid; gap:2px"><span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ pr.updated }}</span><span style="{{ pr.idleStyle }}">{{ pr.idle }}</span></span>
                   <span role="cell"><span style="{{ pr.stageStyle }}">{{ pr.stage }}</span></span>
                   <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ pr.rejections }}</span>
                   <span role="cell">{{ pr.journals }}</span>
                   <span role="cell" style="min-width:0; overflow-wrap:anywhere"><sc-if value="{{ pr.hasDoi }}" hint-placeholder-val="{{ false }}"><a href="{{ pr.doiHref }}" target="_blank" rel="noopener" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ pr.doi }}</a></sc-if><sc-if value="{{ pr.noDoi }}" hint-placeholder-val="{{ true }}"><span style="color:hsl(var(--c-38-6-42))">—</span></sc-if></span>
                 </div>
               </sc-for>
+              <sc-if value="{{ adProjEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:24px; text-align:center; font-size:14px; color:hsl(var(--c-38-6-42)); border-top:1px solid hsl(var(--c-42-12-84))">No projects match the filters.</div>
+              </sc-if>
             </div>
           </div>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; margin-top:4px">
+          <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Project overview</h2>
+          <span style="font-size:13px; color:hsl(var(--c-38-6-42))">All projects and mentees · table filters do not change these numbers</span>
+        </div>
+        <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px">
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+            <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:600">Projects per area</h3>
+            <p style="margin:2px 0 14px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adProjChartsSub }}</p>
+            <div style="display:grid; gap:8px">
+              <sc-for list="{{ adProjAreaBars }}" as="hb" hint-placeholder-count="5">
+                <div tabindex="0" onMouseEnter="{{ hb.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ hb.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:130px 1fr 28px; align-items:center; gap:10px; outline:none">
+                  <span style="font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ hb.label }}</span>
+                  <span style="display:block; height:14px"><span style="{{ hb.barStyle }}"></span></span>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ hb.value }}</span>
+                  <sc-if value="{{ hb.tip }}" hint-placeholder-val="{{ false }}">
+                    <span role="tooltip" style="position:absolute; z-index:5; left:0; bottom:calc(100% + 2px); padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none">{{ hb.tipText }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+            <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:600">Projects per stage</h3>
+            <p style="margin:2px 0 14px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adProjChartsSub }}</p>
+            <div style="display:grid; gap:8px">
+              <sc-for list="{{ adProjStageBars }}" as="hb" hint-placeholder-count="5">
+                <div tabindex="0" onMouseEnter="{{ hb.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ hb.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:130px 1fr 28px; align-items:center; gap:10px; outline:none">
+                  <span style="font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ hb.label }}</span>
+                  <span style="display:block; height:14px"><span style="{{ hb.barStyle }}"></span></span>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ hb.value }}</span>
+                  <sc-if value="{{ hb.tip }}" hint-placeholder-val="{{ false }}">
+                    <span role="tooltip" style="position:absolute; z-index:5; left:0; bottom:calc(100% + 2px); padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none">{{ hb.tipText }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+            <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:600">Projects without an update</h3>
+            <p style="margin:2px 0 14px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adProjChartsSub }}</p>
+            <div style="display:grid; gap:8px">
+              <sc-for list="{{ adProjIdleBars }}" as="hb" hint-placeholder-count="5">
+                <div tabindex="0" onMouseEnter="{{ hb.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ hb.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:130px 1fr 28px; align-items:center; gap:10px; outline:none">
+                  <span style="font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ hb.label }}</span>
+                  <span style="display:block; height:14px"><span style="{{ hb.barStyle }}"></span></span>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ hb.value }}</span>
+                  <sc-if value="{{ hb.tip }}" hint-placeholder-val="{{ false }}">
+                    <span role="tooltip" style="position:absolute; z-index:5; left:0; bottom:calc(100% + 2px); padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none">{{ hb.tipText }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px">
+            <div style="flex:1; min-width:240px">
+              <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:600">Mentees without projects and without publications, by authorship role</h3>
+              <p style="margin:2px 0 0; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adRoleSub }}. A publication is a project at the Accepted stage. Bars run to the total number of present mentees.</p>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:12px">
+              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:var(--viz-1)"></span>Without a project</span>
+              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:var(--viz-2)"></span>Without a publication</span>
+            </div>
+          </div>
+          <div style="display:grid; gap:12px; margin-top:16px">
+            <sc-for list="{{ adRoleRows }}" as="rr" hint-placeholder-count="4">
+              <div tabindex="0" onMouseEnter="{{ rr.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ rr.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:150px 1fr 32px; align-items:center; column-gap:10px; row-gap:2px; outline:none">
+                <span style="grid-row:span 2; font-size:13px; font-weight:600">{{ rr.label }}</span>
+                <span style="display:block; height:12px"><span style="{{ rr.projBar }}"></span></span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ rr.noProj }}</span>
+                <span style="display:block; height:12px"><span style="{{ rr.pubBar }}"></span></span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ rr.noPub }}</span>
+                <sc-if value="{{ rr.tip }}" hint-placeholder-val="{{ false }}">
+                  <span role="tooltip" style="position:absolute; z-index:5; left:0; bottom:calc(100% + 2px); padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none">{{ rr.tipText }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
         </div>
         </sc-if>
       </div>
@@ -3471,7 +3575,7 @@ function seedProjects() {
   return [
     // ---- real projects (from claudeOS/mentorship/mentees), task states mapped by hand; ids are stage-task ----
     {
-      id: 'p8', mentee: 'Caroline Dagostin', started: new Date(2026, 3, 26), name: 'Antibiotic prophylaxis and PEECS after endoscopic submucosal dissection', status: 'Active', reviewNote: '', updated: new Date(2026, 8, 9),
+      id: 'p8', mentee: 'Caroline Dagostin', area: 'Gastroenterology', started: new Date(2026, 3, 26), name: 'Antibiotic prophylaxis and PEECS after endoscopic submucosal dissection', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 27),
       picott: { p: 'Adults undergoing ESD or related procedures (POEM, EFTR): colorectal, oesophageal, gastric', i: 'Systemic antibiotic prophylaxis', c: 'No prophylaxis (placebo or usual care)', o: 'PEECS (primary); length of stay, fever, bacteraemia, infection, mortality', t: 'Index admission or within 30 days', t2: 'Systematic review and meta-analysis (RCTs and observational), stratified by anatomical site', reviewType: 'Intervention', secondaryQs: 'The workbook runs four PICOTs (A–D). A is the primary question above; B–D (by organ and procedure) are analysed as secondary questions.' },
       taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '2-3': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '4-2': true, '5-0': true, '5-1': true, '5-2': true, '5-3': 'ready', '7-0': 'ready', '7-1': 'ready' },
       taskNotes: {},
@@ -3514,7 +3618,7 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p9', mentee: 'Ana Beatriz Moraes', started: new Date(2025, 11, 20), name: 'Cap-assisted forward-viewing endoscope vs side-viewing duodenoscope for ERCP in Billroth II', status: 'Active', reviewNote: '', updated: new Date(2026, 4, 25),
+      id: 'p9', mentee: 'Ana Beatriz Moraes', area: 'Gastroenterology', started: new Date(2025, 11, 20), name: 'Cap-assisted forward-viewing endoscope vs side-viewing duodenoscope for ERCP in Billroth II', status: 'Active', reviewNote: '', updated: new Date(2026, 4, 25),
       picott: { p: 'Adults undergoing ERCP with Billroth II anatomy', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Afferent limb intubation, biliary cannulation, clinical success; pancreatitis, perforation, unintended PD cannulation', t: 'Not reported', t2: 'Systematic review and meta-analysis with GRADE and trial sequential analysis' },
       taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-0': true, '2-1': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '3-4': true, '4-0': true, '4-1': true, '4-2': true, '4-3': true, '5-0': true, '5-1': true, '5-2': true, '5-3': true, '5-4': true, '6-0': true, '6-1': true, '6-2': true, '6-3': true, '7-0': true, '7-1': true, '7-2': true, '7-3': true, '7-4': true, '7-5': true, '7-7': true, '8-0': true, '8-1': true, '8-2': true },
       taskNotes: {},
@@ -3550,7 +3654,7 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p10', mentee: 'Letícia Moura', started: new Date(2026, 4, 19), name: 'Tumour contact length on MRI for predicting muscle-invasive bladder cancer', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 23),
+      id: 'p10', mentee: 'Letícia Moura', area: 'Radiology', started: new Date(2026, 4, 19), name: 'Tumour contact length on MRI for predicting muscle-invasive bladder cancer', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 23),
       picott: { p: 'Bladder tumours staged with multiparametric MRI before histology (lesion level)', i: 'Index test: tumour contact length (TCL), curvilinear or transverse', c: 'Comparator test: VI-RADS ≥3 (paired)', o: 'Sensitivity, specificity, AUC against histopathology (TURBT or cystectomy)', t: 'Not applicable (diagnostic accuracy)', t2: 'Diagnostic test accuracy meta-analysis', reviewType: 'Diagnostic accuracy', secondaryQs: 'Transverse vs curvilinear TCL measurement; TCL vs VI-RADS head-to-head (paired studies only).' },
       taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '5-0': true, '5-1': true, '5-2': true, '7-0': 'ready', '7-1': 'ready', '7-2': 'ready', '7-3': 'ready' },
       taskNotes: {},
@@ -3646,7 +3750,7 @@ class Component extends DCLogic {
     copiedEmail: '',
     coOpen: null, coDraft: { mentee: '', name: '', email: '', senior: false },
     projects: SEED_PROJECTS, projectId: SEED_PROJECTS[0].id, projectFilter: 'All mentees',
-    adSort: { key: 'end', dir: 1 }, adSection: 'mentees', adMentorSort: { key: 'name', dir: 1 }, adMentorFilter: { q: '', status: 'All', area: 'All', country: 'All', gmt: 'All', open: false }, adProjSort: { key: 'started', dir: -1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
+    adSort: { key: 'end', dir: 1 }, adSection: 'mentees', adMentorSort: { key: 'name', dir: 1 }, adMentorFilter: { q: '', status: 'All', area: 'All', country: 'All', gmt: 'All', open: false }, adProjSort: { key: 'started', dir: -1 }, adProjFilter: { q: '', area: 'All', stage: 'All', idle: 'any' }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
     theme: (function () { try { return localStorage.getItem('mh-theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
     logbook: SEED_PROJECTS[0].logbook,
@@ -3750,7 +3854,7 @@ class Component extends DCLogic {
     if (kind === 'event') return [F('title', 'Title', { placeholder: 'Event title' }), F('category', 'Category', { type: 'select', options: CAL_CATEGORIES }), F('date', 'Date', { type: 'date' }), F('start', 'Start time (Brasília)', { type: 'time' }), F('end', 'End time (Brasília)', { type: 'time' }), F('recurrence', 'Recurrence', { type: 'select', options: CAL_RECURRENCE }), F('link', 'Meeting link (optional)', { placeholder: 'https://zoom.us/...' }), F('note', 'Short note', { placeholder: 'e.g. Group session' }), F('desc', 'Description', { type: 'textarea' }), F('active', 'Status', { type: 'switch' })];
     if (kind === 'block') return [F('title', 'Card title'), F('notice', 'Notice (optional)', { type: 'textarea' }), F('pastLabel', 'Left column label'), F('pastTitle', 'Left title'), F('pastWhen', 'Left date & time'), F('pastChips', 'Left tags (one per line)', { type: 'lines' }), F('pastListLabel', 'Left list heading'), F('pastList', 'Left bullet points (one per line)', { type: 'lines' }), F('pastAction', 'Left link label'), F('nextLabel', 'Right column label'), F('nextTitle', 'Right title'), F('nextWhen', 'Right date & time'), F('nextCountdown', 'Countdown badge'), F('nextChips', 'Right tags (one per line)', { type: 'lines' }), F('nextListLabel', 'Right list heading'), F('nextList', 'Right bullet points (one per line)', { type: 'lines' }), F('nextAction', 'Button label')];
     if (kind === 'profile') return [F('affiliation', 'Affiliation'), F('country', 'Country'), F('bio', 'Bio', { type: 'textarea', placeholder: 'A few lines about your research and mentoring' })];
-    if (kind === 'project') return [F('title', 'Project title', { placeholder: 'e.g. SGLT2 inhibitors for anthracycline cardiotoxicity' }), F('mentee', 'Mentee', { type: 'select' }), F('reviewType', 'Review type', { type: 'select', options: REVIEW_TYPES }), F('p', 'Population'), F('i', 'Intervention'), F('c', 'Comparator'), F('o', 'Outcome'), F('t', 'Timeframe'), F('t2', 'Type of study', { placeholder: 'e.g. Systematic review and meta-analysis' })];
+    if (kind === 'project') return [F('title', 'Project title', { placeholder: 'e.g. SGLT2 inhibitors for anthracycline cardiotoxicity' }), F('mentee', 'Mentee', { type: 'select' }), F('reviewType', 'Review type', { type: 'select', options: REVIEW_TYPES }), F('area', 'Research area', { type: 'select', options: AREAS }), F('p', 'Population'), F('i', 'Intervention'), F('c', 'Comparator'), F('o', 'Outcome'), F('t', 'Timeframe'), F('t2', 'Type of study', { placeholder: 'e.g. Systematic review and meta-analysis' })];
     if (kind === 'module' || kind === 'submodule') return [F('title', 'Title', { placeholder: kind === 'module' ? 'Module title' : 'Submodule title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('thumb', 'Thumbnail', { type: 'image' }), F('order', 'Order', { type: 'number' }), F('status', 'Status', { type: 'select', options: ['Active', 'Inactive'] })];
     if (kind === 'lesson') return [F('title', 'Title', { placeholder: 'Lesson title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('content', 'Content', { type: 'rich', placeholder: 'Lesson content... (**bold**, _italic_, ## heading, - list)' }), F('videoUrl', 'Video URL', { placeholder: 'YouTube, Vimeo or https:// embed link' }), F('mins', 'Duration (minutes)', { type: 'number' }), F('thumb', 'Thumbnail', { type: 'image' }), F('files', 'Lesson files', { type: 'files' }), F('subId', 'Submodule', { type: 'select' }), F('order', 'Order', { type: 'number' }), F('active', 'Status', { type: 'switch' })];
     return [];
@@ -3784,7 +3888,7 @@ class Component extends DCLogic {
     if (d.kind === 'project') {
       const proposed = this.state.role === 'mentee';
       const proj = {
-        id: 'p' + Date.now(), mentee: v.mentee || this.newProjectMentees()[0], started: TODAY, name: v.title.trim(), status: proposed ? 'Proposed' : 'Active', reviewNote: '', updated: TODAY,
+        id: 'p' + Date.now(), mentee: v.mentee || this.newProjectMentees()[0], area: v.area || ((MENTEES.filter((m) => m.name === (v.mentee || this.newProjectMentees()[0]))[0] || {}).area || ''), started: TODAY, name: v.title.trim(), status: proposed ? 'Proposed' : 'Active', reviewNote: '', updated: TODAY,
         taskDone: {}, taskNotes: {}, docs: [], taskDocs: {}, registration: Object.assign({}, REG_BLANK), journals: [], conferences: [], coauthors: [], expert: Object.assign({}, EXPERT_BLANK),
         picott: { p: v.p, i: v.i, c: v.c, o: v.o, t: v.t, t2: v.t2, reviewType: v.reviewType || 'Intervention', secondaryQs: '' },
         studies: [], details: { pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' }, logbook: []
@@ -4236,12 +4340,54 @@ class Component extends DCLogic {
 
     // ---- projects
     const PCOLS = [
-      ['name', 'Project', (p) => p.name], ['mentee', 'Mentee', (p) => p.mentee], ['mentor', 'Mentor', (p) => mentorOf(p.mentee).name],
-      ['started', 'Started', (p) => (p.started || p.updated).getTime()], ['stage', 'Stage', (p) => PROJECT_PUB_STAGES.indexOf(this.projectPubStage(p))],
+      ['name', 'Project', (p) => p.name], ['area', 'Area', (p) => p.area || ''], ['mentee', 'Mentee', (p) => p.mentee], ['mentor', 'Mentor', (p) => mentorOf(p.mentee).name],
+      ['started', 'Started', (p) => (p.started || p.updated).getTime()], ['updated', 'Last update', (p) => (p.updated || p.started).getTime()], ['stage', 'Stage', (p) => PROJECT_PUB_STAGES.indexOf(this.projectPubStage(p))],
       ['rejections', 'Rejections', (p) => (p.journals || []).reduce((n, j) => n + (j.rounds || []).filter((r) => r.decision === 'Rejected').length, 0)],
       ['journals', 'Journals tried', (p) => (p.journals || []).map((j) => j.name).join(', ')], ['doi', 'DOI / link', (p) => (p.details && p.details.pubDoi) || '']
     ];
-    const projRows = sortRows(this.state.projects.map((p) => this.projectData(p)), PCOLS, st.adProjSort, (p) => p.name);
+    const allProjects = this.state.projects.map((p) => this.projectData(p));
+    const idleDays = (p) => Math.max(0, daysBetween(p.updated || p.started || TODAY, TODAY));
+    const IDLE = [['any', 'Any', () => true], ['lt1', 'Updated this week', (d) => d < 7], ['w1', '1+ weeks', (d) => d >= 7], ['w2', '2+ weeks', (d) => d >= 14], ['w3', '3+ weeks', (d) => d >= 21], ['w4', '4+ weeks', (d) => d >= 28]];
+    const pf = st.adProjFilter;
+    const projRows = sortRows(allProjects.filter((p) => {
+      const q = pf.q.trim().toLowerCase();
+      if (q && (p.name + ' ' + p.mentee + ' ' + mentorOf(p.mentee).name).toLowerCase().indexOf(q) === -1) return false;
+      if (pf.area !== 'All' && p.area !== pf.area) return false;
+      if (pf.stage !== 'All' && this.projectPubStage(p) !== pf.stage) return false;
+      if (!(IDLE.filter((x) => x[0] === pf.idle)[0] || IDLE[0])[2](idleDays(p))) return false;
+      return true;
+    }), PCOLS, st.adProjSort, (p) => p.name);
+    const setPF = (k, v) => { const f = Object.assign({}, this.state.adProjFilter); f[k] = v; this.setState({ adProjFilter: f }); };
+
+    // ---- project charts: every project and present mentee, table filters do not apply
+    const hbars = (key, rows, color, unit) => {
+      const max = Math.max.apply(null, rows.map((r) => r.value).concat([1]));
+      return rows.map((r, i) => ({
+        label: r.label,
+        value: r.value,
+        barStyle: bar(Math.round((r.value / max) * 100), color),
+        enter: enter(key + '-' + i),
+        tip: st.adTip === key + '-' + i,
+        tipText: r.label + ': ' + r.value + ' ' + unit + (r.value === 1 ? '' : 's') + (r.names && r.names.length ? ' · ' + r.names.join(', ') : '')
+      }));
+    };
+    const byArea = uniq(allProjects.map((p) => p.area || 'No area')).map((a) => ({ label: a, names: allProjects.filter((p) => (p.area || 'No area') === a).map((p) => p.mentee), value: allProjects.filter((p) => (p.area || 'No area') === a).length })).sort((x, y) => y.value - x.value || x.label.localeCompare(y.label));
+    const byStage = PROJECT_PUB_STAGES.map((stg) => { const list = allProjects.filter((p) => this.projectPubStage(p) === stg); return { label: stg, value: list.length, names: list.map((p) => p.mentee) }; });
+    const IDLE_BUCKETS = [['Updated this week', 0, 7], ['1 week', 7, 14], ['2 weeks', 14, 21], ['3 weeks', 21, 28], ['4 weeks or more', 28, 1e9]];
+    const byIdle = IDLE_BUCKETS.map((bk) => { const list = allProjects.filter((p) => idleDays(p) >= bk[1] && idleDays(p) < bk[2]); return { label: bk[0], value: list.length, names: list.map((p) => p.mentee + ' (' + idleDays(p) + ' d)') }; });
+    const present = MENTEES.filter((m) => m.status === 'Active' || m.status === 'Paused');
+    const accepted = (p) => this.projectPubStage(p) === 'Accepted';
+    const roleOf = (p, name) => {
+      if (p.mentee === name) return 'first';
+      const c = (p.coauthors || []).filter((x) => x.kind === 'mentee' && x.name === name)[0];
+      return c ? (c.senior ? 'senior' : 'co') : '';
+    };
+    const ROLES = [['any', 'Any role'], ['first', 'As first author'], ['co', 'As co-author'], ['senior', 'As senior author']];
+    const withoutRole = ROLES.map((r) => {
+      const has = (m, onlyAccepted) => allProjects.some((p) => (!onlyAccepted || accepted(p)) && (r[0] === 'any' ? !!roleOf(p, m.name) : roleOf(p, m.name) === r[0]));
+      return { label: r[1], noProj: present.filter((m) => !has(m, false)), noPub: present.filter((m) => !has(m, true)) };
+    });
+    const roleMax = Math.max(present.length, 1);
     const STAGE_SC = { 'Working': '38-6-42', 'Waiting senior': '40-78-44', 'Waiting submission': '212-85-20', 'Waiting review': '234-85-14', 'Accepted': '155-40-27' };
     const secTab = (key) => 'height:32px; padding:0 14px; border:0; border-radius:6.6px; font-size:14px; cursor:pointer; ' + (st.adSection === key ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; color:hsl(var(--c-38-6-42))');
 
@@ -4359,7 +4505,37 @@ class Component extends DCLogic {
       adWaitTargetLabel: LONG_WAIT + ' d',
       adWaitTargetPos: 'position:absolute; top:0; left:' + Math.round((LONG_WAIT / waitMax) * 1000) / 10 + '%; transform:translateX(-50%)',
       adProjHeaders: heads(PCOLS, 'adProjSort', { rejections: 1 }),
-      adProjCount: this.state.projects.length + ' projects',
+      adProjCount: projRows.length + ' of ' + this.state.projects.length + ' projects',
+      adProjQ: pf.q,
+      adProjSetQ: (e) => setPF('q', e.target.value),
+      adProjFilters: [
+        ['area', 'Area', uniq(allProjects.map((p) => p.area).filter(Boolean)).sort().map((v) => ({ value: v, label: v }))],
+        ['stage', 'Stage', PROJECT_PUB_STAGES.map((v) => ({ value: v, label: v }))],
+        ['idle', 'Without update', IDLE.slice(1).map((x) => ({ value: x[0], label: x[1] }))]
+      ].map((f) => ({
+        label: f[1],
+        value: pf[f[0]],
+        options: [{ value: f[0] === 'idle' ? 'any' : 'All', label: 'All' }].concat(f[2]),
+        set: (e) => setPF(f[0], e.target.value)
+      })),
+      adProjFiltered: !!(pf.q || pf.area !== 'All' || pf.stage !== 'All' || pf.idle !== 'any'),
+      adProjClear: () => this.setState({ adProjFilter: { q: '', area: 'All', stage: 'All', idle: 'any' } }),
+      adProjEmpty: projRows.length === 0,
+      adProjAreaBars: hbars('pa', byArea, 'var(--viz-1)', 'project'),
+      adProjStageBars: hbars('ps', byStage, 'var(--viz-1)', 'project'),
+      adProjIdleBars: hbars('pi', byIdle, 'var(--viz-1)', 'project'),
+      adProjChartsSub: 'All ' + allProjects.length + ' projects',
+      adRoleSub: present.length + ' present mentees (active or paused)',
+      adRoleRows: withoutRole.map((r, i) => ({
+        label: r.label,
+        noProj: r.noProj.length,
+        noPub: r.noPub.length,
+        projBar: bar(Math.round((r.noProj.length / roleMax) * 100), 'var(--viz-1)'),
+        pubBar: bar(Math.round((r.noPub.length / roleMax) * 100), 'var(--viz-2)'),
+        enter: enter('pr-' + i),
+        tip: st.adTip === 'pr-' + i,
+        tipText: r.label + ': ' + r.noProj.length + ' without a project, ' + r.noPub.length + ' without a publication (of ' + present.length + ')'
+      })),
       adProjLegend: 'Stage: Accepted (accepted round or status) · Waiting review (last round pending at the journal) · Waiting submission (internal review approved, or last journal rejected) · Waiting senior (tasks waiting for mentor or senior review) · Working.',
       adProjRows: projRows.map((p) => {
         const stage = this.projectPubStage(p);
@@ -4376,13 +4552,17 @@ class Component extends DCLogic {
           started: fmtD(p.started || p.updated),
           stage: stage,
           stageStyle: pill(STAGE_SC[stage]),
-          rejections: PCOLS[5][2](p),
+          rejections: PCOLS.filter((c) => c[0] === 'rejections')[0][2](p),
+          area: p.area || '—',
+          updated: fmtD(p.updated || p.started),
+          idle: idleDays(p) === 0 ? 'today' : idleDays(p) + ' days ago',
+          idleStyle: 'font-size:11px; ' + (idleDays(p) >= 28 ? 'font-weight:700; color:hsl(var(--c-4-62-50))' : 'color:hsl(var(--c-38-6-42))'),
           journals: (p.journals || []).map((j) => j.name).filter(Boolean).join(', ') || '—',
           doi: doi,
           hasDoi: !!doi,
           noDoi: !doi,
           doiHref: /^https?:/.test(doi) ? doi : 'https://doi.org/' + doi,
-          rowStyle: 'display:grid; grid-template-columns:minmax(260px,2.2fr) 150px 130px 104px 150px 92px minmax(170px,1fr) minmax(150px,1fr); gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px'
+          rowStyle: 'display:grid; grid-template-columns:minmax(240px,2fr) 140px 150px 130px 104px 120px 150px 92px minmax(160px,1fr) minmax(140px,1fr); gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px'
         };
       }),
       isAdminPage: st.page === 'admin' && admin,
@@ -5806,7 +5986,7 @@ class Component extends DCLogic {
       ...this.ohVals(),
       ...this.dlgVals(),
       newResearchLabel: st.role === 'mentee' ? 'Propose research' : 'New Research',
-      newResearch: (e) => { e.preventDefault(); this.openDlg('project', { title: '', mentee: this.newProjectMentees()[0], reviewType: 'Intervention', p: '', i: '', c: '', o: '', t: '', t2: 'Systematic review and meta-analysis' }, { mode: 'create' }); },
+      newResearch: (e) => { e.preventDefault(); this.openDlg('project', { title: '', mentee: this.newProjectMentees()[0], area: (MENTEES.filter((m) => m.name === this.newProjectMentees()[0])[0] || {}).area || AREAS[0], reviewType: 'Intervention', p: '', i: '', c: '', o: '', t: '', t2: 'Systematic review and meta-analysis' }, { mode: 'create' }); },
       hasReviewItems: this.pendingItems().length > 0,
       reviewHeading: st.role === 'mentee' ? 'Waiting for your mentor’s review' : 'Awaiting your review',
       reviewCount: this.pendingItems().length,
