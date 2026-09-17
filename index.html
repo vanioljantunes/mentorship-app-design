@@ -405,6 +405,12 @@
                   <sc-if value="{{ pc.showMentee }}" hint-placeholder-val="{{ true }}">
                     <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ pc.mentee }}</span>
                   </sc-if>
+                  <sc-if value="{{ pc.hasRoleTag }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ pc.roleTagStyle }}">{{ pc.roleTag }}</span>
+                  </sc-if>
+                  <sc-if value="{{ pc.hasCoLine }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ pc.coLine }}</span>
+                  </sc-if>
                   <sc-if value="{{ pc.hasStatusTag }}" hint-placeholder-val="{{ false }}">
                     <span style="{{ pc.statusTagStyle }}">{{ pc.statusTag }}</span>
                   </sc-if>
@@ -1281,7 +1287,10 @@
                 <div style="display:flex; align-items:center; gap:14px">
                   <span style="{{ stage.ringStyle }}"></span>
                   <div style="flex:1; min-width:0">
-                    <div style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700">{{ stage.title }}</div>
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px">
+                      <span style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700">{{ stage.title }}</span>
+                      <button onClick="{{ stage.toggleCo }}" title="{{ stage.coToggleLabel }}" aria-label="{{ stage.coToggleLabel }}" style="{{ stage.coToggleStyle }}"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>{{ stage.coCount }}</span></button>
+                    </div>
                     <div style="margin-top:2px; font-size:14px; color:hsl(var(--c-38-6-42))">{{ stage.desc }}</div>
                   </div>
                   <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">{{ stage.count }}</span>
@@ -1289,13 +1298,65 @@
                     <span style="{{ stage.barStyle }}; display:block"></span>
                   </span>
                 </div>
+                <sc-if value="{{ stage.hasCo }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:12px">
+                    <span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Co-authors</span>
+                    <sc-for list="{{ stage.coauthors }}" as="co" hint-placeholder-count="2">
+                      <span style="{{ co.chipStyle }}">
+                        <sc-if value="{{ co.isMentee }}" hint-placeholder-val="{{ true }}">
+                          <a href="#" onClick="{{ co.open }}" title="Open profile" style="display:inline-flex; align-items:center; gap:6px; color:inherit">
+                            <span style="display:inline-grid; place-items:center; width:20px; height:20px; border-radius:9999px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:9px; font-weight:700">{{ co.initials }}</span>{{ co.name }}
+                          </a>
+                        </sc-if>
+                        <sc-if value="{{ co.isExternal }}" hint-placeholder-val="{{ false }}">
+                          <span style="padding-left:6px">{{ co.name }}</span>
+                          <a href="{{ co.mailto }}" style="font-size:11px; font-weight:500; color:hsl(var(--c-38-6-42))">{{ co.email }}</a>
+                        </sc-if>
+                        <button onClick="{{ co.remove }}" aria-label="Remove co-author" style="width:20px; height:20px; border:0; border-radius:9999px; background:transparent; color:hsl(var(--c-38-6-42)); cursor:pointer">×</button>
+                      </span>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ stage.coOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid; gap:12px; margin-top:12px; padding:14px; border:1px dashed hsl(var(--c-234-85-14) / .3); border-radius:9.6px">
+                    <div style="font-size:13px; font-weight:600">Add a co-author to this stage</div>
+                    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px">
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1; min-width:200px">From the mentee list
+                        <select onChange="{{ stage.setCoMentee }}" value="{{ stage.coDraftMentee }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                          <sc-for list="{{ stage.coMenteeOptions }}" as="o" hint-placeholder-count="3">
+                            <option value="{{ o.value }}">{{ o.label }}</option>
+                          </sc-for>
+                        </select>
+                      </label>
+                      <button onClick="{{ stage.addCoMentee }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:6.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap">Add mentee</button>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px">
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1; min-width:160px">Outside co-author name
+                        <input value="{{ stage.coDraftName }}" onChange="{{ stage.setCoName }}" placeholder="Full name" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                      </label>
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1; min-width:180px">Email
+                        <input type="email" value="{{ stage.coDraftEmail }}" onChange="{{ stage.setCoEmail }}" placeholder="name@institution.org" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                      </label>
+                      <button onClick="{{ stage.addCoExternal }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:6.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap">Add outside co-author</button>
+                    </div>
+                    <label style="display:inline-flex; align-items:center; gap:8px; font-size:13px">
+                      <input type="checkbox" checked="{{ stage.coDraftSenior }}" onChange="{{ stage.toggleCoSenior }}" style="width:16px; height:16px; accent-color:hsl(var(--c-234-85-14))" />
+                      Senior author (applies to the next one you add)
+                    </label>
+                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">Mentees added here see this project in their MetaTracker under co-author projects, and so do their mentors.</span>
+                  </div>
+                </sc-if>
                 <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px">
                   <sc-for list="{{ stage.tasks }}" as="task" hint-placeholder-count="4">
+                    <div style="display:grid; gap:8px">
                     <label style="{{ task.rowStyle }}">
                       <input type="checkbox" checked="{{ task.checked }}" disabled="{{ task.locked }}" onChange="{{ task.toggle }}" style="width:16px; height:16px; margin-top:2px; flex-shrink:0; accent-color:hsl(var(--c-234-85-14))" />
                       <span style="display:grid; gap:2px; flex:1; min-width:0">
                         <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap">
                           <span style="{{ task.titleStyle }}">{{ task.title }}</span>
+                          <sc-if value="{{ task.canReopen }}" hint-placeholder-val="{{ false }}">
+                            <button onClick="{{ task.reopen }}" title="Reopen this approved task" style="display:inline-flex; align-items:center; height:28px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; height:24px; font-size:11px">Reopen</button>
+                          </sc-if>
                           <sc-if value="{{ task.optional }}" hint-placeholder-val="{{ true }}">
                             <span style="display:inline-flex; padding:2px 8px; border-radius:9999px; background:hsl(var(--c-40-78-44) / .14); color:hsl(var(--c-40-78-44)); font-size:11px; font-weight:700">Optional · not counted</span>
                           </sc-if>
@@ -1321,17 +1382,196 @@
                           </span>
                         </sc-if>
                         <sc-if value="{{ task.hasNote }}" hint-placeholder-val="{{ false }}">
-                          <span style="font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50))">Sent back: {{ task.note }}</span>
+                          <span style="font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50))">{{ task.note }}</span>
                         </sc-if>
+                      <span style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:6px">
+                          <sc-for list="{{ task.docs }}" as="doc" hint-placeholder-count="1">
+                            <span style="display:inline-flex; align-items:center; gap:4px; height:26px; padding:0 4px 0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9999px; background:hsl(var(--c-42-33-99)); font-size:12px">
+                              <a href="{{ doc.href }}" target="_blank" rel="noopener" style="font-weight:600">{{ doc.name }}</a>
+                              <button onClick="{{ doc.detach }}" aria-label="Detach document" title="Detach from this task" style="width:20px; height:20px; border:0; border-radius:9999px; background:transparent; color:hsl(var(--c-38-6-42)); cursor:pointer">×</button>
+                            </span>
+                          </sc-for>
+                          <select onChange="{{ task.attach }}" value="" aria-label="Attach a document to this task" style="height:26px; padding:0 8px; border:1px dashed hsl(var(--c-42-12-84)); border-radius:9999px; background:transparent; font-size:12px; color:hsl(var(--c-38-6-42)); cursor:pointer">
+                            <sc-for list="{{ task.docOptions }}" as="o" hint-placeholder-count="2">
+                              <option value="{{ o.value }}">{{ o.label }}</option>
+                            </sc-for>
+                          </select>
+                        </span>
                       </span>
-                      <button onClick="{{ task.driveClick }}" title="{{ task.driveTitle }}" aria-label="{{ task.driveTitle }}" style="{{ task.driveStyle }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.2 2.5h7.6L23 15l-3.8 6.5H4.8L1 15Z"></path><path d="M8.2 2.5 15.2 15"></path><path d="M23 15H6.9"></path></svg>
-                      </button>
                     </label>
+                    <sc-if value="{{ task.isRegister }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid; gap:10px; margin:0 0 4px 46px; padding:12px 14px; border:1px dashed hsl(var(--c-234-85-14) / .3); border-radius:9.6px">
+                        <div class="rgrid-1" style="display:grid; grid-template-columns:140px minmax(0,1fr) 190px; gap:10px">
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Registry
+                            <select onChange="{{ task.setRegRegistry }}" value="{{ task.regRegistry }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                              <option value="PROSPERO">PROSPERO</option><option value="OSF">OSF</option><option value="Other">Other</option>
+                            </select>
+                          </label>
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Registration ID
+                            <input value="{{ task.regId }}" onChange="{{ task.setRegId }}" placeholder="e.g. CRD42026…" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); font-family:'JetBrains Mono', monospace" />
+                          </label>
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Status
+                            <select onChange="{{ task.setRegStatus }}" value="{{ task.regStatus }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                              <sc-for list="{{ regStatusOptions }}" as="o" hint-placeholder-count="6">
+                                <option value="{{ o }}">{{ o }}</option>
+                              </sc-for>
+                            </select>
+                          </label>
+                        </div>
+                        <sc-if value="{{ task.regWarn }}" hint-placeholder-val="{{ false }}">
+                          <span role="status" style="font-size:12px; font-weight:600; color:hsl(var(--c-40-78-44))">⚠ {{ task.regWarn }}</span>
+                        </sc-if>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ task.isExpert }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid; gap:10px; margin:0 0 4px 46px; padding:12px 14px; border:1px dashed hsl(var(--c-234-85-14) / .3); border-radius:9.6px">
+                        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px">
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); width:190px">Status
+                            <select onChange="{{ task.setExpertStatus }}" value="{{ task.expertStatus }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                              <sc-for list="{{ expertStatusOptions }}" as="o" hint-placeholder-count="3">
+                                <option value="{{ o }}">{{ o }}</option>
+                              </sc-for>
+                            </select>
+                          </label>
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); width:160px">Expert is
+                            <select onChange="{{ task.setExpertKind }}" value="{{ task.expertKind }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                              <option value="external">An outside expert</option>
+                              <option value="mentee">A mentee</option>
+                            </select>
+                          </label>
+                          <sc-if value="{{ task.expertIsMentee }}" hint-placeholder-val="{{ false }}">
+                            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1; min-width:200px">Mentee
+                              <select onChange="{{ task.setExpertName }}" value="{{ task.expertName }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                                <sc-for list="{{ task.expertMenteeOptions }}" as="o" hint-placeholder-count="3">
+                                  <option value="{{ o.value }}">{{ o.label }}</option>
+                                </sc-for>
+                              </select>
+                            </label>
+                          </sc-if>
+                          <sc-if value="{{ task.expertIsExternal }}" hint-placeholder-val="{{ true }}">
+                            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1; min-width:160px">Name
+                              <input value="{{ task.expertName }}" onChange="{{ task.setExpertName }}" placeholder="Expert's full name" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                            </label>
+                            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1; min-width:180px">Email
+                              <input type="email" value="{{ task.expertEmail }}" onChange="{{ task.setExpertEmail }}" placeholder="name@institution.org" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                            </label>
+                          </sc-if>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:13px">
+                          <span style="{{ task.expertStatusStyle }}">{{ task.expertStatus }}</span>
+                          <sc-if value="{{ task.expertAcceptedMentee }}" hint-placeholder-val="{{ false }}">
+                            <a href="#" onClick="{{ task.openExpert }}" style="display:inline-flex; align-items:center; gap:6px; font-weight:600">
+                              <span style="display:inline-grid; place-items:center; width:22px; height:22px; border-radius:9999px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:10px; font-weight:700">{{ task.expertInitials }}</span>{{ task.expertName }}
+                            </a>
+                          </sc-if>
+                          <sc-if value="{{ task.expertAcceptedExternal }}" hint-placeholder-val="{{ false }}">
+                            <span style="font-weight:600">{{ task.expertName }}</span>
+                            <a href="{{ task.expertMailto }}" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ task.expertEmailLabel }}</a>
+                          </sc-if>
+                        </div>
+                      </div>
+                    </sc-if>
+                    </div>
                   </sc-for>
                 </div>
               </div>
             </sc-for>
+            <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:20px 22px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
+              <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px">
+                <div>
+                  <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:hsl(var(--c-38-6-42))">Stage 8</div>
+                  <h2 style="margin:2px 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">Journal submissions</h2>
+                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">One item per journal, with its submission files and every review round. Add a new journal after a rejection.</p>
+                </div>
+                <button onClick="{{ addJournal }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:6.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; height:34px">+ Add journal</button>
+              </div>
+              <div style="display:grid; gap:14px; margin-top:16px">
+                <sc-for list="{{ journals }}" as="jr" hint-placeholder-count="1">
+                  <div style="display:grid; gap:12px; padding:14px 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:13.6px">
+                    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px">
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:2; min-width:220px">Journal
+                        <input value="{{ jr.name }}" onChange="{{ jr.setName }}" placeholder="Journal name" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); font-weight:600" />
+                      </label>
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:2; min-width:220px">Submission files (link)
+                        <input value="{{ jr.files }}" onChange="{{ jr.setFiles }}" placeholder="Drive folder with manuscript, cover letter, figures" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                      </label>
+                      <sc-if value="{{ jr.hasFiles }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ jr.filesHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Open files</a>
+                      </sc-if>
+                      <button onClick="{{ jr.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; border-color:hsl(var(--c-4-62-50) / .35); color:hsl(var(--c-4-62-50))">Delete journal</button>
+                    </div>
+                    <span style="font-size:12px; font-weight:700; color:hsl(var(--c-234-85-14))">{{ jr.status }}</span>
+                    <div style="display:grid; gap:10px; padding-left:14px; border-left:2px solid hsl(var(--c-42-12-84))">
+                      <sc-for list="{{ jr.rounds }}" as="rd" hint-placeholder-count="2">
+                        <div style="display:grid; gap:8px; padding:10px 12px; border-radius:9.6px; background:hsl(var(--c-44-26-96))">
+                          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px">
+                            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); width:150px">Round
+                              <input value="{{ rd.label }}" onChange="{{ rd.setLabel }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); font-weight:600" />
+                            </label>
+                            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); width:170px">Decision
+                              <select onChange="{{ rd.setDecision }}" value="{{ rd.decision }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                                <sc-for list="{{ rd.decisionOptions }}" as="o" hint-placeholder-count="5">
+                                  <option value="{{ o }}">{{ o }}</option>
+                                </sc-for>
+                              </select>
+                            </label>
+                            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:1; min-width:200px">Response files (link)
+                              <input value="{{ rd.files }}" onChange="{{ rd.setFiles }}" placeholder="Response letter, tracked changes" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                            </label>
+                            <sc-if value="{{ rd.hasFiles }}" hint-placeholder-val="{{ false }}">
+                              <a href="{{ rd.filesHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Open</a>
+                            </sc-if>
+                            <button onClick="{{ rd.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; border-color:hsl(var(--c-4-62-50) / .35); color:hsl(var(--c-4-62-50))">Delete round</button>
+                          </div>
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Reviewer questions
+                            <textarea onInput="{{ rd.setQuestions }}" value="{{ rd.questions }}" rows="2" placeholder="Reviewer points and who answers each" style="padding:8px 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-family:inherit; font-size:13px; text-transform:none; letter-spacing:0; font-weight:400; color:hsl(var(--c-234-68-12)); resize:vertical"></textarea>
+                          </label>
+                        </div>
+                      </sc-for>
+                      <button onClick="{{ jr.addRound }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; justify-self:start">+ Add review round</button>
+                    </div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ noJournals }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:14px; text-align:center; border:1px dashed hsl(var(--c-42-12-84)); border-radius:9.6px; font-size:13px; color:hsl(var(--c-38-6-42))">No journal submissions yet.</div>
+                </sc-if>
+              </div>
+
+              <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; margin-top:26px">
+                <div>
+                  <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:700">Conference abstracts</h2>
+                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">Abstracts are accepted or not; there are no review rounds.</p>
+                </div>
+                <button onClick="{{ addConference }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:6.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; height:34px">+ Add conference</button>
+              </div>
+              <div style="display:grid; gap:10px; margin-top:14px">
+                <sc-for list="{{ conferences }}" as="cf" hint-placeholder-count="1">
+                  <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px; padding:12px 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:13.6px">
+                    <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:2; min-width:200px">Conference
+                      <input value="{{ cf.name }}" onChange="{{ cf.setName }}" placeholder="Conference name and year" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); font-weight:600" />
+                    </label>
+                    <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:2; min-width:200px">Abstract files (link)
+                      <input value="{{ cf.files }}" onChange="{{ cf.setFiles }}" placeholder="Abstract, poster or slides" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                    </label>
+                    <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); width:160px">Decision
+                      <select onChange="{{ cf.setDecision }}" value="{{ cf.decision }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                        <sc-for list="{{ cf.decisionOptions }}" as="o" hint-placeholder-count="3">
+                          <option value="{{ o }}">{{ o }}</option>
+                        </sc-for>
+                      </select>
+                    </label>
+                    <span style="{{ cf.decisionStyle }}; align-self:center">{{ cf.decision }}</span>
+                    <sc-if value="{{ cf.hasFiles }}" hint-placeholder-val="{{ false }}">
+                      <a href="{{ cf.filesHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Open</a>
+                    </sc-if>
+                    <button onClick="{{ cf.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; border-color:hsl(var(--c-4-62-50) / .35); color:hsl(var(--c-4-62-50))">Delete</button>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ noConferences }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:14px; text-align:center; border:1px dashed hsl(var(--c-42-12-84)); border-radius:9.6px; font-size:13px; color:hsl(var(--c-38-6-42))">No conference abstracts yet.</div>
+                </sc-if>
+              </div>
+            </div>
           </div>
         </sc-if>
 
@@ -1341,7 +1581,8 @@
               <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px">
                 <div>
                   <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Project PICOTT</h2>
-                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">The research question this review answers. Papers below should match it.</p>
+                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">The primary research question this review answers. Papers below should match it.</p>
+                  <span style="display:inline-flex; margin-top:8px; padding:2px 10px; border-radius:9999px; background:hsl(var(--c-234-85-14) / .1); color:hsl(var(--c-234-85-14)); font-size:12px; font-weight:700">{{ reviewTypeLabel }}</span>
                 </div>
                 <sc-if value="{{ picottViewing }}" hint-placeholder-val="{{ true }}">
                   <button onClick="{{ editPicott }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:34px">Edit</button>
@@ -1354,8 +1595,21 @@
                   </sc-for>
                 </div>
               </sc-if>
+              <sc-if value="{{ showSecondaryQs }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid; gap:4px; margin-top:12px; padding:12px 16px; border-left:3px solid hsl(var(--c-234-85-14) / .35); border-radius:6px; background:hsl(var(--c-44-26-96))">
+                  <span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Secondary questions</span>
+                  <span style="font-size:14px; line-height:1.55; white-space:pre-wrap">{{ secondaryQs }}</span>
+                </div>
+              </sc-if>
               <sc-if value="{{ picottEditing }}" hint-placeholder-val="{{ false }}">
                 <div style="display:grid; gap:12px">
+                  <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); max-width:280px">Review type
+                    <select onChange="{{ setPicottDraftType }}" value="{{ picottDraftType }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:36px">
+                      <sc-for list="{{ reviewTypeOptions }}" as="o" hint-placeholder-count="3">
+                        <option value="{{ o }}">{{ o }}</option>
+                      </sc-for>
+                    </select>
+                  </label>
                   <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px">
                     <sc-for list="{{ picottFields }}" as="pf" hint-placeholder-count="6">
                       <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">{{ pf.label }}
@@ -1363,6 +1617,9 @@
                       </label>
                     </sc-for>
                   </div>
+                  <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Secondary questions (optional)
+                    <textarea onInput="{{ setPicottDraftSecondary }}" value="{{ picottDraftSecondary }}" rows="3" placeholder="Other PICOTs or comparisons analysed alongside the primary question" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:auto; padding:8px 10px; font-family:inherit; resize:vertical"></textarea>
+                  </label>
                   <div style="display:flex; gap:8px">
                     <button onClick="{{ savePicott }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; height:34px">Save PICOTT</button>
                     <button onClick="{{ cancelPicott }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; height:34px">Cancel</button>
@@ -1375,7 +1632,7 @@
               <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:18px">
                 <div>
                   <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Viability assessment</h2>
-                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">PICOTT of every study included in the assessment. {{ papersCount }}</p>
+                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">Each study is named “Author, Year”; title and DOI are optional. {{ papersCount }} {{ qualityScaleNote }}</p>
                 </div>
                 <button onClick="{{ addStudy }}" style="height:34px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer">+ Add paper</button>
               </div>
@@ -1385,8 +1642,11 @@
                     <sc-if value="{{ s.viewing }}" hint-placeholder-val="{{ true }}">
                       <div style="display:flex; align-items:flex-start; gap:12px">
                         <div style="flex:1; min-width:0">
-                          <div style="font-size:15px; font-weight:600">{{ s.title }}</div>
-                          <div style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42)); margin-top:2px">DOI {{ s.doi }}</div>
+                          <div style="font-size:15px; font-weight:700">{{ s.label }}</div>
+                          <sc-if value="{{ s.hasSub }}" hint-placeholder-val="{{ true }}">
+                            <div style="font-size:13px; color:hsl(var(--c-38-6-42)); margin-top:2px; overflow-wrap:anywhere">{{ s.sub }}</div>
+                          </sc-if>
+                          <div style="margin-top:6px"><span style="{{ s.qualityStyle }}">{{ s.quality }}</span></div>
                         </div>
                         <button onClick="{{ s.edit }}" style="height:34px; padding:0 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer">Edit</button>
                       </div>
@@ -1398,12 +1658,29 @@
                     </sc-if>
                     <sc-if value="{{ s.editing }}" hint-placeholder-val="{{ false }}">
                       <div style="display:grid; gap:12px">
-                        <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Title
-                          <input value="{{ s.dTitle }}" onChange="{{ s.setTitle }}" placeholder="Paper title" style="width:100%; height:36px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); text-transform:none; letter-spacing:normal; font-weight:400" />
-                        </label>
-                        <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">DOI
-                          <input value="{{ s.dDoi }}" onChange="{{ s.setDoi }}" placeholder="10.xxxx/xxxxx" style="width:100%; height:36px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); text-transform:none; letter-spacing:normal; font-weight:400; font-family:'JetBrains Mono', monospace" />
-                        </label>
+                        <div class="rgrid-1" style="display:grid; grid-template-columns:minmax(0,2fr) 110px minmax(0,1fr); gap:12px">
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">First author
+                            <input value="{{ s.dAuthor }}" onChange="{{ s.setAuthor }}" placeholder="e.g. Muro" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:36px" />
+                          </label>
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Year
+                            <input value="{{ s.dYear }}" onChange="{{ s.setYear }}" placeholder="2024" inputmode="numeric" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:36px" />
+                          </label>
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Quality
+                            <select onChange="{{ s.setQuality }}" value="{{ s.dQuality }}" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:36px">
+                              <sc-for list="{{ s.qualityOptions }}" as="o" hint-placeholder-count="3">
+                                <option value="{{ o.value }}">{{ o.label }}</option>
+                              </sc-for>
+                            </select>
+                          </label>
+                        </div>
+                        <div class="rgrid-1" style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:12px">
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">Title (optional)
+                            <input value="{{ s.dTitle }}" onChange="{{ s.setTitle }}" placeholder="Paper title" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:36px" />
+                          </label>
+                          <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">DOI (optional)
+                            <input value="{{ s.dDoi }}" onChange="{{ s.setDoi }}" placeholder="10.xxxx/xxxxx" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:36px" />
+                          </label>
+                        </div>
                         <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px">
                           <sc-for list="{{ s.fields }}" as="f" hint-placeholder-count="6">
                             <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42))">{{ f.label }}
@@ -1426,6 +1703,32 @@
             </div>
 
             <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
+              <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px">
+                <div>
+                  <h2 style="margin:0 0 4px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Project documents</h2>
+                  <p style="margin:0; font-size:14px; color:hsl(var(--c-38-6-42))">One library of links for the whole project. A document (e.g. the viability sheet) can be attached to several tasks.</p>
+                </div>
+                <button onClick="{{ addLibraryDoc }}" style="height:34px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer">+ Add document</button>
+              </div>
+              <div style="display:grid; gap:8px">
+                <sc-for list="{{ libraryDocs }}" as="ld" hint-placeholder-count="3">
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:10px 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px">
+                    <span style="flex:1; min-width:200px; display:grid; gap:2px">
+                      <a href="{{ ld.href }}" target="_blank" rel="noopener" style="font-size:14px; font-weight:600">{{ ld.name }}</a>
+                      <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ ld.usedIn }}</span>
+                    </span>
+                    <button onClick="{{ ld.rename }}" style="display:inline-flex; align-items:center; height:28px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer">Rename</button>
+                    <button onClick="{{ ld.relink }}" style="display:inline-flex; align-items:center; height:28px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer">Change link</button>
+                    <button onClick="{{ ld.remove }}" style="display:inline-flex; align-items:center; height:28px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; border-color:hsl(var(--c-4-62-50) / .35); color:hsl(var(--c-4-62-50))">Remove</button>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ libraryEmpty }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:16px; text-align:center; border:1px dashed hsl(var(--c-42-12-84)); border-radius:9.6px; font-size:13px; color:hsl(var(--c-38-6-42))">No documents yet. Start with the project's Google Drive folder.</div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
               <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px">
                 <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Files &amp; outputs</h2>
                 <sc-if value="{{ detailsViewing }}" hint-placeholder-val="{{ true }}">
@@ -1437,10 +1740,6 @@
               </sc-if>
               <sc-if value="{{ detailsViewing }}" hint-placeholder-val="{{ true }}">
                 <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px">
-                  <div style="display:grid; gap:6px">
-                    <span style="font-size:13px; font-weight:600">Drive folder</span>
-                    <a href="{{ detailsDriveHref }}" target="_blank" rel="noopener" style="font-size:14px; overflow-wrap:anywhere">{{ detailsDrive }}</a>
-                  </div>
                   <sc-for list="{{ detailsRows }}" as="d" hint-placeholder-count="5">
                     <div style="display:grid; gap:6px">
                       <span style="font-size:13px; font-weight:600">{{ d.label }}</span>
@@ -1864,6 +2163,9 @@
             </select>
           </sc-if>
         </div>
+        <sc-if value="{{ hasCoProjects }}" hint-placeholder-val="{{ false }}">
+          <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:700; color:hsl(var(--c-38-6-42))">{{ firstAuthorHeading }}</h3>
+        </sc-if>
         <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:20px">
           <sc-for list="{{ projectCards }}" as="pc" hint-placeholder-count="4">
             <a href="#" onClick="{{ pc.open }}" style="display:block; color:inherit; padding:20px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)" style-hover="border-color:hsl(var(--c-234-85-14) / .4)">
@@ -1873,6 +2175,12 @@
                   <span style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700; line-height:1.3">{{ pc.name }}</span>
                   <sc-if value="{{ pc.showMentee }}" hint-placeholder-val="{{ true }}">
                     <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ pc.mentee }}</span>
+                  </sc-if>
+                  <sc-if value="{{ pc.hasRoleTag }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ pc.roleTagStyle }}">{{ pc.roleTag }}</span>
+                  </sc-if>
+                  <sc-if value="{{ pc.hasCoLine }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ pc.coLine }}</span>
                   </sc-if>
                   <sc-if value="{{ pc.hasStatusTag }}" hint-placeholder-val="{{ false }}">
                     <span style="{{ pc.statusTagStyle }}">{{ pc.statusTag }}</span>
@@ -1901,6 +2209,52 @@
             </a>
           </sc-for>
         </div>
+        <sc-if value="{{ hasCoProjects }}" hint-placeholder-val="{{ false }}">
+          <h3 style="margin:8px 0 0; font-family:Ruda, sans-serif; font-size:16px; font-weight:700; color:hsl(var(--c-38-6-42))">{{ coAuthorHeading }}</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:20px">
+          <sc-for list="{{ coProjectCards }}" as="pc" hint-placeholder-count="4">
+            <a href="#" onClick="{{ pc.open }}" style="display:block; color:inherit; padding:20px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)" style-hover="border-color:hsl(var(--c-234-85-14) / .4)">
+              <div style="display:flex; align-items:flex-start; gap:12px">
+                <span style="margin-top:3px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-234-85-14))"><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path><path d="m9 18-1.5-1.5"></path><circle cx="5" cy="14" r="3"></circle></svg></span>
+                <span style="flex:1; min-width:0; display:grid; gap:4px">
+                  <span style="font-family:Ruda, sans-serif; font-size:17px; font-weight:700; line-height:1.3">{{ pc.name }}</span>
+                  <sc-if value="{{ pc.showMentee }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size:13px; color:hsl(var(--c-38-6-42))">{{ pc.mentee }}</span>
+                  </sc-if>
+                  <sc-if value="{{ pc.hasRoleTag }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ pc.roleTagStyle }}">{{ pc.roleTag }}</span>
+                  </sc-if>
+                  <sc-if value="{{ pc.hasCoLine }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ pc.coLine }}</span>
+                  </sc-if>
+                  <sc-if value="{{ pc.hasStatusTag }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ pc.statusTagStyle }}">{{ pc.statusTag }}</span>
+                  </sc-if>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:hsl(var(--c-38-6-42))"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+              </div>
+              <div style="display:flex; align-items:center; gap:0; margin:18px 0 14px">
+                <sc-for list="{{ pc.dots }}" as="dot" hint-placeholder-count="8">
+                  <div style="display:flex; align-items:center; flex:1">
+                    <span style="{{ dot.style }}"></span>
+                    <span style="flex:1; height:2px; background:hsl(var(--c-42-12-84))"></span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:14px">
+                <span style="color:hsl(var(--c-38-6-42))">Now: {{ pc.stage }}</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-weight:700">{{ pc.pct }}</span>
+              </div>
+              <div style="height:6px; border-radius:9999px; background:hsl(var(--c-44-14-89)); margin:8px 0 14px; overflow:hidden"><span style="{{ pc.barStyle }}"></span></div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; font-size:13px; color:hsl(var(--c-38-6-42))">
+                <span style="display:inline-flex; align-items:center; gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> {{ pc.updated }}</span>
+                <span title="{{ pc.pubWarn }}" style="{{ pc.pubStyle }}">{{ pc.pubIcon }}{{ pc.pub }}</span>
+                <span style="font-family:'JetBrains Mono', monospace">{{ pc.count }}</span>
+              </div>
+            </a>
+          </sc-for>
+          </div>
+        </sc-if>
         <sc-if value="{{ projectsEmpty }}" hint-placeholder-val="{{ false }}">
           <div style="padding:40px; text-align:center; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; color:hsl(var(--c-38-6-42))">No projects yet.</div>
         </sc-if>
@@ -2519,8 +2873,7 @@ const PROJECT_STAGES = [
     ['Write Introduction', 'Draft the introduction section with background and rationale'],
     ['Define Methodology', 'Describe the methods including eligibility criteria and search strategy'],
     ['Create Search Strategy', 'Develop search strategies for each database'],
-    ['Submit to PROSPERO', 'Register the protocol in PROSPERO'],
-    ['Get Protocol Approval', 'Receive confirmation of protocol registration']
+    ['Register Protocol', 'Register the protocol (PROSPERO or OSF) and record its ID and status', false, 'register']
   ] },
   { title: 'Stage 3: Screening', desc: 'Execute database searches and screen studies for inclusion', tasks: [
     ['Execute Database Searches', 'Run searches in all planned databases'],
@@ -2554,6 +2907,8 @@ const PROJECT_STAGES = [
     ['Write Discussion', 'Interpret findings and discuss implications'],
     ['Write Abstract', 'Prepare a structured abstract'],
     ['Format References', 'Format all references according to target journal'],
+    ['English Language Review', 'Send the manuscript for English editing before co-author review'],
+    ['Expert Review', 'Invite a content expert to review the manuscript', false, 'expert'],
     ['Internal Review', 'Complete internal review with all co-authors']
   ] },
   { title: 'Stage 8: Submission', desc: 'Submit manuscript and track journal responses', tasks: [
@@ -2566,11 +2921,29 @@ const PROJECT_STAGES = [
 ];
 const JOURNEY = ['Idea','Research Question','Protocol','Screening','Data Extraction','Statistics','Quality Assessment','Manuscript Writing','Submission'];
 const PUB_STATUSES = ['Not started', 'In progress', 'Submitted', 'Under review', 'Accepted', 'Published'];
+const REVIEW_TYPES = ['Intervention', 'Diagnostic accuracy', 'Prognostic'];
+// the review type sets the PICOTT labels, the quality tool and the per-paper quality scale
+const REVIEW_TYPE_INFO = {
+  'Intervention': { labels: ['Population', 'Intervention', 'Comparator', 'Outcome', 'Timeframe', 'Type of study'], tool: 'RoB 2 for RCTs, ROBINS-I for non-randomised studies', quality: ['Low', 'Some concerns', 'High', 'Moderate', 'Serious', 'Critical'], grade: 'Assess certainty of evidence using GRADE' },
+  'Diagnostic accuracy': { labels: ['Population', 'Index test', 'Comparator test', 'Reference standard & target condition', 'Timeframe', 'Type of study'], tool: 'QUADAS-2 (QUADAS-C for comparative accuracy)', quality: ['Low', 'High', 'Unclear'], grade: 'Assess certainty of evidence using GRADE for diagnostic tests' },
+  'Prognostic': { labels: ['Population', 'Prognostic factor', 'Comparator', 'Outcome', 'Timeframe', 'Type of study'], tool: 'QUIPS', quality: ['Low', 'Moderate', 'High'], grade: 'Assess certainty of evidence using GRADE for prognostic factors' }
+};
+function reviewInfo(picott) { return REVIEW_TYPE_INFO[(picott && picott.reviewType) || 'Intervention'] || REVIEW_TYPE_INFO.Intervention; }
+function picottFieldsFor(picott) { const info = reviewInfo(picott); return PICOTT_FIELDS.map((f, i) => [f[0], info.labels[i]]); }
+const ROUND_DECISIONS = ['Pending', 'Minor revision', 'Major revision', 'Accepted', 'Rejected'];
+const CONF_DECISIONS = ['Pending', 'Accepted', 'Not accepted'];
+const EXPERT_STATUSES = ['Searching', 'Waiting acceptance', 'Accepted'];
+const EXPERT_BLANK = { status: 'Searching', kind: 'external', name: '', email: '' };
+const REG_STATUSES = ['Not registered', 'Draft', 'Submitted', 'Registered', 'Amendment pending', 'Not applicable'];
+const REG_BLANK = { registry: 'PROSPERO', id: '', status: 'Not registered' };
+// papers are named "Author, Year" everywhere; title and DOI are optional
+function paperLabel(x) { return [String(x.author || '').trim(), String(x.year || '').trim()].filter(Boolean).join(', ') || 'Unnamed paper'; }
+function docHref(url) { return !url ? '#' : /^https?:\/\//.test(url) ? url : 'https://' + url; }
 const PICOTT_FIELDS = [['p', 'Population'], ['i', 'Intervention'], ['c', 'Comparator'], ['o', 'Outcome'], ['t', 'Timeframe'], ['t2', 'Type of study']];
 const PICOTT_STUDIES = [
-  { title: 'Effect of early mobilisation after cardiac surgery', doi: '10.1001/jama.2024.1234', p: 'Adults after cardiac surgery', i: 'Early mobilisation < 24h', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'RCT' },
-  { title: 'Prehabilitation and postoperative complications', doi: '10.1016/j.jclinepi.2023.0456', p: 'Elective surgery patients', i: 'Structured prehabilitation', c: 'Usual preoperative care', o: 'Clavien-Dindo ≥ II', t: '90 days', t2: 'RCT' },
-  { title: 'Remote monitoring after discharge', doi: '10.1136/bmj.2025.0987', p: 'Post-discharge cardiac patients', i: 'Remote monitoring', c: 'In-person follow-up', o: 'Readmission', t: '6 months', t2: 'Cohort' }
+  { author: 'Moreira', year: '2024', title: 'Effect of early mobilisation after cardiac surgery', doi: '10.1001/jama.2024.1234', p: 'Adults after cardiac surgery', i: 'Early mobilisation < 24h', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'RCT' },
+  { author: 'Tanaka', year: '2023', title: 'Prehabilitation and postoperative complications', doi: '10.1016/j.jclinepi.2023.0456', p: 'Elective surgery patients', i: 'Structured prehabilitation', c: 'Usual preoperative care', o: 'Clavien-Dindo ≥ II', t: '90 days', t2: 'RCT' },
+  { author: 'Okafor', year: '2025', title: 'Remote monitoring after discharge', doi: '10.1136/bmj.2025.0987', p: 'Post-discharge cardiac patients', i: 'Remote monitoring', c: 'In-person follow-up', o: 'Readmission', t: '6 months', t2: 'Cohort' }
 ];
 
 const MENTEES = [
@@ -2743,7 +3116,7 @@ function waLink(phone) { return 'https://wa.me/' + String(phone).replace(/\D/g, 
 
 // ---- task review: taskDone[id] is 'ready' (mentee marked it, awaiting mentor) or 'approved'/true (counts toward progress) ----
 function isApproved(v) { return v === true || v === 'approved'; }
-function filledPapers(list) { return (list || []).filter((x) => String(x.title || '').trim()).length; }
+function filledPapers(list) { return (list || []).filter((x) => String(x.author || '').trim()).length; }
 // "Include Three Viable Studies" moves to review when a 3rd paper is listed and resets below 3
 const VIABILITY_TASK = '1-2';
 function syncViability(td, studies) {
@@ -2770,29 +3143,37 @@ const ALL_TASK_IDS = [];
 PROJECT_STAGES.forEach((stage, si) => stage.tasks.forEach((t, ti) => ALL_TASK_IDS.push(si + '-' + ti)));
 function tasksDone(n, ready) { const out = {}; ALL_TASK_IDS.slice(0, n).forEach((id) => { out[id] = true; }); ALL_TASK_IDS.slice(n, n + (ready || 0)).forEach((id) => { out[id] = 'ready'; }); return out; }
 function projectProgress(p) {
-  let done = 0, total = 0, stageIdx = -1;
+  let done = 0, total = 0, stageIdx = 0;
+  const open = [];
   PROJECT_STAGES.forEach((stage, si) => {
-    let sd = 0, stt = 0;
-    stage.tasks.forEach((t, ti) => { if (t[2]) return; stt++; if (isApproved(p.taskDone[si + '-' + ti])) sd++; });
-    done += sd; total += stt;
-    if (stageIdx === -1 && sd < stt) stageIdx = si;
+    let sd = 0, stt = 0, any = false;
+    stage.tasks.forEach((t, ti) => {
+      const ok = isApproved(p.taskDone[si + '-' + ti]);
+      if (ok) any = true;
+      if (t[2]) return;
+      stt++; if (ok) sd++;
+    });
+    done += sd; total += stt; open.push(stt - sd);
+    if (any) stageIdx = si;
   });
-  if (stageIdx === -1) stageIdx = PROJECT_STAGES.length - 1;
-  return { done: done, total: total, pct: total ? Math.round((done / total) * 100) : 0, stageIdx: stageIdx };
+  const openEarlier = open.slice(0, stageIdx).reduce((x, y) => x + y, 0);
+  return { done: done, total: total, pct: total ? Math.round((done / total) * 100) : 0, stageIdx: stageIdx, open: open, openEarlier: openEarlier };
 }
-const PICOTT_BLANK = { title: '', doi: '', p: '', i: '', c: '', o: '', t: '', t2: '' };
+function openEarlierLabel(n) { return n ? n + ' open earlier task' + (n === 1 ? '' : 's') : ''; }
+const PICOTT_BLANK = { author: '', year: '', title: '', doi: '', quality: '', p: '', i: '', c: '', o: '', t: '', t2: '' };
 function exampleStudies(list) { return list.map((x, i) => Object.assign({ id: i + 1 }, PICOTT_BLANK, x)); }
 function seedProjects() {
   return [
     // the original template project; its live data sits in top-level state while open
-    { id: 'p1', mentee: 'Isabella Michelon', name: 'Example 1', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 31), taskDone: {}, taskNotes: {}, taskLinks: {}, gradeCounts: false, picott: {}, studies: [], details: {}, logbook: [] },
+    { id: 'p1', mentee: 'Isabella Michelon', name: 'Example 1', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 31), docs: [{ id: 'd1', name: 'Project folder', url: 'drive.google.com/example-1' }], taskDocs: { '0-0': ['d1'] }, registration: { registry: 'PROSPERO', id: '', status: 'Draft' }, taskDone: {}, taskNotes: {}, picott: {}, studies: [], details: {}, logbook: [] },
     {
       id: 'p2', mentee: 'Isabella Michelon', name: 'SGLT2 inhibitors for anthracycline cardiotoxicity', updated: new Date(2026, 7, 27), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults receiving anthracycline chemotherapy', i: 'SGLT2 inhibitors', c: 'Placebo or standard care', o: 'Cancer therapy-related cardiac dysfunction', t: '6–24 months', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(12), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(11),
+      registration: { registry: 'PROSPERO', id: '', status: 'Registered' },
       studies: exampleStudies([
-        { title: 'Empagliflozin during anthracycline chemotherapy for breast cancer', doi: '10.5555/example.cardio.01', p: 'Women with HER2-negative breast cancer on anthracyclines', i: 'Empagliflozin 10 mg', c: 'Placebo', o: 'Drop in LVEF ≥ 10 points', t: '12 months', t2: 'RCT' },
-        { title: 'SGLT2 inhibitor use and heart failure after lymphoma chemotherapy', doi: '10.5555/example.cardio.02', p: 'Adults with lymphoma and type 2 diabetes', i: 'SGLT2 inhibitor', c: 'Other glucose-lowering drugs', o: 'Heart failure hospitalisation', t: '24 months', t2: 'Cohort' },
-        { title: 'Dapagliflozin and global longitudinal strain in cancer survivors', doi: '10.5555/example.cardio.03', p: 'Anthracycline-treated cancer survivors', i: 'Dapagliflozin', c: 'Standard care', o: 'Global longitudinal strain', t: '6 months', t2: 'RCT' }
+        { author: 'Almeida', year: '2025', title: 'Empagliflozin during anthracycline chemotherapy for breast cancer', doi: '10.5555/example.cardio.01', p: 'Women with HER2-negative breast cancer on anthracyclines', i: 'Empagliflozin 10 mg', c: 'Placebo', o: 'Drop in LVEF ≥ 10 points', t: '12 months', t2: 'RCT' },
+        { author: 'Kowalski', year: '2024', title: 'SGLT2 inhibitor use and heart failure after lymphoma chemotherapy', doi: '10.5555/example.cardio.02', p: 'Adults with lymphoma and type 2 diabetes', i: 'SGLT2 inhibitor', c: 'Other glucose-lowering drugs', o: 'Heart failure hospitalisation', t: '24 months', t2: 'Cohort' },
+        { author: 'Haddad', year: '2026', title: 'Dapagliflozin and global longitudinal strain in cancer survivors', doi: '10.5555/example.cardio.03', p: 'Anthracycline-treated cancer survivors', i: 'Dapagliflozin', c: 'Standard care', o: 'Global longitudinal strain', t: '6 months', t2: 'RCT' }
       ]),
       details: { drive: 'drive.google.com/sglt2-cardio-oncology', docs: 'Protocol v1.docx · Search strings.txt', pubStatus: 'In progress', pubDoi: '', presentations: '—', freeCat: '' },
       logbook: [
@@ -2802,11 +3183,13 @@ function seedProjects() {
     },
     {
       id: 'p3', mentee: 'Maria L. R. Defante', name: 'Immune checkpoint inhibitors in MSI-high gastrointestinal cancers', updated: new Date(2026, 7, 28), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Patients with MSI-H/dMMR gastrointestinal cancers', i: 'Immune checkpoint inhibitors', c: 'Chemotherapy', o: 'Overall and progression-free survival', t: '2–5 years', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(23, 1), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(22, 1),
+      registration: { registry: 'PROSPERO', id: 'CRD42026-demo-03', status: 'Registered' },
+      conferences: [{ id: 'c1', name: 'ESMO GI 2027', files: '', decision: 'Pending' }],
       studies: exampleStudies([
-        { title: 'Pembrolizumab versus chemotherapy in MSI-high metastatic colorectal cancer', doi: '10.5555/example.onco.01', p: 'Metastatic MSI-H/dMMR colorectal cancer', i: 'Pembrolizumab', c: 'Chemotherapy ± targeted therapy', o: 'Overall survival', t: '5 years', t2: 'RCT' },
-        { title: 'Nivolumab plus ipilimumab in dMMR gastric cancer', doi: '10.5555/example.onco.02', p: 'Advanced dMMR gastric or GEJ cancer', i: 'Nivolumab + ipilimumab', c: 'Chemotherapy', o: 'Progression-free survival', t: '3 years', t2: 'RCT' },
-        { title: 'Real-world outcomes of first-line immunotherapy in MSI-high GI tumours', doi: '10.5555/example.onco.03', p: 'MSI-H gastrointestinal tumours', i: 'First-line immune checkpoint inhibitor', c: 'First-line chemotherapy', o: 'Overall survival', t: '2 years', t2: 'Cohort' }
+        { author: 'Fischer', year: '2022', title: 'Pembrolizumab versus chemotherapy in MSI-high metastatic colorectal cancer', doi: '10.5555/example.onco.01', p: 'Metastatic MSI-H/dMMR colorectal cancer', i: 'Pembrolizumab', c: 'Chemotherapy ± targeted therapy', o: 'Overall survival', t: '5 years', t2: 'RCT' },
+        { author: 'Nakamura', year: '2024', title: 'Nivolumab plus ipilimumab in dMMR gastric cancer', doi: '10.5555/example.onco.02', p: 'Advanced dMMR gastric or GEJ cancer', i: 'Nivolumab + ipilimumab', c: 'Chemotherapy', o: 'Progression-free survival', t: '3 years', t2: 'RCT' },
+        { author: 'Ribeiro', year: '2025', title: 'Real-world outcomes of first-line immunotherapy in MSI-high GI tumours', doi: '10.5555/example.onco.03', p: 'MSI-H gastrointestinal tumours', i: 'First-line immune checkpoint inhibitor', c: 'First-line chemotherapy', o: 'Overall survival', t: '2 years', t2: 'Cohort' }
       ]),
       details: { drive: 'drive.google.com/ici-msi-gi', docs: 'Extraction sheet.xlsx · R script v3.R', pubStatus: 'In progress', pubDoi: '', presentations: 'Abstract submitted · ESMO GI 2027', freeCat: '' },
       logbook: [
@@ -2816,11 +3199,16 @@ function seedProjects() {
     },
     {
       id: 'p4', mentee: 'Pedro Henrique Costa', name: 'Letermovir vs valganciclovir for CMV prophylaxis after kidney transplant', updated: new Date(2026, 7, 14), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Kidney transplant recipients at risk of CMV', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'CMV infection and leukopenia', t: '28–52 weeks', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(37), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(38),
+      registration: { registry: 'OSF', id: 'osf.io/demo4', status: 'Registered' },
+      journals: [
+        { id: 'j1', name: 'Transplant Infectious Disease', files: '', rounds: [{ id: 'r1', label: 'Review 1', decision: 'Pending', questions: '', files: '' }] }
+      ],
+      coauthors: [{ id: 'a1', stage: 7, kind: 'mentee', name: 'Camila Rocha', email: '', senior: true }],
       studies: exampleStudies([
-        { title: 'Letermovir versus valganciclovir for CMV prophylaxis in kidney transplant recipients', doi: '10.5555/example.id.01', p: 'CMV D+/R− adult kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Clinically significant CMV infection', t: '52 weeks', t2: 'RCT' },
-        { title: 'Leukopenia with letermovir compared with valganciclovir after transplant', doi: '10.5555/example.id.02', p: 'Solid organ transplant recipients', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'Leukopenia', t: '28 weeks', t2: 'Cohort' },
-        { title: 'Late-onset CMV disease after letermovir prophylaxis', doi: '10.5555/example.id.03', p: 'High-risk kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Late-onset CMV disease', t: '12 months', t2: 'Cohort' }
+        { author: 'Schmidt', year: '2023', title: 'Letermovir versus valganciclovir for CMV prophylaxis in kidney transplant recipients', doi: '10.5555/example.id.01', p: 'CMV D+/R− adult kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Clinically significant CMV infection', t: '52 weeks', t2: 'RCT' },
+        { author: 'Park', year: '2024', title: 'Leukopenia with letermovir compared with valganciclovir after transplant', doi: '10.5555/example.id.02', p: 'Solid organ transplant recipients', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'Leukopenia', t: '28 weeks', t2: 'Cohort' },
+        { author: 'Lindqvist', year: '2025', title: 'Late-onset CMV disease after letermovir prophylaxis', doi: '10.5555/example.id.03', p: 'High-risk kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Late-onset CMV disease', t: '12 months', t2: 'Cohort' }
       ]),
       details: { drive: 'drive.google.com/cmv-prophylaxis-ktx', docs: 'Manuscript v5.docx · Cover letter.docx', pubStatus: 'Under review', pubDoi: '', presentations: 'Poster · ESCMID Global 2026', freeCat: 'Co-authored with a transplant ID group abroad' },
       logbook: [
@@ -2829,11 +3217,13 @@ function seedProjects() {
     },
     {
       id: 'p5', mentee: 'Camila Rocha', name: 'Early vs delayed dialysis for AKI after cardiac surgery', updated: new Date(2026, 7, 30), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults with AKI after cardiac surgery', i: 'Early renal replacement therapy', c: 'Delayed renal replacement therapy', o: '90-day mortality and dialysis dependence', t: '90 days', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(31, 1), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(30, 1),
+      registration: { registry: 'PROSPERO', id: 'CRD42026-demo-05', status: 'Registered' },
+      coauthors: [{ id: 'a1', stage: 4, kind: 'mentee', name: 'Isabella Michelon', email: '', senior: false }],
       studies: exampleStudies([
-        { title: 'Early renal replacement therapy after cardiac surgery-associated AKI', doi: '10.5555/example.neph.01', p: 'Adults with KDIGO stage 2 AKI after cardiac surgery', i: 'Early RRT (< 12 h)', c: 'Delayed RRT', o: '90-day mortality', t: '90 days', t2: 'RCT' },
-        { title: 'Timing of dialysis and kidney recovery after cardiopulmonary bypass', doi: '10.5555/example.neph.02', p: 'Patients with AKI after cardiopulmonary bypass', i: 'Early dialysis', c: 'Standard-trigger dialysis', o: 'Dialysis dependence', t: '90 days', t2: 'Cohort' },
-        { title: 'Accelerated versus standard RRT in postoperative AKI', doi: '10.5555/example.neph.03', p: 'Critically ill postoperative AKI', i: 'Accelerated RRT', c: 'Standard RRT', o: 'Mortality', t: '90 days', t2: 'RCT' }
+        { author: 'Rossi', year: '2023', title: 'Early renal replacement therapy after cardiac surgery-associated AKI', doi: '10.5555/example.neph.01', p: 'Adults with KDIGO stage 2 AKI after cardiac surgery', i: 'Early RRT (< 12 h)', c: 'Delayed RRT', o: '90-day mortality', t: '90 days', t2: 'RCT' },
+        { author: 'Mendes', year: '2022', title: 'Timing of dialysis and kidney recovery after cardiopulmonary bypass', doi: '10.5555/example.neph.02', p: 'Patients with AKI after cardiopulmonary bypass', i: 'Early dialysis', c: 'Standard-trigger dialysis', o: 'Dialysis dependence', t: '90 days', t2: 'Cohort' },
+        { author: 'Novak', year: '2024', title: 'Accelerated versus standard RRT in postoperative AKI', doi: '10.5555/example.neph.03', p: 'Critically ill postoperative AKI', i: 'Accelerated RRT', c: 'Standard RRT', o: 'Mortality', t: '90 days', t2: 'RCT' }
       ]),
       details: { drive: 'drive.google.com/rrt-timing-csa-aki', docs: 'Manuscript draft v2.docx · Forest plots.pdf', pubStatus: 'In progress', pubDoi: '', presentations: '—', freeCat: '' },
       logbook: [
@@ -2843,16 +3233,17 @@ function seedProjects() {
     },
     {
       id: 'p6', mentee: 'Camila Rocha', name: 'Remote ischaemic preconditioning to prevent AKI after cardiac surgery', updated: new Date(2026, 7, 11), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham or no preconditioning', o: 'Postoperative AKI', t: '72 hours', t2: 'Systematic review and meta-analysis of RCTs' },
-      taskDone: tasksDone(4), taskLinks: {}, gradeCounts: false,
+      taskDone: tasksDone(4),
+      coauthors: [{ id: 'a1', stage: 7, kind: 'mentee', name: 'Isabella Michelon', email: '', senior: true }],
       studies: exampleStudies([
-        { title: 'Remote ischaemic preconditioning and AKI in high-risk cardiac surgery', doi: '10.5555/example.neph.04', p: 'High-risk adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham preconditioning', o: 'AKI within 72 h', t: '72 hours', t2: 'RCT' }
+        { author: 'Silva', year: '2021', title: 'Remote ischaemic preconditioning and AKI in high-risk cardiac surgery', doi: '10.5555/example.neph.04', p: 'High-risk adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham preconditioning', o: 'AKI within 72 h', t: '72 hours', t2: 'RCT' }
       ]),
       details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
       logbook: []
     },
     {
       id: 'p7', mentee: 'Maria L. R. Defante', name: 'Neoadjuvant immunotherapy in dMMR locally advanced rectal cancer', status: 'Proposed', reviewNote: '', updated: new Date(2026, 7, 30),
-      taskDone: {}, taskNotes: {}, taskLinks: {}, gradeCounts: false,
+      taskDone: {}, taskNotes: {},
       picott: { p: 'Patients with dMMR locally advanced rectal cancer', i: 'Neoadjuvant PD-1 blockade', c: 'Chemoradiotherapy', o: 'Clinical complete response', t: '12 months', t2: 'Systematic review and meta-analysis' },
       studies: [],
       details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
@@ -2861,33 +3252,34 @@ function seedProjects() {
     // ---- real projects (from claudeOS/mentorship/mentees), task states mapped by hand; ids are stage-task ----
     {
       id: 'p8', mentee: 'Gustavo Gurian', name: 'Antibiotic prophylaxis and PEECS after endoscopic submucosal dissection', status: 'Active', reviewNote: '', updated: new Date(2026, 8, 9),
-      picott: { p: 'Adults undergoing ESD or related procedures (POEM, EFTR): colorectal, oesophageal, gastric', i: 'Systemic antibiotic prophylaxis', c: 'No prophylaxis (placebo or usual care)', o: 'PEECS (primary); length of stay, fever, bacteraemia, infection, mortality', t: 'Index admission or within 30 days', t2: 'Systematic review and meta-analysis (RCTs and observational), stratified by anatomical site' },
-      taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '2-3': true, '2-4': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '4-2': true, '5-0': true, '5-1': true, '5-2': true, '5-3': 'ready', '7-0': 'ready', '7-1': 'ready' },
-      taskNotes: {}, gradeCounts: false,
-      taskLinks: {
-        'task-0-0': 'https://drive.google.com/drive/folders/1Q9gO9D6jwwXZgk30T22d8s-PFSxA3qDD',
-        'task-2-3': 'https://www.crd.york.ac.uk/PROSPERO/view/1379673',
-        'task-4-1': 'https://docs.google.com/spreadsheets/d/1a1RqHUUl46yOGhLKNbJXgM2tdDRFQX2n052rK6ajZpg/edit',
-        'task-4-2': 'https://docs.google.com/spreadsheets/d/1a1RqHUUl46yOGhLKNbJXgM2tdDRFQX2n052rK6ajZpg/edit',
-        'task-5-0': 'https://drive.google.com/drive/u/1/folders/1bMzKFgPAbqUlCClpdJsnxo39475Yu4QZ',
-        'task-5-1': 'https://drive.google.com/drive/folders/15FtPgwDTpUuuJstORp7BPMghgYneMpWV',
-        'task-5-3': 'https://drive.google.com/drive/folders/1yz4muaibIowr4VqjKSsK_Bwd3ROjPMG5',
-        'task-7-0': 'https://docs.google.com/document/d/1bNLx4I5T9CmTiHfSr1z3Y7F5KUqhO8RNKQiwF4CTVm4/edit',
-        'task-7-1': 'https://docs.google.com/document/d/1bNLx4I5T9CmTiHfSr1z3Y7F5KUqhO8RNKQiwF4CTVm4/edit',
-        'task-8-1': 'https://drive.google.com/drive/folders/1JN8zQgsJFK1Jcht90LjXzVqwJlUZ4LzA'
-      },
+      picott: { p: 'Adults undergoing ESD or related procedures (POEM, EFTR): colorectal, oesophageal, gastric', i: 'Systemic antibiotic prophylaxis', c: 'No prophylaxis (placebo or usual care)', o: 'PEECS (primary); length of stay, fever, bacteraemia, infection, mortality', t: 'Index admission or within 30 days', t2: 'Systematic review and meta-analysis (RCTs and observational), stratified by anatomical site', reviewType: 'Intervention', secondaryQs: 'The workbook runs four PICOTs (A–D). A is the primary question above; B–D (by organ and procedure) are analysed as secondary questions.' },
+      taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '2-3': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '4-2': true, '5-0': true, '5-1': true, '5-2': true, '5-3': 'ready', '7-0': 'ready', '7-1': 'ready' },
+      taskNotes: {},
+      docs: [
+        { id: 'd1', name: 'Project folder', url: 'https://drive.google.com/drive/folders/1Q9gO9D6jwwXZgk30T22d8s-PFSxA3qDD' },
+        { id: 'd2', name: 'PROSPERO record', url: 'https://www.crd.york.ac.uk/PROSPERO/view/1379673' },
+        { id: 'd3', name: 'Data sheet', url: 'https://docs.google.com/spreadsheets/d/1a1RqHUUl46yOGhLKNbJXgM2tdDRFQX2n052rK6ajZpg/edit' },
+        { id: 'd4', name: 'Analysis folder', url: 'https://drive.google.com/drive/u/1/folders/1bMzKFgPAbqUlCClpdJsnxo39475Yu4QZ' },
+        { id: 'd5', name: 'Forest plots', url: 'https://drive.google.com/drive/folders/15FtPgwDTpUuuJstORp7BPMghgYneMpWV' },
+        { id: 'd6', name: 'Subgroup analyses', url: 'https://drive.google.com/drive/folders/1yz4muaibIowr4VqjKSsK_Bwd3ROjPMG5' },
+        { id: 'd7', name: 'Manuscript (Portuguese)', url: 'https://docs.google.com/document/d/1bNLx4I5T9CmTiHfSr1z3Y7F5KUqhO8RNKQiwF4CTVm4/edit' },
+        { id: 'd8', name: 'Submission package', url: 'https://drive.google.com/drive/folders/1JN8zQgsJFK1Jcht90LjXzVqwJlUZ4LzA' }
+      ],
+      taskDocs: { '0-0': ['d1'], '2-3': ['d2'], '4-1': ['d3'], '4-2': ['d3'], '5-0': ['d4'], '5-1': ['d5'], '5-3': ['d6'], '7-0': ['d7'], '7-1': ['d7'], '8-1': ['d8'] },
+      registration: { registry: 'PROSPERO', id: 'CRD420261379673', status: 'Amendment pending' },
+      expert: { status: 'Searching', kind: 'external', name: '', email: '' },
       studies: exampleStudies([
-        { title: 'Muro 2015 · Japan', p: 'Colorectal ESD', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 421' },
-        { title: 'Lee 2017 · Korea', p: 'Colorectal ESD', i: 'Ampicillin/sulbactam', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'RCT · n = 100' },
-        { title: 'Shichijo 2022 · Japan', p: 'Colorectal ESD', i: 'Ampicillin-sulbactam 3 g ×3', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'RCT · n = 380' },
-        { title: 'Hastier-De Chelle 2022 · France', p: 'Oesophagus (POEM)', i: 'Cefazolin or amoxicillin-clavulanate', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 226' },
-        { title: 'Liao 2024 · China', p: 'Oesophageal ESD', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 552' },
-        { title: 'Qiu 2024 · China', p: 'Colorectal ESD', i: 'Antibiotics at endoscopist discretion', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 555' },
-        { title: 'Steinbruck 2024 · Germany', p: 'ESD (organ NR)', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS (defined as fever only)', t: 'NR', t2: 'Observational · n = 384' },
-        { title: 'Zhao 2025 · China', p: 'Oesophageal ESD', i: 'Cefoperazone-sulbactam / ceftriaxone', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 262' },
-        { title: 'Chen 2025 · China', p: 'Gastric EFTR', i: 'Cefoperazone / ceftazidime', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 81' }
+        { author: 'Muro', year: '2015', quality: '', p: 'Colorectal ESD', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 421 · Japan' },
+        { author: 'Lee', year: '2017', quality: '', p: 'Colorectal ESD', i: 'Ampicillin/sulbactam', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'RCT · n = 100 · Korea' },
+        { author: 'Shichijo', year: '2022', quality: '', p: 'Colorectal ESD', i: 'Ampicillin-sulbactam 3 g ×3', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'RCT · n = 380 · Japan' },
+        { author: 'Hastier-De Chelle', year: '2022', quality: '', p: 'Oesophagus (POEM)', i: 'Cefazolin or amoxicillin-clavulanate', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 226 · France' },
+        { author: 'Liao', year: '2024', quality: '', p: 'Oesophageal ESD', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 552 · China' },
+        { author: 'Qiu', year: '2024', quality: '', p: 'Colorectal ESD', i: 'Antibiotics at endoscopist discretion', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 555 · China' },
+        { author: 'Steinbruck', year: '2024', quality: '', p: 'ESD (organ NR)', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS (defined as fever only)', t: 'NR', t2: 'Observational · n = 384 · Germany' },
+        { author: 'Zhao', year: '2025', quality: '', p: 'Oesophageal ESD', i: 'Cefoperazone-sulbactam / ceftriaxone', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 262 · China' },
+        { author: 'Chen', year: '2025', quality: '', p: 'Gastric EFTR', i: 'Cefoperazone / ceftazidime', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 81 · China' }
       ]),
-      details: { drive: 'https://drive.google.com/drive/folders/1Q9gO9D6jwwXZgk30T22d8s-PFSxA3qDD', docs: 'Data sheet (Google Sheets) · Manuscript (Google Docs, Portuguese) · Figures and subgroup folders', pubStatus: 'In progress', pubDoi: '', presentations: 'Standalone abstract drafted (pre-exclusion numbers)', freeCat: 'PROSPERO CRD420261379673 (notes say CRD420261334207, which is a different review)' },
+      details: { drive: 'https://drive.google.com/drive/folders/1Q9gO9D6jwwXZgk30T22d8s-PFSxA3qDD', docs: 'Data sheet (Google Sheets) · Manuscript (Google Docs, Portuguese) · Figures and subgroup folders', pubStatus: 'In progress', pubDoi: '', presentations: 'Standalone abstract drafted (pre-exclusion numbers)', freeCat: 'Notes cite CRD420261334207, which is a different review' },
       logbook: [
         { id: 1, date: new Date(2026, 3, 26), author: 'Gustavo Gurian', role: 'mentee', stage: 'Protocol', text: 'Registered the review on PROSPERO.', link: 'https://www.crd.york.ac.uk/PROSPERO/view/1379673' },
         { id: 2, date: new Date(2026, 6, 31), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Restructured the workbook, ran first forest plots for the four PICOTs (A–D) and fixed the analysis settings.', link: '' },
@@ -2900,17 +3292,27 @@ function seedProjects() {
     {
       id: 'p9', mentee: 'Gustavo Gurian', name: 'Cap-assisted forward-viewing endoscope vs side-viewing duodenoscope for ERCP in Billroth II', status: 'Active', reviewNote: '', updated: new Date(2026, 4, 25),
       picott: { p: 'Adults undergoing ERCP with Billroth II anatomy', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Afferent limb intubation, biliary cannulation, clinical success; pancreatitis, perforation, unintended PD cannulation', t: 'Not reported', t2: 'Systematic review and meta-analysis with GRADE and trial sequential analysis' },
-      taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-0': true, '2-1': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '3-4': true, '4-0': true, '4-1': true, '4-2': true, '4-3': true, '5-0': true, '5-1': true, '5-2': true, '5-3': true, '5-4': true, '6-0': true, '6-1': true, '6-2': true, '6-3': true, '7-0': true, '7-1': true, '7-2': true, '7-3': true, '7-4': true, '7-5': true, '8-0': true, '8-1': true, '8-2': true },
-      taskNotes: {}, gradeCounts: false,
-      taskLinks: { 'task-8-3': 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh' },
+      taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-0': true, '2-1': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '3-4': true, '4-0': true, '4-1': true, '4-2': true, '4-3': true, '5-0': true, '5-1': true, '5-2': true, '5-3': true, '5-4': true, '6-0': true, '6-1': true, '6-2': true, '6-3': true, '7-0': true, '7-1': true, '7-2': true, '7-3': true, '7-4': true, '7-5': true, '7-7': true, '8-0': true, '8-1': true, '8-2': true },
+      taskNotes: {},
+      docs: [
+        { id: 'd1', name: 'Project folder · Revision 2 package', url: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh' }
+      ],
+      taskDocs: { '0-0': ['d1'], '8-3': ['d1'] },
+      registration: { registry: 'PROSPERO', id: '', status: 'Not registered' },
+      journals: [
+        { id: 'j1', name: 'Gastrointestinal Endoscopy', files: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh', rounds: [
+          { id: 'r1', label: 'Review 1', decision: 'Major revision', questions: 'Editorial 2.1–2.2 · Reviewer 1: 3.1–3.9 · Reviewer 3: 4.1, 4.3', files: '' },
+          { id: 'r2', label: 'Revision 2', decision: 'Pending', questions: 'Mentor: 3.1, 3.2, 3.5, 3.9. Mentee: Editorial 2.1/2.2, R1 3.3, 3.4, 3.6–3.8, R3 4.1, 4.3. New prediction intervals and a risk-of-bias subgroup (Supp Table 11).', files: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh' }
+        ] }
+      ],
       studies: exampleStudies([
-        { title: 'Kim SB 2023', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
-        { title: 'Li JS 2019', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
-        { title: 'Lee KH 2025', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
-        { title: 'Fortunati F 2025', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB moderate' },
-        { title: 'Wang F 2016', p: 'Billroth II ERCP (arms 44 vs 8)', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB serious' },
-        { title: 'Zhu Yijin 2020', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB serious' },
-        { title: 'Tuyet 2024', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational · RoB critical' }
+        { author: 'Kim SB', year: '2023', quality: 'Moderate', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' },
+        { author: 'Li JS', year: '2019', quality: 'Moderate', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' },
+        { author: 'Lee KH', year: '2025', quality: 'Moderate', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' },
+        { author: 'Fortunati F', year: '2025', quality: 'Moderate', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' },
+        { author: 'Wang F', year: '2016', quality: 'Serious', p: 'Billroth II ERCP (arms 44 vs 8)', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' },
+        { author: 'Zhu Yijin', year: '2020', quality: 'Serious', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' },
+        { author: 'Tuyet', year: '2024', quality: 'Critical', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' }
       ]),
       details: { drive: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh', docs: 'Revision 2 package (Drive) · reviewer edits split between mentor and mentee', pubStatus: 'Under review', pubDoi: '', presentations: '—', freeCat: 'Gastrointestinal Endoscopy · revision round 2 · 350 patients, 727 procedures from 2,015 records' },
       logbook: [
@@ -2921,38 +3323,51 @@ function seedProjects() {
     },
     {
       id: 'p10', mentee: 'Júlia Miranda', name: 'Tumour contact length on MRI for predicting muscle-invasive bladder cancer', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 23),
-      picott: { p: 'Bladder tumours staged with multiparametric MRI before histology (lesion level)', i: 'Index test: tumour contact length (TCL), curvilinear or transverse', c: 'Comparator test: VI-RADS ≥3 (paired)', o: 'Sensitivity, specificity, AUC against histopathology (TURBT or cystectomy)', t: 'Not applicable (diagnostic accuracy)', t2: 'Diagnostic test accuracy meta-analysis' },
+      picott: { p: 'Bladder tumours staged with multiparametric MRI before histology (lesion level)', i: 'Index test: tumour contact length (TCL), curvilinear or transverse', c: 'Comparator test: VI-RADS ≥3 (paired)', o: 'Sensitivity, specificity, AUC against histopathology (TURBT or cystectomy)', t: 'Not applicable (diagnostic accuracy)', t2: 'Diagnostic test accuracy meta-analysis', reviewType: 'Diagnostic accuracy', secondaryQs: 'Transverse vs curvilinear TCL measurement; TCL vs VI-RADS head-to-head (paired studies only).' },
       taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '5-0': true, '5-1': true, '5-2': true, '7-0': 'ready', '7-1': 'ready', '7-2': 'ready', '7-3': 'ready' },
-      taskNotes: {}, gradeCounts: false,
-      taskLinks: {
-        'task-0-0': 'https://drive.google.com/drive/folders/1MmNvETRwOiOEDIg_6OQt0vdfsOWTZ1z8',
-        'task-1-0': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit',
-        'task-1-2': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit',
-        'task-2-2': 'https://docs.google.com/document/d/1bJYRHgknKRspFyoNhuKhkXD9ZCFUAny57ds8-t6MaeQ/edit?usp=drivesdk',
-        'task-4-1': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit',
-        'task-4-2': 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit'
-      },
+      taskNotes: {},
+      docs: [
+        { id: 'd1', name: 'Project folder', url: 'https://drive.google.com/drive/folders/1MmNvETRwOiOEDIg_6OQt0vdfsOWTZ1z8' },
+        { id: 'd2', name: 'Viability & extraction sheet', url: 'https://docs.google.com/spreadsheets/d/1dmHNbz5QWhMWEH01A3n0qepT1X4kIb3SA-9829DpdhE/edit' },
+        { id: 'd3', name: 'Meeting notes & search strategy', url: 'https://docs.google.com/document/d/1bJYRHgknKRspFyoNhuKhkXD9ZCFUAny57ds8-t6MaeQ/edit?usp=drivesdk' }
+      ],
+      taskDocs: { '0-0': ['d1'], '1-0': ['d2'], '1-2': ['d2'], '2-2': ['d3'], '4-1': ['d2'], '4-2': ['d2'] },
+      registration: { registry: 'PROSPERO', id: '', status: 'Not registered' },
+      conferences: [{ id: 'c1', name: 'SAR 2027 (Society of Abdominal Radiology)', files: '', decision: 'Pending' }],
+      coauthors: [
+        { id: 'a1', stage: 3, kind: 'external', name: 'Sara', email: '', senior: false },
+        { id: 'a2', stage: 3, kind: 'external', name: 'Beatriz', email: '', senior: false }
+      ],
       studies: exampleStudies([
-        { title: 'Ahn H 2023', p: '247 lesions · 26 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Akcay A 2021', p: '73 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 1.95', c: 'VI-RADS ≥3 (2 observers)', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Elshewy 2024', p: '80 lesions · 39 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Gong Y 2024', p: '198 lesions · 72 MIBC', i: 'TCL transverse, cutoff 3.0 (2x2 not extractable)', c: 'VI-RADS ≥3, ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Ikuma S 2025', p: '101 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 4.0 (2x2 not extractable)', c: 'VI-RADS ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Li Q 2022', p: '97 lesions · 33 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Qin C 2024', p: '68 lesions · 24 MIBC', i: 'TCL curvilinear 3.0; transverse 2.39', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Selvaraju A 2025', p: '55 lesions · 19 MIBC', i: 'TCL curvilinear, cutoff 3.47', c: 'VI-RADS ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Wang X 2021', p: '179 lesions · 65 MIBC', i: 'TCL curvilinear, cutoff 3.0 (3 readers averaged)', c: 'VI-RADS 1–5', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Xiao W 2026', p: '92 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 2.8', c: 'VI-RADS not extractable', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
-        { title: 'Yu R 2024', p: '235 lesions · 80 MIBC', i: 'TCL curvilinear, cutoff not reported', c: 'None', o: 'MIBC detection', t: 'NA', t2: 'DTA study' }
+        { author: 'Ahn H', year: '2023', quality: '', p: '247 lesions · 26 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Akcay A', year: '2021', quality: '', p: '73 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 1.95', c: 'VI-RADS ≥3 (2 observers)', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Elshewy', year: '2024', quality: '', p: '80 lesions · 39 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Gong Y', year: '2024', quality: '', p: '198 lesions · 72 MIBC', i: 'TCL transverse, cutoff 3.0 (2x2 not extractable)', c: 'VI-RADS ≥3, ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Ikuma S', year: '2025', quality: '', p: '101 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 4.0 (2x2 not extractable)', c: 'VI-RADS ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Li Q', year: '2022', quality: '', p: '97 lesions · 33 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Qin C', year: '2024', quality: '', p: '68 lesions · 24 MIBC', i: 'TCL curvilinear 3.0; transverse 2.39', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Selvaraju A', year: '2025', quality: '', p: '55 lesions · 19 MIBC', i: 'TCL curvilinear, cutoff 3.47', c: 'VI-RADS ≥4', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Wang X', year: '2021', quality: '', p: '179 lesions · 65 MIBC', i: 'TCL curvilinear, cutoff 3.0 (3 readers averaged)', c: 'VI-RADS 1–5', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Xiao W', year: '2026', quality: '', p: '92 lesions · 31 MIBC', i: 'TCL curvilinear, cutoff 2.8', c: 'VI-RADS not extractable', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
+        { author: 'Yu R', year: '2024', quality: '', p: '235 lesions · 80 MIBC', i: 'TCL curvilinear, cutoff not reported', c: 'None', o: 'MIBC detection', t: 'NA', t2: 'DTA study' }
       ]),
-      details: { drive: 'https://drive.google.com/drive/folders/1MmNvETRwOiOEDIg_6OQt0vdfsOWTZ1z8', docs: 'Extraction/viability sheet (Google Sheets) · meeting notes (Google Docs) · analysis.Rmd', pubStatus: 'In progress', pubDoi: '', presentations: 'SAR 2027 abstract in preparation', freeCat: 'Not registered on PROSPERO' },
+      details: { drive: 'https://drive.google.com/drive/folders/1MmNvETRwOiOEDIg_6OQt0vdfsOWTZ1z8', docs: 'Extraction/viability sheet (Google Sheets) · meeting notes (Google Docs) · analysis.Rmd', pubStatus: 'In progress', pubDoi: '', presentations: 'SAR 2027 abstract in preparation', freeCat: '' },
       logbook: [
         { id: 1, date: new Date(2026, 4, 19), author: 'Vânio Antunes', role: 'mentor', stage: 'Protocol', text: 'Search strategy finalised (VI-RADS term kept, about 165 results). Use 2x2 tables; viability needs at least three studies; screening in Rayyan; invite co-authors Sara and Beatriz.', link: 'https://docs.google.com/document/d/1bJYRHgknKRspFyoNhuKhkXD9ZCFUAny57ds8-t6MaeQ/edit?usp=drivesdk' },
         { id: 2, date: new Date(2026, 7, 4), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Built data.xlsx from the Google Sheet and ran analysis.Rmd for the first time; agreed to average Wang’s three readers.', link: '' },
         { id: 3, date: new Date(2026, 7, 11), author: 'Júlia Miranda', role: 'mentee', stage: 'Manuscript Writing', text: 'First full manuscript draft. Protocol registration, search details and QUADAS-2 are still placeholders; 2x2 data blocked for Gong, Ikuma and Yu R.', link: '' }
       ]
     }
-  ].map((p) => Object.assign(p, { taskDone: syncViability(p.taskDone, p.studies) }));
+  ].map((p) => {
+    const details = Object.assign({}, p.details);
+    let docs = p.docs, taskDocs = p.taskDocs || {};
+    if (!docs) {
+      docs = details.drive ? [{ id: 'd1', name: 'Project folder', url: details.drive }] : [];
+      if (docs.length) taskDocs = { '0-0': ['d1'] };
+    }
+    delete details.drive; delete details.docs;
+    return Object.assign(p, { details: details, docs: docs, taskDocs: taskDocs, registration: p.registration || Object.assign({}, REG_BLANK), journals: p.journals || [], conferences: p.conferences || [], coauthors: p.coauthors || [], expert: p.expert || Object.assign({}, EXPERT_BLANK), taskDone: syncViability(p.taskDone, p.studies) });
+  });
 }
 
 const TIME_OPTIONS = (function () {
@@ -2967,7 +3382,6 @@ class Component extends DCLogic {
     navOpen: false,
     sidebarCollapsed: false,
     briefOpen: null,
-    taskLinks: {},
     dismissedTasks: {},
     outcomes: {},
     outcomeOpen: null,
@@ -2984,12 +3398,12 @@ class Component extends DCLogic {
     booked: null,
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
-    projectTab: 'progress', taskDone: { '1-2': 'ready' }, taskNotes: {}, gradeCounts: false,
-    projectPicott: { p: 'Adults after cardiac surgery', i: 'Early mobilisation', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'Systematic review and meta-analysis of RCTs' }, picottDraft: null,
+    projectTab: 'progress', taskDone: { '1-2': 'ready' }, taskNotes: {},
+    projectPicott: { p: 'Adults after cardiac surgery', i: 'Early mobilisation', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'Systematic review and meta-analysis of RCTs', reviewType: 'Intervention', secondaryQs: '' }, picottDraft: null,
     projectName: 'Example 1',
     studies: PICOTT_STUDIES.map((x, i) => Object.assign({ id: i + 1 }, x)),
     studyEdit: null, studyDraft: null,
-    details: { drive: 'drive.google.com/example-1', docs: 'Protocol v2.docx · Search log.xlsx', pubStatus: 'In progress', pubDoi: '', presentations: 'Poster · SBC 2026', freeCat: 'Travel grant · ESC Congress' },
+    details: { pubStatus: 'In progress', pubDoi: '', presentations: 'Poster · SBC 2026', freeCat: 'Travel grant · ESC Congress' },
     detailsDraft: null,
     hubLinks: { metawriters: '', icu: '' },
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
@@ -2998,6 +3412,7 @@ class Component extends DCLogic {
     calYear: TODAY.getFullYear(), calMonth: TODAY.getMonth(), availSaved: false, cancelledNext: {},
     profile: { affiliation: 'Meta-Analysis Academy', country: 'Brazil', bio: '' },
     copiedEmail: '',
+    coOpen: null, coDraft: { mentee: '', name: '', email: '', senior: false },
     projects: seedProjects(), projectId: 'p1', projectFilter: 'All mentees',
     adSort: { key: 'end', dir: 1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
@@ -3022,23 +3437,54 @@ class Component extends DCLogic {
   };
 
   go = (page) => (e) => { if (e) e.preventDefault(); this.setState({ page, navOpen: false }); window.scrollTo(0, 0); };
+  // ---- project document library: named links; tasks attach library docs ----
+  updateCur(fn) {
+    const pid = this.state.projectId;
+    this.setState({ projects: this.state.projects.map((p) => (p.id === pid ? Object.assign({}, p, fn(p), { updated: TODAY }) : p)) });
+  }
+  addDoc(name, url, tid) {
+    const cur = this.currentProject();
+    const id = 'd' + ((cur.docs || []).reduce((mx, x) => Math.max(mx, Number(String(x.id).slice(1)) || 0), 0) + 1);
+    this.updateCur((p) => {
+      const td = Object.assign({}, p.taskDocs);
+      if (tid) td[tid] = (td[tid] || []).concat([id]);
+      return { docs: (p.docs || []).concat([{ id: id, name: name, url: url }]), taskDocs: td };
+    });
+  }
+  promptNewDoc(tid, suggested) {
+    const name = window.prompt('Document name (e.g. Viability doc, Data sheet, Manuscript):', suggested || '');
+    if (!name || !name.trim()) return;
+    const url = window.prompt('Paste the link (Google Drive, Docs, Sheets, PROSPERO…):', '');
+    if (!url || !url.trim()) return;
+    this.addDoc(name.trim(), url.trim(), tid);
+  }
+  taskDocList(tid) {
+    const cur = this.currentProject();
+    return ((cur.taskDocs || {})[tid] || []).map((id) => (cur.docs || []).filter((d) => d.id === id)[0]).filter(Boolean);
+  }
+  // dashboard task rows: open the first attached doc, or attach a new one
   driveProps(id) {
-    const link = this.state.taskLinks[id];
+    const link = (this.taskDocList(id)[0] || {}).url;
     return {
       hasLink: !!link,
-      driveTitle: link ? 'Open the linked Google Drive file (Shift+click to change it)' : 'Attach the Google Drive link for this task',
+      driveTitle: link ? 'Open the attached document' : 'Attach a document from the project library',
       driveStyle: 'display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; flex-shrink:0; border:0; border-radius:6.6px; cursor:pointer; background:' + (link ? 'hsl(var(--c-155-40-27) / .14)' : 'transparent') + '; color:' + (link ? 'hsl(var(--c-155-40-27))' : 'hsl(var(--c-38-6-42) / .6)'),
       driveClick: (e) => {
         e.preventDefault(); e.stopPropagation();
-        const cur = this.state.taskLinks[id];
-        if (cur && !e.shiftKey) { window.open(cur, '_blank', 'noopener'); return; }
-        const url = window.prompt('Paste the Google Drive link for this task:', cur || '');
-        if (url) {
-          const next = Object.assign({}, this.state.taskLinks); next[id] = url;
-          this.setState({ taskLinks: next });
-        }
+        const first = this.taskDocList(id)[0];
+        if (first) { window.open(docHref(first.url), '_blank', 'noopener'); return; }
+        this.promptNewDoc(id, '');
       }
     };
+  }
+  reopenTask(tid, title) {
+    const reason = window.prompt('Why reopen "' + title + '"? The reason is logged in the project logbook.', '');
+    if (reason === null) return;
+    const why = reason.trim() || 'needs rework';
+    this.setTaskState(this.state.projectId, tid, null, 'Reopened: ' + why);
+    const lb = this.state.logbook;
+    const entry = { id: lb.reduce((mx, x) => Math.max(mx, x.id), 0) + 1, date: TODAY, author: ME, role: 'mentor', stage: JOURNEY[Number(tid.split('-')[0])], text: 'Reopened "' + title + '": ' + why, link: '' };
+    this.setState({ logbook: lb.concat([entry]) });
   }
 
   openMentee = (name) => (e) => { if (e) e.preventDefault(); this.setState({ page: 'mentee', menteeSel: name, prevPage: this.state.page === 'mentee' ? this.state.prevPage : this.state.page, navOpen: false }); window.scrollTo(0, 0); };
@@ -3076,7 +3522,7 @@ class Component extends DCLogic {
     if (kind === 'event') return [F('title', 'Title', { placeholder: 'Event title' }), F('category', 'Category', { type: 'select', options: CAL_CATEGORIES }), F('date', 'Date', { type: 'date' }), F('start', 'Start time (Brasília)', { type: 'time' }), F('end', 'End time (Brasília)', { type: 'time' }), F('recurrence', 'Recurrence', { type: 'select', options: CAL_RECURRENCE }), F('link', 'Meeting link (optional)', { placeholder: 'https://zoom.us/...' }), F('note', 'Short note', { placeholder: 'e.g. Group session' }), F('desc', 'Description', { type: 'textarea' }), F('active', 'Status', { type: 'switch' })];
     if (kind === 'block') return [F('title', 'Card title'), F('notice', 'Notice (optional)', { type: 'textarea' }), F('pastLabel', 'Left column label'), F('pastTitle', 'Left title'), F('pastWhen', 'Left date & time'), F('pastChips', 'Left tags (one per line)', { type: 'lines' }), F('pastListLabel', 'Left list heading'), F('pastList', 'Left bullet points (one per line)', { type: 'lines' }), F('pastAction', 'Left link label'), F('nextLabel', 'Right column label'), F('nextTitle', 'Right title'), F('nextWhen', 'Right date & time'), F('nextCountdown', 'Countdown badge'), F('nextChips', 'Right tags (one per line)', { type: 'lines' }), F('nextListLabel', 'Right list heading'), F('nextList', 'Right bullet points (one per line)', { type: 'lines' }), F('nextAction', 'Button label')];
     if (kind === 'profile') return [F('affiliation', 'Affiliation'), F('country', 'Country'), F('bio', 'Bio', { type: 'textarea', placeholder: 'A few lines about your research and mentoring' })];
-    if (kind === 'project') return [F('title', 'Project title', { placeholder: 'e.g. SGLT2 inhibitors for anthracycline cardiotoxicity' }), F('mentee', 'Mentee', { type: 'select' }), F('p', 'Population'), F('i', 'Intervention'), F('c', 'Comparator'), F('o', 'Outcome'), F('t', 'Timeframe'), F('t2', 'Type of study', { placeholder: 'e.g. Systematic review and meta-analysis' })];
+    if (kind === 'project') return [F('title', 'Project title', { placeholder: 'e.g. SGLT2 inhibitors for anthracycline cardiotoxicity' }), F('mentee', 'Mentee', { type: 'select' }), F('reviewType', 'Review type', { type: 'select', options: REVIEW_TYPES }), F('p', 'Population'), F('i', 'Intervention'), F('c', 'Comparator'), F('o', 'Outcome'), F('t', 'Timeframe'), F('t2', 'Type of study', { placeholder: 'e.g. Systematic review and meta-analysis' })];
     if (kind === 'module' || kind === 'submodule') return [F('title', 'Title', { placeholder: kind === 'module' ? 'Module title' : 'Submodule title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('thumb', 'Thumbnail', { type: 'image' }), F('order', 'Order', { type: 'number' }), F('status', 'Status', { type: 'select', options: ['Active', 'Inactive'] })];
     if (kind === 'lesson') return [F('title', 'Title', { placeholder: 'Lesson title' }), F('description', 'Description', { type: 'textarea', placeholder: 'Optional description' }), F('content', 'Content', { type: 'rich', placeholder: 'Lesson content... (**bold**, _italic_, ## heading, - list)' }), F('videoUrl', 'Video URL', { placeholder: 'YouTube, Vimeo or https:// embed link' }), F('mins', 'Duration (minutes)', { type: 'number' }), F('thumb', 'Thumbnail', { type: 'image' }), F('files', 'Lesson files', { type: 'files' }), F('subId', 'Submodule', { type: 'select' }), F('order', 'Order', { type: 'number' }), F('active', 'Status', { type: 'switch' })];
     return [];
@@ -3111,9 +3557,9 @@ class Component extends DCLogic {
       const proposed = this.state.role === 'mentee';
       const proj = {
         id: 'p' + Date.now(), mentee: v.mentee || this.newProjectMentees()[0], name: v.title.trim(), status: proposed ? 'Proposed' : 'Active', reviewNote: '', updated: TODAY,
-        taskDone: {}, taskNotes: {}, taskLinks: {}, gradeCounts: false,
-        picott: { p: v.p, i: v.i, c: v.c, o: v.o, t: v.t, t2: v.t2 },
-        studies: [], details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' }, logbook: []
+        taskDone: {}, taskNotes: {}, docs: [], taskDocs: {}, registration: Object.assign({}, REG_BLANK), journals: [], conferences: [], coauthors: [], expert: Object.assign({}, EXPERT_BLANK),
+        picott: { p: v.p, i: v.i, c: v.c, o: v.o, t: v.t, t2: v.t2, reviewType: v.reviewType || 'Intervention', secondaryQs: '' },
+        studies: [], details: { pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' }, logbook: []
       };
       this.setState({ projects: this.state.projects.concat([proj]), dlg: null, projectFilter: 'All mentees' });
       return;
@@ -3610,7 +4056,7 @@ class Component extends DCLogic {
   }
 
   // the open project is edited through top-level keys; switching saves them back and loads the next one
-  workingProject() { const w = this.state; return { name: w.projectName, taskDone: w.taskDone, taskNotes: w.taskNotes, picott: w.projectPicott, taskLinks: w.taskLinks, gradeCounts: false, studies: w.studies, details: w.details, logbook: w.logbook }; }
+  workingProject() { const w = this.state; return { name: w.projectName, taskDone: w.taskDone, taskNotes: w.taskNotes, picott: w.projectPicott, studies: w.studies, details: w.details, logbook: w.logbook }; }
   projectData(p) { return p.id === this.state.projectId ? Object.assign({}, p, this.workingProject()) : p; }
   currentProject() { return this.state.projects.filter((p) => p.id === this.state.projectId)[0] || this.state.projects[0]; }
   openProject = (id) => (e) => {
@@ -3620,9 +4066,9 @@ class Component extends DCLogic {
     const next = projects.filter((p) => p.id === id)[0];
     this.setState({
       projects: projects, projectId: id, page: 'project', projectTab: 'progress', navOpen: false,
-      projectName: next.name, taskDone: next.taskDone, taskLinks: next.taskLinks, gradeCounts: next.gradeCounts,
+      projectName: next.name, taskDone: next.taskDone,
       studies: next.studies, details: next.details, logbook: next.logbook, taskNotes: next.taskNotes || {}, projectPicott: next.picott || {}, picottDraft: null,
-      studyEdit: null, studyDraft: null, detailsDraft: null, logEdit: null, logEditDraft: null, dismissedTasks: {}
+      studyEdit: null, studyDraft: null, detailsDraft: null, logEdit: null, logEditDraft: null, dismissedTasks: {}, coOpen: null
     });
     window.scrollTo(0, 0);
   };
@@ -3652,7 +4098,7 @@ class Component extends DCLogic {
   setStudies(patch) { this.setState(Object.assign({}, patch, { taskDone: syncViability(this.state.taskDone, patch.studies) })); }
   pendingItems() {
     const out = [];
-    this.visibleProjects().forEach((p0) => {
+    this.ownProjects().forEach((p0) => {
       const p = this.projectData(p0);
       if (p.status === 'Proposed') out.push({ kind: 'project', pid: p.id, tid: '', project: p.name, mentee: p.mentee, title: 'New project proposal', stage: '' });
       PROJECT_STAGES.forEach((stage, si) => stage.tasks.forEach((t, ti) => {
@@ -3667,7 +4113,7 @@ class Component extends DCLogic {
     const note = window.prompt('Why are you sending this back? The mentee will see this note.', '');
     if (note === null) return;
     if (it.kind === 'project') this.setProjectStatus(it.pid, 'Sent back', note.trim() || 'Sent back for changes');
-    else this.setTaskState(it.pid, it.tid, null, note.trim() || 'Sent back for changes');
+    else this.setTaskState(it.pid, it.tid, null, 'Sent back: ' + (note.trim() || 'changes requested'));
   }
   newProjectMentees() {
     const role = this.state.role;
@@ -3675,19 +4121,27 @@ class Component extends DCLogic {
     return MENTEES.filter((m) => role === 'admin' || m.mentor === ME).map((m) => m.name);
   }
 
-  projectCardVals(list) {
+  projectCardVals(list, asCoauthor) {
     const st = this.state;
+    const names = this.followedMentees();
     return list.map((p0) => {
         const p = this.projectData(p0);
+        const mine = asCoauthor ? (p.coauthors || []).filter((c) => c.kind === 'mentee' && names.indexOf(c.name) !== -1) : [];
+        const senior = mine.some((c) => c.senior);
         const pr = projectProgress(p);
         const pub = (p.details && p.details.pubStatus) || 'Not started';
         const pubColor = pub === 'Published' || pub === 'Accepted' ? '155-40-27' : pub === 'Submitted' || pub === 'Under review' ? '234-85-14' : pub === 'In progress' ? '40-78-44' : '38-6-42';
         return {
           name: p.name,
           mentee: p.mentee,
-          showMentee: st.role !== 'mentee',
+          showMentee: st.role !== 'mentee' || !!asCoauthor,
+          hasRoleTag: !!asCoauthor,
+          roleTag: (senior ? 'Senior author' : 'Co-author') + (st.role === 'mentee' ? '' : ' · ' + mine.map((c) => c.name).join(', ')),
+          roleTagStyle: 'display:inline-flex; justify-self:start; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (senior ? 'border:1px solid hsl(var(--c-40-78-44)); color:hsl(var(--c-40-78-44)); background:hsl(var(--c-40-78-44) / .1)' : 'border:1px solid hsl(var(--c-234-85-14) / .3); color:hsl(var(--c-234-85-14)); background:hsl(var(--c-234-85-14) / .06)'),
+          hasCoLine: !asCoauthor && (p.coauthors || []).length > 0,
+          coLine: 'Co-authors: ' + (p.coauthors || []).map((c) => c.name + (c.senior ? ' (senior)' : '')).join(', '),
           open: this.openProject(p.id),
-          stage: PROJECT_STAGES[pr.stageIdx].title.replace(/^Stage \d+: /, ''),
+          stage: PROJECT_STAGES[pr.stageIdx].title.replace(/^Stage \d+: /, '') + (pr.openEarlier ? ' · ' + openEarlierLabel(pr.openEarlier) : ''),
           pct: pr.pct + '%',
           count: pr.done + '/' + pr.total + ' tasks',
           barStyle: 'display:block; height:100%; width:' + pr.pct + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
@@ -3700,18 +4154,31 @@ class Component extends DCLogic {
           statusTagStyle: 'display:inline-flex; justify-self:start; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (p.status === 'Proposed' ? 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))' : 'background:hsl(var(--c-4-62-50) / .12); color:hsl(var(--c-4-62-50))'),
           pubStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; color:hsl(var(--c-' + pubColor + ')); background:hsl(var(--c-' + pubColor + ') / .13)',
           dots: PROJECT_STAGES.map((stage, i) => ({
-            style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (i < pr.stageIdx || pr.pct === 100 ? 'hsl(var(--c-155-40-27))' : i === pr.stageIdx ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-44-14-89))') + '; box-shadow:0 0 0 1px hsl(var(--c-42-12-84))'
+            style: 'width:12px; height:12px; flex-shrink:0; border-radius:9999px; background:' + (pr.open[i] === 0 && i <= pr.stageIdx ? 'hsl(var(--c-155-40-27))' : i === pr.stageIdx ? 'hsl(var(--c-234-85-14))' : i < pr.stageIdx ? 'hsl(var(--c-40-78-44))' : 'hsl(var(--c-44-14-89))') + '; box-shadow:0 0 0 1px hsl(var(--c-42-12-84))'
           }))
         };
     });
   }
 
-  visibleProjects() {
+  // first-author projects: the viewer's own (mentee), their mentees' (mentor) or all (admin)
+  ownProjects() {
     const w = this.state;
     if (w.role === 'mentee') return w.projects.filter((p) => p.mentee === PROJECT_MENTEE);
     if (w.role === 'mentor') return w.projects.filter((p) => (MENTEES.filter((m) => m.name === p.mentee)[0] || {}).mentor === ME);
     return w.projects;
   }
+  // mentees whose co-authorships the viewer follows
+  followedMentees() {
+    const role = this.state.role;
+    if (role === 'mentee') return [PROJECT_MENTEE];
+    if (role === 'mentor') return MENTEES.filter((m) => m.mentor === ME).map((m) => m.name);
+    return [];
+  }
+  coauthorProjects() {
+    const own = this.ownProjects().map((p) => p.id), names = this.followedMentees();
+    return this.state.projects.filter((p) => own.indexOf(p.id) === -1 && (p.coauthors || []).some((c) => c.kind === 'mentee' && names.indexOf(c.name) !== -1));
+  }
+  visibleProjects() { return this.ownProjects().concat(this.coauthorProjects()); }
 
   shiftCalMonth(dir) {
     const d = new Date(this.state.calYear, this.state.calMonth + dir, 1);
@@ -3893,6 +4360,15 @@ class Component extends DCLogic {
       + '&location=' + encodeURIComponent('Google Meet');
 
     let projectDone = 0, projectTotal = 0;
+    const curEntry = this.currentProject();
+    const curInfo = reviewInfo(st.projectPicott);
+    const curReg = Object.assign({}, REG_BLANK, curEntry.registration);
+    const setReg = (k) => (e) => { const v = e.target.value; this.updateCur((p) => { const r = Object.assign({}, REG_BLANK, p.registration); r[k] = v; return { registration: r }; }); };
+    const updList = (key, id, patch) => this.updateCur((p) => { const o = {}; o[key] = (p[key] || []).map((x) => (x.id === id ? Object.assign({}, x, typeof patch === 'function' ? patch(x) : patch) : x)); return o; });
+    const newId = (prefix) => prefix + Date.now().toString(36);
+    const menteeOptions = (exclude) => MENTEES.map((m) => m.name).filter((n) => n !== curEntry.mentee && exclude.indexOf(n) === -1);
+    const curExpert = Object.assign({}, EXPERT_BLANK, curEntry.expert);
+    const setExpert = (k) => (e) => { const v = e.target.value; this.updateCur((p) => { const x = Object.assign({}, EXPERT_BLANK, p.expert); x[k] = v; if (k === 'kind') { x.name = ''; x.email = ''; } return { expert: x }; }); };
     const projectStages = PROJECT_STAGES.map((stage, si) => {
       let sDone = 0, sTotal = 0;
       const tasks = stage.tasks.map((t, ti) => {
@@ -3902,11 +4378,56 @@ class Component extends DCLogic {
         const ready = st.taskDone[id] === 'ready';
         const locked = id === VIABILITY_TASK && filledPapers(st.studies) < 3 && !done && !ready;
         if (!optional) { sTotal++; if (done) sDone++; }
-        return Object.assign(this.driveProps('task-' + id), {
+        return Object.assign(this.driveProps(id), {
           title: t[0],
-          desc: t[1],
+          desc: id === '6-0' ? 'Choose the tool for this review type: ' + curInfo.tool : id === '6-1' ? 'Rate every included study (' + curInfo.tool + ')' : id === '6-3' ? curInfo.grade : t[1],
           optional: optional,
           done: done,
+          canReopen: done && st.role !== 'mentee',
+          reopen: (e) => { e.preventDefault(); e.stopPropagation(); this.reopenTask(id, t[0]); },
+          docs: this.taskDocList(id).map((d) => ({
+            name: d.name,
+            href: docHref(d.url),
+            detach: (e) => {
+              e.preventDefault(); e.stopPropagation();
+              this.updateCur((p) => { const td = Object.assign({}, p.taskDocs); td[id] = (td[id] || []).filter((x) => x !== d.id); return { taskDocs: td }; });
+            }
+          })),
+          docOptions: [{ value: '', label: 'Attach document…' }].concat((curEntry.docs || []).filter((d) => ((curEntry.taskDocs || {})[id] || []).indexOf(d.id) === -1).map((d) => ({ value: d.id, label: d.name }))).concat([{ value: '__new', label: '+ New link…' }]),
+          attach: (e) => {
+            const v = e.target.value;
+            e.target.value = '';
+            if (!v) return;
+            if (v === '__new') { this.promptNewDoc(id, t[0]); return; }
+            this.updateCur((p) => { const td = Object.assign({}, p.taskDocs); td[id] = (td[id] || []).concat([v]); return { taskDocs: td }; });
+          },
+          isExpert: t[3] === 'expert',
+          expertStatus: curExpert.status,
+          expertKind: curExpert.kind,
+          expertIsMentee: curExpert.kind === 'mentee',
+          expertIsExternal: curExpert.kind !== 'mentee',
+          expertName: curExpert.name,
+          expertEmail: curExpert.email,
+          expertMenteeOptions: [{ value: '', label: 'Choose a mentee…' }].concat(menteeOptions([]).map((n) => ({ value: n, label: n }))),
+          setExpertStatus: setExpert('status'),
+          setExpertKind: setExpert('kind'),
+          setExpertName: setExpert('name'),
+          setExpertEmail: setExpert('email'),
+          expertAcceptedMentee: curExpert.status === 'Accepted' && !!curExpert.name && curExpert.kind === 'mentee',
+          expertAcceptedExternal: curExpert.status === 'Accepted' && !!curExpert.name && curExpert.kind !== 'mentee',
+          expertInitials: initials(curExpert.name || '?'),
+          openExpert: this.openMentee(curExpert.name),
+          expertMailto: 'mailto:' + curExpert.email,
+          expertEmailLabel: curExpert.email || 'no email recorded',
+          expertStatusStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (curExpert.status === 'Accepted' ? 'background:hsl(var(--c-155-40-27) / .12); color:hsl(var(--c-155-40-27))' : curExpert.status === 'Waiting acceptance' ? 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))' : 'background:hsl(var(--c-44-14-89)); color:hsl(var(--c-38-6-42))'),
+          isRegister: t[3] === 'register',
+          regRegistry: curReg.registry,
+          regId: curReg.id,
+          regStatus: curReg.status,
+          setRegRegistry: setReg('registry'),
+          setRegId: setReg('id'),
+          setRegStatus: setReg('status'),
+          regWarn: (curReg.status === 'Registered' || curReg.status === 'Amendment pending' || curReg.status === 'Submitted') && !String(curReg.id).trim() ? 'Status is "' + curReg.status + '" but no registration ID is recorded.' : '',
           hasEmail: t[3] === 'invite',
           email: mentorOf(this.currentProject().mentee).email,
           emailLabel: 'Mentor: ' + mentorOf(this.currentProject().mentee).name + ' · ',
@@ -3934,10 +4455,53 @@ class Component extends DCLogic {
       });
       projectDone += sDone; projectTotal += sTotal;
       const pct = sTotal ? Math.round((sDone / sTotal) * 100) : 0;
+      const stageCo = (curEntry.coauthors || []).filter((c) => c.stage === si);
+      const coOpen = st.coOpen === si;
+      const addCo = (c) => this.updateCur((p) => ({ coauthors: (p.coauthors || []).concat([Object.assign({ id: newId('a'), stage: si }, c)]) }));
       return {
         title: stage.title,
         desc: stage.desc,
         tasks: tasks,
+        coCount: stageCo.length ? String(stageCo.length) : '',
+        coToggleLabel: (coOpen ? 'Close co-authors for ' : 'Add co-authors to ') + stage.title,
+        coToggleStyle: 'display:inline-flex; align-items:center; gap:4px; height:28px; padding:0 8px; border-radius:6.6px; cursor:pointer; font-size:12px; font-weight:700; ' + (coOpen || stageCo.length ? 'border:1px solid hsl(var(--c-234-85-14) / .35); background:hsl(var(--c-234-85-14) / .08); color:hsl(var(--c-234-85-14))' : 'border:1px solid hsl(var(--c-42-12-84)); background:transparent; color:hsl(var(--c-38-6-42))'),
+        toggleCo: (e) => { e.preventDefault(); this.setState({ coOpen: coOpen ? null : si, coDraft: { mentee: '', name: '', email: '', senior: false } }); },
+        hasCo: stageCo.length > 0,
+        coauthors: stageCo.map((c) => ({
+          name: c.name + (c.senior ? ' · Senior' : ''),
+          isMentee: c.kind === 'mentee',
+          isExternal: c.kind !== 'mentee',
+          open: this.openMentee(c.name),
+          initials: initials(c.name),
+          mailto: c.email ? 'mailto:' + c.email : '#',
+          email: c.email || 'no email',
+          chipStyle: 'display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 4px; border-radius:9999px; font-size:12px; font-weight:600; ' + (c.senior ? 'border:1.5px solid hsl(var(--c-40-78-44)); background:hsl(var(--c-40-78-44) / .1)' : 'border:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-42-33-99))'),
+          remove: (e) => { e.preventDefault(); if (window.confirm('Remove ' + c.name + ' as co-author?')) this.updateCur((p) => ({ coauthors: (p.coauthors || []).filter((x) => x.id !== c.id) })); }
+        })),
+        coOpen: coOpen,
+        coMenteeOptions: [{ value: '', label: 'Choose a mentee…' }].concat(menteeOptions(stageCo.filter((c) => c.kind === 'mentee').map((c) => c.name)).map((n) => ({ value: n, label: n }))),
+        coDraftMentee: st.coDraft.mentee,
+        coDraftName: st.coDraft.name,
+        coDraftEmail: st.coDraft.email,
+        coDraftSenior: !!st.coDraft.senior,
+        setCoMentee: (e) => this.setState({ coDraft: Object.assign({}, this.state.coDraft, { mentee: e.target.value }) }),
+        setCoName: (e) => this.setState({ coDraft: Object.assign({}, this.state.coDraft, { name: e.target.value }) }),
+        setCoEmail: (e) => this.setState({ coDraft: Object.assign({}, this.state.coDraft, { email: e.target.value }) }),
+        toggleCoSenior: () => this.setState({ coDraft: Object.assign({}, this.state.coDraft, { senior: !this.state.coDraft.senior }) }),
+        addCoMentee: (e) => {
+          e.preventDefault();
+          const d = this.state.coDraft;
+          if (!d.mentee) return;
+          addCo({ kind: 'mentee', name: d.mentee, email: '', senior: !!d.senior });
+          this.setState({ coDraft: { mentee: '', name: '', email: '', senior: false } });
+        },
+        addCoExternal: (e) => {
+          e.preventDefault();
+          const d = this.state.coDraft;
+          if (!d.name.trim()) return;
+          addCo({ kind: 'external', name: d.name.trim(), email: d.email.trim(), senior: !!d.senior });
+          this.setState({ coDraft: { mentee: '', name: '', email: '', senior: false } });
+        },
         count: sDone + '/' + sTotal,
         pct: pct,
         barStyle: 'height:100%; width:' + pct + '%; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))',
@@ -3945,8 +4509,8 @@ class Component extends DCLogic {
       };
     });
     const projectPct = projectTotal ? Math.round((projectDone / projectTotal) * 100) : 0;
-    let curStageIdx = projectStages.findIndex((sg) => sg.pct < 100);
-    if (curStageIdx === -1) curStageIdx = projectStages.length - 1;
+    const curProgress = projectProgress({ taskDone: st.taskDone });
+    const curStageIdx = curProgress.stageIdx;
     const curStageName = projectStages[curStageIdx].title.replace(/^Stage \d+: /, '');
 
     // calendar events for the displayed month, from state (admins can add, edit and delete them)
@@ -4090,6 +4654,56 @@ class Component extends DCLogic {
       setTabProgress: (e) => { e.preventDefault(); this.setState({ projectTab: 'progress' }); },
       setTabDetails: (e) => { e.preventDefault(); this.setState({ projectTab: 'details' }); },
       projectStages: projectStages,
+      journals: (curEntry.journals || []).map((j) => {
+        const rounds = j.rounds || [];
+        const last = rounds[rounds.length - 1];
+        const setRounds = (fn) => updList('journals', j.id, (x) => ({ rounds: fn(x.rounds || []) }));
+        const setRound = (id, k) => (e) => { const v = e.target.value; setRounds((rs) => rs.map((x) => { if (x.id !== id) return x; const y = Object.assign({}, x); y[k] = v; return y; })); };
+        return {
+          name: j.name,
+          files: j.files,
+          filesHref: docHref(j.files),
+          hasFiles: !!String(j.files || '').trim(),
+          status: last ? last.label + ' · ' + last.decision : 'Not submitted yet',
+          setName: (e) => updList('journals', j.id, { name: e.target.value }),
+          setFiles: (e) => updList('journals', j.id, { files: e.target.value }),
+          remove: (e) => { e.preventDefault(); if (window.confirm('Delete the submission to ' + (j.name || 'this journal') + ' and all its review rounds?')) this.updateCur((p) => ({ journals: (p.journals || []).filter((x) => x.id !== j.id) })); },
+          addRound: (e) => { e.preventDefault(); setRounds((r) => r.concat([{ id: newId('r'), label: r.length === 0 ? 'Review 1' : 'Revision ' + (r.length + 1), decision: 'Pending', questions: '', files: '' }])); },
+          rounds: rounds.map((r) => ({
+            label: r.label,
+            decision: r.decision,
+            questions: r.questions,
+            files: r.files,
+            filesHref: docHref(r.files),
+            hasFiles: !!String(r.files || '').trim(),
+            decisionOptions: ROUND_DECISIONS,
+            setLabel: setRound(r.id, 'label'),
+            setDecision: setRound(r.id, 'decision'),
+            setQuestions: setRound(r.id, 'questions'),
+            setFiles: setRound(r.id, 'files'),
+            remove: (e) => { e.preventDefault(); if (window.confirm('Delete ' + r.label + '?')) setRounds((rs) => rs.filter((x) => x.id !== r.id)); }
+          }))
+        };
+      }),
+      noJournals: (curEntry.journals || []).length === 0,
+      addJournal: (e) => { e.preventDefault(); this.updateCur((p) => ({ journals: (p.journals || []).concat([{ id: newId('j'), name: '', files: '', rounds: [] }]) })); },
+      conferences: (curEntry.conferences || []).map((c) => ({
+        name: c.name,
+        files: c.files,
+        filesHref: docHref(c.files),
+        hasFiles: !!String(c.files || '').trim(),
+        decision: c.decision,
+        decisionOptions: CONF_DECISIONS,
+        decisionStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (c.decision === 'Accepted' ? 'background:hsl(var(--c-155-40-27) / .12); color:hsl(var(--c-155-40-27))' : c.decision === 'Not accepted' ? 'background:hsl(var(--c-4-62-50) / .12); color:hsl(var(--c-4-62-50))' : 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))'),
+        setName: (e) => updList('conferences', c.id, { name: e.target.value }),
+        setFiles: (e) => updList('conferences', c.id, { files: e.target.value }),
+        setDecision: (e) => updList('conferences', c.id, { decision: e.target.value }),
+        remove: (e) => { e.preventDefault(); if (window.confirm('Delete the abstract for ' + (c.name || 'this conference') + '?')) this.updateCur((p) => ({ conferences: (p.conferences || []).filter((x) => x.id !== c.id) })); }
+      })),
+      noConferences: (curEntry.conferences || []).length === 0,
+      addConference: (e) => { e.preventDefault(); this.updateCur((p) => ({ conferences: (p.conferences || []).concat([{ id: newId('c'), name: '', files: '', decision: 'Pending' }]) })); },
+      regStatusOptions: REG_STATUSES,
+      expertStatusOptions: EXPERT_STATUSES,
       projectPct: projectPct + '%',
       projectCount: projectDone + ' of ' + projectTotal + ' tasks',
       projectJourney: JOURNEY.map((name, i) => ({
@@ -4100,24 +4714,63 @@ class Component extends DCLogic {
       projectName: st.projectName,
       setProjectName: (e) => this.setState({ projectName: e.target.value }),
       papersCount: st.studies.length + (st.studies.length === 1 ? ' paper.' : ' papers.'),
+      libraryDocs: (curEntry.docs || []).map((d) => {
+        const used = Object.keys(curEntry.taskDocs || {}).filter((k) => (curEntry.taskDocs[k] || []).indexOf(d.id) !== -1);
+        return {
+          name: d.name,
+          href: docHref(d.url),
+          usedIn: used.length ? 'Attached to ' + used.map((k) => PROJECT_STAGES[Number(k.split('-')[0])].tasks[Number(k.split('-')[1])][0]).join(', ') : 'Not attached to a task yet',
+          rename: (e) => {
+            e.preventDefault();
+            const name = window.prompt('Document name:', d.name);
+            if (name && name.trim()) this.updateCur((p) => ({ docs: p.docs.map((x) => (x.id === d.id ? Object.assign({}, x, { name: name.trim() }) : x)) }));
+          },
+          relink: (e) => {
+            e.preventDefault();
+            const url = window.prompt('Link for "' + d.name + '":', d.url);
+            if (url && url.trim()) this.updateCur((p) => ({ docs: p.docs.map((x) => (x.id === d.id ? Object.assign({}, x, { url: url.trim() }) : x)) }));
+          },
+          remove: (e) => {
+            e.preventDefault();
+            if (!window.confirm('Remove "' + d.name + '" from the project library' + (used.length ? ' and detach it from ' + used.length + ' task' + (used.length === 1 ? '' : 's') : '') + '?')) return;
+            this.updateCur((p) => {
+              const td = {};
+              Object.keys(p.taskDocs || {}).forEach((k) => { td[k] = p.taskDocs[k].filter((x) => x !== d.id); });
+              return { docs: p.docs.filter((x) => x.id !== d.id), taskDocs: td };
+            });
+          }
+        };
+      }),
+      libraryEmpty: (curEntry.docs || []).length === 0,
+      addLibraryDoc: (e) => { e.preventDefault(); this.promptNewDoc('', ''); },
       addStudy: (e) => {
         e.preventDefault();
         const id = st.studies.reduce((mx, x) => Math.max(mx, x.id), 0) + 1;
-        const blank = { id: id, title: '', doi: '', p: '', i: '', c: '', o: '', t: '', t2: '' };
+        const blank = Object.assign({ id: id }, PICOTT_BLANK);
         this.setState({ studies: st.studies.concat([blank]), studyEdit: id, studyDraft: Object.assign({}, blank) });
       },
       picottStudies: st.studies.map((x) => {
         const editing = st.studyEdit === x.id;
         const draft = editing ? st.studyDraft : null;
         const setD = (k) => (e) => { const d = Object.assign({}, this.state.studyDraft); d[k] = e.target.value; this.setState({ studyDraft: d }); };
-        const isBlank = (o) => !o.title && !o.doi && PICOTT_FIELDS.every((f) => !o[f[0]]);
+        const isBlank = (o) => !o.author && !o.year && !o.title && !o.doi && PICOTT_FIELDS.every((f) => !o[f[0]]);
         return {
-          title: x.title || 'Untitled paper',
-          doi: x.doi || '—',
+          label: paperLabel(x),
+          sub: [x.title, x.doi ? 'DOI ' + x.doi : ''].filter(Boolean).join(' · '),
+          hasSub: !!(x.title || x.doi),
+          quality: x.quality ? 'Quality: ' + x.quality : 'Quality not assessed',
+          qualityStyle: 'display:inline-flex; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; ' + (x.quality === 'Low' ? 'background:hsl(var(--c-155-40-27) / .12); color:hsl(var(--c-155-40-27))' : !x.quality ? 'background:hsl(var(--c-44-14-89)); color:hsl(var(--c-38-6-42))' : x.quality === 'Some concerns' || x.quality === 'Moderate' || x.quality === 'Unclear' ? 'background:hsl(var(--c-40-78-44) / .16); color:hsl(var(--c-40-78-44))' : 'background:hsl(var(--c-4-62-50) / .12); color:hsl(var(--c-4-62-50))'),
+          dAuthor: draft ? draft.author || '' : '',
+          dYear: draft ? draft.year || '' : '',
+          dQuality: draft ? draft.quality || '' : '',
+          setAuthor: setD('author'),
+          setYear: setD('year'),
+          setQuality: setD('quality'),
+          qualityOptions: [{ value: '', label: 'Not assessed' }].concat(curInfo.quality.map((q) => ({ value: q, label: q }))),
           viewing: !editing,
           editing: editing,
           cardStyle: 'padding:16px 18px; border-radius:13.6px; border:1px solid ' + (editing ? 'hsl(var(--c-234-85-14) / .35)' : 'hsl(var(--c-42-12-84))'),
-          fields: PICOTT_FIELDS.map((f) => ({ label: f[1], value: x[f[0]] || '—', draft: draft ? draft[f[0]] : '', set: setD(f[0]) })),
+          fields: picottFieldsFor(st.projectPicott).map((f) => ({ label: f[1], value: x[f[0]] || '—', draft: draft ? draft[f[0]] : '', set: setD(f[0]) })),
           dTitle: draft ? draft.title : '',
           dDoi: draft ? draft.doi : '',
           setTitle: setD('title'),
@@ -4137,27 +4790,22 @@ class Component extends DCLogic {
           canRemove: st.role !== 'mentee' || isBlank(x),
           remove: (e) => {
             e.preventDefault();
-            if (!isBlank(x) && !window.confirm('Remove "' + (x.title || 'this paper') + '" from the viability assessment?')) return;
+            if (!isBlank(x) && !window.confirm('Remove "' + paperLabel(x) + '" from the viability assessment?')) return;
             this.setStudies({ studies: this.state.studies.filter((y) => y.id !== x.id), studyEdit: null, studyDraft: null });
           }
         };
       }),
       detailsViewing: !st.detailsDraft,
       detailsEditing: !!st.detailsDraft,
-      detailsDrive: st.details.drive || '—',
-      detailsDriveHref: !st.details.drive ? '#' : /^https?:\/\//.test(st.details.drive) ? st.details.drive : 'https://' + st.details.drive,
       detailsPubStatus: st.details.pubStatus,
       detailsPubDoiLabel: st.details.pubDoi || 'added on acceptance',
       detailsRows: [
-        { label: 'Documents', value: st.details.docs || '—', style: 'font-size:14px; color:hsl(var(--c-38-6-42))' },
         { label: 'Publication status', value: st.details.pubStatus, style: 'display:inline-flex; justify-self:start; padding:2px 10px; border-radius:9999px; font-size:12px; font-weight:600; ' + (st.details.pubStatus === 'Accepted' || st.details.pubStatus === 'Published' ? 'background:hsl(var(--c-155-40-27) / .14); color:hsl(var(--c-155-40-27))' : 'background:hsl(var(--c-40-78-44) / .14); color:hsl(var(--c-40-78-44))') },
         { label: 'DOI', value: st.details.pubDoi || 'Added on acceptance', style: 'font-size:14px; color:hsl(var(--c-38-6-42))' + (st.details.pubDoi ? "; font-family:'JetBrains Mono', monospace" : '') },
         { label: 'Presentations & awards', value: st.details.presentations || '—', style: 'font-size:14px; color:hsl(var(--c-38-6-42))' },
         { label: 'Free category', value: st.details.freeCat || '—', style: 'font-size:14px; color:hsl(var(--c-38-6-42))' }
       ],
       detailsFields: [
-        ['drive', 'Drive folder', 'drive.google.com/...'],
-        ['docs', 'Documents', 'Protocol v2.docx · Search log.xlsx'],
         ['presentations', 'Presentations & awards', 'Poster · Congress name'],
         ['freeCat', 'Free category', 'Anything else worth tracking']
       ].map((f) => ({
@@ -4556,7 +5204,7 @@ class Component extends DCLogic {
       weekTasks: PROJECT_STAGES[curStageIdx].tasks.map((t, ti) => {
         const id = curStageIdx + '-' + ti;
         const done = !!st.taskDone[id];
-        return Object.assign(this.driveProps('task-' + id), {
+        return Object.assign(this.driveProps(id), {
           id: id,
           title: t[0],
           project: st.projectName,
@@ -4603,7 +5251,7 @@ class Component extends DCLogic {
       calMonthLabel: MONTHS[st.calMonth] + ' ' + st.calYear,
       calPrev: () => this.shiftCalMonth(-1),
       calNext: () => this.shiftCalMonth(1),
-      nowStageTitle: projectStages[curStageIdx].title,
+      nowStageTitle: projectStages[curStageIdx].title + (curProgress.openEarlier ? ' · ' + openEarlierLabel(curProgress.openEarlier) : ''),
       dayActivities: (monthEvents[st.selected] || []).map((ev) => {
         const c = CAL_COLOR[ev.category] || CAL_COLOR.Other;
         return {
@@ -4644,7 +5292,7 @@ class Component extends DCLogic {
       ...this.ohVals(),
       ...this.dlgVals(),
       newResearchLabel: st.role === 'mentee' ? 'Propose research' : 'New Research',
-      newResearch: (e) => { e.preventDefault(); this.openDlg('project', { title: '', mentee: this.newProjectMentees()[0], p: '', i: '', c: '', o: '', t: '', t2: 'Systematic review and meta-analysis' }, { mode: 'create' }); },
+      newResearch: (e) => { e.preventDefault(); this.openDlg('project', { title: '', mentee: this.newProjectMentees()[0], reviewType: 'Intervention', p: '', i: '', c: '', o: '', t: '', t2: 'Systematic review and meta-analysis' }, { mode: 'create' }); },
       hasReviewItems: this.pendingItems().length > 0,
       reviewHeading: st.role === 'mentee' ? 'Waiting for your mentor’s review' : 'Awaiting your review',
       reviewCount: this.pendingItems().length,
@@ -4662,7 +5310,16 @@ class Component extends DCLogic {
       detailsHasWarning: !!pubMismatch(this.projectData(this.currentProject())),
       picottViewing: !st.picottDraft,
       picottEditing: !!st.picottDraft,
-      picottFields: PICOTT_FIELDS.map((f) => ({
+      reviewTypeLabel: 'Review type: ' + ((st.projectPicott || {}).reviewType || 'Intervention'),
+      reviewTypeOptions: REVIEW_TYPES,
+      picottDraftType: st.picottDraft ? st.picottDraft.reviewType || 'Intervention' : '',
+      setPicottDraftType: (e) => this.setState({ picottDraft: Object.assign({}, this.state.picottDraft, { reviewType: e.target.value }) }),
+      picottDraftSecondary: st.picottDraft ? st.picottDraft.secondaryQs || '' : '',
+      setPicottDraftSecondary: (e) => this.setState({ picottDraft: Object.assign({}, this.state.picottDraft, { secondaryQs: e.target.value }) }),
+      showSecondaryQs: !st.picottDraft && !!String((st.projectPicott || {}).secondaryQs || '').trim(),
+      secondaryQs: (st.projectPicott || {}).secondaryQs || '',
+      qualityScaleNote: 'Quality scale: ' + curInfo.tool + ' (' + curInfo.quality.join(' / ') + ').',
+      picottFields: picottFieldsFor(st.picottDraft || st.projectPicott).map((f) => ({
         label: f[1],
         value: (st.projectPicott || {})[f[0]] || '—',
         draft: st.picottDraft ? st.picottDraft[f[0]] || '' : '',
@@ -4698,12 +5355,16 @@ class Component extends DCLogic {
       projectsCanFilter: st.role !== 'mentee',
       projectFilter: st.projectFilter,
       setProjectFilter: (e) => this.setState({ projectFilter: e.target.value }),
-      projectFilterOptions: ['All mentees'].concat(this.visibleProjects().map((p) => p.mentee).filter((v, i, arr) => arr.indexOf(v) === i)),
+      projectFilterOptions: ['All mentees'].concat(this.ownProjects().map((p) => p.mentee).filter((v, i, arr) => arr.indexOf(v) === i)),
       projectsEmpty: this.visibleProjects().length === 0,
       dashProjectsHeading: st.role === 'mentee' ? 'Your research projects' : st.role === 'mentor' ? 'Your mentees’ research projects' : 'All research projects',
       dashProjectsEmpty: this.visibleProjects().length === 0,
-      dashProjects: this.projectCardVals(this.visibleProjects()),
-      projectCards: this.projectCardVals(this.visibleProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || p.mentee === st.projectFilter)),
+      dashProjects: this.projectCardVals(this.ownProjects()).concat(this.projectCardVals(this.coauthorProjects(), true)),
+      projectCards: this.projectCardVals(this.ownProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || p.mentee === st.projectFilter)),
+      coProjectCards: this.projectCardVals(this.coauthorProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || (p.coauthors || []).some((c) => c.name === st.projectFilter)), true),
+      hasCoProjects: this.coauthorProjects().length > 0,
+      firstAuthorHeading: st.role === 'mentee' ? 'First-author projects' : 'First-author projects (your mentees lead)',
+      coAuthorHeading: st.role === 'mentee' ? 'Co-author projects' : 'Projects where your mentees are co-authors',
       ...this.adminVals(),
       hasDayActivities: (monthEvents[st.selected] || []).length > 0,
       noDayActivities: (monthEvents[st.selected] || []).length === 0,
