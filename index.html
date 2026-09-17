@@ -3940,7 +3940,6 @@ function pubMismatch(p) {
 // ---- MetaTracker projects: one entry per mentee project (examples use Vânio's mentees) ----
 const ALL_TASK_IDS = [];
 PROJECT_STAGES.forEach((stage, si) => stage.tasks.forEach((t, ti) => ALL_TASK_IDS.push(si + '-' + ti)));
-function tasksDone(n, ready) { const out = {}; ALL_TASK_IDS.slice(0, n).forEach((id) => { out[id] = true; }); ALL_TASK_IDS.slice(n, n + (ready || 0)).forEach((id) => { out[id] = 'ready'; }); return out; }
 function projectProgress(p) {
   let done = 0, total = 0, stageIdx = 0;
   const open = [];
@@ -5055,7 +5054,6 @@ class Component extends DCLogic {
           tipText: x.area + ': ' + x.mentees + ' present mentee' + (x.mentees === 1 ? '' : 's') + ' · ' + d + ' slot' + (d === 1 ? '' : 's') + ' set for this area' + (d ? ' (' + firstNames(x.dedicated) + ')' : '') + ' · ' + f + ' flexible' + (f ? ' (' + firstNames(x.flexible) + ')' : '')
         };
       }),
-      adAreaMax: String(areaMax),
       adWaitRows: waitRows.map((y, i) => {
         const on = st.adTip === 'wait-' + i;
         const n = slotsOf(y.md).length;
@@ -6404,8 +6402,6 @@ class Component extends DCLogic {
 
       sessionsDone: sessionsDone,
       sessionsTotal: sessionsTotal,
-      sessionsLeft: sessionsTotal - sessionsDone,
-      planPct: Math.round((sessionsDone / sessionsTotal) * 100) + '%',
       ringStyle: 'position:relative; display:grid; place-items:center; width:148px; height:148px; border-radius:9999px; background:conic-gradient(hsl(var(--c-234-85-14)) 0 ' + Math.round((sessionsDone / sessionsTotal) * 100) + '%, hsl(var(--c-44-14-89)) 0)',
       planDots: (function () {
         const out = [];
