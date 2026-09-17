@@ -501,6 +501,130 @@
         </div>
         </sc-if>
 
+        <sc-if value="{{ adSecBonus }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:20px">
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px; display:grid; gap:14px">
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:14px">
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); min-width:230px">Semester
+              <select onChange="{{ setBonusSem }}" value="{{ bonusSem }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:42px">
+                <sc-for list="{{ bonusSemOptions }}" as="o" hint-placeholder-count="2">
+                  <option value="{{ o.value }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); flex:1; min-width:220px">Value (R$)
+              <input value="{{ bonusValue }}" onChange="{{ setBonusValue }}" inputmode="decimal" placeholder="e.g. 100.000,00" aria-label="Bonus value in reais" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%; height:42px; font-size:16px; font-family:'JetBrains Mono', monospace" />
+            </label>
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); min-width:220px">This value is
+              <select onChange="{{ setBonusKind }}" value="{{ bonusKind }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); height:42px">
+                <option value="pool">The bonus pool (30% already applied)</option>
+                <option value="profit">The semester profit (apply 30%)</option>
+              </select>
+            </label>
+            <button onClick="{{ adBonusExport }}" style="height:42px; padding:0 18px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600; cursor:pointer">Export CSV</button>
+          </div>
+          <span style="font-size:13px; font-weight:600; color:hsl(var(--c-234-68-12))">{{ bonusValueRead }}</span>
+          <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ bonusCloseNote }}</span>
+        </div>
+        <div class="rgrid-2col" style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px">
+          <sc-for list="{{ bonusTiles }}" as="k" hint-placeholder-count="4">
+            <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); display:grid; align-content:start; gap:6px; padding:18px 20px">
+              <span style="font-size:13px; font-weight:600; color:hsl(var(--c-38-6-42))">{{ k.label }}</span>
+              <span style="font-family:'Hanken Grotesk', sans-serif; font-size:28px; font-weight:700; line-height:1.1">{{ k.value }}</span>
+              <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ k.sub }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+            <div style="flex:1; min-width:220px">
+              <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Bonus by mentor</h2>
+              <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">Productivity: 1 point per mentee with 1 first/last-author submission or 3 co-author submissions in a semester, kept while the mentee stays active and paid. Volume: 1 point per 4 paid mentees.</p>
+            </div>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adBonusCount }}</span>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; padding:14px 20px; border-bottom:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-44-26-96) / .6)">
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); flex:1; min-width:180px">Search
+              <input value="{{ adBonusQ }}" onChange="{{ adBonusSetQ }}" placeholder="Mentor name" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%" />
+            </label>
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); min-width:170px">Eligibility
+              <select onChange="{{ adBonusSetElig }}" value="{{ adBonusElig }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                <option value="eligible">Eligible (Level 2 at close)</option>
+                <option value="not">Not eligible</option>
+                <option value="all">All mentors</option>
+              </select>
+            </label>
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); min-width:160px">Sort by
+              <select onChange="{{ adBonusSetSort }}" value="{{ adBonusSortKey }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                <sc-for list="{{ adBonusSortOptions }}" as="o" hint-placeholder-count="10">
+                  <option value="{{ o.value }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <button onClick="{{ adBonusFlipDir }}" aria-label="Flip sort direction" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); cursor:pointer; font-weight:600">{{ adBonusDirLabel }}</button>
+          </div>
+          <div style="overflow-x:auto">
+            <div role="table" class="ad-table" aria-label="Bonus by mentor" style="min-width:1580px">
+              <div role="row" style="{{ adBonusGrid }}">
+                <sc-for list="{{ adBonusHeaders }}" as="h" hint-placeholder-count="10">
+                  <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
+                </sc-for>
+              </div>
+              <sc-for list="{{ adBonusRows }}" as="br" hint-placeholder-count="5">
+                <div role="row" style="{{ br.rowStyle }}">
+                  <span role="cell" style="font-weight:600">{{ br.name }}</span>
+                  <span role="cell" style="display:grid; gap:2px"><span>{{ br.level }}</span><sc-if value="{{ br.hasLevelNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ br.levelNote }}</span></sc-if></span>
+                  <span role="cell" title="{{ br.paidTitle }}" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px">{{ br.paid }}</span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px">{{ br.prod }}</span>
+                  <span role="cell" style="display:grid; gap:2px"><span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px">{{ br.volume }}</span><span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ br.volumeNote }}</span></span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:15px; font-weight:700">{{ br.total }}</span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ br.share }}</span>
+                  <span role="cell" style="{{ br.bonusStyle }}">{{ br.bonus }}</span>
+                  <span role="cell" style="display:grid; gap:6px; width:100%">
+                    <sc-if value="{{ br.hasProofs }}" hint-placeholder-val="{{ true }}">
+                      <table style="width:100%; border-collapse:collapse; font-size:11px; border:1px solid hsl(var(--c-42-12-84))">
+                        <thead>
+                          <tr style="background:hsl(var(--c-44-26-96)); color:hsl(var(--c-38-6-42)); text-transform:uppercase; letter-spacing:.08em; font-size:10px">
+                            <th style="padding:4px 6px; font-weight:700; text-align:center">Mentee</th>
+                            <th style="padding:4px 6px; font-weight:700; text-align:center">Criterion</th>
+                            <th style="padding:4px 6px; font-weight:700; text-align:center">Evidence</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <sc-for list="{{ br.proofs }}" as="pf" hint-placeholder-count="1">
+                            <tr style="border-top:1px solid hsl(var(--c-42-12-84))">
+                              <td style="padding:4px 6px; text-align:center"><a href="#" onClick="{{ pf.openMentee }}" style="font-weight:600">{{ pf.mentee }}</a></td>
+                              <td style="padding:4px 6px; text-align:center">{{ pf.criterion }}</td>
+                              <td style="padding:4px 6px; text-align:center">
+                                <sc-for list="{{ pf.evidence }}" as="ev" hint-placeholder-count="1">
+                                  <span style="display:block"><a href="{{ ev.href }}" target="_blank" rel="noopener">{{ ev.label }} ↗</a> · <a href="#" onClick="{{ ev.open }}">project</a></span>
+                                </sc-for>
+                              </td>
+                            </tr>
+                          </sc-for>
+                        </tbody>
+                      </table>
+                    </sc-if>
+                    <sc-if value="{{ br.noProofs }}" hint-placeholder-val="{{ false }}"><span style="color:hsl(var(--c-38-6-42))">—</span></sc-if>
+                  </span>
+                  <span role="cell" style="display:grid; gap:4px; font-size:11px">
+                    <sc-if value="{{ br.hasPending }}" hint-placeholder-val="{{ false }}">
+                      <sc-for list="{{ br.pending }}" as="pd" hint-placeholder-count="1">
+                        <a href="#" onClick="{{ pd.open }}" style="color:hsl(var(--c-40-78-44)); font-weight:600">⚠ {{ pd.label }}</a>
+                      </sc-for>
+                    </sc-if>
+                  </span>
+                </div>
+              </sc-for>
+              <sc-if value="{{ adBonusEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:24px; text-align:center; font-size:14px; color:hsl(var(--c-38-6-42)); border-top:1px solid hsl(var(--c-42-12-84))">No mentors match the filters.</div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+        </div>
+        </sc-if>
+
         <sc-if value="{{ adSecProjects }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex; flex-direction:column; gap:20px">
         <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
@@ -1728,7 +1852,7 @@
                       <input type="checkbox" checked="{{ stage.coDraftSenior }}" onChange="{{ stage.toggleCoSenior }}" style="width:16px; height:16px; accent-color:hsl(var(--c-234-85-14))" />
                       Senior author (applies to the next one you add)
                     </label>
-                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">Mentees added here see this project in their MetaTracker under co-author projects, and so do their mentors.</span>
+                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">Mentees added here see this project in their MetaTracker under co-author projects, and so do their mentors. Mark senior authors: a last-author submission counts like a first-author one for the mentors’ bonus.</span>
                   </div>
                 </sc-if>
                 <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px">
@@ -1880,12 +2004,21 @@
                       <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:hsl(var(--c-38-6-42)); flex:2; min-width:220px">Submission files (link)
                         <input value="{{ jr.files }}" onChange="{{ jr.setFiles }}" placeholder="Drive folder with manuscript, cover letter, figures" style="width:100%; height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
                       </label>
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); width:170px">Submission date
+                        <input type="date" value="{{ jr.submitted }}" onChange="{{ jr.setSubmitted }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%" />
+                      </label>
                       <sc-if value="{{ jr.hasFiles }}" hint-placeholder-val="{{ false }}">
                         <a href="{{ jr.filesHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">Open files</a>
                       </sc-if>
                       <button onClick="{{ jr.remove }}" style="display:inline-flex; align-items:center; height:30px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:6.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap; border-color:hsl(var(--c-4-62-50) / .35); color:hsl(var(--c-4-62-50))">Delete journal</button>
                     </div>
                     <span style="font-size:12px; font-weight:700; color:hsl(var(--c-234-85-14))">{{ jr.status }}</span>
+                    <sc-if value="{{ jr.bonusOk }}" hint-placeholder-val="{{ false }}">
+                      <span style="display:flex; gap:6px; font-size:12px; color:hsl(var(--c-155-40-27))"><span aria-hidden="true">✓</span><span>{{ jr.bonusText }}</span></span>
+                    </sc-if>
+                    <sc-if value="{{ jr.bonusMissing }}" hint-placeholder-val="{{ true }}">
+                      <span role="status" style="display:flex; gap:6px; font-size:12px; font-weight:600; color:hsl(var(--c-40-78-44))"><span aria-hidden="true">⚠</span><span>{{ jr.bonusMissingText }}</span></span>
+                    </sc-if>
                     <div style="display:grid; gap:10px; padding-left:14px; border-left:2px solid hsl(var(--c-42-12-84))">
                       <sc-for list="{{ jr.rounds }}" as="rd" hint-placeholder-count="2">
                         <div style="display:grid; gap:8px; padding:10px 12px; border-radius:9.6px; background:hsl(var(--c-44-26-96))">
@@ -2311,6 +2444,56 @@
                         </div>
                       </div>
                       </sc-if>
+              </div>
+            </sc-if>
+            <sc-if value="{{ myBonusShow }}" hint-placeholder-val="{{ true }}">
+              <div style="display:grid; gap:10px; margin-top:6px; padding:14px 16px; border:1px solid hsl(var(--c-40-78-44) / .45); border-radius:13.6px; background:hsl(var(--c-40-78-44) / .07)">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px">
+                  <span style="font-family:'Hanken Grotesk', sans-serif; font-size:34px; font-weight:800; line-height:1">{{ myBonusTotal }}</span>
+                  <span style="display:grid; gap:2px; flex:1; min-width:180px">
+                    <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">{{ myBonusTitle }}</span>
+                    <span style="font-size:13px; font-weight:600">{{ myBonusSub }}</span>
+                  </span>
+                  <button onClick="{{ myBonusToggle }}" aria-expanded="{{ myBonusOpen }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">{{ myBonusToggleLabel }}</button>
+                </div>
+                <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ myBonusEligibility }} Points only come from what is filled in MetaTracker: submission dates, submission file links and co-author roles.</span>
+                <sc-if value="{{ myBonusOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid; gap:12px; padding-top:10px; border-top:1px solid hsl(var(--c-42-12-84))">
+                    <div style="display:grid; gap:6px">
+                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Productivity points</span>
+                      <sc-for list="{{ myBonusProd }}" as="bp" hint-placeholder-count="1">
+                        <div style="display:grid; gap:3px; padding:8px 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px">
+                          <span><a href="#" onClick="{{ bp.openMentee }}" style="font-weight:700">{{ bp.mentee }}</a> · {{ bp.criterion }}</span>
+                          <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ bp.since }}</span>
+                          <sc-for list="{{ bp.evidence }}" as="ev" hint-placeholder-count="1">
+                            <span style="font-size:12px"><a href="{{ ev.href }}" target="_blank" rel="noopener">{{ ev.label }} ↗</a> · <a href="#" onClick="{{ ev.open }}">{{ ev.project }}</a></span>
+                          </sc-for>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{ myBonusNoProd }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:hsl(var(--c-38-6-42))">None yet.</span></sc-if>
+                    </div>
+                    <div style="display:grid; gap:6px">
+                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Volume points</span>
+                      <span style="font-size:13px">{{ myBonusVolume }}</span>
+                      <div style="display:flex; flex-wrap:wrap; gap:6px">
+                        <sc-for list="{{ myBonusPaid }}" as="pm" hint-placeholder-count="2">
+                          <a href="#" onClick="{{ pm.open }}" style="display:inline-flex; align-items:center; height:24px; padding:0 8px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9999px; font-size:12px">{{ pm.name }}</a>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <sc-if value="{{ myBonusHasTodo }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:grid; gap:6px">
+                        <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-40-78-44))">To keep or earn points</span>
+                        <sc-for list="{{ myBonusTodo }}" as="td" hint-placeholder-count="2">
+                          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:12px">
+                            <span style="flex:1; min-width:220px">{{ td.text }}</span>
+                            <a href="#" onClick="{{ td.open }}" style="font-weight:600">{{ td.action }} →</a>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
               </div>
             </sc-if>
           </div>
@@ -3482,7 +3665,7 @@ const MENTEE_ADMIN = {
   'Isabella Michelon': { gmt: -3, phone: '+55 51 99000-0101', start: '2025-09-15', end: '2026-09-15', status: 'Active', reschedules: 3, renewals: 1, renewReq: true, lastMeet: 6, cadence: 7 },
   'Maria L. R. Defante': { gmt: -3, phone: '+55 16 99000-0102', start: '2026-03-02', end: '2027-03-02', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 4, cadence: 7 },
   'Caroline Dagostin': { gmt: -3, phone: '+55 11 99000-0103', start: '2026-04-06', end: '2027-04-06', status: 'Active', reschedules: 2, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 },
-  'Pedro Henrique Costa': { gmt: -3, phone: '+55 31 99000-0104', start: '2025-09-29', end: '2026-09-28', status: 'Paused', reschedules: 5, renewals: 1, renewReq: false, lastMeet: 20, cadence: 14 },
+  'Pedro Henrique Costa': { gmt: -3, paid: false, phone: '+55 31 99000-0104', start: '2025-09-29', end: '2026-09-28', status: 'Paused', reschedules: 5, renewals: 1, renewReq: false, lastMeet: 20, cadence: 14 },
   'Ana Beatriz Moraes': { gmt: -3, phone: '+55 51 99000-0105', start: '2025-08-31', end: '2026-08-31', status: 'Active', reschedules: 0, renewals: 2, renewReq: true, lastMeet: 1, cadence: 7 },
   'Lucas Ferreira': { gmt: 1, phone: '+55 11 99000-0106', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
   'Júlia Miranda': { gmt: -3, phone: '+55 21 99000-0107', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 12, cadence: 14 },
@@ -3490,7 +3673,7 @@ const MENTEE_ADMIN = {
   'Camila Rocha': { gmt: -3, phone: '+55 19 99000-0109', start: '2025-09-22', end: '2026-09-20', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 2, cadence: 7 },
   'Gustavo Gurian': { gmt: -3, phone: '+55 11 99000-0110', start: '2025-09-01', end: '2026-09-01', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 5, cadence: 7 },
   'Larissa Barbosa': { gmt: -3, phone: '+55 71 99000-0111', start: '2026-07-06', end: '2027-07-06', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 9, cadence: 7 },
-  'Thiago Mendes': { gmt: -5, phone: '+55 11 99000-0112', start: '2025-11-03', end: '2026-11-03', status: 'Cancelled', reschedules: 3, renewals: 0, renewReq: false, lastMeet: 60, cadence: 14 },
+  'Thiago Mendes': { gmt: -5, paid: false, phone: '+55 11 99000-0112', start: '2025-11-03', end: '2026-11-03', status: 'Cancelled', reschedules: 3, renewals: 0, renewReq: false, lastMeet: 60, cadence: 14 },
   'Letícia Moura': { gmt: 0, phone: '+55 48 99000-0113', start: '2026-04-13', end: '2027-04-13', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
   'Bruno Tavares': { gmt: -3, phone: '+55 21 99000-0114', start: '2026-06-08', end: '2027-01-08', status: 'Active', reschedules: 0, renewals: 0, renewReq: true, lastMeet: 8, cadence: 7 },
   'Sofia Lins': { gmt: -3, phone: '+55 81 99000-0115', start: '2026-08-03', end: '2027-02-03', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 }
@@ -3628,7 +3811,7 @@ function seedProjects() {
       taskDocs: { '0-0': ['d1'], '8-3': ['d1'] },
       registration: { registry: 'PROSPERO', id: '', status: 'Not registered' },
       journals: [
-        { id: 'j1', name: 'Gastrointestinal Endoscopy', files: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh', rounds: [
+        { id: 'j1', name: 'Gastrointestinal Endoscopy', submitted: '2026-01-25', files: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh', rounds: [
           { id: 'r1', label: 'Review 1', decision: 'Major revision', questions: 'Editorial 2.1–2.2 · Reviewer 1: 3.1–3.9 · Reviewer 3: 4.1, 4.3', files: '' },
           { id: 'r2', label: 'Revision 2', decision: 'Pending', questions: 'Mentor: 3.1, 3.2, 3.5, 3.9. Mentee: Editorial 2.1/2.2, R1 3.3, 3.4, 3.6–3.8, R3 4.1, 4.3. New prediction intervals and a risk-of-bias subgroup (Supp Table 11).', files: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh' }
         ] }
@@ -3705,6 +3888,26 @@ function seedProjects() {
 }
 
 const SEED_PROJECTS = seedProjects();
+
+// ---- Level II bonus (contract addendum, items 4.2-4.6). Semesters close on Jun 30 and Dec 31.
+const BONUS_SHARE = 0.3;
+const BONUS_SEMESTERS = ['2026-S1', '2026-S2'];
+function semesterRange(key) { const y = Number(key.slice(0, 4)), first = key.slice(-2) === 'S1'; return { start: new Date(y, first ? 0 : 6, 1), end: new Date(y, first ? 5 : 11, first ? 30 : 31) }; }
+function semesterKey(d) { return d.getFullYear() + '-' + (d.getMonth() < 6 ? 'S1' : 'S2'); }
+function semesterLabel(key) { return (key.slice(-2) === 'S1' ? 'Jan–Jun ' : 'Jul–Dec ') + key.slice(0, 4); }
+function brl(n) { return 'R$ ' + Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+// accepts "100000", "100.000,00" or "100,000.00"
+function parseBrl(str) {
+  let t = String(str || '').replace(/[^0-9,.]/g, '');
+  if (!t) return null;
+  if (t.indexOf(',') !== -1 && t.lastIndexOf(',') > t.lastIndexOf('.')) t = t.replace(/\./g, '').replace(',', '.');
+  else t = t.replace(/,/g, '');
+  const n = Number(t);
+  return isFinite(n) && n > 0 ? n : null;
+}
+const AUTHOR_ROLE_LABEL = { first: 'first author', last: 'last (senior) author', co: 'co-author' };
+function fmtDateY(d) { return MONTHS_SHORT[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+function menteePaid(m) { return !!m && m.status === 'Active' && (MENTEE_ADMIN[m.name] || {}).paid !== false; }
 const TIME_OPTIONS = (function () {
   const out = [];
   for (let m = 6 * 60; m <= 22 * 60; m += 30) out.push(fmt(m));
@@ -3750,7 +3953,7 @@ class Component extends DCLogic {
     copiedEmail: '',
     coOpen: null, coDraft: { mentee: '', name: '', email: '', senior: false },
     projects: SEED_PROJECTS, projectId: SEED_PROJECTS[0].id, projectFilter: 'All mentees',
-    adSort: { key: 'end', dir: 1 }, adSection: 'mentees', adMentorSort: { key: 'name', dir: 1 }, adMentorFilter: { q: '', status: 'All', area: 'All', country: 'All', gmt: 'All', open: false }, adProjSort: { key: 'started', dir: -1 }, adProjFilter: { q: '', area: 'All', stage: 'All', idle: 'any' }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
+    adSort: { key: 'end', dir: 1 }, adSection: 'mentees', adMentorSort: { key: 'name', dir: 1 }, adMentorFilter: { q: '', status: 'All', area: 'All', country: 'All', gmt: 'All', open: false }, adProjSort: { key: 'started', dir: -1 }, bonusSem: semesterKey(TODAY), bonusValue: '', bonusKind: 'pool', adBonusSort: { key: 'total', dir: -1 }, adBonusFilter: { q: '', elig: 'eligible' }, bonusOpen: false, adProjFilter: { q: '', area: 'All', stage: 'All', idle: 'any' }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
     theme: (function () { try { return localStorage.getItem('mh-theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
     logbook: SEED_PROJECTS[0].logbook,
@@ -4192,6 +4395,68 @@ class Component extends DCLogic {
     };
   }
 
+  // Level II bonus for one semester, computed only from what is filled in the platform.
+  // 4.3 productivity: 1 point per mentee with 1 first/last-author submission or 3 co-author submissions in a semester;
+  //     permanent while the mentee stays active and paid; not kept when the mentee changed mentor after achieving it.
+  // 4.4 volume: 1 point per 4 paid mentees at closing. A submission counts only with a journal, a submission date and a files link.
+  bonusData(semKey) {
+    const range = semesterRange(semKey);
+    const projects = this.state.projects.map((p) => this.projectData(p));
+    const subs = [], pending = [];
+    projects.forEach((p) => {
+      const people = [{ name: p.mentee, role: 'first' }].concat((p.coauthors || []).filter((c) => c.kind === 'mentee').map((c) => ({ name: c.name, role: c.senior ? 'last' : 'co' })));
+      (p.journals || []).forEach((j) => {
+        const date = parseIso(j.submitted);
+        const proof = String(j.files || '').trim();
+        const missing = [!String(j.name || '').trim() ? 'journal name' : '', !date ? 'submission date' : '', !proof ? 'submission files link' : ''].filter(Boolean);
+        if (missing.length) { pending.push({ project: p, journal: j, people: people, missing: missing }); return; }
+        if (date > range.end) return;
+        people.forEach((x) => subs.push({ mentee: x.name, role: x.role, date: date, project: p, journal: j, proof: proof }));
+      });
+      if (isApproved((p.taskDone || {})[SUBMIT_TASK]) && !(p.journals || []).length) pending.push({ project: p, journal: null, people: people, missing: ['journal submission (Stage 8)'] });
+    });
+    // first semester in which each mentee met the goal
+    const achieved = {}, progress = {};
+    subs.map((x) => x.mentee).filter((v, i, a) => a.indexOf(v) === i).forEach((name) => {
+      const mine = subs.filter((x) => x.mentee === name).sort((a, b) => a.date - b.date);
+      const keys = mine.map((x) => semesterKey(x.date)).filter((v, i, a) => a.indexOf(v) === i).sort();
+      keys.some((k) => {
+        const inSem = mine.filter((x) => semesterKey(x.date) === k);
+        const lead = inSem.filter((x) => x.role !== 'co');
+        const co = inSem.filter((x) => x.role === 'co');
+        if (lead.length) { achieved[name] = { name: name, how: 'lead', date: lead[0].date, evidence: [lead[0]] }; return true; }
+        if (co.length >= 3) { achieved[name] = { name: name, how: 'co', date: co[2].date, evidence: co.slice(0, 3) }; return true; }
+        return false;
+      });
+      if (!achieved[name]) progress[name] = mine.filter((x) => x.role === 'co' && semesterKey(x.date) === semKey).length;
+    });
+    return MENTORS_DATA.map((md) => {
+      const mentees = MENTEES.filter((m) => m.mentor === md.name);
+      const names = mentees.map((m) => m.name);
+      const paid = mentees.filter(menteePaid);
+      const prod = [], lost = [], risk = [];
+      mentees.forEach((m) => {
+        const a = achieved[m.name];
+        if (!a) return;
+        const adm = MENTEE_ADMIN[m.name] || {};
+        const since = parseIso(adm.mentorSince || adm.start);
+        if (since && since > a.date) { lost.push({ a: a, reason: 'goal reached before joining this mentor (points do not transfer)' }); return; }
+        if (!menteePaid(m)) { lost.push({ a: a, reason: 'mentee is not active and paid' }); return; }
+        prod.push(a);
+        const end = parseIso(adm.end);
+        if (end && end < range.end) risk.push({ a: a, end: end });
+      });
+      const eligible = md.level === 2 || md.end <= range.end;
+      const volume = Math.floor(paid.length / 4);
+      return {
+        md: md, eligible: eligible, paid: paid, prod: prod, lost: lost, risk: risk, volume: volume, total: prod.length + volume,
+        toNextVolume: 4 - (paid.length % 4),
+        pending: pending.filter((x) => x.people.some((y) => names.indexOf(y.name) !== -1)),
+        close: mentees.filter((m) => progress[m.name]).map((m) => ({ name: m.name, n: progress[m.name] }))
+      };
+    });
+  }
+
   // first-author and co-author project counts for one mentee (admin tables)
   projectCounts(name) {
     const first = this.state.projects.filter((p) => p.mentee === name).length;
@@ -4395,7 +4660,107 @@ class Component extends DCLogic {
       adSecMentees: st.adSection === 'mentees',
       adSecMentors: st.adSection === 'mentors',
       adSecProjects: st.adSection === 'projects',
-      adSections: [['mentees', 'Mentees', MENTEES.filter((m) => MENTEE_ADMIN[m.name]).length], ['mentors', 'Mentors', MENTORS_DATA.length], ['projects', 'Projects', this.state.projects.length]].map((x) => ({
+      adSecBonus: st.adSection === 'bonus',
+      ...(function (self) {
+        const data = self.bonusData(st.bonusSem);
+        const range = semesterRange(st.bonusSem);
+        const eligibleRows = data.filter((r) => r.eligible);
+        const totalPts = eligibleRows.reduce((n, r) => n + r.total, 0);
+        const raw = parseBrl(st.bonusValue);
+        const pool = raw === null ? null : st.bonusKind === 'profit' ? raw * BONUS_SHARE : raw;
+        const pointValue = pool !== null && totalPts ? pool / totalPts : null;
+        const payOf = (r) => (r.eligible && pointValue !== null ? r.total * pointValue : null);
+        const bf = st.adBonusFilter;
+        const BCOLS = [
+          ['name', 'Mentor', (r) => r.md.name], ['level', 'Level at close', (r) => (r.eligible ? 2 : 1)], ['paid', 'Paid mentees', (r) => r.paid.length],
+          ['prod', 'Productivity', (r) => r.prod.length], ['volume', 'Volume', (r) => r.volume], ['total', 'Total points', (r) => (r.eligible ? r.total : -1)],
+          ['share', 'Share', (r) => (r.eligible && totalPts ? r.total / totalPts : -1)], ['bonus', 'Bonus (R$)', (r) => payOf(r) || -1],
+          ['proofs', 'Proofs', (r) => r.prod.length], ['pending', 'Missing info', (r) => r.pending.length]
+        ];
+        const shown = sortRows(data.filter((r) => {
+          const q = bf.q.trim().toLowerCase();
+          if (q && r.md.name.toLowerCase().indexOf(q) === -1) return false;
+          if (bf.elig === 'eligible' && !r.eligible) return false;
+          if (bf.elig === 'not' && r.eligible) return false;
+          return true;
+        }), BCOLS, st.adBonusSort, (r) => r.md.name);
+        const csvCell = (v) => '"' + String(v === null || v === undefined ? '' : v).replace(/"/g, '""') + '"';
+        const num = (n) => (n === null ? '' : n.toFixed(2).replace('.', ','));
+        const setBF = (k, v) => { const f = Object.assign({}, self.state.adBonusFilter); f[k] = v; self.setState({ adBonusFilter: f }); };
+        const BGRID = 'minmax(150px,1fr) 110px 90px 100px 80px 90px 70px 130px minmax(380px,2.4fr) minmax(200px,1.2fr)';
+        return {
+          bonusSemOptions: BONUS_SEMESTERS.map((k) => ({ value: k, label: semesterLabel(k) + (semesterRange(k).end < TODAY ? ' · closed' : ' · in progress (projection)') })),
+          bonusSem: st.bonusSem,
+          setBonusSem: (e) => self.setState({ bonusSem: e.target.value }),
+          bonusValue: st.bonusValue,
+          setBonusValue: (e) => self.setState({ bonusValue: e.target.value }),
+          bonusKind: st.bonusKind,
+          setBonusKind: (e) => self.setState({ bonusKind: e.target.value }),
+          bonusValueRead: raw === null ? (String(st.bonusValue).trim() ? 'Could not read this value' : 'Enter a value to calculate each mentor’s bonus') : 'Read as ' + brl(raw) + (st.bonusKind === 'profit' ? ' profit → pool of ' + brl(pool) + ' (30%)' : ' bonus pool'),
+          bonusCloseNote: 'Closing date ' + fmtDateY(range.end) + '. Only mentors at Level 2 on that date share the pool. Points come from submissions with a date and a files link, co-author roles, and each mentee’s active/paid status.',
+          bonusTiles: [
+            { label: 'Bonus pool', value: pool === null ? '—' : brl(pool), sub: st.bonusKind === 'profit' && raw !== null ? '30% of ' + brl(raw) : 'value entered above' },
+            { label: 'Total points', value: String(totalPts), sub: 'across ' + eligibleRows.length + ' eligible mentors' },
+            { label: 'Point value', value: pointValue === null ? '—' : brl(pointValue), sub: 'pool ÷ total points' },
+            { label: 'Missing info', value: String(data.reduce((n, r) => n + r.pending.length, 0)), sub: 'submissions that cannot count yet' }
+          ],
+          adBonusQ: bf.q,
+          adBonusSetQ: (e) => setBF('q', e.target.value),
+          adBonusElig: bf.elig,
+          adBonusSetElig: (e) => setBF('elig', e.target.value),
+          adBonusHeaders: heads(BCOLS, 'adBonusSort', {}),
+          adBonusSortKey: st.adBonusSort.key,
+          adBonusSortOptions: BCOLS.map((c) => ({ value: c[0], label: c[1] })),
+          adBonusSetSort: (e) => self.setState({ adBonusSort: { key: e.target.value, dir: self.state.adBonusSort.dir } }),
+          adBonusDirLabel: st.adBonusSort.dir === 1 ? 'Ascending ▲' : 'Descending ▼',
+          adBonusFlipDir: () => self.setState({ adBonusSort: { key: self.state.adBonusSort.key, dir: -self.state.adBonusSort.dir } }),
+          adBonusCount: shown.length + ' of ' + data.length + ' mentors',
+          adBonusEmpty: shown.length === 0,
+          adBonusRows: shown.map((r) => ({
+            name: r.md.name,
+            level: r.eligible ? 'Level 2' : 'Level 1',
+            levelNote: r.md.level === 2 ? '' : r.eligible ? 'from ' + fmtDateY(r.md.end) : 'not eligible',
+            hasLevelNote: r.md.level !== 2,
+            paid: r.paid.length,
+            paidTitle: r.paid.map((m) => m.name).join(', '),
+            prod: r.prod.length,
+            volume: r.volume,
+            volumeNote: r.paid.length + ' paid ÷ 4',
+            total: r.eligible ? String(r.total) : '(' + r.total + ')',
+            share: r.eligible && totalPts ? Math.round((r.total / totalPts) * 1000) / 10 + '%' : '—',
+            bonus: payOf(r) === null ? '—' : brl(payOf(r)),
+            bonusStyle: "font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:" + (payOf(r) ? '700' : '400'),
+            hasProofs: r.prod.length > 0,
+            noProofs: r.prod.length === 0,
+            proofs: r.prod.map((a) => ({
+              mentee: a.name,
+              openMentee: self.openMentee(a.name),
+              criterion: a.how === 'lead' ? '1 submission as ' + AUTHOR_ROLE_LABEL[a.evidence[0].role] : '3 submissions as co-author',
+              evidence: a.evidence.map((x) => ({ label: x.journal.name + ' · ' + fmtDateY(x.date), href: docHref(x.proof), open: self.openProject(x.project.id) }))
+            })),
+            hasPending: r.pending.length > 0,
+            pending: r.pending.map((x) => ({ label: x.project.name.slice(0, 48) + (x.project.name.length > 48 ? '…' : '') + ': ' + x.missing.join(', '), open: self.openProject(x.project.id) })),
+            rowStyle: 'display:grid; grid-template-columns:' + BGRID + '; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px' + (r.eligible ? '' : '; opacity:.62')
+          })),
+          adBonusGrid: 'display:grid; grid-template-columns:' + BGRID + '; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))',
+          adBonusExport: () => {
+            const header = ['Mentor', 'Level at close', 'Eligible', 'Paid mentees', 'Paid mentees (names)', 'Productivity points', 'Productivity proofs', 'Volume points', 'Total points', 'Share of points (%)', 'Point value (R$)', 'Bonus (R$)', 'Missing info'];
+            const lines = [header.map(csvCell).join(';')].concat(data.map((r) => [
+              r.md.name, r.eligible ? 'Level 2' : 'Level 1', r.eligible ? 'Yes' : 'No', r.paid.length, r.paid.map((m) => m.name).join(', '),
+              r.prod.length, r.prod.map((a) => a.name + ': ' + (a.how === 'lead' ? '1 submission as ' + AUTHOR_ROLE_LABEL[a.evidence[0].role] : '3 co-author submissions') + ' [' + a.evidence.map((x) => x.journal.name + ', submitted ' + isoDate(x.date) + ', ' + docHref(x.proof)).join(' ; ') + ']').join(' | '),
+              r.volume, r.eligible ? r.total : 0, r.eligible && totalPts ? num((r.total / totalPts) * 100) : '', num(pointValue), num(payOf(r)),
+              r.pending.map((x) => x.project.name + ': ' + x.missing.join(', ')).join(' | ')
+            ].map(csvCell).join(';')));
+            const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url; link.download = 'mentor-bonus-' + self.state.bonusSem + '.csv';
+            document.body.appendChild(link); link.click(); link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+          }
+        };
+      })(this),
+      adSections: [['mentees', 'Mentees', MENTEES.filter((m) => MENTEE_ADMIN[m.name]).length], ['mentors', 'Mentors', MENTORS_DATA.length], ['projects', 'Projects', this.state.projects.length], ['bonus', 'Bonus', semesterLabel(st.bonusSem)]].map((x) => ({
         label: x[1] + ' · ' + x[2],
         pressed: st.adSection === x[0],
         style: secTab(x[0]),
@@ -5276,6 +5641,38 @@ class Component extends DCLogic {
       meAdminNote: st.role === 'admin' && MENTORS_DATA.filter((m) => m.name === ME)[0].level !== 1,
       mentorsCount: MENTORS_DATA.length + ' mentors',
       me: this.mentorCard(MENTORS_DATA.filter((m) => m.name === ME)[0]),
+      ...(function (self) {
+        const semKey = semesterKey(TODAY);
+        const r = self.bonusData(semKey).filter((x) => x.md.name === ME)[0];
+        const range = semesterRange(semKey);
+        return {
+          myBonusShow: st.role !== 'mentee',
+          myBonusTitle: 'Bonus points · ' + semesterLabel(semKey),
+          myBonusTotal: String(r.total),
+          myBonusSub: r.prod.length + ' productivity + ' + r.volume + ' volume',
+          myBonusEligibility: r.md.level === 2 ? 'Counts at the ' + fmtDateY(range.end) + ' closing.' : r.eligible ? 'You reach Level 2 on ' + fmtDateY(r.md.end) + ', before the ' + fmtDateY(range.end) + ' closing, so these points count.' : 'Preview: points only count once you are Level 2 at a semester closing.',
+          myBonusOpen: !!st.bonusOpen,
+          myBonusToggle: (e) => { e.preventDefault(); self.setState({ bonusOpen: !self.state.bonusOpen }); },
+          myBonusToggleLabel: st.bonusOpen ? 'Hide breakdown' : 'Show breakdown',
+          myBonusProd: r.prod.map((a) => ({
+            mentee: a.name,
+            openMentee: self.openMentee(a.name),
+            criterion: a.how === 'lead' ? '1 submission as ' + AUTHOR_ROLE_LABEL[a.evidence[0].role] : '3 submissions as co-author',
+            since: 'reached ' + fmtDateY(a.date) + ' · kept while active and paid',
+            evidence: a.evidence.map((x) => ({ label: x.journal.name + ' · submitted ' + fmtDateY(x.date), href: docHref(x.proof), project: x.project.name, open: self.openProject(x.project.id) }))
+          })),
+          myBonusNoProd: r.prod.length === 0,
+          myBonusVolume: r.paid.length + ' paid mentee' + (r.paid.length === 1 ? '' : 's') + ' → ' + r.volume + ' point' + (r.volume === 1 ? '' : 's') + ' · ' + r.toNextVolume + ' more for the next point',
+          myBonusPaid: r.paid.map((m) => ({ name: m.name, open: self.openMentee(m.name) })),
+          myBonusTodo: [].concat(
+            r.pending.map((x) => ({ text: x.project.name + ': add ' + x.missing.join(', '), open: self.openProject(x.project.id), action: 'Fill in' })),
+            r.risk.map((x) => ({ text: x.a.name + '’s contract ends ' + fmtDateY(x.end) + ', before the closing: the point is kept only if they renew and stay paid.', open: self.openMentee(x.a.name), action: 'View mentee' })),
+            r.close.map((x) => ({ text: x.name + ' has ' + x.n + ' of 3 co-author submissions this semester (or 1 as first/last author).', open: self.openMentee(x.name), action: 'View mentee' })),
+            r.lost.map((x) => ({ text: x.a.name + ': not counted, ' + x.reason + '.', open: self.openMentee(x.a.name), action: 'View mentee' }))
+          ),
+          myBonusHasTodo: r.pending.length + r.risk.length + r.close.length + r.lost.length > 0
+        };
+      })(this),
       mentorGroups: [2, 1].map((lvl) => {
         const list = MENTORS_DATA.filter((m) => m.level === lvl && m.name !== ME);
         return {
@@ -5324,6 +5721,19 @@ class Component extends DCLogic {
           status: last ? last.label + ' · ' + last.decision : 'Not submitted yet',
           setName: (e) => updList('journals', j.id, { name: e.target.value }),
           setFiles: (e) => updList('journals', j.id, { files: e.target.value }),
+          submitted: j.submitted || '',
+          setSubmitted: (e) => updList('journals', j.id, { submitted: e.target.value }),
+          ...(function () {
+            const date = parseIso(j.submitted), proof = String(j.files || '').trim();
+            const missing = [!String(j.name || '').trim() ? 'the journal name' : '', !date ? 'the submission date' : '', !proof ? 'the submission files link' : ''].filter(Boolean);
+            const people = [curEntry.mentee + ' (first author)'].concat((curEntry.coauthors || []).filter((c) => c.kind === 'mentee').map((c) => c.name + (c.senior ? ' (last author)' : ' (co-author)')));
+            return {
+              bonusOk: !missing.length,
+              bonusText: 'Counts toward the mentors’ bonus (' + (date ? semesterLabel(semesterKey(date)) : '') + ') for ' + people.join(', ') + '.',
+              bonusMissing: missing.length > 0,
+              bonusMissingText: 'Add ' + missing.join(' and ') + ' so this submission counts toward the mentors’ bonus.'
+            };
+          })(),
           remove: (e) => { e.preventDefault(); if (window.confirm('Delete the submission to ' + (j.name || 'this journal') + ' and all its review rounds?')) this.updateCur((p) => ({ journals: (p.journals || []).filter((x) => x.id !== j.id) })); },
           addRound: (e) => { e.preventDefault(); setRounds((r) => r.concat([{ id: newId('r'), label: r.length === 0 ? 'Review 1' : 'Revision ' + (r.length + 1), decision: 'Pending', questions: '', files: '' }])); },
           rounds: rounds.map((r) => ({
@@ -5343,7 +5753,7 @@ class Component extends DCLogic {
         };
       }),
       noJournals: (curEntry.journals || []).length === 0,
-      addJournal: (e) => { e.preventDefault(); this.updateCur((p) => ({ journals: (p.journals || []).concat([{ id: newId('j'), name: '', files: '', rounds: [] }]) })); },
+      addJournal: (e) => { e.preventDefault(); this.updateCur((p) => ({ journals: (p.journals || []).concat([{ id: newId('j'), name: '', submitted: '', files: '', rounds: [] }]) })); },
       conferences: (curEntry.conferences || []).map((c) => ({
         name: c.name,
         files: c.files,
