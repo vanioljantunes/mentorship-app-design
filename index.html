@@ -58,6 +58,8 @@
     .app-main .cal-layout { flex-direction: column !important; }
     .app-main .cal-layout > * { width: 100%; }
   }
+  .ad-table [role=cell], .ad-table [role=columnheader] { text-align: center !important; justify-content: center !important; justify-items: center !important; }
+  .ad-table [role=cell] > * { margin-left: auto; margin-right: auto; }
 </style>
 </helmet>
 <div style="display:flex; min-height:100vh; width:100%; background:hsl(var(--c-40-8-93)); position:relative">
@@ -186,9 +188,9 @@
             <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adCount }}</span>
           </div>
           <div style="overflow-x:auto">
-            <div role="table" aria-label="All mentees" style="min-width:1080px">
-              <div role="row" style="display:grid; grid-template-columns:minmax(170px,1.6fr) 160px 104px 128px 96px 72px 76px 92px 90px; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
-                <sc-for list="{{ adHeaders }}" as="h" hint-placeholder-count="9">
+            <div role="table" class="ad-table" aria-label="All mentees" style="min-width:1180px">
+              <div role="row" style="display:grid; grid-template-columns:minmax(170px,1.6fr) 160px 76px 104px 128px 96px 90px 76px 92px 90px; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
+                <sc-for list="{{ adHeaders }}" as="h" hint-placeholder-count="10">
                   <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
                 </sc-for>
               </div>
@@ -196,6 +198,7 @@
                 <div role="row" style="{{ r.rowStyle }}">
                   <span role="cell" style="min-width:0"><a href="#" onClick="{{ r.open }}" style="font-weight:600; color:hsl(var(--c-234-68-12))">{{ r.name }}</a></span>
                   <span role="cell"><a href="{{ r.wa }}" target="_blank" rel="noopener" title="Open WhatsApp chat" style="display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:600; color:hsl(var(--c-155-40-27))"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg> {{ r.phone }}</a></span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ r.gmt }}</span>
                   <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ r.start }}</span>
                   <span role="cell" style="display:grid; gap:2px"><span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ r.end }}</span><sc-if value="{{ r.hasEndNote }}" hint-placeholder-val="{{ false }}"><span style="{{ r.endNoteStyle }}">{{ r.endNote }}</span></sc-if></span>
                   <span role="cell"><span style="{{ r.statusStyle }}">{{ r.status }}</span></span>
@@ -306,18 +309,49 @@
         </sc-if>
 
         <sc-if value="{{ adSecMentors }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:20px">
         <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
           <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
             <div style="flex:1; min-width:220px">
               <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">All mentors</h2>
-              <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">Same columns as the ClickUp mentor list. Click a column header to sort.</p>
+              <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">Same columns as the ClickUp mentor list. Slots are the ones each mentor opens in Sessions. Filter, then sort with the selector or a column header.</p>
             </div>
             <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adMentorCount }}</span>
           </div>
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; padding:14px 20px; border-bottom:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-44-26-96) / .6)">
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); flex:1; min-width:180px">Search
+              <input value="{{ adMentorQ }}" onChange="{{ adMentorSetQ }}" placeholder="Name, email or slot notes" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%" />
+            </label>
+            <sc-for list="{{ adMentorFilters }}" as="f" hint-placeholder-count="4">
+              <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); min-width:130px">{{ f.label }}
+                <select onChange="{{ f.set }}" value="{{ f.value }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                  <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3">
+                    <option value="{{ o.value }}">{{ o.label }}</option>
+                  </sc-for>
+                </select>
+              </label>
+            </sc-for>
+            <label style="display:inline-flex; align-items:center; gap:8px; height:34px; font-size:13px">
+              <input type="checkbox" checked="{{ adMentorOpenOnly }}" onChange="{{ adMentorToggleOpen }}" style="width:16px; height:16px; accent-color:hsl(var(--c-234-85-14))" />
+              Open slots only
+            </label>
+            <span style="width:1px; align-self:stretch; background:hsl(var(--c-42-12-84))"></span>
+            <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); min-width:160px">Sort by
+              <select onChange="{{ adMentorSetSort }}" value="{{ adMentorSortKey }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))">
+                <sc-for list="{{ adMentorSortOptions }}" as="o" hint-placeholder-count="11">
+                  <option value="{{ o.value }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <button onClick="{{ adMentorFlipDir }}" aria-label="Flip sort direction" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); cursor:pointer; font-weight:600">{{ adMentorDirLabel }}</button>
+            <sc-if value="{{ adMentorFiltered }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ adMentorClear }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); cursor:pointer; color:hsl(var(--c-38-6-42))">Clear filters</button>
+            </sc-if>
+          </div>
           <div style="overflow-x:auto">
-            <div role="table" aria-label="All mentors" style="min-width:1480px">
-              <div role="row" style="display:grid; grid-template-columns:minmax(160px,1.3fr) 124px 60px 118px 110px minmax(200px,1.2fr) minmax(160px,1fr) minmax(170px,1fr) 160px 76px; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
-                <sc-for list="{{ adMentorHeaders }}" as="h" hint-placeholder-count="10">
+            <div role="table" class="ad-table" aria-label="All mentors" style="min-width:1740px">
+              <div role="row" style="display:grid; grid-template-columns:minmax(150px,1.1fr) 124px minmax(300px,2fr) 60px 118px 110px 72px minmax(190px,1.1fr) minmax(150px,1fr) minmax(170px,1.2fr) 150px; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
+                <sc-for list="{{ adMentorHeaders }}" as="h" hint-placeholder-count="11">
                   <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
                 </sc-for>
               </div>
@@ -325,18 +359,85 @@
                 <div role="row" style="{{ mr.rowStyle }}">
                   <span role="cell" style="font-weight:600">{{ mr.name }}</span>
                   <span role="cell"><span style="{{ mr.statusStyle }}">{{ mr.status }}</span></span>
-                  <span role="cell" style="{{ mr.slotsStyle }}">{{ mr.slots }}</span>
+                  <span role="cell" style="display:grid; gap:6px; width:100%">
+                    <span style="font-size:12px; font-weight:700">{{ mr.presentCount }}</span>
+                    <sc-if value="{{ mr.hasPresent }}" hint-placeholder-val="{{ true }}">
+                      <table style="width:100%; border-collapse:collapse; font-size:11px; border:1px solid hsl(var(--c-42-12-84))">
+                        <thead>
+                          <tr style="background:hsl(var(--c-44-26-96)); color:hsl(var(--c-38-6-42)); text-transform:uppercase; letter-spacing:.08em; font-size:10px">
+                            <th style="padding:4px 6px; font-weight:700; text-align:center">Mentee</th>
+                            <th style="padding:4px 6px; font-weight:700; text-align:center">Area</th>
+                            <th style="padding:4px 6px; font-weight:700; text-align:center">GMT</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <sc-for list="{{ mr.present }}" as="pm" hint-placeholder-count="2">
+                            <tr style="border-top:1px solid hsl(var(--c-42-12-84))">
+                              <td style="padding:4px 6px; text-align:center"><a href="#" onClick="{{ pm.open }}" style="font-weight:600">{{ pm.name }}</a></td>
+                              <td style="padding:4px 6px; text-align:center">{{ pm.area }}</td>
+                              <td style="padding:4px 6px; text-align:center; font-family:'JetBrains Mono', monospace; font-size:12px; font-size:11px">{{ pm.gmt }}</td>
+                            </tr>
+                          </sc-for>
+                        </tbody>
+                      </table>
+                    </sc-if>
+                  </span>
+                  <span role="cell" title="{{ mr.slotsTitle }}" style="{{ mr.slotsStyle }}">{{ mr.slots }}</span>
                   <span role="cell" style="display:grid; gap:2px"><span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ mr.level2 }}</span><sc-if value="{{ mr.hasLevel2Note }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ mr.level2Note }}</span></sc-if></span>
                   <span role="cell">{{ mr.country }}</span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ mr.gmt }}</span>
                   <span role="cell" style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap"><a href="{{ mr.mailto }}" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ mr.email }}</a></span>
-                  <span role="cell">{{ mr.interests }}</span>
+                  <span role="cell">{{ mr.areas }}</span>
                   <span role="cell" style="color:hsl(var(--c-38-6-42))">{{ mr.notes }}</span>
                   <span role="cell"><a href="{{ mr.wa }}" target="_blank" rel="noopener" title="Open WhatsApp chat" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ mr.phone }}</a></span>
-                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ mr.mentees }}</span>
                 </div>
               </sc-for>
+              <sc-if value="{{ adMentorEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:24px; text-align:center; font-size:14px; color:hsl(var(--c-38-6-42)); border-top:1px solid hsl(var(--c-42-12-84))">No mentors match the filters.</div>
+              </sc-if>
             </div>
           </div>
+        </div>
+        <div class="rgrid-1" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px">
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+            <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:600">Mentees per area</h3>
+            <p style="margin:2px 0 14px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adAreaSub }}</p>
+            <div style="display:grid; gap:8px">
+              <sc-for list="{{ adAreaMentees }}" as="ab" hint-placeholder-count="6">
+                <div tabindex="0" onMouseEnter="{{ ab.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ ab.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:140px 1fr 32px; align-items:center; gap:10px; outline:none">
+                  <span style="font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ ab.label }}</span>
+                  <span style="display:block; height:14px"><span style="{{ ab.barStyle }}"></span></span>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ ab.value }}</span>
+                  <sc-if value="{{ ab.tip }}" hint-placeholder-val="{{ false }}">
+                    <span role="tooltip" style="position:absolute; z-index:5; left:150px; bottom:calc(100% + 4px); padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none">{{ ab.tipText }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ adAreaEmpty }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:13px; color:hsl(var(--c-38-6-42))">No mentors match the filters.</span>
+              </sc-if>
+            </div>
+          </div>
+          <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:20px">
+            <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:600">Open slots per area</h3>
+            <p style="margin:2px 0 14px; font-size:12px; color:hsl(var(--c-38-6-42))">{{ adAreaSub }}</p>
+            <div style="display:grid; gap:8px">
+              <sc-for list="{{ adAreaSlots }}" as="ab" hint-placeholder-count="6">
+                <div tabindex="0" onMouseEnter="{{ ab.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ ab.enter }}" onBlur="{{ adLeave }}" style="position:relative; display:grid; grid-template-columns:140px 1fr 32px; align-items:center; gap:10px; outline:none">
+                  <span style="font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ ab.label }}</span>
+                  <span style="display:block; height:14px"><span style="{{ ab.barStyle }}"></span></span>
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ ab.value }}</span>
+                  <sc-if value="{{ ab.tip }}" hint-placeholder-val="{{ false }}">
+                    <span role="tooltip" style="position:absolute; z-index:5; left:150px; bottom:calc(100% + 4px); padding:6px 10px; border-radius:8px; background:hsl(var(--c-234-68-12)); color:hsl(var(--c-42-33-99)); font-size:12px; white-space:nowrap; pointer-events:none">{{ ab.tipText }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ adAreaEmpty }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:13px; color:hsl(var(--c-38-6-42))">No mentors match the filters.</span>
+              </sc-if>
+            </div>
+          </div>
+        </div>
         </div>
         </sc-if>
 
@@ -350,7 +451,7 @@
             <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adProjCount }}</span>
           </div>
           <div style="overflow-x:auto">
-            <div role="table" aria-label="All research projects" style="min-width:1280px">
+            <div role="table" class="ad-table" aria-label="All research projects" style="min-width:1280px">
               <div role="row" style="display:grid; grid-template-columns:minmax(260px,2.2fr) 150px 130px 104px 150px 92px minmax(170px,1fr) minmax(150px,1fr); gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
                 <sc-for list="{{ adProjHeaders }}" as="h" hint-placeholder-count="8">
                   <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
@@ -1111,6 +1212,44 @@
               </div>
 
                             <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+                  <div>
+                    <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ slotsHeading }}</h2>
+                    <p style="margin:4px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Each slot is a place for one new mentee. Admins see this count in the mentor table. Area, language and note are optional.</p>
+                  </div>
+                  <button onClick="{{ addSlot }}" style="height:36px; padding:0 16px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600; cursor:pointer">+ Add slot</button>
+                </div>
+                <div style="display:flex; flex-direction:column">
+                  <sc-for list="{{ mySlots }}" as="sl" hint-placeholder-count="1">
+                    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; padding:14px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+                      <span style="align-self:center; min-width:56px; font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700">{{ sl.label }}</span>
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); width:200px">Preferred area
+                        <select onChange="{{ sl.setArea }}" value="{{ sl.area }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%">
+                          <sc-for list="{{ slotAreaOptions }}" as="o" hint-placeholder-count="4">
+                            <option value="{{ o.value }}">{{ o.label }}</option>
+                          </sc-for>
+                        </select>
+                      </label>
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); width:150px">Language
+                        <select onChange="{{ sl.setLang }}" value="{{ sl.lang }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%">
+                          <sc-for list="{{ slotLangOptions }}" as="o" hint-placeholder-count="4">
+                            <option value="{{ o }}">{{ o }}</option>
+                          </sc-for>
+                        </select>
+                      </label>
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); flex:1; min-width:200px">Note
+                        <input value="{{ sl.note }}" onChange="{{ sl.setNote }}" placeholder="e.g. prefers surgical topics, available from March" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%" />
+                      </label>
+                      <button onClick="{{ sl.remove }}" aria-label="Delete this slot" style="height:34px; padding:0 12px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:transparent; font-size:13px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer">Delete</button>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ noSlots }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:20px 24px; font-size:14px; color:hsl(var(--c-38-6-42))">No open slots: you are not taking new mentees right now.</div>
+                  </sc-if>
+                </div>
+              </div>
+
+              <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                   <div>
                     <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Weekly availability</h2>
@@ -3050,12 +3189,12 @@ const MENTEES = [
 ];
 // mentor ladder: Level 1 mentors are promoted to Level 2 after a six-month track (start -> end)
 const MENTORS_DATA = [
-  { name: 'Vânio Antunes', country: 'Brazil', slots: 1, interests: 'Gastro · Cardio · Radiology', notes: '', phone: '+55 48 99000-0201', email: 'vanio.antunes.md@gmail.com', level: 1, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2026, 3, 3), end: new Date(2026, 9, 3) },
-  { name: 'Caroline Serafim', country: 'Brazil', slots: 5, interests: 'Cardio · Neuro · Critical care', notes: '', phone: '+55 11 99000-0202', email: 'caroline.serafim@example.com', level: 2, area: 'Neurology', position: 'MD, PhD', affiliation: 'UNIFESP', langs: ['BR','EN'], start: new Date(2025, 2, 10), end: new Date(2025, 8, 10) },
-  { name: 'Rafael Lima', country: 'Brazil', slots: 3, interests: 'Anesthesiology · Endocrinology', notes: 'Prefers surgical areas', phone: '+55 51 99000-0203', email: 'rafael.lima@example.com', level: 2, area: 'Endocrinology', position: 'MD, MSc', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'], start: new Date(2025, 4, 5), end: new Date(2025, 10, 5) },
-  { name: 'Beatriz Carvalho', country: 'Brazil', slots: 0, interests: 'Cardiology', notes: '+2 from May 2027', phone: '+55 11 99000-0204', email: 'beatriz.carvalho@example.com', level: 1, area: 'Cardiology', position: 'MD', affiliation: 'Instituto do Coração', langs: ['BR','EN'], start: new Date(2026, 2, 16), end: new Date(2026, 8, 16) },
-  { name: 'Felipe Andrade', country: 'United States', slots: 2, interests: 'Oncology · Surgical oncology', notes: 'Can take 4 in total', phone: '+1 305 555 0205', email: 'felipe.andrade@example.com', level: 1, area: 'Oncology', position: 'MD, MSc', affiliation: 'INCA', langs: ['BR'], start: new Date(2026, 4, 4), end: new Date(2026, 10, 4) },
-  { name: 'Juliana Prado', country: 'Brazil', slots: 2, interests: 'Pediatrics', notes: 'Prefers mentees in Portuguese', phone: '+55 81 99000-0206', email: 'juliana.prado@example.com', level: 1, area: 'Pediatrics', position: 'MD', affiliation: 'UFPE', langs: ['BR','EN'], start: new Date(2026, 6, 20), end: new Date(2027, 0, 20) }
+  { name: 'Vânio Antunes', country: 'Brazil', seedSlots: 1, areas: ['Gastroenterology', 'Cardiology', 'Radiology'], gmt: -3, notes: '', phone: '+55 48 99000-0201', email: 'vanio.antunes.md@gmail.com', level: 1, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2026, 3, 3), end: new Date(2026, 9, 3) },
+  { name: 'Caroline Serafim', country: 'Brazil', seedSlots: 5, areas: ['Cardiology', 'Neurology', 'Emergency Medicine'], gmt: -3, notes: '', phone: '+55 11 99000-0202', email: 'caroline.serafim@example.com', level: 2, area: 'Neurology', position: 'MD, PhD', affiliation: 'UNIFESP', langs: ['BR','EN'], start: new Date(2025, 2, 10), end: new Date(2025, 8, 10) },
+  { name: 'Rafael Lima', country: 'Brazil', seedSlots: 3, areas: ['Endocrinology', 'Surgery'], gmt: -3, notes: 'Prefers surgical areas', phone: '+55 51 99000-0203', email: 'rafael.lima@example.com', level: 2, area: 'Endocrinology', position: 'MD, MSc', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'], start: new Date(2025, 4, 5), end: new Date(2025, 10, 5) },
+  { name: 'Beatriz Carvalho', country: 'Brazil', seedSlots: 0, areas: ['Cardiology'], gmt: 0, notes: '+2 from May 2027', phone: '+55 11 99000-0204', email: 'beatriz.carvalho@example.com', level: 1, area: 'Cardiology', position: 'MD', affiliation: 'Instituto do Coração', langs: ['BR','EN'], start: new Date(2026, 2, 16), end: new Date(2026, 8, 16) },
+  { name: 'Felipe Andrade', country: 'United States', seedSlots: 2, areas: ['Oncology', 'Surgery'], gmt: -5, notes: 'Can take 4 in total', phone: '+1 305 555 0205', email: 'felipe.andrade@example.com', level: 1, area: 'Oncology', position: 'MD, MSc', affiliation: 'INCA', langs: ['BR'], start: new Date(2026, 4, 4), end: new Date(2026, 10, 4) },
+  { name: 'Juliana Prado', country: 'Brazil', seedSlots: 2, areas: ['Pediatrics'], gmt: -3, notes: 'Prefers mentees in Portuguese', phone: '+55 81 99000-0206', email: 'juliana.prado@example.com', level: 1, area: 'Pediatrics', position: 'MD', affiliation: 'UFPE', langs: ['BR','EN'], start: new Date(2026, 6, 20), end: new Date(2027, 0, 20) }
 ];
 const ME = 'Vânio Antunes';
 function mentorOf(mentee) { const m = MENTEES.filter((x) => x.name === mentee)[0]; const md = m && MENTORS_DATA.filter((x) => x.name === m.mentor)[0]; return { name: m ? m.mentor : '', email: md ? md.email : '' }; }
@@ -3176,27 +3315,46 @@ function seedOfficeHours() {
 // phone: WhatsApp number; start/end: contract dates; status: Active | Paused | Expired | Cancelled
 // renewals: times renewed; renewReq: asked to renew; lastMeet/cadence: days since the last meeting and days between meetings
 const MENTEE_ADMIN = {
-  'Isabella Michelon': { phone: '+55 51 99000-0101', start: '2025-09-15', end: '2026-09-15', status: 'Active', reschedules: 3, renewals: 1, renewReq: true, lastMeet: 6, cadence: 7 },
-  'Maria L. R. Defante': { phone: '+55 16 99000-0102', start: '2026-03-02', end: '2027-03-02', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 4, cadence: 7 },
-  'Caroline Dagostin': { phone: '+55 11 99000-0103', start: '2026-04-06', end: '2027-04-06', status: 'Active', reschedules: 2, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 },
-  'Pedro Henrique Costa': { phone: '+55 31 99000-0104', start: '2025-09-29', end: '2026-09-28', status: 'Paused', reschedules: 5, renewals: 1, renewReq: false, lastMeet: 20, cadence: 14 },
-  'Ana Beatriz Moraes': { phone: '+55 51 99000-0105', start: '2025-08-31', end: '2026-08-31', status: 'Active', reschedules: 0, renewals: 2, renewReq: true, lastMeet: 1, cadence: 7 },
-  'Lucas Ferreira': { phone: '+55 11 99000-0106', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
-  'Júlia Miranda': { phone: '+55 21 99000-0107', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 12, cadence: 14 },
-  'Rafael Souza Pinto': { phone: '+55 81 99000-0108', start: '2026-06-01', end: '2027-06-01', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 5, cadence: 7 },
-  'Camila Rocha': { phone: '+55 19 99000-0109', start: '2025-09-22', end: '2026-09-20', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 2, cadence: 7 },
-  'Gustavo Gurian': { phone: '+55 11 99000-0110', start: '2025-09-01', end: '2026-09-01', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 5, cadence: 7 },
-  'Larissa Barbosa': { phone: '+55 71 99000-0111', start: '2026-07-06', end: '2027-07-06', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 9, cadence: 7 },
-  'Thiago Mendes': { phone: '+55 11 99000-0112', start: '2025-11-03', end: '2026-11-03', status: 'Cancelled', reschedules: 3, renewals: 0, renewReq: false, lastMeet: 60, cadence: 14 },
-  'Letícia Moura': { phone: '+55 48 99000-0113', start: '2026-04-13', end: '2027-04-13', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
-  'Bruno Tavares': { phone: '+55 21 99000-0114', start: '2026-06-08', end: '2027-01-08', status: 'Active', reschedules: 0, renewals: 0, renewReq: true, lastMeet: 8, cadence: 7 },
-  'Sofia Lins': { phone: '+55 81 99000-0115', start: '2026-08-03', end: '2027-02-03', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 }
+  'Isabella Michelon': { gmt: -3, phone: '+55 51 99000-0101', start: '2025-09-15', end: '2026-09-15', status: 'Active', reschedules: 3, renewals: 1, renewReq: true, lastMeet: 6, cadence: 7 },
+  'Maria L. R. Defante': { gmt: -3, phone: '+55 16 99000-0102', start: '2026-03-02', end: '2027-03-02', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 4, cadence: 7 },
+  'Caroline Dagostin': { gmt: -3, phone: '+55 11 99000-0103', start: '2026-04-06', end: '2027-04-06', status: 'Active', reschedules: 2, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 },
+  'Pedro Henrique Costa': { gmt: -3, phone: '+55 31 99000-0104', start: '2025-09-29', end: '2026-09-28', status: 'Paused', reschedules: 5, renewals: 1, renewReq: false, lastMeet: 20, cadence: 14 },
+  'Ana Beatriz Moraes': { gmt: -3, phone: '+55 51 99000-0105', start: '2025-08-31', end: '2026-08-31', status: 'Active', reschedules: 0, renewals: 2, renewReq: true, lastMeet: 1, cadence: 7 },
+  'Lucas Ferreira': { gmt: 1, phone: '+55 11 99000-0106', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
+  'Júlia Miranda': { gmt: -3, phone: '+55 21 99000-0107', start: '2026-05-04', end: '2027-05-04', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 12, cadence: 14 },
+  'Rafael Souza Pinto': { gmt: -3, phone: '+55 81 99000-0108', start: '2026-06-01', end: '2027-06-01', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 5, cadence: 7 },
+  'Camila Rocha': { gmt: -3, phone: '+55 19 99000-0109', start: '2025-09-22', end: '2026-09-20', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 2, cadence: 7 },
+  'Gustavo Gurian': { gmt: -3, phone: '+55 11 99000-0110', start: '2025-09-01', end: '2026-09-01', status: 'Active', reschedules: 2, renewals: 1, renewReq: true, lastMeet: 5, cadence: 7 },
+  'Larissa Barbosa': { gmt: -3, phone: '+55 71 99000-0111', start: '2026-07-06', end: '2027-07-06', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 9, cadence: 7 },
+  'Thiago Mendes': { gmt: -5, phone: '+55 11 99000-0112', start: '2025-11-03', end: '2026-11-03', status: 'Cancelled', reschedules: 3, renewals: 0, renewReq: false, lastMeet: 60, cadence: 14 },
+  'Letícia Moura': { gmt: 0, phone: '+55 48 99000-0113', start: '2026-04-13', end: '2027-04-13', status: 'Active', reschedules: 1, renewals: 0, renewReq: false, lastMeet: 3, cadence: 7 },
+  'Bruno Tavares': { gmt: -3, phone: '+55 21 99000-0114', start: '2026-06-08', end: '2027-01-08', status: 'Active', reschedules: 0, renewals: 0, renewReq: true, lastMeet: 8, cadence: 7 },
+  'Sofia Lins': { gmt: -3, phone: '+55 81 99000-0115', start: '2026-08-03', end: '2027-02-03', status: 'Active', reschedules: 0, renewals: 0, renewReq: false, lastMeet: 2, cadence: 7 }
 };
 const ADMIN_STATUSES = ['Active', 'Paused', 'Expired', 'Cancelled'];
 const NOTIFY_DAYS = 30;
 function daysBetween(a, b) { return Math.round((b - a) / 86400000); }
 // meetings inside the last `win` days, from the last meeting and the usual cadence (capped at total sessions)
 function meetingsWithin(a, total, win) { let n = 0; for (let d = a.lastMeet; d <= win && n < total; d += a.cadence) n++; return n; }
+function gmtLabel(n) { return 'GMT' + (n < 0 ? '−' + Math.abs(n) : '+' + n); }
+// open mentorship slots: one record per slot, optional preferred area, language and note
+const SLOT_LANGS = ['Any', 'Portuguese', 'English', 'Spanish'];
+function seedMentorSlots() {
+  const demo = {
+    'Vânio Antunes': [{ area: 'Gastroenterology', lang: 'Any', note: 'Endoscopy or hepatology questions preferred' }],
+    'Rafael Lima': [{ area: 'Surgery', lang: 'Portuguese', note: '' }],
+    'Beatriz Carvalho': [],
+    'Juliana Prado': [{ area: '', lang: 'Portuguese', note: 'Prefers mentees in Portuguese' }]
+  };
+  const out = {};
+  MENTORS_DATA.forEach((md) => {
+    const base = demo[md.name] || [];
+    const list = [];
+    for (let i = 0; i < md.seedSlots; i++) list.push(Object.assign({ id: 's' + (i + 1), area: '', lang: 'Any', note: '' }, base[i] || {}));
+    out[md.name] = list;
+  });
+  return out;
+}
 function waLink(phone) { return 'https://wa.me/' + String(phone).replace(/\D/g, ''); }
 
 // ---- task review: taskDone[id] is 'ready' (mentee marked it, awaiting mentor) or 'approved'/true (counts toward progress) ----
@@ -3421,12 +3579,13 @@ class Component extends DCLogic {
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
     oh: seedOfficeHours(), ohView: 'watch', ohLesson: null, ohDone: {}, ohOpen: {}, ohQuery: '',
     dlg: null,
+    mentorSlots: seedMentorSlots(),
     calYear: TODAY.getFullYear(), calMonth: TODAY.getMonth(), availSaved: false, cancelledNext: {},
     profile: { affiliation: 'Meta-Analysis Academy', country: 'Brazil', bio: '' },
     copiedEmail: '',
     coOpen: null, coDraft: { mentee: '', name: '', email: '', senior: false },
     projects: SEED_PROJECTS, projectId: SEED_PROJECTS[0].id, projectFilter: 'All mentees',
-    adSort: { key: 'end', dir: 1 }, adSection: 'mentees', adMentorSort: { key: 'name', dir: 1 }, adProjSort: { key: 'started', dir: -1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
+    adSort: { key: 'end', dir: 1 }, adSection: 'mentees', adMentorSort: { key: 'name', dir: 1 }, adMentorFilter: { q: '', status: 'All', area: 'All', country: 'All', gmt: 'All', open: false }, adProjSort: { key: 'started', dir: -1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
     theme: (function () { try { return localStorage.getItem('mh-theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
     logbook: SEED_PROJECTS[0].logbook,
@@ -3907,7 +4066,7 @@ class Component extends DCLogic {
 
     // ---- sortable table
     const COLS = [
-      ['name', 'Mentee', (r) => r.m.name], ['phone', 'WhatsApp', (r) => r.a.phone], ['start', 'Start', (r) => r.start.getTime()], ['end', 'End', (r) => r.end.getTime()],
+      ['name', 'Mentee', (r) => r.m.name], ['phone', 'WhatsApp', (r) => r.a.phone], ['gmt', 'GMT', (r) => r.a.gmt], ['start', 'Start', (r) => r.start.getTime()], ['end', 'End', (r) => r.end.getTime()],
       ['status', 'Status', (r) => ADMIN_STATUSES.indexOf(r.a.status)], ['projects', 'Projects', (r) => this.projectCounts(r.m.name).total], ['meetings', 'Meetings', (r) => r.m.sessions],
       ['reschedules', 'Reschedules', (r) => r.a.reschedules], ['renewals', 'Renewals', (r) => r.a.renewals]
     ];
@@ -3957,18 +4116,43 @@ class Component extends DCLogic {
       };
     });
 
-    // ---- mentors (columns follow the ClickUp "Mentor Information" table)
+    // ---- mentors (columns follow the ClickUp "Mentor Information" table), with filters
     const mentorStatus = (md) => md.status || 'Mentor Level ' + md.level;
     const MENTOR_SC = { 'Ready': '155-40-27', 'Mentor Level 2': '234-85-14', 'Mentor Level 1': '330-70-45' };
-    const menteeCount = (md) => MENTEES.filter((m) => m.mentor === md.name && (m.status === 'Active' || m.status === 'Paused')).length;
+    const presentOf = (md) => MENTEES.filter((m) => m.mentor === md.name && (m.status === 'Active' || m.status === 'Paused'));
+    const slotsOf = (md) => st.mentorSlots[md.name] || [];
     const MCOLS = [
-      ['name', 'Name', (md) => md.name], ['status', 'Status', (md) => mentorStatus(md)], ['slots', 'Slots', (md) => md.slots || 0],
-      ['level2', 'Level 2', (md) => md.end.getTime()], ['country', 'Country', (md) => md.country || ''], ['email', 'Email', (md) => md.email || ''],
-      ['interests', 'Interests', (md) => md.interests || ''], ['notes', 'Notes', (md) => md.notes || ''], ['phone', 'Contact', (md) => md.phone || ''],
-      ['mentees', '# Mentees', (md) => menteeCount(md)]
+      ['name', 'Name', (md) => md.name], ['status', 'Status', (md) => mentorStatus(md)], ['present', 'Present mentees', (md) => presentOf(md).length],
+      ['slots', 'Slots', (md) => slotsOf(md).length], ['level2', 'Level 2', (md) => md.end.getTime()], ['country', 'Country', (md) => md.country || ''],
+      ['gmt', 'GMT', (md) => md.gmt], ['email', 'Email', (md) => md.email || ''], ['areas', 'Areas', (md) => (md.areas || []).join(', ')],
+      ['notes', 'Notes', (md) => md.notes || ''], ['phone', 'Contact', (md) => md.phone || '']
     ];
-    const mentorRows = sortRows(MENTORS_DATA, MCOLS, st.adMentorSort, (md) => md.name);
+    const mf = st.adMentorFilter;
+    const uniq = (xs) => xs.filter((v, i, arr) => arr.indexOf(v) === i);
+    const filteredMentors = MENTORS_DATA.filter((md) => {
+      const q = mf.q.trim().toLowerCase();
+      if (q && (md.name + ' ' + (md.email || '') + ' ' + (md.notes || '') + ' ' + slotsOf(md).map((x) => x.note).join(' ')).toLowerCase().indexOf(q) === -1) return false;
+      if (mf.status !== 'All' && mentorStatus(md) !== mf.status) return false;
+      if (mf.area !== 'All' && (md.areas || []).indexOf(mf.area) === -1) return false;
+      if (mf.country !== 'All' && md.country !== mf.country) return false;
+      if (mf.gmt !== 'All' && String(md.gmt) !== mf.gmt) return false;
+      if (mf.open && !slotsOf(md).length) return false;
+      return true;
+    });
+    const mentorRows = sortRows(filteredMentors, MCOLS, st.adMentorSort, (md) => md.name);
     const fmtMY = (d) => MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    const setMF = (k, v) => { const f = Object.assign({}, this.state.adMentorFilter); f[k] = v; this.setState({ adMentorFilter: f }); };
+    // area charts follow the filtered mentors: their present mentees and their open slots
+    // (a slot with a preferred area counts there; a slot without one counts in every area the mentor accepts)
+    const slotFits = (md, x, area) => (x.area ? x.area === area : (md.areas || []).indexOf(area) !== -1);
+    const areaStats = AREAS.map((area) => ({
+      area: area,
+      mentees: filteredMentors.reduce((n, md) => n + presentOf(md).filter((m) => m.area === area).length, 0),
+      slots: filteredMentors.reduce((n, md) => n + slotsOf(md).filter((x) => slotFits(md, x, area)).length, 0),
+      slotMentors: filteredMentors.map((md) => ({ md: md, n: slotsOf(md).filter((x) => slotFits(md, x, area)).length })).filter((y) => y.n).map((y) => y.md.name.split(' ')[0] + ' ' + y.n)
+    })).filter((x) => x.mentees || x.slots || filteredMentors.some((md) => (md.areas || []).indexOf(x.area) !== -1))
+      .sort((x, y) => y.mentees - x.mentees || y.slots - x.slots || x.area.localeCompare(y.area));
+    const areaMax = Math.max.apply(null, areaStats.map((x) => Math.max(x.mentees, x.slots)).concat([1]));
 
     // ---- projects
     const PCOLS = [
@@ -3991,30 +4175,77 @@ class Component extends DCLogic {
         style: secTab(x[0]),
         go: () => this.setState({ adSection: x[0] })
       })),
-      adMentorHeaders: heads(MCOLS, 'adMentorSort', { slots: 1, mentees: 1 }),
-      adMentorCount: MENTORS_DATA.length + ' mentors · ' + MENTORS_DATA.reduce((n, md) => n + (md.slots || 0), 0) + ' open slots',
+      adMentorHeaders: heads(MCOLS, 'adMentorSort', {}),
+      adMentorCount: filteredMentors.length + ' of ' + MENTORS_DATA.length + ' mentors · ' + filteredMentors.reduce((n, md) => n + slotsOf(md).length, 0) + ' open slots',
+      adMentorQ: mf.q,
+      adMentorSetQ: (e) => setMF('q', e.target.value),
+      adMentorFilters: [
+        ['status', 'Status', uniq(MENTORS_DATA.map(mentorStatus)).sort()],
+        ['area', 'Area', uniq([].concat.apply([], MENTORS_DATA.map((md) => md.areas || []))).sort()],
+        ['country', 'Country', uniq(MENTORS_DATA.map((md) => md.country)).sort()],
+        ['gmt', 'GMT', uniq(MENTORS_DATA.map((md) => md.gmt)).sort((x, y) => x - y).map(String)]
+      ].map((f) => ({
+        label: f[1],
+        value: mf[f[0]],
+        options: [{ value: 'All', label: 'All' }].concat(f[2].map((v) => ({ value: v, label: f[0] === 'gmt' ? gmtLabel(Number(v)) : v }))),
+        set: (e) => setMF(f[0], e.target.value)
+      })),
+      adMentorOpenOnly: !!mf.open,
+      adMentorToggleOpen: () => setMF('open', !this.state.adMentorFilter.open),
+      adMentorSortKey: st.adMentorSort.key,
+      adMentorSortOptions: MCOLS.map((c) => ({ value: c[0], label: c[1] })),
+      adMentorSetSort: (e) => this.setState({ adMentorSort: { key: e.target.value, dir: this.state.adMentorSort.dir } }),
+      adMentorDirLabel: st.adMentorSort.dir === 1 ? 'Ascending ▲' : 'Descending ▼',
+      adMentorFlipDir: () => this.setState({ adMentorSort: { key: this.state.adMentorSort.key, dir: -this.state.adMentorSort.dir } }),
+      adMentorFiltered: !!(mf.q || mf.status !== 'All' || mf.area !== 'All' || mf.country !== 'All' || mf.gmt !== 'All' || mf.open),
+      adMentorClear: () => this.setState({ adMentorFilter: { q: '', status: 'All', area: 'All', country: 'All', gmt: 'All', open: false } }),
+      adMentorEmpty: mentorRows.length === 0,
       adMentorRows: mentorRows.map((md) => {
         const status = mentorStatus(md);
+        const present = presentOf(md);
+        const slots = slotsOf(md);
         return {
           name: md.name,
           status: status,
           statusStyle: pill(MENTOR_SC[status] || '38-6-42'),
-          slots: md.slots || 0,
-          slotsStyle: "font-family:'JetBrains Mono', monospace; font-size:13px; text-align:right; font-weight:" + (md.slots ? '700' : '400'),
+          presentCount: present.length + ' mentee' + (present.length === 1 ? '' : 's'),
+          hasPresent: present.length > 0,
+          present: present.map((m) => ({ name: m.name, area: m.area, gmt: gmtLabel((MENTEE_ADMIN[m.name] || {}).gmt || 0), open: this.openMentee(m.name) })),
+          slots: slots.length,
+          slotsTitle: slots.map((x) => [x.area || 'Any area', x.lang && x.lang !== 'Any' ? x.lang : '', x.note].filter(Boolean).join(', ')).join(' · '),
+          slotsStyle: "font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:" + (slots.length ? '700' : '400'),
           level2: md.level === 2 ? fmtMY(md.end) : '—',
           level2Note: md.level === 2 ? '' : 'Expected ' + fmtMY(md.end),
           hasLevel2Note: md.level !== 2,
           country: md.country || '—',
+          gmt: gmtLabel(md.gmt),
           email: md.email || '—',
           mailto: md.email ? 'mailto:' + md.email : '#',
-          interests: md.interests || '—',
+          areas: (md.areas || []).join(' · ') || '—',
           notes: md.notes || '—',
           phone: md.phone || '—',
           wa: md.phone ? waLink(md.phone) : '#',
-          mentees: menteeCount(md),
-          rowStyle: 'display:grid; grid-template-columns:minmax(160px,1.3fr) 124px 60px 118px 110px minmax(200px,1.2fr) minmax(160px,1fr) minmax(170px,1fr) 160px 76px; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px'
+          rowStyle: 'display:grid; grid-template-columns:minmax(150px,1.1fr) 124px minmax(300px,2fr) 60px 118px 110px 72px minmax(190px,1.1fr) minmax(150px,1fr) minmax(170px,1.2fr) 150px; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px'
         };
       }),
+      adAreaSub: 'Mentors in the table (filters apply). Slots come from what each mentor opens in Sessions; a slot without a preferred area counts in every area the mentor accepts.',
+      adAreaMentees: areaStats.map((x, i) => ({
+        label: x.area,
+        value: x.mentees,
+        barStyle: bar(Math.round((x.mentees / areaMax) * 100), 'hsl(var(--c-234-85-14))'),
+        enter: enter('am-' + i),
+        tip: st.adTip === 'am-' + i,
+        tipText: x.area + ': ' + x.mentees + ' present mentee' + (x.mentees === 1 ? '' : 's')
+      })),
+      adAreaSlots: areaStats.map((x, i) => ({
+        label: x.area,
+        value: x.slots,
+        barStyle: bar(Math.round((x.slots / areaMax) * 100), 'hsl(var(--c-155-40-27))'),
+        enter: enter('as-' + i),
+        tip: st.adTip === 'as-' + i,
+        tipText: x.area + ': ' + (x.slots ? x.slots + ' open slot' + (x.slots === 1 ? '' : 's') + ' (' + x.slotMentors.join(', ') + ')' : 'no open slots')
+      })),
+      adAreaEmpty: areaStats.length === 0,
       adProjHeaders: heads(PCOLS, 'adProjSort', { rejections: 1 }),
       adProjCount: this.state.projects.length + ' projects',
       adProjLegend: 'Stage: Accepted (accepted round or status) · Waiting review (last round pending at the journal) · Waiting submission (internal review approved, or last journal rejected) · Waiting senior (tasks waiting for mentor or senior review) · Working.',
@@ -4064,6 +4295,7 @@ class Component extends DCLogic {
           name: r.m.name,
           open: this.openMentee(r.m.name),
           phone: r.a.phone,
+          gmt: gmtLabel(r.a.gmt),
           wa: waLink(r.a.phone),
           start: fmtD(r.start),
           end: fmtD(r.end),
@@ -4077,7 +4309,7 @@ class Component extends DCLogic {
           reschedules: r.a.reschedules,
           renewals: r.a.renewals,
           renewReq: r.a.renewReq,
-          rowStyle: 'display:grid; grid-template-columns:minmax(170px,1.6fr) 160px 104px 128px 96px 72px 76px 92px 90px; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px' + (soon ? '; background:hsl(var(--c-40-78-44) / .06)' : '')
+          rowStyle: 'display:grid; grid-template-columns:minmax(170px,1.6fr) 160px 76px 104px 128px 96px 90px 76px 92px 90px; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px' + (soon ? '; background:hsl(var(--c-40-78-44) / .06)' : '')
         };
       }),
 
@@ -5139,6 +5371,28 @@ class Component extends DCLogic {
 
       availabilityRows: availabilityRows,
       timeOptions: TIME_OPTIONS,
+      ...(function (self) {
+        const mine = st.mentorSlots[ME] || [];
+        const setMine = (fn) => { const all = Object.assign({}, self.state.mentorSlots); all[ME] = fn(all[ME] || []); self.setState({ mentorSlots: all }); };
+        const setField = (id, k) => (e) => { const v = e.target.value; setMine((list) => list.map((x) => { if (x.id !== id) return x; const y = Object.assign({}, x); y[k] = v; return y; })); };
+        return {
+          slotsHeading: 'Open mentorship slots (' + mine.length + ')',
+          noSlots: mine.length === 0,
+          slotAreaOptions: [{ value: '', label: 'Any of my areas' }].concat(AREAS.map((x) => ({ value: x, label: x }))),
+          slotLangOptions: SLOT_LANGS,
+          addSlot: (e) => { e.preventDefault(); setMine((list) => list.concat([{ id: 's' + Date.now().toString(36), area: '', lang: 'Any', note: '' }])); },
+          mySlots: mine.map((x, i) => ({
+            label: 'Slot ' + (i + 1),
+            area: x.area || '',
+            lang: x.lang || 'Any',
+            note: x.note || '',
+            setArea: setField(x.id, 'area'),
+            setLang: setField(x.id, 'lang'),
+            setNote: setField(x.id, 'note'),
+            remove: (e) => { e.preventDefault(); if (x.note || x.area ? window.confirm('Delete Slot ' + (i + 1) + '?') : true) setMine((list) => list.filter((y) => y.id !== x.id)); }
+          }))
+        };
+      })(this),
       saveAvailability: () => this.setState({ availSaved: true }),
       saveAvailLabel: st.availSaved ? 'Saved ✓' : 'Save availability',
       availabilitySummary: openDays + ' open days this week · ' + totalSlots + ' bookable ' + st.duration + '-minute slots',
