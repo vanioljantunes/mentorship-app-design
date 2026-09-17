@@ -4118,7 +4118,7 @@ class Component extends DCLogic {
 
     // ---- mentors (columns follow the ClickUp "Mentor Information" table), with filters
     const mentorStatus = (md) => md.status || 'Mentor Level ' + md.level;
-    const MENTOR_SC = { 'Ready': '155-40-27', 'Mentor Level 2': '234-85-14', 'Mentor Level 1': '330-70-45' };
+    const MENTOR_SC = { 'Ready': '155-40-27', 'Mentor Level 2': '234-85-14', 'Mentor Level 1': '4-62-50' };
     const presentOf = (md) => MENTEES.filter((m) => m.mentor === md.name && (m.status === 'Active' || m.status === 'Paused'));
     const slotsOf = (md) => st.mentorSlots[md.name] || [];
     const MCOLS = [
