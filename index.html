@@ -156,7 +156,7 @@
               <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))" dangerouslySetInnerHTML="{{ adIcon }}"></span>
               <span>Admin dashboard</span>
             </h1>
-            <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Every mentee in the programme, their contract dates and activity.</p>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Mentees, mentors and research projects across the programme.</p>
           </div>
           <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">As of {{ adAsOf }}</span>
         </div>
@@ -169,6 +169,14 @@
           </div>
         </sc-if>
 
+        <div role="group" aria-label="Dashboard section" style="display:inline-flex; align-self:flex-start; gap:4px; padding:4px; background:hsl(var(--c-44-14-89)); border-radius:9.6px">
+          <sc-for list="{{ adSections }}" as="sec" hint-placeholder-count="3">
+            <button onClick="{{ sec.go }}" aria-pressed="{{ sec.pressed }}" style="{{ sec.style }}">{{ sec.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ adSecMentees }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; flex-direction:column; gap:24px">
         <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
           <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
             <div style="flex:1; min-width:220px">
@@ -294,6 +302,76 @@
             <span></span>
           </div>
         </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ adSecMentors }}" hint-placeholder-val="{{ false }}">
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+            <div style="flex:1; min-width:220px">
+              <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">All mentors</h2>
+              <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">Same columns as the ClickUp mentor list. Click a column header to sort.</p>
+            </div>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adMentorCount }}</span>
+          </div>
+          <div style="overflow-x:auto">
+            <div role="table" aria-label="All mentors" style="min-width:1480px">
+              <div role="row" style="display:grid; grid-template-columns:minmax(160px,1.3fr) 124px 60px 118px 110px minmax(200px,1.2fr) minmax(160px,1fr) minmax(170px,1fr) 160px 76px; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
+                <sc-for list="{{ adMentorHeaders }}" as="h" hint-placeholder-count="10">
+                  <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
+                </sc-for>
+              </div>
+              <sc-for list="{{ adMentorRows }}" as="mr" hint-placeholder-count="6">
+                <div role="row" style="{{ mr.rowStyle }}">
+                  <span role="cell" style="font-weight:600">{{ mr.name }}</span>
+                  <span role="cell"><span style="{{ mr.statusStyle }}">{{ mr.status }}</span></span>
+                  <span role="cell" style="{{ mr.slotsStyle }}">{{ mr.slots }}</span>
+                  <span role="cell" style="display:grid; gap:2px"><span style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ mr.level2 }}</span><sc-if value="{{ mr.hasLevel2Note }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ mr.level2Note }}</span></sc-if></span>
+                  <span role="cell">{{ mr.country }}</span>
+                  <span role="cell" style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap"><a href="{{ mr.mailto }}" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ mr.email }}</a></span>
+                  <span role="cell">{{ mr.interests }}</span>
+                  <span role="cell" style="color:hsl(var(--c-38-6-42))">{{ mr.notes }}</span>
+                  <span role="cell"><a href="{{ mr.wa }}" target="_blank" rel="noopener" title="Open WhatsApp chat" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ mr.phone }}</a></span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ mr.mentees }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ adSecProjects }}" hint-placeholder-val="{{ false }}">
+        <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid hsl(var(--c-42-12-84))">
+            <div style="flex:1; min-width:220px">
+              <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">All research projects</h2>
+              <p style="margin:2px 0 0; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adProjLegend }}</p>
+            </div>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ adProjCount }}</span>
+          </div>
+          <div style="overflow-x:auto">
+            <div role="table" aria-label="All research projects" style="min-width:1280px">
+              <div role="row" style="display:grid; grid-template-columns:minmax(260px,2.2fr) 150px 130px 104px 150px 92px minmax(170px,1fr) minmax(150px,1fr); gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))">
+                <sc-for list="{{ adProjHeaders }}" as="h" hint-placeholder-count="8">
+                  <button role="columnheader" aria-sort="{{ h.aria }}" onClick="{{ h.sort }}" style="{{ h.style }}">{{ h.label }}<span aria-hidden="true" style="font-size:10px">{{ h.arrow }}</span></button>
+                </sc-for>
+              </div>
+              <sc-for list="{{ adProjRows }}" as="pr" hint-placeholder-count="3">
+                <div role="row" style="{{ pr.rowStyle }}">
+                  <span role="cell" style="display:grid; gap:2px; min-width:0"><a href="#" onClick="{{ pr.open }}" style="font-weight:600; color:hsl(var(--c-234-68-12))">{{ pr.name }}</a><sc-if value="{{ pr.hasCoauthors }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ pr.coauthors }}</span></sc-if></span>
+                  <span role="cell"><a href="#" onClick="{{ pr.openMentee }}">{{ pr.mentee }}</a></span>
+                  <span role="cell">{{ pr.mentor }}</span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ pr.started }}</span>
+                  <span role="cell"><span style="{{ pr.stageStyle }}">{{ pr.stage }}</span></span>
+                  <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:13px; text-align:right">{{ pr.rejections }}</span>
+                  <span role="cell">{{ pr.journals }}</span>
+                  <span role="cell" style="min-width:0; overflow-wrap:anywhere"><sc-if value="{{ pr.hasDoi }}" hint-placeholder-val="{{ false }}"><a href="{{ pr.doiHref }}" target="_blank" rel="noopener" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ pr.doi }}</a></sc-if><sc-if value="{{ pr.noDoi }}" hint-placeholder-val="{{ true }}"><span style="color:hsl(var(--c-38-6-42))">—</span></sc-if></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -834,7 +912,7 @@
                     </div>
                   </div>
                   <label style="display:block; font-size:14px; font-weight:600; margin-bottom:6px">What do you want to cover?</label>
-                  <input value="{{ topic }}" onChange="{{ setTopic }}" placeholder="e.g. Review the screening strategy for Example 1" style="width:100%; height:44px; padding:0 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); margin-bottom:16px" />
+                  <input value="{{ topic }}" onChange="{{ setTopic }}" placeholder="e.g. Review the screening strategy for the PEECS review" style="width:100%; height:44px; padding:0 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); margin-bottom:16px" />
                   <label style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; margin-bottom:20px; cursor:pointer">
                     <input type="checkbox" checked="{{ repeatWeekly }}" onChange="{{ toggleRepeat }}" style="width:16px; height:16px; margin-top:2px; accent-color:hsl(var(--c-234-85-14))" />
                     <span style="display:grid; gap:2px">
@@ -2209,6 +2287,9 @@
             </a>
           </sc-for>
         </div>
+        <sc-if value="{{ noFirstAuthor }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px; text-align:center; border:1px dashed hsl(var(--c-42-12-84)); border-radius:13.6px; font-size:14px; color:hsl(var(--c-38-6-42))">{{ noFirstAuthorText }}</div>
+        </sc-if>
         <sc-if value="{{ hasCoProjects }}" hint-placeholder-val="{{ false }}">
           <h3 style="margin:8px 0 0; font-family:Ruda, sans-serif; font-size:16px; font-weight:700; color:hsl(var(--c-38-6-42))">{{ coAuthorHeading }}</h3>
           <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:20px">
@@ -2752,14 +2833,14 @@ function countdownLabel(d) { const n = daysFromToday(d); return n === 0 ? 'Today
 // Single source of truth for the mentorship timeline. Every view derives from these.
 const PLAN = { total: 52, start: new Date(2026, 2, 2), end: new Date(2027, 2, 1) };
 const SESSION_LOG = [
-  { n: 26, date: new Date(2026, 7, 25), start: '14:00', end: '15:00', status: 'Held', desc: 'Reviewed the screening strategy and agreed on the inclusion criteria for the second reviewer.', projects: 'Example 1' },
-  { n: 25, date: new Date(2026, 7, 18), start: '14:00', end: '15:00', status: 'Held', desc: 'Walked through the search string in Embase and fixed the MeSH terms.', projects: 'Example 1' },
+  { n: 26, date: new Date(2026, 7, 25), start: '14:00', end: '15:00', status: 'Held', desc: 'Reviewed the screening strategy and agreed on the inclusion criteria for the second reviewer.', projects: 'PEECS review' },
+  { n: 25, date: new Date(2026, 7, 18), start: '14:00', end: '15:00', status: 'Held', desc: 'Walked through the search string in Embase and fixed the MeSH terms.', projects: 'PEECS review' },
   { n: 24, date: new Date(2026, 7, 11), start: '14:00', end: '15:00', status: 'No-show', desc: 'Mentee unavailable, rescheduled to the following week.', projects: '—' },
-  { n: 23, date: new Date(2026, 7, 4), start: '14:00', end: '15:00', status: 'Held', desc: 'Defined the PICOTT and closed the research question.', projects: 'Example 1' },
-  { n: 22, date: new Date(2026, 6, 28), start: '15:00', end: '16:00', status: 'Held', desc: 'Discussed authorship order and journal shortlist for the pilot review.', projects: 'Example 1 · Pilot review' },
+  { n: 23, date: new Date(2026, 7, 4), start: '14:00', end: '15:00', status: 'Held', desc: 'Defined the PICOTT and closed the research question.', projects: 'PEECS review' },
+  { n: 22, date: new Date(2026, 6, 28), start: '15:00', end: '16:00', status: 'Held', desc: 'Discussed authorship order and journal shortlist for the pilot review.', projects: 'PEECS review · Pilot review' },
   { n: 21, date: new Date(2026, 6, 21), start: '14:00', end: '15:00', status: 'Cancelled', desc: 'Cancelled by mentor, clinical duty.', projects: '—' }
 ];
-const NEXT_SESSION = { n: SESSION_LOG[0].n + 1, date: new Date(2026, 8, 1), start: '14:00', end: '15:00', project: 'Example 1', agenda: ['Review the protocol draft', 'Agree on the risk-of-bias tool'] };
+const NEXT_SESSION = { n: SESSION_LOG[0].n + 1, date: new Date(2026, 8, 1), start: '14:00', end: '15:00', project: 'PEECS review', agenda: ['Review the protocol draft', 'Agree on the risk-of-bias tool'] };
 const OFFICE_HOURS = {
   last: { title: 'Heterogeneity: when to pool and when to stop', date: new Date(2026, 7, 27), start: '18:00', end: '19:00', track: 'Research Methods', mins: 58, covered: ['I² and τ² in practice', 'Subgroup vs. meta-regression', 'When not to pool at all'] },
   next: { title: 'Research Methods & Statistics', date: new Date(2026, 8, 3), start: '18:00', end: '19:00', topics: ['Building a search string that reviewers accept', 'Live Q&A on screening conflicts'] }
@@ -2940,37 +3021,32 @@ const REG_BLANK = { registry: 'PROSPERO', id: '', status: 'Not registered' };
 function paperLabel(x) { return [String(x.author || '').trim(), String(x.year || '').trim()].filter(Boolean).join(', ') || 'Unnamed paper'; }
 function docHref(url) { return !url ? '#' : /^https?:\/\//.test(url) ? url : 'https://' + url; }
 const PICOTT_FIELDS = [['p', 'Population'], ['i', 'Intervention'], ['c', 'Comparator'], ['o', 'Outcome'], ['t', 'Timeframe'], ['t2', 'Type of study']];
-const PICOTT_STUDIES = [
-  { author: 'Moreira', year: '2024', title: 'Effect of early mobilisation after cardiac surgery', doi: '10.1001/jama.2024.1234', p: 'Adults after cardiac surgery', i: 'Early mobilisation < 24h', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'RCT' },
-  { author: 'Tanaka', year: '2023', title: 'Prehabilitation and postoperative complications', doi: '10.1016/j.jclinepi.2023.0456', p: 'Elective surgery patients', i: 'Structured prehabilitation', c: 'Usual preoperative care', o: 'Clavien-Dindo ≥ II', t: '90 days', t2: 'RCT' },
-  { author: 'Okafor', year: '2025', title: 'Remote monitoring after discharge', doi: '10.1136/bmj.2025.0987', p: 'Post-discharge cardiac patients', i: 'Remote monitoring', c: 'In-person follow-up', o: 'Readmission', t: '6 months', t2: 'Cohort' }
-];
 
 const MENTEES = [
-  { name: 'Isabella Michelon', area: 'Cardiology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 26, projects: 2, position: 'Medical Student', affiliation: 'UFCSPA', langs: ['BR','EN'] },
-  { name: 'Maria L. R. Defante', area: 'Oncology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 24, projects: 1, position: 'Resident', affiliation: 'USP Ribeirão Preto', langs: ['BR','EN'] },
-  { name: 'Caroline Dagostin', area: 'Neurology', status: 'Active', mentor: 'Caroline Serafim', since: 'Apr 2026', sessions: 19, projects: 3, position: 'MD, PhD candidate', affiliation: 'UNIFESP', langs: ['BR'] },
-  { name: 'Pedro Henrique Costa', area: 'Infectious Diseases', status: 'Paused', mentor: 'Vânio Antunes', since: 'Jan 2026', sessions: 14, projects: 1, position: 'Medical Student', affiliation: 'UFMG', langs: ['BR'] },
-  { name: 'Ana Beatriz Moraes', area: 'Endocrinology', status: 'Active', mentor: 'Rafael Lima', since: 'Feb 2026', sessions: 29, projects: 2, position: 'Resident', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'] },
-  { name: 'Lucas Ferreira', area: 'Surgery', status: 'Active', mentor: 'Rafael Lima', since: 'May 2026', sessions: 15, projects: 1, position: 'MD', affiliation: 'Hospital Sírio-Libanês', langs: ['BR','EN'] },
-  { name: 'Júlia Miranda', area: 'Radiology', status: 'Active', mentor: 'Vânio Antunes', since: 'May 2026', sessions: 9, projects: 1, position: 'Mentee', affiliation: 'Meta-Analysis Academy', langs: ['BR'] },
-  { name: 'Rafael Souza Pinto', area: 'Psychiatry', status: 'Active', mentor: 'Caroline Serafim', since: 'Jun 2026', sessions: 11, projects: 1, position: 'Medical Student', affiliation: 'UFPE', langs: ['BR'] },
-  { name: 'Camila Rocha', area: 'Nephrology', status: 'Active', mentor: 'Vânio Antunes', since: 'Apr 2026', sessions: 20, projects: 2, position: 'Resident', affiliation: 'UNICAMP', langs: ['BR','EN'] },
-  { name: 'Gustavo Gurian', area: 'Gastroenterology', status: 'Active', mentor: 'Vânio Antunes', since: 'Dec 2025', sessions: 17, projects: 2, position: 'Mentee', affiliation: 'Meta-Analysis Academy', langs: ['BR'] },
-  { name: 'Larissa Barbosa', area: 'Oncology', status: 'Active', mentor: 'Rafael Lima', since: 'Jul 2026', sessions: 7, projects: 1, position: 'Medical Student', affiliation: 'UFBA', langs: ['BR','EN'] },
+  { name: 'Isabella Michelon', area: 'Cardiology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 26, projects: 0, position: 'Medical Student', affiliation: 'UFCSPA', langs: ['BR','EN'] },
+  { name: 'Maria L. R. Defante', area: 'Oncology', status: 'Active', mentor: 'Vânio Antunes', since: 'Mar 2026', sessions: 24, projects: 0, position: 'Resident', affiliation: 'USP Ribeirão Preto', langs: ['BR','EN'] },
+  { name: 'Caroline Dagostin', area: 'Neurology', status: 'Active', mentor: 'Caroline Serafim', since: 'Apr 2026', sessions: 19, projects: 1, position: 'MD, PhD candidate', affiliation: 'UNIFESP', langs: ['BR'] },
+  { name: 'Pedro Henrique Costa', area: 'Infectious Diseases', status: 'Paused', mentor: 'Vânio Antunes', since: 'Jan 2026', sessions: 14, projects: 0, position: 'Medical Student', affiliation: 'UFMG', langs: ['BR'] },
+  { name: 'Ana Beatriz Moraes', area: 'Endocrinology', status: 'Active', mentor: 'Rafael Lima', since: 'Feb 2026', sessions: 29, projects: 1, position: 'Resident', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'] },
+  { name: 'Lucas Ferreira', area: 'Surgery', status: 'Active', mentor: 'Rafael Lima', since: 'May 2026', sessions: 15, projects: 0, position: 'MD', affiliation: 'Hospital Sírio-Libanês', langs: ['BR','EN'] },
+  { name: 'Júlia Miranda', area: 'Radiology', status: 'Active', mentor: 'Vânio Antunes', since: 'May 2026', sessions: 9, projects: 0, position: 'Mentee', affiliation: 'Meta-Analysis Academy', langs: ['BR'] },
+  { name: 'Rafael Souza Pinto', area: 'Psychiatry', status: 'Active', mentor: 'Caroline Serafim', since: 'Jun 2026', sessions: 11, projects: 0, position: 'Medical Student', affiliation: 'UFPE', langs: ['BR'] },
+  { name: 'Camila Rocha', area: 'Nephrology', status: 'Active', mentor: 'Vânio Antunes', since: 'Apr 2026', sessions: 20, projects: 0, position: 'Resident', affiliation: 'UNICAMP', langs: ['BR','EN'] },
+  { name: 'Gustavo Gurian', area: 'Gastroenterology', status: 'Active', mentor: 'Vânio Antunes', since: 'Dec 2025', sessions: 17, projects: 0, position: 'Mentee', affiliation: 'Meta-Analysis Academy', langs: ['BR'] },
+  { name: 'Larissa Barbosa', area: 'Oncology', status: 'Active', mentor: 'Rafael Lima', since: 'Jul 2026', sessions: 7, projects: 0, position: 'Medical Student', affiliation: 'UFBA', langs: ['BR','EN'] },
   { name: 'Thiago Mendes', area: 'Cardiology', status: 'Cancelled', mentor: 'Caroline Serafim', since: 'Nov 2025', sessions: 9, projects: 0, position: 'MD, MSc', affiliation: 'Instituto do Coração', langs: ['EN'] },
   { name: 'Letícia Moura', area: 'Cardiology', status: 'Active', mentor: 'Beatriz Carvalho', since: 'Apr 2026', sessions: 18, projects: 1, position: 'Medical Student', affiliation: 'UFSC', langs: ['BR'] },
-  { name: 'Bruno Tavares', area: 'Oncology', status: 'Active', mentor: 'Felipe Andrade', since: 'Jun 2026', sessions: 10, projects: 1, position: 'Resident', affiliation: 'INCA', langs: ['BR','EN'] },
+  { name: 'Bruno Tavares', area: 'Oncology', status: 'Active', mentor: 'Felipe Andrade', since: 'Jun 2026', sessions: 10, projects: 0, position: 'Resident', affiliation: 'INCA', langs: ['BR','EN'] },
   { name: 'Sofia Lins', area: 'Pediatrics', status: 'Active', mentor: 'Juliana Prado', since: 'Aug 2026', sessions: 3, projects: 0, position: 'Medical Student', affiliation: 'UFPE', langs: ['BR'] }
 ];
 // mentor ladder: Level 1 mentors are promoted to Level 2 after a six-month track (start -> end)
 const MENTORS_DATA = [
-  { name: 'Vânio Antunes', email: 'vanio.antunes.md@gmail.com', level: 1, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2026, 3, 3), end: new Date(2026, 9, 3) },
-  { name: 'Caroline Serafim', email: 'caroline.serafim@example.com', level: 2, area: 'Neurology', position: 'MD, PhD', affiliation: 'UNIFESP', langs: ['BR','EN'], start: new Date(2025, 2, 10), end: new Date(2025, 8, 10) },
-  { name: 'Rafael Lima', email: 'rafael.lima@example.com', level: 2, area: 'Endocrinology', position: 'MD, MSc', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'], start: new Date(2025, 4, 5), end: new Date(2025, 10, 5) },
-  { name: 'Beatriz Carvalho', email: 'beatriz.carvalho@example.com', level: 1, area: 'Cardiology', position: 'MD', affiliation: 'Instituto do Coração', langs: ['BR','EN'], start: new Date(2026, 2, 16), end: new Date(2026, 8, 16) },
-  { name: 'Felipe Andrade', email: 'felipe.andrade@example.com', level: 1, area: 'Oncology', position: 'MD, MSc', affiliation: 'INCA', langs: ['BR'], start: new Date(2026, 4, 4), end: new Date(2026, 10, 4) },
-  { name: 'Juliana Prado', email: 'juliana.prado@example.com', level: 1, area: 'Pediatrics', position: 'MD', affiliation: 'UFPE', langs: ['BR','EN'], start: new Date(2026, 6, 20), end: new Date(2027, 0, 20) }
+  { name: 'Vânio Antunes', country: 'Brazil', slots: 1, interests: 'Gastro · Cardio · Radiology', notes: '', phone: '+55 48 99000-0201', email: 'vanio.antunes.md@gmail.com', level: 1, area: 'Evidence synthesis', position: 'MD', affiliation: 'Meta-Analysis Academy', langs: ['BR','EN'], start: new Date(2026, 3, 3), end: new Date(2026, 9, 3) },
+  { name: 'Caroline Serafim', country: 'Brazil', slots: 5, interests: 'Cardio · Neuro · Critical care', notes: '', phone: '+55 11 99000-0202', email: 'caroline.serafim@example.com', level: 2, area: 'Neurology', position: 'MD, PhD', affiliation: 'UNIFESP', langs: ['BR','EN'], start: new Date(2025, 2, 10), end: new Date(2025, 8, 10) },
+  { name: 'Rafael Lima', country: 'Brazil', slots: 3, interests: 'Anesthesiology · Endocrinology', notes: 'Prefers surgical areas', phone: '+55 51 99000-0203', email: 'rafael.lima@example.com', level: 2, area: 'Endocrinology', position: 'MD, MSc', affiliation: 'Hospital de Clínicas de Porto Alegre', langs: ['BR','EN'], start: new Date(2025, 4, 5), end: new Date(2025, 10, 5) },
+  { name: 'Beatriz Carvalho', country: 'Brazil', slots: 0, interests: 'Cardiology', notes: '+2 from May 2027', phone: '+55 11 99000-0204', email: 'beatriz.carvalho@example.com', level: 1, area: 'Cardiology', position: 'MD', affiliation: 'Instituto do Coração', langs: ['BR','EN'], start: new Date(2026, 2, 16), end: new Date(2026, 8, 16) },
+  { name: 'Felipe Andrade', country: 'United States', slots: 2, interests: 'Oncology · Surgical oncology', notes: 'Can take 4 in total', phone: '+1 305 555 0205', email: 'felipe.andrade@example.com', level: 1, area: 'Oncology', position: 'MD, MSc', affiliation: 'INCA', langs: ['BR'], start: new Date(2026, 4, 4), end: new Date(2026, 10, 4) },
+  { name: 'Juliana Prado', country: 'Brazil', slots: 2, interests: 'Pediatrics', notes: 'Prefers mentees in Portuguese', phone: '+55 81 99000-0206', email: 'juliana.prado@example.com', level: 1, area: 'Pediatrics', position: 'MD', affiliation: 'UFPE', langs: ['BR','EN'], start: new Date(2026, 6, 20), end: new Date(2027, 0, 20) }
 ];
 const ME = 'Vânio Antunes';
 function mentorOf(mentee) { const m = MENTEES.filter((x) => x.name === mentee)[0]; const md = m && MENTORS_DATA.filter((x) => x.name === m.mentor)[0]; return { name: m ? m.mentor : '', email: md ? md.email : '' }; }
@@ -3126,7 +3202,8 @@ function syncViability(td, studies) {
   return out;
 }
 // publication status is manual; this explains when it contradicts the approved Stage 8 tasks
-const SUBMIT_TASK = '8-2', ACCEPT_TASK = '8-4';
+const SUBMIT_TASK = '8-2', ACCEPT_TASK = '8-4', INTERNAL_REVIEW_TASK = '7-7';
+const PROJECT_PUB_STAGES = ['Working', 'Waiting senior', 'Waiting submission', 'Waiting review', 'Accepted'];
 function pubMismatch(p) {
   const status = (p.details && p.details.pubStatus) || 'Not started';
   const td = p.taskDone || {};
@@ -3164,94 +3241,9 @@ const PICOTT_BLANK = { author: '', year: '', title: '', doi: '', quality: '', p:
 function exampleStudies(list) { return list.map((x, i) => Object.assign({ id: i + 1 }, PICOTT_BLANK, x)); }
 function seedProjects() {
   return [
-    // the original template project; its live data sits in top-level state while open
-    { id: 'p1', mentee: 'Isabella Michelon', name: 'Example 1', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 31), docs: [{ id: 'd1', name: 'Project folder', url: 'drive.google.com/example-1' }], taskDocs: { '0-0': ['d1'] }, registration: { registry: 'PROSPERO', id: '', status: 'Draft' }, taskDone: {}, taskNotes: {}, picott: {}, studies: [], details: {}, logbook: [] },
-    {
-      id: 'p2', mentee: 'Isabella Michelon', name: 'SGLT2 inhibitors for anthracycline cardiotoxicity', updated: new Date(2026, 7, 27), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults receiving anthracycline chemotherapy', i: 'SGLT2 inhibitors', c: 'Placebo or standard care', o: 'Cancer therapy-related cardiac dysfunction', t: '6–24 months', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(11),
-      registration: { registry: 'PROSPERO', id: '', status: 'Registered' },
-      studies: exampleStudies([
-        { author: 'Almeida', year: '2025', title: 'Empagliflozin during anthracycline chemotherapy for breast cancer', doi: '10.5555/example.cardio.01', p: 'Women with HER2-negative breast cancer on anthracyclines', i: 'Empagliflozin 10 mg', c: 'Placebo', o: 'Drop in LVEF ≥ 10 points', t: '12 months', t2: 'RCT' },
-        { author: 'Kowalski', year: '2024', title: 'SGLT2 inhibitor use and heart failure after lymphoma chemotherapy', doi: '10.5555/example.cardio.02', p: 'Adults with lymphoma and type 2 diabetes', i: 'SGLT2 inhibitor', c: 'Other glucose-lowering drugs', o: 'Heart failure hospitalisation', t: '24 months', t2: 'Cohort' },
-        { author: 'Haddad', year: '2026', title: 'Dapagliflozin and global longitudinal strain in cancer survivors', doi: '10.5555/example.cardio.03', p: 'Anthracycline-treated cancer survivors', i: 'Dapagliflozin', c: 'Standard care', o: 'Global longitudinal strain', t: '6 months', t2: 'RCT' }
-      ]),
-      details: { drive: 'drive.google.com/sglt2-cardio-oncology', docs: 'Protocol v1.docx · Search strings.txt', pubStatus: 'In progress', pubDoi: '', presentations: '—', freeCat: '' },
-      logbook: [
-        { id: 1, date: new Date(2026, 7, 13), author: 'Vânio Antunes', role: 'mentor', stage: 'Protocol', text: 'PROSPERO registration confirmed. Keep LVEF drop ≥ 10 points as the primary outcome.', link: '' },
-        { id: 2, date: new Date(2026, 7, 27), author: 'Isabella Michelon', role: 'mentee', stage: 'Screening', text: 'Deduplicated 1,214 records in Rayyan; title and abstract screening started with a second reviewer.', link: '' }
-      ]
-    },
-    {
-      id: 'p3', mentee: 'Maria L. R. Defante', name: 'Immune checkpoint inhibitors in MSI-high gastrointestinal cancers', updated: new Date(2026, 7, 28), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Patients with MSI-H/dMMR gastrointestinal cancers', i: 'Immune checkpoint inhibitors', c: 'Chemotherapy', o: 'Overall and progression-free survival', t: '2–5 years', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(22, 1),
-      registration: { registry: 'PROSPERO', id: 'CRD42026-demo-03', status: 'Registered' },
-      conferences: [{ id: 'c1', name: 'ESMO GI 2027', files: '', decision: 'Pending' }],
-      studies: exampleStudies([
-        { author: 'Fischer', year: '2022', title: 'Pembrolizumab versus chemotherapy in MSI-high metastatic colorectal cancer', doi: '10.5555/example.onco.01', p: 'Metastatic MSI-H/dMMR colorectal cancer', i: 'Pembrolizumab', c: 'Chemotherapy ± targeted therapy', o: 'Overall survival', t: '5 years', t2: 'RCT' },
-        { author: 'Nakamura', year: '2024', title: 'Nivolumab plus ipilimumab in dMMR gastric cancer', doi: '10.5555/example.onco.02', p: 'Advanced dMMR gastric or GEJ cancer', i: 'Nivolumab + ipilimumab', c: 'Chemotherapy', o: 'Progression-free survival', t: '3 years', t2: 'RCT' },
-        { author: 'Ribeiro', year: '2025', title: 'Real-world outcomes of first-line immunotherapy in MSI-high GI tumours', doi: '10.5555/example.onco.03', p: 'MSI-H gastrointestinal tumours', i: 'First-line immune checkpoint inhibitor', c: 'First-line chemotherapy', o: 'Overall survival', t: '2 years', t2: 'Cohort' }
-      ]),
-      details: { drive: 'drive.google.com/ici-msi-gi', docs: 'Extraction sheet.xlsx · R script v3.R', pubStatus: 'In progress', pubDoi: '', presentations: 'Abstract submitted · ESMO GI 2027', freeCat: '' },
-      logbook: [
-        { id: 1, date: new Date(2026, 7, 20), author: 'Maria L. R. Defante', role: 'mentee', stage: 'Statistics', text: 'Random-effects model for OS finished (HR pooled from 6 trials). Heterogeneity moderate.', link: '' },
-        { id: 2, date: new Date(2026, 7, 28), author: 'Vânio Antunes', role: 'mentor', stage: 'Statistics', text: 'Add a sensitivity analysis excluding the cohort studies before moving to quality assessment.', link: '' }
-      ]
-    },
-    {
-      id: 'p4', mentee: 'Pedro Henrique Costa', name: 'Letermovir vs valganciclovir for CMV prophylaxis after kidney transplant', updated: new Date(2026, 7, 14), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Kidney transplant recipients at risk of CMV', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'CMV infection and leukopenia', t: '28–52 weeks', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(38),
-      registration: { registry: 'OSF', id: 'osf.io/demo4', status: 'Registered' },
-      journals: [
-        { id: 'j1', name: 'Transplant Infectious Disease', files: '', rounds: [{ id: 'r1', label: 'Review 1', decision: 'Pending', questions: '', files: '' }] }
-      ],
-      coauthors: [{ id: 'a1', stage: 7, kind: 'mentee', name: 'Camila Rocha', email: '', senior: true }],
-      studies: exampleStudies([
-        { author: 'Schmidt', year: '2023', title: 'Letermovir versus valganciclovir for CMV prophylaxis in kidney transplant recipients', doi: '10.5555/example.id.01', p: 'CMV D+/R− adult kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Clinically significant CMV infection', t: '52 weeks', t2: 'RCT' },
-        { author: 'Park', year: '2024', title: 'Leukopenia with letermovir compared with valganciclovir after transplant', doi: '10.5555/example.id.02', p: 'Solid organ transplant recipients', i: 'Letermovir prophylaxis', c: 'Valganciclovir prophylaxis', o: 'Leukopenia', t: '28 weeks', t2: 'Cohort' },
-        { author: 'Lindqvist', year: '2025', title: 'Late-onset CMV disease after letermovir prophylaxis', doi: '10.5555/example.id.03', p: 'High-risk kidney transplant recipients', i: 'Letermovir', c: 'Valganciclovir', o: 'Late-onset CMV disease', t: '12 months', t2: 'Cohort' }
-      ]),
-      details: { drive: 'drive.google.com/cmv-prophylaxis-ktx', docs: 'Manuscript v5.docx · Cover letter.docx', pubStatus: 'Under review', pubDoi: '', presentations: 'Poster · ESCMID Global 2026', freeCat: 'Co-authored with a transplant ID group abroad' },
-      logbook: [
-        { id: 1, date: new Date(2026, 7, 3), author: 'Pedro Henrique Costa', role: 'mentee', stage: 'Submission', text: 'Submitted to Transplant Infectious Disease. Mentorship paused for exams; tracking reviewer response.', link: '' }
-      ]
-    },
-    {
-      id: 'p5', mentee: 'Camila Rocha', name: 'Early vs delayed dialysis for AKI after cardiac surgery', updated: new Date(2026, 7, 30), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults with AKI after cardiac surgery', i: 'Early renal replacement therapy', c: 'Delayed renal replacement therapy', o: '90-day mortality and dialysis dependence', t: '90 days', t2: 'Systematic review and meta-analysis' },
-      taskDone: tasksDone(30, 1),
-      registration: { registry: 'PROSPERO', id: 'CRD42026-demo-05', status: 'Registered' },
-      coauthors: [{ id: 'a1', stage: 4, kind: 'mentee', name: 'Isabella Michelon', email: '', senior: false }],
-      studies: exampleStudies([
-        { author: 'Rossi', year: '2023', title: 'Early renal replacement therapy after cardiac surgery-associated AKI', doi: '10.5555/example.neph.01', p: 'Adults with KDIGO stage 2 AKI after cardiac surgery', i: 'Early RRT (< 12 h)', c: 'Delayed RRT', o: '90-day mortality', t: '90 days', t2: 'RCT' },
-        { author: 'Mendes', year: '2022', title: 'Timing of dialysis and kidney recovery after cardiopulmonary bypass', doi: '10.5555/example.neph.02', p: 'Patients with AKI after cardiopulmonary bypass', i: 'Early dialysis', c: 'Standard-trigger dialysis', o: 'Dialysis dependence', t: '90 days', t2: 'Cohort' },
-        { author: 'Novak', year: '2024', title: 'Accelerated versus standard RRT in postoperative AKI', doi: '10.5555/example.neph.03', p: 'Critically ill postoperative AKI', i: 'Accelerated RRT', c: 'Standard RRT', o: 'Mortality', t: '90 days', t2: 'RCT' }
-      ]),
-      details: { drive: 'drive.google.com/rrt-timing-csa-aki', docs: 'Manuscript draft v2.docx · Forest plots.pdf', pubStatus: 'In progress', pubDoi: '', presentations: '—', freeCat: '' },
-      logbook: [
-        { id: 1, date: new Date(2026, 7, 24), author: 'Camila Rocha', role: 'mentee', stage: 'Manuscript Writing', text: 'Methods and results sections drafted; GRADE tables attached to the manuscript folder.', link: '' },
-        { id: 2, date: new Date(2026, 7, 30), author: 'Vânio Antunes', role: 'mentor', stage: 'Manuscript Writing', text: 'Discussion needs to address the heterogeneity in the definition of “early”.', link: '' }
-      ]
-    },
-    {
-      id: 'p6', mentee: 'Camila Rocha', name: 'Remote ischaemic preconditioning to prevent AKI after cardiac surgery', updated: new Date(2026, 7, 11), status: 'Active', reviewNote: '', taskNotes: {}, picott: { p: 'Adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham or no preconditioning', o: 'Postoperative AKI', t: '72 hours', t2: 'Systematic review and meta-analysis of RCTs' },
-      taskDone: tasksDone(4),
-      coauthors: [{ id: 'a1', stage: 7, kind: 'mentee', name: 'Isabella Michelon', email: '', senior: true }],
-      studies: exampleStudies([
-        { author: 'Silva', year: '2021', title: 'Remote ischaemic preconditioning and AKI in high-risk cardiac surgery', doi: '10.5555/example.neph.04', p: 'High-risk adults undergoing cardiac surgery', i: 'Remote ischaemic preconditioning', c: 'Sham preconditioning', o: 'AKI within 72 h', t: '72 hours', t2: 'RCT' }
-      ]),
-      details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
-      logbook: []
-    },
-    {
-      id: 'p7', mentee: 'Maria L. R. Defante', name: 'Neoadjuvant immunotherapy in dMMR locally advanced rectal cancer', status: 'Proposed', reviewNote: '', updated: new Date(2026, 7, 30),
-      taskDone: {}, taskNotes: {},
-      picott: { p: 'Patients with dMMR locally advanced rectal cancer', i: 'Neoadjuvant PD-1 blockade', c: 'Chemoradiotherapy', o: 'Clinical complete response', t: '12 months', t2: 'Systematic review and meta-analysis' },
-      studies: [],
-      details: { drive: '', docs: '', pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' },
-      logbook: []
-    },
     // ---- real projects (from claudeOS/mentorship/mentees), task states mapped by hand; ids are stage-task ----
     {
-      id: 'p8', mentee: 'Gustavo Gurian', name: 'Antibiotic prophylaxis and PEECS after endoscopic submucosal dissection', status: 'Active', reviewNote: '', updated: new Date(2026, 8, 9),
+      id: 'p8', mentee: 'Caroline Dagostin', started: new Date(2026, 3, 26), name: 'Antibiotic prophylaxis and PEECS after endoscopic submucosal dissection', status: 'Active', reviewNote: '', updated: new Date(2026, 8, 9),
       picott: { p: 'Adults undergoing ESD or related procedures (POEM, EFTR): colorectal, oesophageal, gastric', i: 'Systemic antibiotic prophylaxis', c: 'No prophylaxis (placebo or usual care)', o: 'PEECS (primary); length of stay, fever, bacteraemia, infection, mortality', t: 'Index admission or within 30 days', t2: 'Systematic review and meta-analysis (RCTs and observational), stratified by anatomical site', reviewType: 'Intervention', secondaryQs: 'The workbook runs four PICOTs (A–D). A is the primary question above; B–D (by organ and procedure) are analysed as secondary questions.' },
       taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '2-3': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '4-2': true, '5-0': true, '5-1': true, '5-2': true, '5-3': 'ready', '7-0': 'ready', '7-1': 'ready' },
       taskNotes: {},
@@ -3268,6 +3260,10 @@ function seedProjects() {
       taskDocs: { '0-0': ['d1'], '2-3': ['d2'], '4-1': ['d3'], '4-2': ['d3'], '5-0': ['d4'], '5-1': ['d5'], '5-3': ['d6'], '7-0': ['d7'], '7-1': ['d7'], '8-1': ['d8'] },
       registration: { registry: 'PROSPERO', id: 'CRD420261379673', status: 'Amendment pending' },
       expert: { status: 'Searching', kind: 'external', name: '', email: '' },
+      coauthors: [
+        { id: 'a1', stage: 0, kind: 'mentee', name: 'Gustavo Gurian', email: '', senior: false },
+        { id: 'a2', stage: 4, kind: 'mentee', name: 'Isabella Michelon', email: '', senior: false }
+      ],
       studies: exampleStudies([
         { author: 'Muro', year: '2015', quality: '', p: 'Colorectal ESD', i: 'Antibiotic prophylaxis (regimen NR)', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'Observational · n = 421 · Japan' },
         { author: 'Lee', year: '2017', quality: '', p: 'Colorectal ESD', i: 'Ampicillin/sulbactam', c: 'No prophylaxis', o: 'PEECS', t: 'NR', t2: 'RCT · n = 100 · Korea' },
@@ -3290,7 +3286,7 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p9', mentee: 'Gustavo Gurian', name: 'Cap-assisted forward-viewing endoscope vs side-viewing duodenoscope for ERCP in Billroth II', status: 'Active', reviewNote: '', updated: new Date(2026, 4, 25),
+      id: 'p9', mentee: 'Ana Beatriz Moraes', started: new Date(2025, 11, 20), name: 'Cap-assisted forward-viewing endoscope vs side-viewing duodenoscope for ERCP in Billroth II', status: 'Active', reviewNote: '', updated: new Date(2026, 4, 25),
       picott: { p: 'Adults undergoing ERCP with Billroth II anatomy', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Afferent limb intubation, biliary cannulation, clinical success; pancreatitis, perforation, unintended PD cannulation', t: 'Not reported', t2: 'Systematic review and meta-analysis with GRADE and trial sequential analysis' },
       taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-0': true, '2-1': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '3-4': true, '4-0': true, '4-1': true, '4-2': true, '4-3': true, '5-0': true, '5-1': true, '5-2': true, '5-3': true, '5-4': true, '6-0': true, '6-1': true, '6-2': true, '6-3': true, '7-0': true, '7-1': true, '7-2': true, '7-3': true, '7-4': true, '7-5': true, '7-7': true, '8-0': true, '8-1': true, '8-2': true },
       taskNotes: {},
@@ -3304,6 +3300,10 @@ function seedProjects() {
           { id: 'r1', label: 'Review 1', decision: 'Major revision', questions: 'Editorial 2.1–2.2 · Reviewer 1: 3.1–3.9 · Reviewer 3: 4.1, 4.3', files: '' },
           { id: 'r2', label: 'Revision 2', decision: 'Pending', questions: 'Mentor: 3.1, 3.2, 3.5, 3.9. Mentee: Editorial 2.1/2.2, R1 3.3, 3.4, 3.6–3.8, R3 4.1, 4.3. New prediction intervals and a risk-of-bias subgroup (Supp Table 11).', files: 'https://drive.google.com/drive/folders/18uo4tuz2ZTSsTRZ-X8msIIQ-P2P8fFYh' }
         ] }
+      ],
+      coauthors: [
+        { id: 'a1', stage: 7, kind: 'mentee', name: 'Gustavo Gurian', email: '', senior: true },
+        { id: 'a2', stage: 3, kind: 'mentee', name: 'Camila Rocha', email: '', senior: false }
       ],
       studies: exampleStudies([
         { author: 'Kim SB', year: '2023', quality: 'Moderate', p: 'Billroth II ERCP', i: 'Cap-assisted forward-viewing endoscope', c: 'Side-viewing duodenoscope', o: 'Intubation, cannulation, adverse events', t: 'NR', t2: 'Observational' },
@@ -3322,7 +3322,7 @@ function seedProjects() {
       ]
     },
     {
-      id: 'p10', mentee: 'Júlia Miranda', name: 'Tumour contact length on MRI for predicting muscle-invasive bladder cancer', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 23),
+      id: 'p10', mentee: 'Letícia Moura', started: new Date(2026, 4, 19), name: 'Tumour contact length on MRI for predicting muscle-invasive bladder cancer', status: 'Active', reviewNote: '', updated: new Date(2026, 7, 23),
       picott: { p: 'Bladder tumours staged with multiparametric MRI before histology (lesion level)', i: 'Index test: tumour contact length (TCL), curvilinear or transverse', c: 'Comparator test: VI-RADS ≥3 (paired)', o: 'Sensitivity, specificity, AUC against histopathology (TURBT or cystectomy)', t: 'Not applicable (diagnostic accuracy)', t2: 'Diagnostic test accuracy meta-analysis', reviewType: 'Diagnostic accuracy', secondaryQs: 'Transverse vs curvilinear TCL measurement; TCL vs VI-RADS head-to-head (paired studies only).' },
       taskDone: { '0-0': true, '0-1': true, '1-0': true, '1-1': true, '1-2': true, '2-2': true, '3-0': true, '3-1': true, '3-2': true, '3-3': true, '4-0': true, '4-1': true, '5-0': true, '5-1': true, '5-2': true, '7-0': 'ready', '7-1': 'ready', '7-2': 'ready', '7-3': 'ready' },
       taskNotes: {},
@@ -3335,8 +3335,10 @@ function seedProjects() {
       registration: { registry: 'PROSPERO', id: '', status: 'Not registered' },
       conferences: [{ id: 'c1', name: 'SAR 2027 (Society of Abdominal Radiology)', files: '', decision: 'Pending' }],
       coauthors: [
-        { id: 'a1', stage: 3, kind: 'external', name: 'Sara', email: '', senior: false },
-        { id: 'a2', stage: 3, kind: 'external', name: 'Beatriz', email: '', senior: false }
+        { id: 'a1', stage: 0, kind: 'mentee', name: 'Júlia Miranda', email: '', senior: false },
+        { id: 'a2', stage: 3, kind: 'external', name: 'Sara', email: '', senior: false },
+        { id: 'a3', stage: 3, kind: 'external', name: 'Beatriz', email: '', senior: false },
+        { id: 'a4', stage: 7, kind: 'mentee', name: 'Maria L. R. Defante', email: '', senior: true }
       ],
       studies: exampleStudies([
         { author: 'Ahn H', year: '2023', quality: '', p: '247 lesions · 26 MIBC', i: 'TCL curvilinear, cutoff 3.0', c: 'VI-RADS ≥3', o: 'MIBC detection', t: 'NA', t2: 'DTA study' },
@@ -3370,6 +3372,7 @@ function seedProjects() {
   });
 }
 
+const SEED_PROJECTS = seedProjects();
 const TIME_OPTIONS = (function () {
   const out = [];
   for (let m = 6 * 60; m <= 22 * 60; m += 30) out.push(fmt(m));
@@ -3398,12 +3401,12 @@ class Component extends DCLogic {
     booked: null,
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
-    projectTab: 'progress', taskDone: { '1-2': 'ready' }, taskNotes: {},
-    projectPicott: { p: 'Adults after cardiac surgery', i: 'Early mobilisation', c: 'Standard care', o: 'ICU length of stay', t: '30 days', t2: 'Systematic review and meta-analysis of RCTs', reviewType: 'Intervention', secondaryQs: '' }, picottDraft: null,
-    projectName: 'Example 1',
-    studies: PICOTT_STUDIES.map((x, i) => Object.assign({ id: i + 1 }, x)),
+    projectTab: 'progress', taskDone: SEED_PROJECTS[0].taskDone, taskNotes: SEED_PROJECTS[0].taskNotes || {},
+    projectPicott: SEED_PROJECTS[0].picott, picottDraft: null,
+    projectName: SEED_PROJECTS[0].name,
+    studies: SEED_PROJECTS[0].studies,
     studyEdit: null, studyDraft: null,
-    details: { pubStatus: 'In progress', pubDoi: '', presentations: 'Poster · SBC 2026', freeCat: 'Travel grant · ESC Congress' },
+    details: SEED_PROJECTS[0].details,
     detailsDraft: null,
     hubLinks: { metawriters: '', icu: '' },
     calEvents: seedCalEvents(), blockEdits: {}, blockHidden: {}, customBlocks: [],
@@ -3413,15 +3416,11 @@ class Component extends DCLogic {
     profile: { affiliation: 'Meta-Analysis Academy', country: 'Brazil', bio: '' },
     copiedEmail: '',
     coOpen: null, coDraft: { mentee: '', name: '', email: '', senior: false },
-    projects: seedProjects(), projectId: 'p1', projectFilter: 'All mentees',
-    adSort: { key: 'end', dir: 1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
+    projects: SEED_PROJECTS, projectId: SEED_PROJECTS[0].id, projectFilter: 'All mentees',
+    adSort: { key: 'end', dir: 1 }, adSection: 'mentees', adMentorSort: { key: 'name', dir: 1 }, adProjSort: { key: 'started', dir: -1 }, adWin: 7, adTip: null, notifOpen: false, notifRead: {},
     menteeSel: null, prevPage: 'mentees',
     theme: (function () { try { return localStorage.getItem('mh-theme') === 'dark' ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
-    logbook: [
-      { id: 1, date: new Date(2026, 7, 4), author: 'Vânio Antunes', role: 'mentor', stage: 'Research Question', text: 'PICOTT agreed: adults after cardiac surgery, early mobilisation vs standard care, ICU length of stay at 30 days.', link: '' },
-      { id: 2, date: new Date(2026, 7, 19), author: 'Isabella Michelon', role: 'mentee', stage: 'Protocol', text: 'Search strings drafted for PubMed, Embase and Cochrane. Saved the full log in the project folder.', link: 'drive.google.com/example-1/search-log' },
-      { id: 3, date: new Date(2026, 7, 26), author: 'Vânio Antunes', role: 'mentor', stage: 'Protocol', text: 'Reviewed protocol v2. Register on PROSPERO before screening starts.', link: '' }
-    ],
+    logbook: SEED_PROJECTS[0].logbook,
     logDraft: { stage: 'Protocol', text: '', link: '' },
     logEdit: null, logEditDraft: null,
     google: { connected: true, account: 'vanio.antunes.md@gmail.com', calendar: 'Mentoria MAA', blockConflicts: true, autoAdd: true, meetLink: true, syncedAt: '2 minutes ago' },
@@ -3556,7 +3555,7 @@ class Component extends DCLogic {
     if (d.kind === 'project') {
       const proposed = this.state.role === 'mentee';
       const proj = {
-        id: 'p' + Date.now(), mentee: v.mentee || this.newProjectMentees()[0], name: v.title.trim(), status: proposed ? 'Proposed' : 'Active', reviewNote: '', updated: TODAY,
+        id: 'p' + Date.now(), mentee: v.mentee || this.newProjectMentees()[0], started: TODAY, name: v.title.trim(), status: proposed ? 'Proposed' : 'Active', reviewNote: '', updated: TODAY,
         taskDone: {}, taskNotes: {}, docs: [], taskDocs: {}, registration: Object.assign({}, REG_BLANK), journals: [], conferences: [], coauthors: [], expert: Object.assign({}, EXPERT_BLANK),
         picott: { p: v.p, i: v.i, c: v.c, o: v.o, t: v.t, t2: v.t2, reviewType: v.reviewType || 'Intervention', secondaryQs: '' },
         studies: [], details: { pubStatus: 'Not started', pubDoi: '', presentations: '', freeCat: '' }, logbook: []
@@ -3860,6 +3859,27 @@ class Component extends DCLogic {
     };
   }
 
+  // first-author and co-author project counts for one mentee (admin tables)
+  projectCounts(name) {
+    const first = this.state.projects.filter((p) => p.mentee === name).length;
+    const co = this.state.projects.filter((p) => p.mentee !== name && (p.coauthors || []).some((c) => c.kind === 'mentee' && c.name === name)).length;
+    return { first: first, co: co, total: first + co, label: first + (co ? ' + ' + co + ' co' : '') };
+  }
+  // publication stage for the admin projects table, derived from tasks and Stage 8 submissions
+  projectPubStage(p) {
+    const rounds = [];
+    (p.journals || []).forEach((j) => (j.rounds || []).forEach((r) => rounds.push(r)));
+    const lastJournal = (p.journals || [])[(p.journals || []).length - 1];
+    const lastRound = lastJournal && (lastJournal.rounds || [])[(lastJournal.rounds || []).length - 1];
+    const pub = (p.details && p.details.pubStatus) || '';
+    const td = p.taskDone || {};
+    if (pub === 'Accepted' || pub === 'Published' || rounds.some((r) => r.decision === 'Accepted') || isApproved(td[ACCEPT_TASK])) return 'Accepted';
+    if (lastRound && lastRound.decision === 'Pending') return 'Waiting review';
+    if ((lastRound && lastRound.decision === 'Rejected') || isApproved(td[INTERNAL_REVIEW_TASK])) return 'Waiting submission';
+    if (Object.keys(td).some((k) => td[k] === 'ready')) return 'Waiting senior';
+    return 'Working';
+  }
+
   adminVals() {
     const st = this.state;
     const admin = st.role === 'admin';
@@ -3879,7 +3899,7 @@ class Component extends DCLogic {
     // ---- sortable table
     const COLS = [
       ['name', 'Mentee', (r) => r.m.name], ['phone', 'WhatsApp', (r) => r.a.phone], ['start', 'Start', (r) => r.start.getTime()], ['end', 'End', (r) => r.end.getTime()],
-      ['status', 'Status', (r) => ADMIN_STATUSES.indexOf(r.a.status)], ['projects', 'Projects', (r) => r.m.projects], ['meetings', 'Meetings', (r) => r.m.sessions],
+      ['status', 'Status', (r) => ADMIN_STATUSES.indexOf(r.a.status)], ['projects', 'Projects', (r) => this.projectCounts(r.m.name).total], ['meetings', 'Meetings', (r) => r.m.sessions],
       ['reschedules', 'Reschedules', (r) => r.a.reschedules], ['renewals', 'Renewals', (r) => r.a.renewals]
     ];
     const getter = (COLS.filter((c) => c[0] === st.adSort.key)[0] || COLS[3])[2];
@@ -3908,7 +3928,111 @@ class Component extends DCLogic {
     const bar = (pct, color) => 'display:block; height:100%; min-width:' + (pct > 0 ? '4px' : '0') + '; width:' + pct + '%; border-radius:0 4px 4px 0; background:' + color;
     const tabStyle = (on) => 'height:30px; padding:0 12px; border:0; border-radius:6.6px; font-size:13px; cursor:pointer; ' + (on ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; font-weight:500; color:hsl(var(--c-38-6-42))');
 
+    // ---- sortable headers shared by the mentor and project tables
+    const sortRows = (list, cols, sort, tie) => {
+      const get = (cols.filter((c) => c[0] === sort.key)[0] || cols[0])[2];
+      return list.slice().sort((x, y) => {
+        const a = get(x), b = get(y);
+        const c = typeof a === 'string' ? a.localeCompare(b) : a - b;
+        return c ? c * sort.dir : tie(x).localeCompare(tie(y));
+      });
+    };
+    const heads = (cols, stateKey, numSet) => cols.map((c) => {
+      const cur = this.state[stateKey], on = cur.key === c[0], num = !!numSet[c[0]];
+      return {
+        label: c[1],
+        arrow: on ? (cur.dir === 1 ? '▲' : '▼') : '',
+        aria: on ? (cur.dir === 1 ? 'ascending' : 'descending') : 'none',
+        style: 'display:flex; align-items:center; gap:4px; width:100%; padding:0; border:0; background:transparent; font-family:inherit; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; cursor:pointer; ' + (num ? 'justify-content:flex-end; ' : '') + 'color:' + (on ? 'hsl(var(--c-234-68-12))' : 'hsl(var(--c-38-6-42))'),
+        sort: () => { const o = {}; o[stateKey] = { key: c[0], dir: on ? -cur.dir : 1 }; this.setState(o); }
+      };
+    });
+
+    // ---- mentors (columns follow the ClickUp "Mentor Information" table)
+    const mentorStatus = (md) => md.status || 'Mentor Level ' + md.level;
+    const MENTOR_SC = { 'Ready': '155-40-27', 'Mentor Level 2': '234-85-14', 'Mentor Level 1': '330-70-45' };
+    const menteeCount = (md) => MENTEES.filter((m) => m.mentor === md.name && (m.status === 'Active' || m.status === 'Paused')).length;
+    const MCOLS = [
+      ['name', 'Name', (md) => md.name], ['status', 'Status', (md) => mentorStatus(md)], ['slots', 'Slots', (md) => md.slots || 0],
+      ['level2', 'Level 2', (md) => md.end.getTime()], ['country', 'Country', (md) => md.country || ''], ['email', 'Email', (md) => md.email || ''],
+      ['interests', 'Interests', (md) => md.interests || ''], ['notes', 'Notes', (md) => md.notes || ''], ['phone', 'Contact', (md) => md.phone || ''],
+      ['mentees', '# Mentees', (md) => menteeCount(md)]
+    ];
+    const mentorRows = sortRows(MENTORS_DATA, MCOLS, st.adMentorSort, (md) => md.name);
+    const fmtMY = (d) => MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+
+    // ---- projects
+    const PCOLS = [
+      ['name', 'Project', (p) => p.name], ['mentee', 'Mentee', (p) => p.mentee], ['mentor', 'Mentor', (p) => mentorOf(p.mentee).name],
+      ['started', 'Started', (p) => (p.started || p.updated).getTime()], ['stage', 'Stage', (p) => PROJECT_PUB_STAGES.indexOf(this.projectPubStage(p))],
+      ['rejections', 'Rejections', (p) => (p.journals || []).reduce((n, j) => n + (j.rounds || []).filter((r) => r.decision === 'Rejected').length, 0)],
+      ['journals', 'Journals tried', (p) => (p.journals || []).map((j) => j.name).join(', ')], ['doi', 'DOI / link', (p) => (p.details && p.details.pubDoi) || '']
+    ];
+    const projRows = sortRows(this.state.projects.map((p) => this.projectData(p)), PCOLS, st.adProjSort, (p) => p.name);
+    const STAGE_SC = { 'Working': '38-6-42', 'Waiting senior': '40-78-44', 'Waiting submission': '212-85-20', 'Waiting review': '234-85-14', 'Accepted': '155-40-27' };
+    const secTab = (key) => 'height:32px; padding:0 14px; border:0; border-radius:6.6px; font-size:14px; cursor:pointer; ' + (st.adSection === key ? 'background:hsl(var(--c-42-33-99)); font-weight:600; color:hsl(var(--c-234-68-12)); box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)' : 'background:transparent; color:hsl(var(--c-38-6-42))');
+
     return {
+      adSecMentees: st.adSection === 'mentees',
+      adSecMentors: st.adSection === 'mentors',
+      adSecProjects: st.adSection === 'projects',
+      adSections: [['mentees', 'Mentees', MENTEES.filter((m) => MENTEE_ADMIN[m.name]).length], ['mentors', 'Mentors', MENTORS_DATA.length], ['projects', 'Projects', this.state.projects.length]].map((x) => ({
+        label: x[1] + ' · ' + x[2],
+        pressed: st.adSection === x[0],
+        style: secTab(x[0]),
+        go: () => this.setState({ adSection: x[0] })
+      })),
+      adMentorHeaders: heads(MCOLS, 'adMentorSort', { slots: 1, mentees: 1 }),
+      adMentorCount: MENTORS_DATA.length + ' mentors · ' + MENTORS_DATA.reduce((n, md) => n + (md.slots || 0), 0) + ' open slots',
+      adMentorRows: mentorRows.map((md) => {
+        const status = mentorStatus(md);
+        return {
+          name: md.name,
+          status: status,
+          statusStyle: pill(MENTOR_SC[status] || '38-6-42'),
+          slots: md.slots || 0,
+          slotsStyle: "font-family:'JetBrains Mono', monospace; font-size:13px; text-align:right; font-weight:" + (md.slots ? '700' : '400'),
+          level2: md.level === 2 ? fmtMY(md.end) : '—',
+          level2Note: md.level === 2 ? '' : 'Expected ' + fmtMY(md.end),
+          hasLevel2Note: md.level !== 2,
+          country: md.country || '—',
+          email: md.email || '—',
+          mailto: md.email ? 'mailto:' + md.email : '#',
+          interests: md.interests || '—',
+          notes: md.notes || '—',
+          phone: md.phone || '—',
+          wa: md.phone ? waLink(md.phone) : '#',
+          mentees: menteeCount(md),
+          rowStyle: 'display:grid; grid-template-columns:minmax(160px,1.3fr) 124px 60px 118px 110px minmax(200px,1.2fr) minmax(160px,1fr) minmax(170px,1fr) 160px 76px; gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px'
+        };
+      }),
+      adProjHeaders: heads(PCOLS, 'adProjSort', { rejections: 1 }),
+      adProjCount: this.state.projects.length + ' projects',
+      adProjLegend: 'Stage: Accepted (accepted round or status) · Waiting review (last round pending at the journal) · Waiting submission (internal review approved, or last journal rejected) · Waiting senior (tasks waiting for mentor or senior review) · Working.',
+      adProjRows: projRows.map((p) => {
+        const stage = this.projectPubStage(p);
+        const doi = (p.details && p.details.pubDoi) || '';
+        const co = (p.coauthors || []).length;
+        return {
+          name: p.name,
+          open: this.openProject(p.id),
+          mentee: p.mentee,
+          openMentee: this.openMentee(p.mentee),
+          mentor: mentorOf(p.mentee).name || '—',
+          coauthors: co + ' co-author' + (co === 1 ? '' : 's'),
+          hasCoauthors: co > 0,
+          started: fmtD(p.started || p.updated),
+          stage: stage,
+          stageStyle: pill(STAGE_SC[stage]),
+          rejections: PCOLS[5][2](p),
+          journals: (p.journals || []).map((j) => j.name).filter(Boolean).join(', ') || '—',
+          doi: doi,
+          hasDoi: !!doi,
+          noDoi: !doi,
+          doiHref: /^https?:/.test(doi) ? doi : 'https://doi.org/' + doi,
+          rowStyle: 'display:grid; grid-template-columns:minmax(260px,2.2fr) 150px 130px 104px 150px 92px minmax(170px,1fr) minmax(150px,1fr); gap:12px; align-items:center; padding:10px 20px; border-top:1px solid hsl(var(--c-42-12-84)); font-size:13px'
+        };
+      }),
       isAdminPage: st.page === 'admin' && admin,
       adminDenied: st.page === 'admin' && !admin,
       adIcon: { __html: ICONS.shield.replace('width="16" height="16"', 'width="20" height="20"') },
@@ -3939,7 +4063,7 @@ class Component extends DCLogic {
           endNoteStyle: 'font-size:11px; font-weight:700; color:' + (soon ? 'hsl(var(--c-40-78-44))' : 'hsl(var(--c-38-6-42))'),
           status: r.a.status,
           statusStyle: pill(SC[r.a.status]),
-          projects: r.m.projects,
+          projects: this.projectCounts(r.m.name).label,
           meetings: r.m.sessions,
           reschedules: r.a.reschedules,
           renewals: r.a.renewals,
@@ -5363,6 +5487,8 @@ class Component extends DCLogic {
       projectCards: this.projectCardVals(this.ownProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || p.mentee === st.projectFilter)),
       coProjectCards: this.projectCardVals(this.coauthorProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || (p.coauthors || []).some((c) => c.name === st.projectFilter)), true),
       hasCoProjects: this.coauthorProjects().length > 0,
+      noFirstAuthor: this.coauthorProjects().length > 0 && this.ownProjects().filter((p) => st.role === 'mentee' || st.projectFilter === 'All mentees' || p.mentee === st.projectFilter).length === 0,
+      noFirstAuthorText: st.role === 'mentee' ? 'You are not first author on any project yet.' : 'None of your mentees leads a project yet.',
       firstAuthorHeading: st.role === 'mentee' ? 'First-author projects' : 'First-author projects (your mentees lead)',
       coAuthorHeading: st.role === 'mentee' ? 'Co-author projects' : 'Projects where your mentees are co-authors',
       ...this.adminVals(),
