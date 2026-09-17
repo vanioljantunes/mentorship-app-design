@@ -471,7 +471,7 @@
           <div style="display:grid; gap:4px; margin-top:16px">
             <sc-for list="{{ adWaitRows }}" as="wr" hint-placeholder-count="5">
               <div tabindex="0" onMouseEnter="{{ wr.enter }}" onMouseLeave="{{ adLeave }}" onFocus="{{ wr.enter }}" onBlur="{{ adLeave }}" style="{{ wr.rowStyle }}">
-                <span style="font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ wr.name }}</span>
+                <span style="display:grid; gap:1px; min-width:0"><span style="font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ wr.name }}</span><span title="{{ wr.areas }}" style="font-size:11px; color:hsl(var(--c-38-6-42)); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ wr.areas }}</span></span>
                 <span style="position:relative; display:block; height:14px">
                   <span style="{{ wr.barStyle }}"></span>
                   <span aria-hidden="true" style="{{ adWaitTarget }}"></span>
@@ -491,7 +491,7 @@
             <sc-if value="{{ adWaitEmpty }}" hint-placeholder-val="{{ false }}">
               <span style="font-size:13px; color:hsl(var(--c-38-6-42))">No mentor has open slots.</span>
             </sc-if>
-            <div style="display:grid; grid-template-columns:150px minmax(0,1fr) 56px 150px; gap:10px; padding:0 8px; font-family:'JetBrains Mono', monospace; font-size:12px; font-size:11px; color:hsl(var(--c-38-6-42))">
+            <div style="display:grid; grid-template-columns:220px minmax(0,1fr) 56px 150px; gap:10px; padding:0 8px; font-family:'JetBrains Mono', monospace; font-size:12px; font-size:11px; color:hsl(var(--c-38-6-42))">
               <span></span>
               <span style="position:relative; display:flex; justify-content:space-between; height:14px"><span>0</span><span style="{{ adWaitTargetPos }}">{{ adWaitTargetLabel }}</span><span>{{ adWaitMax }}</span></span>
               <span></span><span></span>
@@ -4342,11 +4342,12 @@ class Component extends DCLogic {
         const n = slotsOf(y.md).length;
         return {
           name: y.md.name,
+          areas: (y.md.areas || []).join(' · '),
           days: y.w.days + ' d',
           slots: n + ' open slot' + (n === 1 ? '' : 's'),
           long: y.w.days > LONG_WAIT,
           barStyle: 'display:block; height:14px; width:' + Math.round((y.w.days / waitMax) * 1000) / 10 + '%; min-width:3px; border-radius:0 4px 4px 0; background:var(--viz-1)',
-          rowStyle: 'position:relative; display:grid; grid-template-columns:150px minmax(0,1fr) 56px 150px; align-items:center; gap:10px; padding:5px 8px; border-radius:6px; outline:none; background:' + (on ? 'hsl(var(--c-44-26-96))' : 'transparent'),
+          rowStyle: 'position:relative; display:grid; grid-template-columns:220px minmax(0,1fr) 56px 150px; align-items:center; gap:10px; padding:5px 8px; border-radius:6px; outline:none; background:' + (on ? 'hsl(var(--c-44-26-96))' : 'transparent'),
           enter: enter('wait-' + i),
           tip: on,
           tipText: y.md.name + ': ' + y.w.days + ' days without a new mentee, since ' + fmtD(y.w.since) + (y.w.byMentee ? ' (last mentee started)' : ' (oldest open slot opened)')
