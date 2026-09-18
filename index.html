@@ -481,12 +481,12 @@
           <div style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px">
             <div style="flex:1; min-width:240px">
               <h3 style="margin:0; font-family:Ruda, sans-serif; font-size:16px; font-weight:600">Present mentees and open slots by area</h3>
-              <p style="margin:2px 0 0; font-size:12px; color:hsl(var(--c-38-6-42))">Mentees grow to the left, open slots to the right, on the same scale. A slot without a preferred area is flexible: it is drawn striped in every area its mentor accepts, so flexible slots can appear in more than one row.</p>
+              <p style="margin:2px 0 0; font-size:12px; color:hsl(var(--c-38-6-42))">Mentees grow to the left, open slots to the right, on the same scale. Slots have no area of their own: each open slot is drawn striped in every area its mentor accepts (Sessions → My areas), so one slot can appear in more than one row.</p>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:12px">
               <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:var(--viz-1)"></span>Present mentees</span>
-              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:var(--viz-2)"></span>Slots set for the area</span>
-              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:repeating-linear-gradient(135deg, var(--viz-2) 0 2px, transparent 2px 5px); box-shadow:inset 0 0 0 1.5px var(--viz-2)"></span>Flexible slots</span>
+              
+              <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:12px; height:12px; border-radius:3px; background:repeating-linear-gradient(135deg, var(--viz-2) 0 2px, transparent 2px 5px); box-shadow:inset 0 0 0 1.5px var(--viz-2)"></span>Open slots (mentor's areas)</span>
             </div>
           </div>
           <div role="img" aria-label="Present mentees and open slots by area; see the mentor table for exact values" style="margin-top:16px">
@@ -1461,6 +1461,55 @@
                   <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My Mentees ({{ mentorMenteeCount }})</h2>
                   <p style="margin:4px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Schedule sessions with each of your mentees.</p>
                 </div>
+                <div style="padding:16px 24px; border-bottom:1px solid hsl(var(--c-42-12-84)); background:hsl(var(--c-44-26-96) / .6)">
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px">
+                    <h3 style="margin:0; flex:1; font-family:Ruda, sans-serif; font-size:16px; font-weight:700">{{ groupsHeading }}</h3>
+                    <sc-if value="{{ groupFormClosed }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ newGroup }}" style="height:34px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer">+ New group</button>
+                    </sc-if>
+                  </div>
+                  <p style="margin:4px 0 12px; font-size:13px; color:hsl(var(--c-38-6-42))">Group mentees who meet together (for example on the same project). Schedule one session for the whole group.</p>
+                  <sc-if value="{{ groupFormOpen }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid; gap:10px; padding:14px; margin-bottom:12px; border:1px solid hsl(var(--c-234-85-14) / .25); border-radius:13.6px; background:hsl(var(--c-42-33-99))">
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Group name
+                        <input value="{{ groupDraftName }}" onChange="{{ setGroupDraftName }}" placeholder="e.g. Oncology writing group" style="height:36px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12))" />
+                      </label>
+                      <span style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Members</span>
+                      <div style="display:flex; flex-wrap:wrap; gap:8px">
+                        <sc-for list="{{ groupMemberChips }}" as="gm" hint-placeholder-count="4">
+                          <button onClick="{{ gm.toggle }}" aria-pressed="{{ gm.on }}" style="{{ gm.style }}">{{ gm.label }}</button>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ groupHasError }}" hint-placeholder-val="{{ false }}">
+                        <span role="alert" style="font-size:12px; font-weight:600; color:hsl(var(--c-4-62-50))">{{ groupDraftError }}</span>
+                      </sc-if>
+                      <div style="display:flex; gap:8px">
+                        <button onClick="{{ saveGroup }}" style="height:34px; padding:0 14px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:13px; font-weight:600; cursor:pointer">Create group</button>
+                        <button onClick="{{ cancelGroup }}" style="height:34px; padding:0 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer">Cancel</button>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ noGroups }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:13px; color:hsl(var(--c-38-6-42))">No groups yet.</span>
+                  </sc-if>
+                  <div style="display:grid; gap:8px">
+                    <sc-for list="{{ groups }}" as="g" hint-placeholder-count="1">
+                      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:10px 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:11.6px; background:hsl(var(--c-42-33-99))">
+                        <span style="display:grid; gap:2px; min-width:160px">
+                          <span style="font-weight:700; font-size:14px">{{ g.name }}</span>
+                          <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:hsl(var(--c-38-6-42))">{{ g.count }}</span>
+                        </span>
+                        <span style="display:flex; flex-wrap:wrap; gap:6px; flex:1; min-width:180px">
+                          <sc-for list="{{ g.members }}" as="gmm" hint-placeholder-count="2">
+                            <a href="#" onClick="{{ gmm.open }}" style="display:inline-flex; align-items:center; height:26px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9999px; font-size:12px">{{ gmm.name }}</a>
+                          </sc-for>
+                        </span>
+                        <button onClick="{{ g.schedule }}" style="height:32px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer">Schedule group session</button>
+                        <button onClick="{{ g.remove }}" aria-label="Delete this group" style="height:32px; padding:0 12px; border:1px solid hsl(var(--c-4-62-50) / .35); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; font-weight:600; color:hsl(var(--c-4-62-50)); cursor:pointer">Delete</button>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px; padding:20px 24px; align-items:start">
                   <sc-for list="{{ mentorMentees }}" as="mm" hint-placeholder-count="4">
                     <div style="position:relative; display:flex; flex-direction:column; gap:14px; padding:18px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)" style-hover="border-color:hsl(var(--c-234-85-14) / .4)">
@@ -1587,21 +1636,26 @@
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                   <div>
                     <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ slotsHeading }}</h2>
-                    <p style="margin:4px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Each slot is a place for one new mentee. Admins see this count in the mentor table. Area, language and note are optional.</p>
+                    <p style="margin:4px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">An individual slot is a place for one new mentee; a group slot takes several mentees who meet together. Admins see these counts in the mentor table. Language and note are optional. {{ slotsSummary }}</p>
                   </div>
-                  <button onClick="{{ addSlot }}" style="height:36px; padding:0 16px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600; cursor:pointer">+ Add slot</button>
+                  <span style="display:inline-flex; flex-wrap:wrap; gap:8px"><button onClick="{{ addSlot }}" style="height:36px; padding:0 16px; border:0; border-radius:9.6px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:600; cursor:pointer">+ Individual slot</button><button onClick="{{ addGroupSlot }}" style="height:36px; padding:0 16px; border:0; border-radius:9.6px; background:hsl(var(--c-42-33-99)); color:hsl(var(--c-234-85-14)); box-shadow:inset 0 0 0 1px hsl(var(--c-234-85-14)); font-size:14px; font-weight:600; cursor:pointer">+ Group slot</button></span>
                 </div>
                 <div style="display:flex; flex-direction:column">
                   <sc-for list="{{ mySlots }}" as="sl" hint-placeholder-count="1">
                     <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; padding:14px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                       <span style="align-self:center; display:grid; gap:2px; min-width:120px"><span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700">{{ sl.label }}</span><span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ sl.since }}</span></span>
-                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); width:200px">Preferred area
-                        <select onChange="{{ sl.setArea }}" value="{{ sl.area }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%">
-                          <sc-for list="{{ slotAreaOptions }}" as="o" hint-placeholder-count="4">
+                      <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); width:150px">Type
+                        <select onChange="{{ sl.setKind }}" value="{{ sl.kind }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%">
+                          <sc-for list="{{ slotKindOptions }}" as="o" hint-placeholder-count="2">
                             <option value="{{ o.value }}">{{ o.label }}</option>
                           </sc-for>
                         </select>
                       </label>
+                      <sc-if value="{{ sl.isGroup }}" hint-placeholder-val="{{ false }}">
+                        <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); width:90px">Seats
+                          <input type="number" min="2" max="8" value="{{ sl.seats }}" onChange="{{ sl.setSeats }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12))" />
+                        </label>
+                      </sc-if>
                       <label style="display:grid; gap:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42)); width:150px">Language
                         <select onChange="{{ sl.setLang }}" value="{{ sl.lang }}" style="height:34px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px; color:hsl(var(--c-234-68-12)); width:100%">
                           <sc-for list="{{ slotLangOptions }}" as="o" hint-placeholder-count="4">
@@ -4055,16 +4109,16 @@ function subLinkStyle(on) { return 'display:flex; align-items:center; height:28p
 function seedMentorSlots() {
   const opened = { 'Vânio Antunes': '2026-06-10', 'Caroline Serafim': '2026-02-02', 'Rafael Lima': '2026-07-20', 'Felipe Andrade': '2026-05-04', 'Juliana Prado': '2026-08-10' };
   const demo = {
-    'Vânio Antunes': [{ area: 'Gastroenterology', lang: 'Any', note: 'Endoscopy or hepatology questions preferred' }],
-    'Rafael Lima': [{ area: 'Surgery', lang: 'Portuguese', note: '' }],
+    'Vânio Antunes': [{ kind: 'individual', lang: 'Any', note: 'Endoscopy or hepatology questions preferred' }],
+    'Rafael Lima': [{ kind: 'group', seats: 3, lang: 'Portuguese', note: 'Surgical topics' }],
     'Beatriz Carvalho': [],
-    'Juliana Prado': [{ area: '', lang: 'Portuguese', note: 'Prefers mentees in Portuguese' }]
+    'Juliana Prado': [{ kind: 'individual', lang: 'Portuguese', note: 'Prefers mentees in Portuguese' }]
   };
   const out = {};
   MENTORS_DATA.forEach((md) => {
     const base = demo[md.name] || [];
     const list = [];
-    for (let i = 0; i < md.seedSlots; i++) list.push(Object.assign({ id: 's' + (i + 1), area: '', lang: 'Any', note: '', opened: opened[md.name] || '2026-08-01' }, base[i] || {}));
+    for (let i = 0; i < md.seedSlots; i++) list.push(Object.assign({ id: 's' + (i + 1), kind: 'individual', seats: 1, lang: 'Any', note: '', opened: opened[md.name] || '2026-08-01' }, base[i] || {}));
     out[md.name] = list;
   });
   return out;
@@ -4302,6 +4356,8 @@ class Component extends DCLogic {
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
     sessSec: 'mentees',
+    menteeGroups: [{ id: 'g1', name: 'Screening study group', members: ['Isabella Michelon', 'Júlia Miranda'] }],
+    groupDraft: null,
     myAreas: ((MENTORS_DATA.filter((m) => m.name === ME)[0] || {}).areas || []).slice(),
     projectTab: 'progress', taskDone: SEED_PROJECTS[0].taskDone, taskNotes: SEED_PROJECTS[0].taskNotes || {},
     projectPicott: SEED_PROJECTS[0].picott, picottDraft: null,
@@ -5205,7 +5261,7 @@ class Component extends DCLogic {
           waitingNote: waitOf(md) ? 'since ' + fmtD(waitOf(md).since) : '',
           hasWaitingNote: !!waitOf(md),
           waitingStyle: "font-family:'JetBrains Mono', monospace; font-size:13px; " + (waitOf(md) && waitOf(md).days > LONG_WAIT ? 'font-weight:700; color:hsl(var(--c-4-62-50))' : ''),
-          slotsTitle: slots.map((x) => [x.area || 'Any area', x.lang && x.lang !== 'Any' ? x.lang : '', x.note].filter(Boolean).join(', ')).join(' · '),
+          slotsTitle: slots.map((x) => [x.kind === 'group' ? 'Group, ' + (x.seats || 3) + ' seats' : 'Individual', x.lang && x.lang !== 'Any' ? x.lang : '', x.note].filter(Boolean).join(', ')).join(' · ') || 'no open slots',
           slotsStyle: "font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:" + (slots.length ? '700' : '400'),
           level2: md.level === 2 ? fmtMY(md.end) : '—',
           level2Note: md.level === 2 ? '' : 'Expected ' + fmtMY(md.end),
@@ -5242,7 +5298,7 @@ class Component extends DCLogic {
           rowStyle: 'position:relative; display:grid; grid-template-columns:150px minmax(0,1fr) minmax(0,1fr) 118px; align-items:center; column-gap:0; padding:5px 8px; border-radius:6px; outline:none; background:' + (on ? 'hsl(var(--c-44-26-96))' : 'transparent'),
           enter: enter('area-' + i),
           tip: on,
-          tipText: x.area + ': ' + x.mentees + ' present mentee' + (x.mentees === 1 ? '' : 's') + ' · ' + d + ' slot' + (d === 1 ? '' : 's') + ' set for this area' + (d ? ' (' + firstNames(x.dedicated) + ')' : '') + ' · ' + f + ' flexible' + (f ? ' (' + firstNames(x.flexible) + ')' : '')
+          tipText: x.area + ': ' + x.mentees + ' present mentee' + (x.mentees === 1 ? '' : 's') + ' · ' + f + ' open slot' + (f === 1 ? '' : 's') + ' from mentors who accept this area' + (f ? ' (' + firstNames(x.flexible) + ')' : '')
         };
       }),
       adWaitRows: waitRows.map((y, i) => {
@@ -6580,6 +6636,42 @@ class Component extends DCLogic {
       backdropClass: 'nav-backdrop' + (st.navOpen ? ' nav-open' : ''),
       toggleNav: (e) => { e.preventDefault(); this.setState({ navOpen: !st.navOpen }); },
       closeNav: (e) => { e.preventDefault(); this.setState({ navOpen: false }); },
+      ...(function (self) {
+        const mine = MENTEES.filter((m) => m.mentor === ME);
+        const groups = st.menteeGroups;
+        const draft = st.groupDraft;
+        const setDraft = (patch) => self.setState({ groupDraft: Object.assign({}, self.state.groupDraft, patch) });
+        return {
+          groupsHeading: 'Groups (' + groups.length + ')',
+          noGroups: groups.length === 0 && !draft,
+          groupFormOpen: !!draft,
+          groupFormClosed: !draft,
+          newGroup: (e) => { e.preventDefault(); self.setState({ groupDraft: { name: '', members: [], error: '' } }); },
+          groupDraftName: draft ? draft.name : '',
+          setGroupDraftName: (e) => setDraft({ name: e.target.value, error: '' }),
+          groupDraftError: draft ? draft.error : '',
+          groupHasError: !!(draft && draft.error),
+          groupMemberChips: mine.map((m) => {
+            const on = !!(draft && draft.members.indexOf(m.name) !== -1);
+            return { label: m.name, on: on, style: chipStyle(on), toggle: () => setDraft({ members: on ? self.state.groupDraft.members.filter((x) => x !== m.name) : self.state.groupDraft.members.concat([m.name]), error: '' }) };
+          }),
+          cancelGroup: (e) => { e.preventDefault(); self.setState({ groupDraft: null }); },
+          saveGroup: (e) => {
+            e.preventDefault();
+            const d = self.state.groupDraft;
+            if (!String(d.name || '').trim()) return setDraft({ error: 'Give the group a name.' });
+            if (d.members.length < 2) return setDraft({ error: 'Pick at least 2 mentees.' });
+            self.setState({ menteeGroups: self.state.menteeGroups.concat([{ id: 'g' + Date.now().toString(36), name: d.name.trim(), members: d.members.slice() }]), groupDraft: null });
+          },
+          groups: groups.map((g) => ({
+            name: g.name,
+            count: g.members.length + ' mentees',
+            members: g.members.map((n) => ({ name: n, open: self.openMentee(n) })),
+            schedule: (e) => { e.preventDefault(); self.openDlg('event', { title: 'Group session · ' + g.name, category: 'Session', date: isoDate(addDays(TODAY, 1)), start: '14:00', end: '15:00', recurrence: 'None', link: 'https://meet.google.com/', note: 'With ' + g.members.join(', ') }, { mode: 'new' }); },
+            remove: (e) => { e.preventDefault(); if (window.confirm('Delete the group "' + g.name + '"? The mentees stay with you.')) self.setState({ menteeGroups: self.state.menteeGroups.filter((x) => x.id !== g.id) }); }
+          }))
+        };
+      })(this),
       mentorMentees: MENTEES.filter((m) => m.mentor === 'Vânio Antunes').map((m) => {
         const brief = BRIEFINGS[m.name];
         const open = st.briefOpen === m.name;
@@ -6667,19 +6759,24 @@ class Component extends DCLogic {
         return {
           slotsHeading: 'Open mentorship slots (' + mine.length + ')',
           noSlots: mine.length === 0,
-          slotAreaOptions: [{ value: '', label: 'Any of my areas' }].concat((self.state.myAreas.length ? self.state.myAreas : AREAS).map((x) => ({ value: x, label: x }))),
+          slotKindOptions: [{ value: 'individual', label: 'Individual' }, { value: 'group', label: 'Group' }],
           slotLangOptions: SLOT_LANGS,
-          addSlot: (e) => { e.preventDefault(); setMine((list) => list.concat([{ id: 's' + Date.now().toString(36), area: '', lang: 'Any', note: '', opened: isoDate(TODAY) }])); },
+          addSlot: (e) => { e.preventDefault(); setMine((list) => list.concat([{ id: 's' + Date.now().toString(36), kind: 'individual', seats: 1, lang: 'Any', note: '', opened: isoDate(TODAY) }])); },
+          addGroupSlot: (e) => { e.preventDefault(); setMine((list) => list.concat([{ id: 's' + Date.now().toString(36), kind: 'group', seats: 3, lang: 'Any', note: '', opened: isoDate(TODAY) }])); },
+          slotsSummary: mine.length ? mine.filter((x) => x.kind !== 'group').length + ' individual · ' + mine.filter((x) => x.kind === 'group').length + ' group (' + mine.filter((x) => x.kind === 'group').reduce((n, x) => n + (Number(x.seats) || 0), 0) + ' seats)' : '',
           mySlots: mine.map((x, i) => ({
             label: 'Slot ' + (i + 1),
             since: 'Open since ' + fmtDate(parseIso(x.opened) || TODAY),
-            area: x.area || '',
+            kind: x.kind || 'individual',
+            isGroup: x.kind === 'group',
+            seats: String(x.seats || 3),
+            setKind: (e) => { const v = e.target.value; setMine((list) => list.map((y) => (y.id !== x.id ? y : Object.assign({}, y, { kind: v, seats: v === 'group' ? (Number(y.seats) >= 2 ? Number(y.seats) : 3) : 1 })))); },
+            setSeats: (e) => { const v = Math.max(2, Math.min(8, Number(e.target.value) || 2)); setMine((list) => list.map((y) => (y.id !== x.id ? y : Object.assign({}, y, { seats: v })))); },
             lang: x.lang || 'Any',
             note: x.note || '',
-            setArea: setField(x.id, 'area'),
             setLang: setField(x.id, 'lang'),
             setNote: setField(x.id, 'note'),
-            remove: (e) => { e.preventDefault(); if (x.note || x.area ? window.confirm('Delete Slot ' + (i + 1) + '?') : true) setMine((list) => list.filter((y) => y.id !== x.id)); }
+            remove: (e) => { e.preventDefault(); if (x.note ? window.confirm('Delete Slot ' + (i + 1) + '?') : true) setMine((list) => list.filter((y) => y.id !== x.id)); }
           }))
         };
       })(this),
