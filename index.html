@@ -637,6 +637,15 @@
                   <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-size:15px; font-weight:700">{{ br.total }}</span>
                   <span role="cell" style="font-family:'JetBrains Mono', monospace; font-size:12px">{{ br.share }}</span>
                   <span role="cell" style="{{ br.bonusStyle }}">{{ br.bonus }}</span>
+                  <span role="cell" style="display:grid; gap:4px; font-size:11px">
+                    <sc-if value="{{ br.hasEnding }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:11px; color:hsl(var(--c-38-6-42))">{{ br.endingNote }}</span>
+                      <sc-for list="{{ br.ending }}" as="en" hint-placeholder-count="1">
+                        <a href="#" onClick="{{ en.open }}" style="{{ en.style }}">{{ en.label }}</a>
+                      </sc-for>
+                    </sc-if>
+                    <sc-if value="{{ br.noEnding }}" hint-placeholder-val="{{ true }}"><span style="color:hsl(var(--c-38-6-42))">—</span></sc-if>
+                  </span>
                   <span role="cell" style="display:grid; gap:6px; width:100%">
                     <sc-if value="{{ br.hasProofs }}" hint-placeholder-val="{{ true }}">
                       <table style="width:100%; border-collapse:collapse; font-size:11px; border:1px solid hsl(var(--c-42-12-84))">
@@ -2656,6 +2665,20 @@
                         </sc-for>
                       </div>
                     </div>
+                    <sc-if value="{{ myBonusHasEnding }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:grid; gap:6px">
+                        <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-4-62-50))">Ending before the closing</span>
+                        <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ myBonusEndingHead }}</span>
+                        <sc-for list="{{ myBonusEnding }}" as="en" hint-placeholder-count="2">
+                          <div style="{{ en.style }}">
+                            <span style="font-weight:600">{{ en.name }}</span>
+                            <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:hsl(var(--c-38-6-42))">{{ en.when }}</span>
+                            <span style="flex:1; min-width:160px">{{ en.impact }}</span>
+                            <a href="#" onClick="{{ en.open }}" style="font-weight:600">Ask to renew →</a>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
                     <sc-if value="{{ myBonusHasTodo }}" hint-placeholder-val="{{ true }}">
                       <div style="display:grid; gap:6px">
                         <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-40-78-44))">To keep or earn points</span>
@@ -4713,8 +4736,23 @@ class Component extends DCLogic {
       });
       const eligible = md.level === 2 || md.end <= range.end;
       const volume = Math.floor(paid.length / 4);
+      // mentees whose contract ends before the closing: their points only count if they renew and stay paid
+      const ending = mentees.map((m) => {
+        const adm = MENTEE_ADMIN[m.name] || {};
+        const end = parseIso(adm.end);
+        if (!end || end >= range.end) return null;
+        const isPaid = menteePaid(m);
+        const hasPoint = prod.some((a) => a.name === m.name);
+        return {
+          name: m.name, end: end, paid: isPaid, hasPoint: hasPoint, near: progress[m.name] || 0,
+          impact: hasPoint ? '1 productivity point is lost' : progress[m.name] ? 'close to a point (' + progress[m.name] + ' of 3 co-author submissions)' : isPaid ? 'counts in the volume tally' : 'already not counted (not active and paid)'
+        };
+      }).filter(Boolean).sort((a, b) => a.end - b.end);
+      const volumeAfter = Math.floor(paid.filter((m) => !ending.some((e) => e.name === m.name)).length / 4);
+      const atRisk = risk.length + (volume - volumeAfter);
       return {
         md: md, eligible: eligible, paid: paid, prod: prod, lost: lost, risk: risk, volume: volume, total: prod.length + volume,
+        ending: ending, atRisk: atRisk, volumeAtRisk: volume - volumeAfter,
         toNextVolume: 4 - (paid.length % 4),
         pending: pending.filter((x) => x.people.some((y) => names.indexOf(y.name) !== -1)),
         close: mentees.filter((m) => progress[m.name]).map((m) => ({ name: m.name, n: progress[m.name] }))
@@ -4940,6 +4978,7 @@ class Component extends DCLogic {
           ['name', 'Mentor', (r) => r.md.name], ['level', 'Level at close', (r) => (r.eligible ? 2 : 1)], ['paid', 'Paid mentees', (r) => r.paid.length],
           ['prod', 'Productivity', (r) => r.prod.length], ['volume', 'Volume', (r) => r.volume], ['total', 'Total points', (r) => (r.eligible ? r.total : -1)],
           ['share', 'Share', (r) => (r.eligible && totalPts ? r.total / totalPts : -1)], ['bonus', 'Bonus (R$)', (r) => payOf(r) || -1],
+          ['ending', 'Ending before close', (r) => r.ending.length],
           ['proofs', 'Proofs', (r) => r.prod.length], ['pending', 'Missing info', (r) => r.pending.length]
         ];
         const shown = sortRows(data.filter((r) => {
@@ -4952,7 +4991,7 @@ class Component extends DCLogic {
         const csvCell = (v) => '"' + String(v === null || v === undefined ? '' : v).replace(/"/g, '""') + '"';
         const num = (n) => (n === null ? '' : n.toFixed(2).replace('.', ','));
         const setBF = (k, v) => { const f = Object.assign({}, self.state.adBonusFilter); f[k] = v; self.setState({ adBonusFilter: f }); };
-        const BGRID = 'minmax(150px,1fr) 110px 90px 100px 80px 90px 70px 130px minmax(380px,2.4fr) minmax(200px,1.2fr)';
+        const BGRID = 'minmax(150px,1fr) 110px 90px 100px 80px 90px 70px 130px minmax(230px,1.4fr) minmax(380px,2.4fr) minmax(200px,1.2fr)';
         return {
           bonusSemOptions: BONUS_SEMESTERS.map((k) => ({ value: k, label: semesterLabel(k) + (semesterRange(k).end < TODAY ? ' · closed' : ' · in progress (projection)') })),
           bonusSem: st.bonusSem,
@@ -4967,7 +5006,8 @@ class Component extends DCLogic {
             { label: 'Bonus pool', value: pool === null ? '—' : brl(pool), sub: st.bonusKind === 'profit' && raw !== null ? '30% of ' + brl(raw) : 'value entered above' },
             { label: 'Total points', value: String(totalPts), sub: 'across ' + eligibleRows.length + ' eligible mentors' },
             { label: 'Point value', value: pointValue === null ? '—' : brl(pointValue), sub: 'pool ÷ total points' },
-            { label: 'Missing info', value: String(data.reduce((n, r) => n + r.pending.length, 0)), sub: 'submissions that cannot count yet' }
+            { label: 'Missing info', value: String(data.reduce((n, r) => n + r.pending.length, 0)), sub: 'submissions that cannot count yet' },
+            { label: 'Points at risk', value: String(data.filter((r) => r.eligible).reduce((n, r) => n + r.atRisk, 0)), sub: data.reduce((n, r) => n + r.ending.length, 0) + ' mentees end before the closing' }
           ],
           adBonusQ: bf.q,
           adBonusSetQ: (e) => setBF('q', e.target.value),
@@ -4995,6 +5035,11 @@ class Component extends DCLogic {
             share: r.eligible && totalPts ? Math.round((r.total / totalPts) * 1000) / 10 + '%' : '—',
             bonus: payOf(r) === null ? '—' : brl(payOf(r)),
             bonusStyle: "font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:" + (payOf(r) ? '700' : '400'),
+            endingCount: r.ending.length,
+            hasEnding: r.ending.length > 0,
+            noEnding: r.ending.length === 0,
+            endingNote: r.atRisk ? r.atRisk + ' point' + (r.atRisk === 1 ? '' : 's') + ' at risk' : 'no point at risk',
+            ending: r.ending.map((x) => ({ label: x.name + ' · ' + fmtDateY(x.end) + ' · ' + x.impact, open: self.openMentee(x.name), style: 'font-weight:600; color:hsl(var(--c-' + (x.hasPoint ? '4-62-50' : '234-85-14') + '))' })),
             hasProofs: r.prod.length > 0,
             noProofs: r.prod.length === 0,
             proofs: r.prod.map((a) => ({
@@ -5009,11 +5054,12 @@ class Component extends DCLogic {
           })),
           adBonusGrid: 'display:grid; grid-template-columns:' + BGRID + '; gap:12px; align-items:center; padding:10px 20px; background:hsl(var(--c-44-26-96))',
           adBonusExport: () => {
-            const header = ['Mentor', 'Level at close', 'Eligible', 'Paid mentees', 'Paid mentees (names)', 'Productivity points', 'Productivity proofs', 'Volume points', 'Total points', 'Share of points (%)', 'Point value (R$)', 'Bonus (R$)', 'Missing info'];
+            const header = ['Mentor', 'Level at close', 'Eligible', 'Paid mentees', 'Paid mentees (names)', 'Productivity points', 'Productivity proofs', 'Volume points', 'Total points', 'Share of points (%)', 'Point value (R$)', 'Bonus (R$)', 'Mentees ending before close', 'Points at risk if not renewed', 'Missing info'];
             const lines = [header.map(csvCell).join(';')].concat(data.map((r) => [
               r.md.name, r.eligible ? 'Level 2' : 'Level 1', r.eligible ? 'Yes' : 'No', r.paid.length, r.paid.map((m) => m.name).join(', '),
               r.prod.length, r.prod.map((a) => a.name + ': ' + (a.how === 'lead' ? '1 submission as ' + AUTHOR_ROLE_LABEL[a.evidence[0].role] : '3 co-author submissions') + ' [' + a.evidence.map((x) => x.journal.name + ', submitted ' + isoDate(x.date) + ', ' + docHref(x.proof)).join(' ; ') + ']').join(' | '),
               r.volume, r.eligible ? r.total : 0, r.eligible && totalPts ? num((r.total / totalPts) * 100) : '', num(pointValue), num(payOf(r)),
+              r.ending.map((x) => x.name + ' (' + isoDate(x.end) + ', ' + x.impact + ')').join(' | '), r.eligible ? r.atRisk : 0,
               r.pending.map((x) => x.project.name + ': ' + x.missing.join(', ')).join(' | ')
             ].map(csvCell).join(';')));
             const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
@@ -6001,6 +6047,15 @@ class Component extends DCLogic {
           myBonusNoProd: r.prod.length === 0,
           myBonusVolume: r.paid.length + ' paid mentee' + (r.paid.length === 1 ? '' : 's') + ' → ' + r.volume + ' point' + (r.volume === 1 ? '' : 's') + ' · ' + r.toNextVolume + ' more for the next point',
           myBonusPaid: r.paid.map((m) => ({ name: m.name, open: self.openMentee(m.name) })),
+          myBonusEndingHead: r.ending.length + ' mentee' + (r.ending.length === 1 ? '' : 's') + ' end before ' + fmtDateY(range.end) + ' · ' + (r.atRisk ? 'up to ' + r.atRisk + ' point' + (r.atRisk === 1 ? '' : 's') + ' at risk' : 'no point at risk') + ' if they do not renew',
+          myBonusHasEnding: r.ending.length > 0,
+          myBonusEnding: r.ending.map((x) => ({
+            name: x.name,
+            when: 'ends ' + fmtDateY(x.end),
+            impact: x.impact,
+            open: self.openMentee(x.name),
+            style: 'display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:8px 10px; border-radius:9.6px; font-size:12px; background:' + (x.hasPoint ? 'hsl(var(--c-4-62-50) / .08)' : 'hsl(var(--c-44-26-96))')
+          })),
           myBonusTodo: [].concat(
             r.pending.map((x) => ({ text: x.project.name + ': add ' + x.missing.join(', '), open: self.openProject(x.project.id), action: 'Fill in' })),
             r.risk.map((x) => ({ text: x.a.name + '’s contract ends ' + fmtDateY(x.end) + ', before the closing: the point is kept only if they renew and stay paid.', open: self.openMentee(x.a.name), action: 'View mentee' })),
