@@ -160,6 +160,13 @@
                 <span style="position:absolute; left:0; top:6px; bottom:6px; width:3px; border-radius:9999px; background:linear-gradient(180deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20)))"></span>
               </sc-if>
             </a>
+            <sc-if value="{{ item.hasSubs }}" hint-placeholder-val="{{ false }}">
+              <ul class="side-text" style="display:flex; flex-direction:column; gap:2px; margin:2px 0 4px; padding:0 0 0 24px; list-style:none">
+                <sc-for list="{{ item.subs }}" as="sub" hint-placeholder-count="3">
+                  <li><a href="#" onClick="{{ sub.go }}" style="{{ sub.style }}">{{ sub.label }}</a></li>
+                </sc-for>
+              </ul>
+            </sc-if>
           </li>
         </sc-for>
       </ul>
@@ -1252,11 +1259,16 @@
           </div>
         </div>
 
+        <div role="group" aria-label="Sessions section" class="ad-tabs" style="display:inline-flex; align-self:flex-start; gap:4px; padding:4px; background:hsl(var(--c-44-14-89)); border-radius:9.6px">
+          <sc-for list="{{ sessSections }}" as="sec" hint-placeholder-count="4">
+            <button onClick="{{ sec.go }}" aria-pressed="{{ sec.pressed }}" style="{{ sec.style }}">{{ sec.label }}</button>
+          </sc-for>
+        </div>
         <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start">
 
           <div style="flex:1 1 520px; display:flex; flex-direction:column; gap:24px; min-width:0">
 
-            <sc-if value="{{ isMenteeView }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ sessMyMeetings }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:stretch">
 
               <div style="flex:1 1 240px; max-width:100%; display:flex; flex-direction:column; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-234-85-14) / .25); border-radius:17.6px; box-shadow:0 12px 30px -16px hsl(var(--c-234-45-18) / .6); overflow:hidden">
@@ -1386,6 +1398,8 @@
                 </div>
               </sc-if>
 
+            </sc-if>
+            <sc-if value="{{ sessHistory }}" hint-placeholder-val="{{ true }}">
               <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px">
                   <div>
@@ -1413,6 +1427,8 @@
                 </sc-for>
               </div>
 
+            </sc-if>
+            <sc-if value="{{ sessMyMeetings }}" hint-placeholder-val="{{ true }}">
               <sc-if value="{{ isBooked }}" hint-placeholder-val="{{ true }}">
                 <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-155-40-27) / .3); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
                   <div style="display:flex; align-items:center; gap:12px">
@@ -1439,7 +1455,7 @@
               </sc-if>
             </sc-if>
 
-            <sc-if value="{{ isMentorView }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ sessMentees }}" hint-placeholder-val="{{ true }}">
               <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
                 <div style="padding:20px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                   <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My Mentees ({{ mentorMenteeCount }})</h2>
@@ -1565,6 +1581,8 @@
                 </div>
               </div>
 
+            </sc-if>
+            <sc-if value="{{ sessSlots }}" hint-placeholder-val="{{ true }}">
                             <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                   <div>
@@ -1603,6 +1621,8 @@
                 </div>
               </div>
 
+            </sc-if>
+            <sc-if value="{{ sessAvail }}" hint-placeholder-val="{{ true }}">
               <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); overflow:hidden">
                 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid hsl(var(--c-42-12-84))">
                   <div>
@@ -1680,17 +1700,99 @@
                 </div>
               </div>
             </sc-if>
+            <sc-if value="{{ sessAreas }}" hint-placeholder-val="{{ true }}">
+              <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5); padding:22px 24px">
+                <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My areas of interest</h2>
+                <p style="margin:4px 0 16px; font-size:14px; color:hsl(var(--c-38-6-42))">Admins use these areas to match new mentees to you, and the slots you open can only name one of them. Change them whenever your interests change.</p>
+                <div style="display:flex; flex-wrap:wrap; gap:8px">
+                  <sc-for list="{{ myAreaChips }}" as="ac" hint-placeholder-count="6">
+                    <button onClick="{{ ac.toggle }}" aria-pressed="{{ ac.on }}" style="{{ ac.style }}">{{ ac.label }}</button>
+                  </sc-for>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:16px; padding-top:14px; border-top:1px solid hsl(var(--c-42-12-84))">
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:hsl(var(--c-38-6-42))">{{ myAreasCount }}</span>
+                  <span style="flex:1; min-width:200px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ myAreasNote }}</span>
+                  <a href="#" onClick="{{ goProfile }}" style="font-weight:600; font-size:13px">Edit the rest of my profile →</a>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ sessBonus }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ myBonusShow }}" hint-placeholder-val="{{ true }}">
+              <div style="display:grid; gap:10px; margin-top:6px; padding:14px 16px; border:1px solid hsl(var(--c-40-78-44) / .45); border-radius:13.6px; background:hsl(var(--c-40-78-44) / .07)">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px">
+                  <span style="font-family:'Hanken Grotesk', sans-serif; font-size:34px; font-weight:800; line-height:1">{{ myBonusTotal }}</span>
+                  <span style="display:grid; gap:2px; flex:1; min-width:180px">
+                    <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">{{ myBonusTitle }}</span>
+                    <span style="font-size:13px; font-weight:600">{{ myBonusSub }}</span>
+                  </span>
+                  <button onClick="{{ myBonusToggle }}" aria-expanded="{{ myBonusOpen }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">{{ myBonusToggleLabel }}</button>
+                </div>
+                <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ myBonusEligibility }} Points only come from what is filled in MetaTracker: submission dates, submission file links and co-author roles.</span>
+                <sc-if value="{{ myBonusOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid; gap:12px; padding-top:10px; border-top:1px solid hsl(var(--c-42-12-84))">
+                    <div style="display:grid; gap:6px">
+                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Productivity points</span>
+                      <sc-for list="{{ myBonusProd }}" as="bp" hint-placeholder-count="1">
+                        <div style="display:grid; gap:3px; padding:8px 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px">
+                          <span><a href="#" onClick="{{ bp.openMentee }}" style="font-weight:700">{{ bp.mentee }}</a> · {{ bp.criterion }}</span>
+                          <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ bp.since }}</span>
+                          <sc-for list="{{ bp.evidence }}" as="ev" hint-placeholder-count="1">
+                            <span style="font-size:12px"><a href="{{ ev.href }}" target="_blank" rel="noopener">{{ ev.label }} ↗</a> · <a href="#" onClick="{{ ev.open }}">{{ ev.project }}</a></span>
+                          </sc-for>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{ myBonusNoProd }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:hsl(var(--c-38-6-42))">None yet.</span></sc-if>
+                    </div>
+                    <div style="display:grid; gap:6px">
+                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Volume points</span>
+                      <span style="font-size:13px">{{ myBonusVolume }}</span>
+                      <div style="display:flex; flex-wrap:wrap; gap:6px">
+                        <sc-for list="{{ myBonusPaid }}" as="pm" hint-placeholder-count="2">
+                          <a href="#" onClick="{{ pm.open }}" style="display:inline-flex; align-items:center; height:24px; padding:0 8px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9999px; font-size:12px">{{ pm.name }}</a>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <sc-if value="{{ myBonusHasEnding }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:grid; gap:6px">
+                        <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-4-62-50))">Ending before the closing</span>
+                        <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ myBonusEndingHead }}</span>
+                        <sc-for list="{{ myBonusEnding }}" as="en" hint-placeholder-count="2">
+                          <div style="{{ en.style }}">
+                            <span style="font-weight:600">{{ en.name }}</span>
+                            <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:hsl(var(--c-38-6-42))">{{ en.when }}</span>
+                            <span style="flex:1; min-width:160px">{{ en.impact }}</span>
+                            <a href="#" onClick="{{ en.open }}" style="font-weight:600">Ask to renew →</a>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ myBonusHasTodo }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:grid; gap:6px">
+                        <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-40-78-44))">To keep or earn points</span>
+                        <sc-for list="{{ myBonusTodo }}" as="td" hint-placeholder-count="2">
+                          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:12px">
+                            <span style="flex:1; min-width:220px">{{ td.text }}</span>
+                            <a href="#" onClick="{{ td.open }}" style="font-weight:600">{{ td.action }} →</a>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+            </sc-if>
 
-            <sc-if value="{{ isMenteeView }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ sessMyMentor }}" hint-placeholder-val="{{ true }}">
             <div style="position:relative; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:24px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
               <span style="position:absolute; top:20px; right:24px; display:inline-flex; align-items:center; padding:2px 10px; border-radius:9999px; background:hsl(var(--c-155-40-27) / .15); color:hsl(var(--c-155-40-27)); font-size:13px; font-weight:600">Active</span>
               <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">My Mentor</h2>
               <div style="display:flex; align-items:center; gap:16px">
                 <span style="display:grid; place-items:center; height:48px; width:48px; flex-shrink:0; border-radius:9999px; background:linear-gradient(100deg, hsl(var(--c-234-85-14)), hsl(var(--c-212-85-20))); color:hsl(var(--c-40-30-96)); font-size:14px; font-weight:700">VA</span>
                 <div style="display:grid; gap:2px">
-                  <span style="font-family:Ruda, sans-serif; font-size:16px; font-weight:700">Vânio Antunes do Livramento Junior</span>
-                  <span style="font-size:14px; color:hsl(var(--c-38-6-42))">vanio.antunes.md@gmail.com</span>
-                  <span style="font-size:14px; color:hsl(var(--c-38-6-42))">Level 2 mentor · Clinical epidemiology, meta-analysis</span>
+                  <span style="font-family:Ruda, sans-serif; font-size:16px; font-weight:700">{{ myMentorName }}</span>
+                  <span style="font-size:14px; color:hsl(var(--c-38-6-42))">{{ myMentorEmail }}</span>
+                  <span style="font-size:14px; color:hsl(var(--c-38-6-42))">{{ myMentorLine }}</span>
                 </div>
               </div>
             </div>
@@ -1698,7 +1800,7 @@
           </div>
 
           <div style="flex:1 1 300px; max-width:340px; display:flex; flex-direction:column; gap:24px">
-            <sc-if value="{{ isMenteeView }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ sessMyMentor }}" hint-placeholder-val="{{ true }}">
             <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
               <h2 style="margin:0 0 18px; font-family:Ruda, sans-serif; font-size:17px; font-weight:600">Mentorship plan</h2>
               <div style="display:grid; place-items:center">
@@ -1747,6 +1849,7 @@
             </div>
             </sc-if>
 
+            <sc-if value="{{ sessGoogle }}" hint-placeholder-val="{{ true }}">
             <div style="background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; padding:22px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
               <div style="display:flex; align-items:center; gap:12px">
                 <span style="display:grid; place-items:center; width:36px; height:36px; flex-shrink:0; border-radius:9.6px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))">
@@ -1786,6 +1889,7 @@
                 <button onClick="{{ gConnect }}" style="width:100%; height:42px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; font-weight:600; cursor:pointer">Connect Google Calendar</button>
               </sc-if>
             </div>
+            </sc-if>
 
           </div>
         </div>
@@ -2582,7 +2686,7 @@
               <span style="display:grid; height:36px; width:36px; flex-shrink:0; place-items:center; border-radius:13.6px; background:hsl(var(--c-234-85-14) / .12); color:hsl(var(--c-234-85-14))"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
               <span>Mentors</span>
             </h1>
-            <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Everyone guiding mentees in the programme, by level.</p>
+            <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">{{ mentorsSubtitle }}</p>
           </div>
           <span style="font-family:'JetBrains Mono', monospace; font-size:14px; color:hsl(var(--c-38-6-42))">{{ mentorsCount }}</span>
         </div>
@@ -2590,7 +2694,7 @@
         <div class="rgrid-1" style="display:grid; grid-template-columns:auto minmax(0,1fr); gap:28px; align-items:center; padding:28px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
           <div style="position:relative; padding-bottom:14px; justify-self:center">
             <img src="./assets/vanio-antunes.jpg" alt="{{ me.name }}" style="display:block; width:148px; height:148px; border-radius:9999px; object-fit:cover; box-shadow:0 0 0 4px hsl(var(--c-234-85-14) / .25)" />
-            <span style="position:absolute; left:50%; bottom:0; transform:translateX(-50%); padding:4px 12px; border-radius:9999px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap">You</span>
+            <span style="position:absolute; left:50%; bottom:0; transform:translateX(-50%); padding:4px 12px; border-radius:9999px; background:hsl(var(--c-234-85-14)); color:hsl(var(--c-40-30-96)); font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap">{{ meBadge }}</span>
           </div>
           <div style="display:grid; gap:10px; min-width:0">
             <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px">
@@ -2631,72 +2735,19 @@
               </div>
             </sc-if>
             <sc-if value="{{ myBonusShow }}" hint-placeholder-val="{{ true }}">
-              <div style="display:grid; gap:10px; margin-top:6px; padding:14px 16px; border:1px solid hsl(var(--c-40-78-44) / .45); border-radius:13.6px; background:hsl(var(--c-40-78-44) / .07)">
-                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px">
-                  <span style="font-family:'Hanken Grotesk', sans-serif; font-size:34px; font-weight:800; line-height:1">{{ myBonusTotal }}</span>
-                  <span style="display:grid; gap:2px; flex:1; min-width:180px">
-                    <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">{{ myBonusTitle }}</span>
-                    <span style="font-size:13px; font-weight:600">{{ myBonusSub }}</span>
-                  </span>
-                  <button onClick="{{ myBonusToggle }}" aria-expanded="{{ myBonusOpen }}" style="display:inline-flex; align-items:center; height:30px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:12px; font-weight:600; color:hsl(var(--c-234-40-22)); cursor:pointer; white-space:nowrap">{{ myBonusToggleLabel }}</button>
-                </div>
-                <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ myBonusEligibility }} Points only come from what is filled in MetaTracker: submission dates, submission file links and co-author roles.</span>
-                <sc-if value="{{ myBonusOpen }}" hint-placeholder-val="{{ false }}">
-                  <div style="display:grid; gap:12px; padding-top:10px; border-top:1px solid hsl(var(--c-42-12-84))">
-                    <div style="display:grid; gap:6px">
-                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Productivity points</span>
-                      <sc-for list="{{ myBonusProd }}" as="bp" hint-placeholder-count="1">
-                        <div style="display:grid; gap:3px; padding:8px 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:13px">
-                          <span><a href="#" onClick="{{ bp.openMentee }}" style="font-weight:700">{{ bp.mentee }}</a> · {{ bp.criterion }}</span>
-                          <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ bp.since }}</span>
-                          <sc-for list="{{ bp.evidence }}" as="ev" hint-placeholder-count="1">
-                            <span style="font-size:12px"><a href="{{ ev.href }}" target="_blank" rel="noopener">{{ ev.label }} ↗</a> · <a href="#" onClick="{{ ev.open }}">{{ ev.project }}</a></span>
-                          </sc-for>
-                        </div>
-                      </sc-for>
-                      <sc-if value="{{ myBonusNoProd }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:hsl(var(--c-38-6-42))">None yet.</span></sc-if>
-                    </div>
-                    <div style="display:grid; gap:6px">
-                      <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">Volume points</span>
-                      <span style="font-size:13px">{{ myBonusVolume }}</span>
-                      <div style="display:flex; flex-wrap:wrap; gap:6px">
-                        <sc-for list="{{ myBonusPaid }}" as="pm" hint-placeholder-count="2">
-                          <a href="#" onClick="{{ pm.open }}" style="display:inline-flex; align-items:center; height:24px; padding:0 8px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9999px; font-size:12px">{{ pm.name }}</a>
-                        </sc-for>
-                      </div>
-                    </div>
-                    <sc-if value="{{ myBonusHasEnding }}" hint-placeholder-val="{{ true }}">
-                      <div style="display:grid; gap:6px">
-                        <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-4-62-50))">Ending before the closing</span>
-                        <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ myBonusEndingHead }}</span>
-                        <sc-for list="{{ myBonusEnding }}" as="en" hint-placeholder-count="2">
-                          <div style="{{ en.style }}">
-                            <span style="font-weight:600">{{ en.name }}</span>
-                            <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:hsl(var(--c-38-6-42))">{{ en.when }}</span>
-                            <span style="flex:1; min-width:160px">{{ en.impact }}</span>
-                            <a href="#" onClick="{{ en.open }}" style="font-weight:600">Ask to renew →</a>
-                          </div>
-                        </sc-for>
-                      </div>
-                    </sc-if>
-                    <sc-if value="{{ myBonusHasTodo }}" hint-placeholder-val="{{ true }}">
-                      <div style="display:grid; gap:6px">
-                        <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-40-78-44))">To keep or earn points</span>
-                        <sc-for list="{{ myBonusTodo }}" as="td" hint-placeholder-count="2">
-                          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:12px">
-                            <span style="flex:1; min-width:220px">{{ td.text }}</span>
-                            <a href="#" onClick="{{ td.open }}" style="font-weight:600">{{ td.action }} →</a>
-                          </div>
-                        </sc-for>
-                      </div>
-                    </sc-if>
-                  </div>
-                </sc-if>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:12px 14px; border:1px solid hsl(var(--c-40-78-44) / .35); border-radius:13.6px; background:hsl(var(--c-40-78-44) / .08)">
+                <span style="font-family:'Hanken Grotesk', sans-serif; font-size:26px; font-weight:800; line-height:1">{{ myBonusTotal }}</span>
+                <span style="display:grid; gap:2px; flex:1; min-width:180px">
+                  <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">{{ myBonusTitle }}</span>
+                  <span style="font-size:13px; font-weight:600">{{ myBonusSub }}</span>
+                </span>
+                <a href="#" onClick="{{ goBonusTracker }}" style="font-weight:600; font-size:13px">Open bonus tracker →</a>
               </div>
             </sc-if>
           </div>
         </div>
 
+        <sc-if value="{{ mentorsShowAll }}" hint-placeholder-val="{{ true }}">
         <sc-for list="{{ mentorGroups }}" as="grp" hint-placeholder-count="2">
           <div style="display:flex; flex-direction:column; gap:16px">
             <div style="display:flex; align-items:baseline; gap:10px">
@@ -2749,6 +2800,7 @@
             </div>
           </div>
         </sc-for>
+        </sc-if>
       </div>
     </sc-if>
 
@@ -3260,7 +3312,8 @@
             </h1>
             <p style="margin:8px 0 0; font-size:14px; color:hsl(var(--c-38-6-42))">Your account information and mentorship role.</p>
           </div>
-          <button onClick="{{ editProfile }}" style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99) / .6); font-size:14px; font-weight:500">
+          <span style="display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; border-radius:9.6px; background:hsl(var(--c-44-26-96)); font-size:13px; color:hsl(var(--c-38-6-42))">Everything here is optional · saved as you type</span>
+          <button hidden="{{ true }}" onClick="{{ editProfile }}" style="display:none; align-items:center; gap:8px; height:40px; padding:0 16px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99) / .6); font-size:14px; font-weight:500">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>
             Edit Profile
           </button>
@@ -3285,37 +3338,42 @@
           </div>
         </div>
 
-        <div style="padding:24px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
-          <h2 style="margin:0 0 6px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Timezone</h2>
-          <p style="margin:0 0 16px; font-size:14px; color:hsl(var(--c-38-6-42))">All session times across the platform are converted into this timezone.</p>
-          <select onChange="{{ setTz }}" value="{{ tzId }}" style="height:44px; padding:0 14px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12)); min-width:280px">
-            <sc-for list="{{ tzOptions }}" as="t" hint-placeholder-count="5">
-              <option value="{{ t.id }}">{{ t.label }}</option>
-            </sc-for>
-          </select>
-        </div>
-
-        <sc-for list="{{ profileSections }}" as="sec" hint-placeholder-count="3">
+        <sc-for list="{{ profileCards }}" as="pc" hint-placeholder-count="3">
           <div style="padding:24px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
-            <h2 style="margin:0 0 20px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ sec.title }}</h2>
-            <div style="display:flex; flex-direction:column; gap:20px">
-              <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="2">
-                <div>
-                  <div style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600">
-                    <span style="display:flex; width:15px; height:15px; color:hsl(var(--c-234-68-12))" dangerouslySetInnerHTML="{{ row.icon }}"></span>
-                    {{ row.label }}
-                  </div>
-                  <div style="margin-top:4px; font-size:15px; color:hsl(var(--c-38-6-42))">{{ row.value }}</div>
-                </div>
+            <h2 style="margin:0; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">{{ pc.title }}</h2>
+            <p style="margin:4px 0 18px; font-size:13px; color:hsl(var(--c-38-6-42))">{{ pc.note }}</p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:16px">
+              <sc-for list="{{ pc.rows }}" as="row" hint-placeholder-count="4">
+                <label style="{{ row.wrapStyle }}">
+                  <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:hsl(var(--c-38-6-42))">{{ row.label }}</span>
+                  <sc-if value="{{ row.isText }}" hint-placeholder-val="{{ true }}">
+                    <input value="{{ row.value }}" onChange="{{ row.set }}" placeholder="{{ row.placeholder }}" style="height:40px; padding:0 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12))" />
+                  </sc-if>
+                  <sc-if value="{{ row.isSelect }}" hint-placeholder-val="{{ false }}">
+                    <select onChange="{{ row.set }}" value="{{ row.value }}" style="height:40px; padding:0 10px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; color:hsl(var(--c-234-68-12))">
+                      <sc-for list="{{ row.options }}" as="o" hint-placeholder-count="3">
+                        <option value="{{ o.value }}">{{ o.label }}</option>
+                      </sc-for>
+                    </select>
+                  </sc-if>
+                  <sc-if value="{{ row.isArea }}" hint-placeholder-val="{{ false }}">
+                    <textarea value="{{ row.value }}" onInput="{{ row.set }}" rows="4" placeholder="{{ row.placeholder }}" style="font-family:inherit; padding:10px 12px; border:1px solid hsl(var(--c-42-12-84)); border-radius:9.6px; background:hsl(var(--c-42-33-99)); font-size:14px; line-height:1.5; color:hsl(var(--c-234-68-12)); resize:vertical"></textarea>
+                  </sc-if>
+                  <sc-if value="{{ row.isChips }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; flex-wrap:wrap; gap:8px">
+                      <sc-for list="{{ row.chips }}" as="ch" hint-placeholder-count="5">
+                        <button onClick="{{ ch.toggle }}" aria-pressed="{{ ch.on }}" style="{{ ch.style }}">{{ ch.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ row.hasHint }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:12px; color:hsl(var(--c-38-6-42))">{{ row.hint }}</span>
+                  </sc-if>
+                </label>
               </sc-for>
             </div>
           </div>
         </sc-for>
-
-        <div style="padding:24px; background:hsl(var(--c-42-33-99)); border:1px solid hsl(var(--c-42-12-84)); border-radius:17.6px; box-shadow:0 4px 14px -8px hsl(var(--c-234-45-18) / .5)">
-          <h2 style="margin:0 0 16px; font-family:Ruda, sans-serif; font-size:18px; font-weight:600">Bio</h2>
-          <p style="{{ bioStyle }}">{{ bioText }}</p>
-        </div>
       </div>
     </sc-if>
 
@@ -3832,6 +3890,11 @@ const MENTORS_DATA = [
   { name: 'Juliana Prado', country: 'Brazil', seedSlots: 2, areas: ['Pediatrics'], gmt: -3, notes: 'Prefers mentees in Portuguese', phone: '+55 81 99000-0206', email: 'juliana.prado@example.com', level: 1, area: 'Pediatrics', position: 'MD', affiliation: 'UFPE', langs: ['BR','EN'], start: new Date(2026, 6, 20), end: new Date(2027, 0, 20) }
 ];
 const ME = 'Vânio Antunes';
+// the mentor of the person using the mentee view
+const MY_MENTOR = (function () {
+  const md = MENTORS_DATA.filter((m) => m.name === ME)[0] || {};
+  return { name: md.name, full: 'Vânio Antunes do Livramento Junior', email: md.email || '', level: md.level, areas: md.areas || [] };
+})();
 function mentorOf(mentee) { const m = MENTEES.filter((x) => x.name === mentee)[0]; const md = m && MENTORS_DATA.filter((x) => x.name === m.mentor)[0]; return { name: m ? m.mentor : '', email: md ? md.email : '' }; }
 const PROJECT_MENTEE = 'Isabella Michelon';
 const LANG_STYLE = {
@@ -3974,6 +4037,21 @@ function meetingsWithin(a, total, win) { let n = 0; for (let d = a.lastMeet; d <
 function gmtLabel(n) { return 'GMT' + (n < 0 ? '−' + Math.abs(n) : '+' + n); }
 // open mentorship slots: one record per slot, optional preferred area, language and note
 const SLOT_LANGS = ['Any', 'Portuguese', 'English', 'Spanish'];
+const PROFILE_SOFTWARE = ['R', 'RStudio', 'Stata', 'RevMan', 'CMA', 'Python', 'Excel', 'Covidence', 'Rayyan', 'EndNote', 'Zotero'];
+const PROFILE_LANGS = ['Portuguese', 'English', 'Spanish', 'French'];
+const PROFILE_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const GMT_OPTIONS = [-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3].map((n) => ({ value: String(n), label: 'GMT' + (n >= 0 ? '+' : '') + n }));
+// Sessions page sections: same tab pattern as the admin dashboard, with a different list per role
+const SESSION_SECTIONS = {
+  mentee: [['meetings', 'My sessions'], ['history', 'History'], ['mentor', 'My mentor']],
+  mentor: [['mentees', 'My mentees'], ['slots', 'Open slots'], ['avail', 'Availability'], ['areas', 'My areas'], ['bonus', 'Bonus tracker']]
+};
+const ADMIN_SECTIONS = [['mentees', 'Mentees'], ['mentors', 'Mentors'], ['projects', 'Projects'], ['bonus', 'Bonus']];
+function sessionSections(role) { return SESSION_SECTIONS[role === 'mentee' ? 'mentee' : 'mentor']; }
+function sessionSection(st) { const list = sessionSections(st.role); return list.some((x) => x[0] === st.sessSec) ? st.sessSec : list[0][0]; }
+function tabStyle(on) { return 'height:32px; padding:0 14px; border:0; border-radius:6.6px; font-size:14px; font-family:inherit; cursor:pointer; white-space:nowrap; ' + (on ? 'background:hsl(var(--c-42-33-99)); font-weight:700; color:hsl(var(--c-234-68-12)); box-shadow:0 1px 3px hsl(var(--c-234-45-18) / .18)' : 'background:transparent; font-weight:500; color:hsl(var(--c-38-6-42))'); }
+function chipStyle(on) { return 'height:32px; padding:0 14px; border-radius:9999px; font-size:14px; font-family:inherit; cursor:pointer; border:1px solid ' + (on ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-42-12-84))') + '; background:' + (on ? 'hsl(var(--c-234-85-14))' : 'hsl(var(--c-42-33-99))') + '; color:' + (on ? 'hsl(var(--c-40-30-96))' : 'hsl(var(--c-234-40-22))') + '; font-weight:' + (on ? '600' : '500'); }
+function subLinkStyle(on) { return 'display:flex; align-items:center; height:28px; padding:0 8px; border-radius:6.6px; font-size:13px; font-weight:' + (on ? '600' : '500') + '; color:' + (on ? 'hsl(var(--c-234-60-18))' : 'hsl(var(--c-234-40-22) / .85)') + '; background:' + (on ? 'hsl(var(--c-234-85-14) / .1)' : 'transparent'); }
 function seedMentorSlots() {
   const opened = { 'Vânio Antunes': '2026-06-10', 'Caroline Serafim': '2026-02-02', 'Rafael Lima': '2026-07-20', 'Felipe Andrade': '2026-05-04', 'Juliana Prado': '2026-08-10' };
   const demo = {
@@ -4223,6 +4301,8 @@ class Component extends DCLogic {
     booked: null,
     rules: { sameDay: true, menteeBooks: true, recurring: true, buffer: false },
     mQuery: '', mAreas: [], mStatus: 'All', mMentor: 'All mentors', mSort: 'name',
+    sessSec: 'mentees',
+    myAreas: ((MENTORS_DATA.filter((m) => m.name === ME)[0] || {}).areas || []).slice(),
     projectTab: 'progress', taskDone: SEED_PROJECTS[0].taskDone, taskNotes: SEED_PROJECTS[0].taskNotes || {},
     projectPicott: SEED_PROJECTS[0].picott, picottDraft: null,
     projectName: SEED_PROJECTS[0].name,
@@ -4237,7 +4317,14 @@ class Component extends DCLogic {
     startDone: {},
     mentorSlots: seedMentorSlots(),
     calYear: TODAY.getFullYear(), calMonth: TODAY.getMonth(), availSaved: false, cancelledNext: {},
-    profile: { affiliation: 'Meta-Analysis Academy', country: 'Brazil', bio: '' },
+    profile: {
+      displayName: ME, pronouns: '', country: 'Brazil', city: '', gmt: '-3',
+      whatsapp: (MENTORS_DATA.filter((m) => m.name === ME)[0] || {}).phone || '', email: (MENTORS_DATA.filter((m) => m.name === ME)[0] || {}).email || '',
+      orcid: '', lattes: '', linkedin: '',
+      degree: 'MD', affiliation: 'Meta-Analysis Academy', position: 'Mentor, Meta-Analysis Academy',
+      software: ['R', 'RevMan'], langs: ['Portuguese', 'English'], bio: '',
+      hours: '', days: [], window: '', meetLang: 'Any', notify: 'WhatsApp'
+    },
     copiedEmail: '',
     coOpen: null, coDraft: { mentee: '', name: '', email: '', senior: false },
     projects: SEED_PROJECTS, projectId: SEED_PROJECTS[0].id, projectFilter: 'All mentees',
@@ -5568,9 +5655,23 @@ class Component extends DCLogic {
     const shift = this.shift();
 
     const pendingCount = st.role === 'mentee' ? 0 : this.pendingItems().length;
+    const subsFor = (key, active) => {
+      if (!active) return [];
+      if (key === 'sessions') {
+        const cur = sessionSection(st);
+        return sessionSections(st.role).map((x) => ({ label: x[1], style: subLinkStyle(x[0] === cur), go: (e) => { if (e) e.preventDefault(); this.setState({ page: 'sessions', sessSec: x[0], navOpen: false }); } }));
+      }
+      if (key === 'admin') {
+        return ADMIN_SECTIONS.map((x) => ({ label: x[1], style: subLinkStyle(x[0] === st.adSection), go: (e) => { if (e) e.preventDefault(); this.setState({ page: 'admin', adSection: x[0], navOpen: false }); } }));
+      }
+      return [];
+    };
     const navItems = NAV.filter((n) => !n.adminOnly || st.role === 'admin').map((n) => {
       const active = n.key === page;
+      const subs = subsFor(n.key, active);
       return {
+        subs: subs,
+        hasSubs: subs.length > 0,
         hasBadge: n.key === 'metatracker' && pendingCount > 0,
         badge: pendingCount,
         badgeAria: pendingCount + ' waiting for your review',
@@ -6022,7 +6123,13 @@ class Component extends DCLogic {
       // your own Level 1 -> 2 track is always visible to you; level note and mentees stay admin-only
       meShowPanel: st.role === 'admin' || MENTORS_DATA.filter((m) => m.name === ME)[0].level === 1,
       meAdminNote: st.role === 'admin' && MENTORS_DATA.filter((m) => m.name === ME)[0].level !== 1,
-      mentorsCount: MENTORS_DATA.length + ' mentors',
+      mentorsCount: st.role === 'mentee' ? 'Your mentor' : MENTORS_DATA.length + ' mentors',
+      mentorsShowAll: st.role !== 'mentee',
+      meBadge: st.role === 'mentee' ? 'Your mentor' : 'You',
+      mentorsSubtitle: st.role === 'mentee' ? 'The mentor guiding you in the programme.' : 'Everyone guiding mentees in the programme, by level.',
+      myMentorName: MY_MENTOR.full,
+      myMentorEmail: MY_MENTOR.email,
+      myMentorLine: 'Level ' + MY_MENTOR.level + ' mentor · ' + (MY_MENTOR.areas || []).join(', '),
       me: this.mentorCard(MENTORS_DATA.filter((m) => m.name === ME)[0]),
       ...(function (self) {
         const semKey = semesterKey(TODAY);
@@ -6328,9 +6435,97 @@ class Component extends DCLogic {
       isDashboard: page === 'dashboard',
       isCalendar: page === 'calendar',
       isSessions: page === 'sessions',
+      goProfile: this.go('profile'),
+      goBonusTracker: (e) => { if (e) e.preventDefault(); this.setState({ page: 'sessions', sessSec: 'bonus' }); },
+      ...(function (self) {
+        const cur = sessionSection(st);
+        const picked = st.myAreas;
+        return {
+          sessSections: sessionSections(st.role).map((x) => ({ label: x[1], pressed: x[0] === cur, style: tabStyle(x[0] === cur), go: () => self.setState({ sessSec: x[0] }) })),
+          sessMyMeetings: cur === 'meetings',
+          sessHistory: cur === 'history',
+          sessMyMentor: cur === 'mentor',
+          sessMentees: cur === 'mentees',
+          sessSlots: cur === 'slots',
+          sessAvail: cur === 'avail',
+          sessAreas: cur === 'areas',
+          sessBonus: cur === 'bonus',
+          sessGoogle: st.role === 'mentee' ? cur === 'meetings' : cur === 'avail',
+          myAreaChips: AREAS.map((a) => {
+            const on = picked.indexOf(a) !== -1;
+            return { label: a, on: on, style: chipStyle(on), toggle: () => self.setState({ myAreas: on ? picked.filter((x) => x !== a) : picked.concat([a]) }) };
+          }),
+          myAreasCount: picked.length + ' of ' + AREAS.length + ' areas',
+          myAreasNote: picked.length ? 'Slots you open can name: ' + picked.join(' · ') : 'Pick at least one area so your open slots can name a preferred area.'
+        };
+      })(this),
       isMetaTracker: page === 'metatracker',
       isCourses: page === 'courses',
       isProfile: page === 'profile',
+      ...(function (self) {
+        const pf = st.profile;
+        const set = (k) => (e) => { const v = Object.assign({}, self.state.profile); v[k] = e.target.value; self.setState({ profile: v }); };
+        const toggleIn = (k, val) => () => {
+          const v = Object.assign({}, self.state.profile);
+          const list = (v[k] || []).slice();
+          const i = list.indexOf(val);
+          if (i === -1) list.push(val); else list.splice(i, 1);
+          v[k] = list;
+          self.setState({ profile: v });
+        };
+        const chips = (k, values) => values.map((x) => ({ label: x, on: (pf[k] || []).indexOf(x) !== -1, style: chipStyle((pf[k] || []).indexOf(x) !== -1), toggle: toggleIn(k, x) }));
+        const W = 'display:grid; gap:6px; min-width:0';
+        const WIDE = 'display:grid; gap:6px; min-width:0; grid-column:1 / -1';
+        const text = (k, label, placeholder, hint, wide) => ({ label: label, isText: true, value: pf[k] || '', set: set(k), placeholder: placeholder || '', hint: hint || '', hasHint: !!hint, wrapStyle: wide ? WIDE : W });
+        const select = (k, label, options, hint) => ({ label: label, isSelect: true, value: pf[k] || '', set: set(k), options: options.map((o) => (typeof o === 'string' ? { value: o, label: o } : o)), hint: hint || '', hasHint: !!hint, wrapStyle: W });
+        const area = (k, label, placeholder, hint) => ({ label: label, isArea: true, value: pf[k] || '', set: set(k), placeholder: placeholder || '', hint: hint || '', hasHint: !!hint, wrapStyle: WIDE });
+        const chipRow = (k, label, values, hint) => ({ label: label, isChips: true, chips: chips(k, values), hint: hint || '', hasHint: !!hint, wrapStyle: WIDE });
+        const areaChips = AREAS.map((a) => { const on = st.myAreas.indexOf(a) !== -1; return { label: a, on: on, style: chipStyle(on), toggle: () => self.setState({ myAreas: on ? self.state.myAreas.filter((x) => x !== a) : self.state.myAreas.concat([a]) }) }; });
+        return {
+          profileCards: [
+            {
+              title: 'Identity and contact',
+              note: 'Used on your mentor or mentee card, in the admin tables and to convert session times. Nothing is required.',
+              rows: [
+                text('displayName', 'Display name', 'Vânio Antunes', 'Shown on your cards instead of your full name.'),
+                text('pronouns', 'Pronouns', 'he/him'),
+                text('country', 'Country', 'Brazil'),
+                text('city', 'City', 'Florianópolis'),
+                select('gmt', 'Timezone (GMT)', GMT_OPTIONS, 'Feeds the GMT column admins sort by.'),
+                text('whatsapp', 'WhatsApp', '+55 48 99000-0000', 'Used by the WhatsApp buttons in the admin tables.'),
+                text('email', 'E-mail', 'name@example.com'),
+                text('orcid', 'ORCID', '0000-0000-0000-0000'),
+                text('lattes', 'Lattes', 'lattes.cnpq.br/...'),
+                text('linkedin', 'LinkedIn', 'linkedin.com/in/...')
+              ]
+            },
+            {
+              title: 'Academic and research',
+              note: 'Helps admins match you with mentees and tells co-authors who they are working with.',
+              rows: [
+                text('degree', 'Degree', 'MD, MSc'),
+                text('affiliation', 'Institution', 'Meta-Analysis Academy'),
+                text('position', 'Current position', 'Resident, second year'),
+                { label: 'Areas of interest', isChips: true, chips: areaChips, hint: 'Same list as Sessions → My areas: it drives mentee matching and the area of each open slot.', hasHint: true, wrapStyle: WIDE },
+                chipRow('software', 'Software you use', PROFILE_SOFTWARE),
+                chipRow('langs', 'Languages', PROFILE_LANGS, 'Shown as the BR/EN badges on your card.'),
+                area('bio', 'Short bio', 'A few lines about your research interests and what you can help with.')
+              ]
+            },
+            {
+              title: 'Working preferences',
+              note: 'Sets expectations before a mentorship starts. Meeting days and hours still come from Sessions → Availability.',
+              rows: [
+                text('hours', 'Hours per week', '8'),
+                chipRow('days', 'Preferred meeting days', PROFILE_DAYS),
+                text('window', 'Preferred time of day', '18:00 – 21:00'),
+                select('meetLang', 'Language for meetings', ['Any', 'Portuguese', 'English', 'Spanish']),
+                select('notify', 'Where to reach you first', ['WhatsApp', 'E-mail', 'Both'])
+              ]
+            }
+          ]
+        };
+      })(this),
       goProfile: this.go('profile'),
       goCalendar: this.go('calendar'),
       goCourses: this.go('courses'),
@@ -6472,7 +6667,7 @@ class Component extends DCLogic {
         return {
           slotsHeading: 'Open mentorship slots (' + mine.length + ')',
           noSlots: mine.length === 0,
-          slotAreaOptions: [{ value: '', label: 'Any of my areas' }].concat(AREAS.map((x) => ({ value: x, label: x }))),
+          slotAreaOptions: [{ value: '', label: 'Any of my areas' }].concat((self.state.myAreas.length ? self.state.myAreas : AREAS).map((x) => ({ value: x, label: x }))),
           slotLangOptions: SLOT_LANGS,
           addSlot: (e) => { e.preventDefault(); setMine((list) => list.concat([{ id: 's' + Date.now().toString(36), area: '', lang: 'Any', note: '', opened: isoDate(TODAY) }])); },
           mySlots: mine.map((x, i) => ({
